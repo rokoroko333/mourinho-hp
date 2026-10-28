@@ -38,56 +38,70 @@ test('mergeNews caps each publisher and always includes the newest item of each 
   assert.deepEqual(merged.map((i) => i.title), ['Big 16', 'Big 15', 'Marca 2', 'Marca 1']);
 });
 
-test('mergeNews does not let a featured outlet exceed its cap or duplicate a general item', () => {
+test('mergeNews never repeats an item, and loosens the cap only to fill a short list', () => {
   const dup = news('AS', 5);
-  const merged = mergeNews([[dup]], { limit: 10, perSource: 1, featured: [[dup, news('AS', 4)]] });
-  assert.deepEqual(merged.map((i) => i.title), ['AS 5']);
+  const featured = [[dup, news('AS', 4), news('AS', 3)]];
+  const opts = { perSource: 1, fillPerSource: 2, featured };
+  assert.deepEqual(mergeNews([[dup], [news('BBC', 1)]], { ...opts, limit: 2 }).map((i) => i.title), ['AS 5', 'BBC 1']);
+  assert.deepEqual(mergeNews([[dup]], { ...opts, limit: 10 }).map((i) => i.title), ['AS 5', 'AS 4']);
 });
 
-test('outletItems keeps only recent items from the outlet that name Mourinho in the title', () => {
+test('outletItems keeps recent items about Mourinho and labels them with the outlet', () => {
   const now = new Date('2026-10-28T00:00:00Z');
   const items = [
-    news('Marca', 9, 'Mourinho rotates the squad'),
-    news('Marca', 8, 'Ancelotti speaks'),
-    { ...news('Marca', 7, 'MOURINHO in 2024'), publishedAt: '2024-06-01T00:00:00.000Z' },
-    { ...news('Marca', 6, 'Mourinho undated'), publishedAt: null },
-    news('marca usa', 5, 'Mourinho in English'),
+    news('', 9, 'Mourinho rotates the squad'),
+    { ...news('', 8, 'Real Madrid win at home'), summary: 'José Mourinho praised the youngsters.' },
+    news('', 7, 'Ancelotti speaks'),
+    { ...news('', 6, 'MOURINHO in 2024'), publishedAt: '2024-06-01T00:00:00.000Z' },
+    { ...news('', 5, 'Mourinho undated'), publishedAt: null },
   ];
-  assert.deepEqual(outletItems(items, { name: 'MARCA' }, now).map((i) => i.title), ['Mourinho rotates the squad']);
+  const kept = outletItems(items, { name: 'MARCA' }, now);
+  assert.deepEqual(kept.map((i) => i.title), ['Mourinho rotates the squad', 'Real Madrid win at home']);
+  assert.deepEqual([...new Set(kept.map((i) => i.source))], ['MARCA']);
+  // A feed that is entirely about him keeps every recent item.
+  assert.equal(outletItems(items, { name: 'The Guardian', all: true }, now).length, 3);
 });
 
-test('fetchNews queries every outlet with site: and mixes its items in', async () => {
+// Answers Google News with one general item, and each outlet feed with one item naming Mourinho,
+// except the outlets in `quiet`, whose only item is about something else.
+const fakeFeeds = (lang, { quiet = [], onFetch = () => {} } = {}) => async (url) => {
+  await onFetch(url);
+  const hl = new URL(url).searchParams.get('hl') || '';
+  const outlet = OUTLETS[lang].find((o) => o.feed === url);
+  const title = !outlet ? `Mourinho general ${hl} - Wire` : quiet.includes(outlet) ? 'Other news' : `Mourinho in ${outlet.name}`;
+  return new Response(`<rss><item><title>${title}</title><link>${outlet ? outlet.feed : 'https://news.google.com/'}/${hl}</link>
+<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate>${outlet ? '' : '<source url="https://x">Wire</source>'}
+<description>&lt;p&gt;Summary&lt;/p&gt;</description></item></rss>`);
+};
+
+test('fetchNews reads every outlet feed and mixes its items in, without summaries', async () => {
   const now = new Date('2026-10-28T00:00:00Z');
   const urls = [];
   const realFetch = globalThis.fetch;
-  globalThis.fetch = async (url) => {
-    urls.push(url);
-    const site = new URL(url).searchParams.get('q').match(/site:(\S+)/)?.[1];
-    const outlet = OUTLETS.es.find((o) => o.site === site);
-    // The last outlet answers under a different publisher name, so it must be reported as empty.
-    const name = !outlet ? 'Wire' : outlet === OUTLETS.es.at(-1) ? 'Someone Else' : outlet.name;
-    const title = `Mourinho in ${site || 'general'} - ${name}`;
-    return new Response(`<rss><item><title>${title}</title><link>https://news.google.com/${site || 'g'}</link>
-<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate><source url="https://x">${name}</source></item></rss>`);
-  };
+  const quiet = [OUTLETS.es.at(-1)];
+  globalThis.fetch = fakeFeeds('es', { quiet, onFetch: (u) => urls.push(u) });
   let r;
   try {
     r = await fetchNewsWithReport('es', now);
   } finally {
     globalThis.fetch = realFetch;
   }
-  assert.equal(urls.length, 2 + OUTLETS.es.length);
+  assert.equal(urls.filter((u) => u.startsWith('https://news.google.com/')).length, 2);
+  assert.deepEqual(urls.filter((u) => !u.startsWith('https://news.google.com/')).sort(), OUTLETS.es.map((o) => o.feed).sort());
   const expected = OUTLETS.es.slice(0, -1).map((o) => o.name);
-  assert.deepEqual(r.items.map((i) => i.source).sort(), ['Wire', ...expected].sort());
+  assert.deepEqual([...new Set(r.items.map((i) => i.source))].sort(), ['Wire', ...expected].sort());
   assert.deepEqual(r.emptyOutlets, [OUTLETS.es.at(-1).name]);
+  assert.ok(r.items.every((i) => !('summary' in i)));
 });
 
 test('fetchNewsWithReport fetches Google News one feed at a time and retries once on 503', async () => {
   const seen = new Map();
   let open = 0;
   let maxOpen = 0;
+  const google = fakeFeeds('pt');
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
+    if (!url.startsWith('https://news.google.com/')) return google(url);
     open++;
     maxOpen = Math.max(maxOpen, open);
     await new Promise((r) => setTimeout(r, 5));
@@ -95,9 +109,8 @@ test('fetchNewsWithReport fetches Google News one feed at a time and retries onc
     const n = (seen.get(url) || 0) + 1;
     seen.set(url, n);
     // Only the first general feed is rate-limited, and only on the first attempt.
-    if (n === 1 && !url.includes('site%3A') && url.includes('gl=PT')) return new Response('busy', { status: 503 });
-    return new Response(`<rss><item><title>Mourinho ${seen.size} - Wire</title><link>https://news.google.com/${seen.size}</link>
-<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate><source url="https://x">Wire</source></item></rss>`);
+    if (n === 1 && url.includes('gl=PT')) return new Response('busy', { status: 503 });
+    return google(url);
   };
   let r;
   try {
@@ -106,9 +119,9 @@ test('fetchNewsWithReport fetches Google News one feed at a time and retries onc
     globalThis.fetch = realFetch;
   }
   assert.equal(maxOpen, 1);
-  assert.deepEqual([...seen.values()].sort(), [1, 1, 1, 1, 2]);
-  // Both general feeds made it in, including the one that needed the retry.
-  assert.equal(r.items.length, 2);
+  assert.deepEqual([...seen.values()].sort(), [1, 2]);
+  // Both general feeds made it in, including the one that needed the retry, plus every outlet.
+  assert.equal(r.items.length, 2 + OUTLETS.pt.length);
   assert.equal(r.failedFeeds, 0);
 });
 

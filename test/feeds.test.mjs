@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseRss, mergeNews, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS } from '../lib/feeds.js';
+import {
+  parseRss, mergeNews, outletItems, fetchNewsWithReport, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+} from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
 <item><title>Mourinho &amp; Madrid win again - Marca</title><link>https://news.google.com/a</link>
@@ -23,6 +25,61 @@ test('mergeNews dedupes by link and title and sorts newest first', () => {
   const a = parseRss(rss);
   const merged = mergeNews([a, [{ ...a[0], link: 'https://other' }]]);
   assert.deepEqual(merged.map((i) => i.link), ['https://news.google.com/b', 'https://news.google.com/a']);
+});
+
+const news = (source, hour, title = `${source} ${hour}`) => ({
+  title, link: `https://news.google.com/${source}-${hour}`, source,
+  publishedAt: new Date(Date.UTC(2026, 9, 27, hour)).toISOString(),
+});
+
+test('mergeNews caps each publisher and always includes the newest item of each featured outlet', () => {
+  const general = [1, 2, 3, 4, 5, 6].map((h) => news('Big', 10 + h));
+  const merged = mergeNews([general], { limit: 4, perSource: 2, featured: [[news('Marca', 1), news('Marca', 2)]] });
+  assert.deepEqual(merged.map((i) => i.title), ['Big 16', 'Big 15', 'Marca 2', 'Marca 1']);
+});
+
+test('mergeNews does not let a featured outlet exceed its cap or duplicate a general item', () => {
+  const dup = news('AS', 5);
+  const merged = mergeNews([[dup]], { limit: 10, perSource: 1, featured: [[dup, news('AS', 4)]] });
+  assert.deepEqual(merged.map((i) => i.title), ['AS 5']);
+});
+
+test('outletItems keeps only recent items from the outlet that name Mourinho in the title', () => {
+  const now = new Date('2026-10-28T00:00:00Z');
+  const items = [
+    news('Marca', 9, 'Mourinho rotates the squad'),
+    news('Marca', 8, 'Ancelotti speaks'),
+    { ...news('Marca', 7, 'MOURINHO in 2024'), publishedAt: '2024-06-01T00:00:00.000Z' },
+    { ...news('Marca', 6, 'Mourinho undated'), publishedAt: null },
+    news('marca usa', 5, 'Mourinho in English'),
+  ];
+  assert.deepEqual(outletItems(items, { name: 'MARCA' }, now).map((i) => i.title), ['Mourinho rotates the squad']);
+});
+
+test('fetchNews queries every outlet with site: and mixes its items in', async () => {
+  const now = new Date('2026-10-28T00:00:00Z');
+  const urls = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    urls.push(url);
+    const site = new URL(url).searchParams.get('q').match(/site:(\S+)/)?.[1];
+    const outlet = OUTLETS.es.find((o) => o.site === site);
+    // The last outlet answers under a different publisher name, so it must be reported as empty.
+    const name = !outlet ? 'Wire' : outlet === OUTLETS.es.at(-1) ? 'Someone Else' : outlet.name;
+    const title = `Mourinho in ${site || 'general'} - ${name}`;
+    return new Response(`<rss><item><title>${title}</title><link>https://news.google.com/${site || 'g'}</link>
+<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate><source url="https://x">${name}</source></item></rss>`);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport('es', now);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(urls.length, 2 + OUTLETS.es.length);
+  const expected = OUTLETS.es.slice(0, -1).map((o) => o.name);
+  assert.deepEqual(r.items.map((i) => i.source).sort(), ['Wire', ...expected].sort());
+  assert.deepEqual(r.emptyOutlets, [OUTLETS.es.at(-1).name]);
 });
 
 const ev = (id, date, completed, hs = '1', as = '0') => ({

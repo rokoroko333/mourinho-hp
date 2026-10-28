@@ -5,17 +5,19 @@
 //   node scripts/screenshot.mjs --pr 12 / /es/    # also pushes them to the `screenshots` branch
 //                                                 # and prints Markdown to paste into the PR
 //
-// Options: --base <origin> (default http://localhost:8788), CHROME=<path to the Chrome binary>.
+// Options: --base <origin> (default http://localhost:8788), --height <px> (default 2200; anything below
+// is cut off, so raise it for long pages such as the history), CHROME=<path to the Chrome binary>.
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = join(ROOT, 'screenshots');
 const BRANCH = 'screenshots';
 // Headless Chrome will not make a window narrower than 500px, so that is the phone-sized shot.
-const SIZES = { desktop: '1280,2200', mobile: '500,2200' };
+const WIDTHS = { desktop: 1280, mobile: 500 };
 
 const CHROME_CANDIDATES = [
   process.env.CHROME,
@@ -26,9 +28,10 @@ const CHROME_CANDIDATES = [
 ].filter(Boolean);
 
 function parseArgs(argv) {
-  const opts = { base: 'http://localhost:8788', pr: null, paths: [] };
+  const opts = { base: 'http://localhost:8788', height: 2200, pr: null, paths: [] };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--base') opts.base = argv[++i].replace(/\/$/, '');
+    else if (argv[i] === '--height') opts.height = Number(argv[++i]);
     else if (argv[i] === '--pr') opts.pr = Number(argv[++i]);
     else opts.paths.push(argv[i]);
   }
@@ -39,11 +42,11 @@ function parseArgs(argv) {
 
 const fileName = (path, size) => `${path.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home'}-${size}.png`;
 
-function capture(chrome, url, size, file) {
+function capture(chrome, url, size, height, file) {
   // The virtual time budget lets app.js fill the news and match cards from /api/* before the shot.
   execFileSync(chrome, [
     '--headless=new', '--hide-scrollbars', '--disable-gpu', '--virtual-time-budget=8000',
-    `--window-size=${SIZES[size]}`, `--screenshot=${file}`, url,
+    `--window-size=${WIDTHS[size]},${height}`, `--screenshot=${file}`, url,
   ], { stdio: 'ignore', timeout: 60_000 }); // headless Chrome occasionally hangs; fail instead of waiting
 }
 
@@ -67,11 +70,15 @@ function publish(pr, files) {
       git(['checkout', '--orphan', BRANCH], dir);
       git(['rm', '-rfq', '.'], dir);
     }
+    // Replace the PR's folder, so shots of pages no longer listed do not linger.
+    rmSync(join(dir, `pr-${pr}`), { recursive: true, force: true });
     mkdirSync(join(dir, `pr-${pr}`), { recursive: true });
     for (const f of files) cpSync(join(OUT, f), join(dir, `pr-${pr}`, f));
-    git(['add', `pr-${pr}`], dir);
-    git(['commit', '-qm', `Screenshots for PR #${pr}`], dir);
-    git(['push', '-q', 'origin', `HEAD:${BRANCH}`], dir);
+    git(['add', '-A', `pr-${pr}`], dir);
+    if (git(['status', '--porcelain'], dir)) {
+      git(['commit', '-qm', `Screenshots for PR #${pr}`], dir);
+      git(['push', '-q', 'origin', `HEAD:${BRANCH}`], dir);
+    }
   } finally {
     git(['worktree', 'remove', '--force', dir]);
   }
@@ -79,6 +86,12 @@ function publish(pr, files) {
 }
 
 const opts = parseArgs(process.argv.slice(2));
+// Chrome would otherwise happily screenshot its own "can't reach this page" error.
+try {
+  await fetch(opts.base);
+} catch {
+  throw new Error(`${opts.base} is not reachable; start it with \`npm run dev\` first`);
+}
 const chrome = CHROME_CANDIDATES.find((c) => existsSync(c));
 if (!chrome) throw new Error('Chrome not found; set CHROME=/path/to/chrome');
 rmSync(OUT, { recursive: true, force: true });
@@ -86,9 +99,9 @@ mkdirSync(OUT);
 
 const rows = [];
 for (const path of opts.paths) {
-  const shots = Object.keys(SIZES).map((size) => {
+  const shots = Object.keys(WIDTHS).map((size) => {
     const f = fileName(path, size);
-    capture(chrome, opts.base + path, size, join(OUT, f));
+    capture(chrome, opts.base + path, size, opts.height, join(OUT, f));
     return f;
   });
   rows.push({ path, shots });

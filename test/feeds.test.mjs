@@ -38,11 +38,12 @@ test('mergeNews caps each publisher and always includes the newest item of each 
   assert.deepEqual(merged.map((i) => i.title), ['Big 16', 'Big 15', 'Marca 2', 'Marca 1']);
 });
 
-test('mergeNews never repeats an item, and lifts the cap only to fill a short list', () => {
+test('mergeNews never repeats an item, and loosens the cap only to fill a short list', () => {
   const dup = news('AS', 5);
   const featured = [[dup, news('AS', 4), news('AS', 3)]];
-  assert.deepEqual(mergeNews([[dup], [news('BBC', 1)]], { limit: 2, perSource: 1, featured }).map((i) => i.title), ['AS 5', 'BBC 1']);
-  assert.deepEqual(mergeNews([[dup]], { limit: 10, perSource: 1, featured }).map((i) => i.title), ['AS 5', 'AS 4', 'AS 3']);
+  const opts = { perSource: 1, fillPerSource: 2, featured };
+  assert.deepEqual(mergeNews([[dup], [news('BBC', 1)]], { ...opts, limit: 2 }).map((i) => i.title), ['AS 5', 'BBC 1']);
+  assert.deepEqual(mergeNews([[dup]], { ...opts, limit: 10 }).map((i) => i.title), ['AS 5', 'AS 4']);
 });
 
 test('outletItems keeps recent items about Mourinho and labels them with the outlet', () => {

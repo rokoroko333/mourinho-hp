@@ -14,10 +14,16 @@ cd "${CLAUDE_PROJECT_DIR:-.}" || exit 0
 
 # コード変更がなければ何もしない
 if git rev-parse --git-dir >/dev/null 2>&1; then
-  # upstream が無いブランチは「未プッシュのコミットあり」とみなして検証する
-  ahead=$(git rev-list --count '@{upstream}..HEAD' 2>/dev/null || echo 1)
-  if [ -z "$(git status --porcelain 2>/dev/null)" ] && [ "$ahead" = "0" ]; then
-    exit 0
+  # 未コミットのファイルと、未プッシュのコミットで変わったファイルを集める
+  # （upstream が無いブランチは、既定ブランチとの差分を見る）
+  base=$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null || echo origin/HEAD)
+  changed=$( { git status --porcelain 2>/dev/null | cut -c4-
+               git diff --name-only "$base...HEAD" 2>/dev/null; } | sort -u)
+  # Markdown と docs/ だけの変更なら検証しない
+  code_changed=$(printf '%s\n' "$changed" | grep -v -e '^$' -e '\.md$' -e '^docs/' || true)
+  # 比較先のブランチが分からないときは、安全側に倒して検証する
+  if git rev-parse -q --verify "$base" >/dev/null; then
+    [ -n "$code_changed" ] || exit 0
   fi
 fi
 
@@ -25,7 +31,8 @@ fi
 command -v npm >/dev/null 2>&1 || exit 0
 
 has_script() {
-  node -e "process.exit(require('./package.json').scripts?.['$1'] ? 0 : 1)" 2>/dev/null
+  # npm init 既定の test（"no test specified"）は無いものとして扱う
+  node -e "const s=require('./package.json').scripts?.['$1'];process.exit(s && !/no test specified/.test(s) ? 0 : 1)" 2>/dev/null
 }
 
 failed=0

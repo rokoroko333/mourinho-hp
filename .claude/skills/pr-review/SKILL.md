@@ -1,5 +1,5 @@
 ---
-name: review
+name: pr-review
 description: PR の AI レビューを行う。実装とは別のスレッドで、バグ・セキュリティ・設計の3観点から、根拠付きの指摘と判定を返すときに使う。
 ---
 

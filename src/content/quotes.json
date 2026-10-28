@@ -1,0 +1,148 @@
+[
+  {
+    "id": "special-one",
+    "year": 2004,
+    "text": "Please don't call me arrogant, but I'm European champion and I think I'm a special one.",
+    "context": {
+      "en": "First press conference as Chelsea manager",
+      "es": "Primera rueda de prensa como entrenador del Chelsea",
+      "pt": "Primeira conferência de imprensa como treinador do Chelsea"
+    }
+  },
+  {
+    "id": "prefer-not-to-speak",
+    "year": 2014,
+    "text": "I prefer not to speak. If I speak, I am in big trouble.",
+    "context": {
+      "en": "Chelsea, a famous non-answer about refereeing",
+      "es": "Chelsea, su famosa no-respuesta sobre el arbitraje",
+      "pt": "Chelsea, a famosa não-resposta sobre a arbitragem"
+    }
+  },
+  {
+    "id": "specialist-in-failure",
+    "year": 2014,
+    "text": "He is a specialist in failure. I'm not.",
+    "context": {
+      "en": "On Arsène Wenger",
+      "es": "Sobre Arsène Wenger",
+      "pt": "Sobre Arsène Wenger"
+    }
+  },
+  {
+    "id": "respect",
+    "year": 2018,
+    "text": "Respect, respect, respect. I won more Premier Leagues alone than the other 19 managers together.",
+    "context": {
+      "en": "Manchester United press conference, holding up three fingers",
+      "es": "Rueda de prensa con el Manchester United, mostrando tres dedos",
+      "pt": "Conferência de imprensa no Manchester United, a mostrar três dedos"
+    }
+  },
+  {
+    "id": "pressure",
+    "text": "Pressure? What pressure? Pressure is poor people in the world trying to feed their families.",
+    "context": {
+      "en": "Chelsea, on the 'pressure' of a title race",
+      "es": "Chelsea, sobre la 'presión' de pelear la liga",
+      "pt": "Chelsea, sobre a 'pressão' de lutar pelo título"
+    }
+  },
+  {
+    "id": "harry-potter",
+    "text": "I am not Harry Potter.",
+    "context": {
+      "en": "Chelsea, asked to perform miracles",
+      "es": "Chelsea, cuando le pedían milagros",
+      "pt": "Chelsea, quando lhe pediam milagres"
+    }
+  },
+  {
+    "id": "omelettes",
+    "text": "Omelettes, eggs. No eggs, no omelettes. And it depends on the quality of the eggs.",
+    "context": {
+      "en": "Chelsea, on building a squad without new signings",
+      "es": "Chelsea, sobre armar un equipo sin fichajes",
+      "pt": "Chelsea, sobre construir uma equipa sem contratações"
+    }
+  },
+  {
+    "id": "easy-job",
+    "year": 2004,
+    "text": "If I wanted to have an easy job I would have stayed at Porto – beautiful blue chair, the UEFA Champions League trophy, God, and after God, me.",
+    "context": {
+      "en": "Chelsea, explaining why he left Porto",
+      "es": "Chelsea, explicando por qué dejó el Oporto",
+      "pt": "Chelsea, a explicar porque deixou o FC Porto"
+    }
+  },
+  {
+    "id": "melons",
+    "text": "Young players are a little bit like melons. Only when you open and taste the melon are you 100% sure that the melon is good.",
+    "context": {
+      "en": "Chelsea, on developing young players",
+      "es": "Chelsea, sobre la formación de jóvenes",
+      "pt": "Chelsea, sobre a formação de jovens"
+    }
+  },
+  {
+    "id": "bus",
+    "year": 2004,
+    "text": "As we say in Portugal, they brought the bus and they left the bus in front of the goal.",
+    "context": {
+      "en": "After a 0-0 against Tottenham – the birth of 'parking the bus'",
+      "es": "Tras un 0-0 ante el Tottenham: nace 'aparcar el autobús'",
+      "pt": "Depois de um 0-0 com o Tottenham: nasce 'estacionar o autocarro'"
+    }
+  },
+  {
+    "id": "beautiful-defeat",
+    "year": 2010,
+    "text": "It was the most beautiful defeat of my life.",
+    "context": {
+      "en": "Inter, after reaching the Champions League final at Camp Nou with ten men",
+      "es": "Inter, tras clasificarse para la final de la Champions en el Camp Nou con diez",
+      "pt": "Inter, depois de chegar à final da Champions em Camp Nou com dez jogadores"
+    }
+  },
+  {
+    "id": "happy-one",
+    "year": 2013,
+    "text": "I'm the happy one.",
+    "context": {
+      "en": "On returning to Chelsea",
+      "es": "En su regreso al Chelsea",
+      "pt": "No regresso ao Chelsea"
+    }
+  },
+  {
+    "id": "19th-century",
+    "year": 2014,
+    "text": "This is football from the 19th century.",
+    "context": {
+      "en": "Chelsea, on West Ham's defensive approach",
+      "es": "Chelsea, sobre el planteamiento defensivo del West Ham",
+      "pt": "Chelsea, sobre a abordagem defensiva do West Ham"
+    }
+  },
+  {
+    "id": "poor-rival",
+    "year": 2010,
+    "text": "One day some poor rival is going to pay for the chances we've missed today.",
+    "context": {
+      "en": "Inter, after a goalless draw",
+      "es": "Inter, tras un empate sin goles",
+      "pt": "Inter, depois de um empate sem golos"
+    }
+  },
+  {
+    "id": "one-of-you",
+    "year": 2013,
+    "text": "I'm one of you.",
+    "context": {
+      "en": "To the Chelsea supporters on his return",
+      "es": "A la afición del Chelsea en su regreso",
+      "pt": "Aos adeptos do Chelsea no regresso"
+    }
+  }
+]

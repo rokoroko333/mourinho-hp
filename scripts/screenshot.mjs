@@ -1,0 +1,102 @@
+// Screenshots of pages for a PR, using the local Chrome in headless mode (no npm dependency).
+//
+//   npm run dev                                   # in another terminal (http://localhost:8788)
+//   node scripts/screenshot.mjs / /es/ /pt/       # writes screenshots/*.png
+//   node scripts/screenshot.mjs --pr 12 / /es/    # also pushes them to the `screenshots` branch
+//                                                 # and prints Markdown to paste into the PR
+//
+// Options: --base <origin> (default http://localhost:8788), CHROME=<path to the Chrome binary>.
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+const ROOT = new URL('..', import.meta.url).pathname;
+const OUT = join(ROOT, 'screenshots');
+const BRANCH = 'screenshots';
+// Headless Chrome will not make a window narrower than 500px, so that is the phone-sized shot.
+const SIZES = { desktop: '1280,2200', mobile: '500,2200' };
+
+const CHROME_CANDIDATES = [
+  process.env.CHROME,
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+  '/usr/bin/google-chrome',
+  '/usr/bin/chromium',
+].filter(Boolean);
+
+function parseArgs(argv) {
+  const opts = { base: 'http://localhost:8788', pr: null, paths: [] };
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === '--base') opts.base = argv[++i].replace(/\/$/, '');
+    else if (argv[i] === '--pr') opts.pr = Number(argv[++i]);
+    else opts.paths.push(argv[i]);
+  }
+  if (!opts.paths.length) opts.paths = ['/', '/es/', '/pt/'];
+  if (opts.pr !== null && !Number.isInteger(opts.pr)) throw new Error('--pr needs a PR number');
+  return opts;
+}
+
+const fileName = (path, size) => `${path.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home'}-${size}.png`;
+
+function capture(chrome, url, size, file) {
+  // The virtual time budget lets app.js fill the news and match cards from /api/* before the shot.
+  execFileSync(chrome, [
+    '--headless=new', '--hide-scrollbars', '--disable-gpu', '--virtual-time-budget=8000',
+    `--window-size=${SIZES[size]}`, `--screenshot=${file}`, url,
+  ], { stdio: 'ignore', timeout: 60_000 }); // headless Chrome occasionally hangs; fail instead of waiting
+}
+
+// Keeps images out of the code branches: they go to an orphan branch, one folder per PR.
+function publish(pr, files) {
+  const git = (args, cwd = ROOT) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
+  const repo = git(['remote', 'get-url', 'origin']).replace(/^git@github\.com:|^https:\/\/github\.com\/|\.git$/g, '');
+  const dir = mkdtempSync(join(tmpdir(), 'shots-'));
+  git(['worktree', 'add', '--detach', dir]);
+  try {
+    let exists = true;
+    try {
+      git(['fetch', 'origin', BRANCH]);
+    } catch {
+      exists = false;
+    }
+    if (exists) git(['checkout', '-B', BRANCH, 'FETCH_HEAD'], dir);
+    else {
+      git(['checkout', '--orphan', BRANCH], dir);
+      git(['rm', '-rfq', '.'], dir);
+    }
+    mkdirSync(join(dir, `pr-${pr}`), { recursive: true });
+    for (const f of files) cpSync(join(OUT, f), join(dir, `pr-${pr}`, f));
+    git(['add', `pr-${pr}`], dir);
+    git(['commit', '-qm', `Screenshots for PR #${pr}`], dir);
+    git(['push', '-q', 'origin', `HEAD:${BRANCH}`], dir);
+  } finally {
+    git(['worktree', 'remove', '--force', dir]);
+  }
+  return (f) => `https://github.com/${repo}/blob/${BRANCH}/pr-${pr}/${f}?raw=true`;
+}
+
+const opts = parseArgs(process.argv.slice(2));
+const chrome = CHROME_CANDIDATES.find((c) => existsSync(c));
+if (!chrome) throw new Error('Chrome not found; set CHROME=/path/to/chrome');
+rmSync(OUT, { recursive: true, force: true });
+mkdirSync(OUT);
+
+const rows = [];
+for (const path of opts.paths) {
+  const shots = Object.keys(SIZES).map((size) => {
+    const f = fileName(path, size);
+    capture(chrome, opts.base + path, size, join(OUT, f));
+    return f;
+  });
+  rows.push({ path, shots });
+}
+console.log(`Saved ${rows.length * 2} screenshots in ${OUT}`);
+
+if (opts.pr !== null) {
+  const url = publish(opts.pr, rows.flatMap((r) => r.shots));
+  console.log('\n| Page | Desktop | Mobile |\n|---|---|---|');
+  for (const { path, shots } of rows) {
+    console.log(`| \`${path}\` | <img src="${url(shots[0])}" width="320"> | <img src="${url(shots[1])}" width="200"> |`);
+  }
+}

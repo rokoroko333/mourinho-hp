@@ -109,6 +109,7 @@ test('fetchNewsWithReport fetches Google News one feed at a time and retries onc
   assert.deepEqual([...seen.values()].sort(), [1, 1, 1, 1, 2]);
   // Both general feeds made it in, including the one that needed the retry.
   assert.equal(r.items.length, 2);
+  assert.equal(r.failedFeeds, 0);
 });
 
 test('langForRun cycles through every language on consecutive 20-minute cron runs', () => {
@@ -142,15 +143,17 @@ test('pickMatches returns latest completed and next upcoming', () => {
 test('refreshAll keeps the last good copy when upstream fails', async () => {
   const store = new Map([[KV_KEYS.news('en'), 'old']]);
   const kv = { put: async (k, v) => store.set(k, v) };
+  let report;
   const realFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response('boom', { status: 500 });
   try {
-    await refreshAll(kv);
+    report = await refreshAll(kv, new Date(), ['en']);
   } finally {
     globalThis.fetch = realFetch;
   }
   assert.equal(store.get(KV_KEYS.news('en')), 'old');
   assert.equal(store.has(KV_KEYS.matches), false);
+  assert.equal(report['feeds:en:failed'], 2 + OUTLETS.en.length);
 });
 
 test('scheduleUrls covers the current season in both halves of the year, plus upcoming fixtures', () => {

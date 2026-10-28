@@ -13,6 +13,9 @@ npm run dev        # http://localhost:8788
 The news and match sections read from KV. Locally the KV is empty, so the Functions fetch live data once;
 if you are offline, seed it with `npx wrangler kv key put --local --binding FEEDS news:en --path sample.json`.
 
+To attach screenshots to a PR, run `npm run dev` and then `npm run screenshot -- --pr <number> / /es/ /pt/`
+(uses the local Chrome in headless mode; see `docs/dev-flow.md`).
+
 ## First deployment
 
 Wrangler 4 needs Node.js 22 or later (`.node-version` pins it for nodenv and similar tools).

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNews, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, outletItems, fetchNewsWithReport, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -44,15 +44,16 @@ test('mergeNews does not let a featured outlet exceed its cap or duplicate a gen
   assert.deepEqual(merged.map((i) => i.title), ['AS 5']);
 });
 
-test('outletItems keeps only recent items that name Mourinho in the title', () => {
+test('outletItems keeps only recent items from the outlet that name Mourinho in the title', () => {
   const now = new Date('2026-10-28T00:00:00Z');
   const items = [
     news('Marca', 9, 'Mourinho rotates the squad'),
     news('Marca', 8, 'Ancelotti speaks'),
     { ...news('Marca', 7, 'MOURINHO in 2024'), publishedAt: '2024-06-01T00:00:00.000Z' },
     { ...news('Marca', 6, 'Mourinho undated'), publishedAt: null },
+    news('marca usa', 5, 'Mourinho in English'),
   ];
-  assert.deepEqual(outletItems(items, now).map((i) => i.title), ['Mourinho rotates the squad']);
+  assert.deepEqual(outletItems(items, { name: 'MARCA' }, now).map((i) => i.title), ['Mourinho rotates the squad']);
 });
 
 test('fetchNews queries every outlet with site: and mixes its items in', async () => {
@@ -62,21 +63,23 @@ test('fetchNews queries every outlet with site: and mixes its items in', async (
   globalThis.fetch = async (url) => {
     urls.push(url);
     const site = new URL(url).searchParams.get('q').match(/site:(\S+)/)?.[1];
-    const title = site ? `Mourinho in ${site} - ${site}` : 'Mourinho general - Wire';
+    const outlet = OUTLETS.es.find((o) => o.site === site);
+    // The last outlet answers under a different publisher name, so it must be reported as empty.
+    const name = !outlet ? 'Wire' : outlet === OUTLETS.es.at(-1) ? 'Someone Else' : outlet.name;
+    const title = `Mourinho in ${site || 'general'} - ${name}`;
     return new Response(`<rss><item><title>${title}</title><link>https://news.google.com/${site || 'g'}</link>
-<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate><source url="https://x">${site || 'Wire'}</source></item></rss>`);
+<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate><source url="https://x">${name}</source></item></rss>`);
   };
-  let items;
+  let r;
   try {
-    items = await fetchNews('es', now);
+    r = await fetchNewsWithReport('es', now);
   } finally {
     globalThis.fetch = realFetch;
   }
   assert.equal(urls.length, 2 + OUTLETS.es.length);
-  assert.deepEqual(
-    items.map((i) => i.source).sort(),
-    ['Wire', ...OUTLETS.es.map((o) => o.site)].sort(),
-  );
+  const expected = OUTLETS.es.slice(0, -1).map((o) => o.name);
+  assert.deepEqual(r.items.map((i) => i.source).sort(), ['Wire', ...expected].sort());
+  assert.deepEqual(r.emptyOutlets, [OUTLETS.es.at(-1).name]);
 });
 
 const ev = (id, date, completed, hs = '1', as = '0') => ({

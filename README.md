@@ -15,6 +15,9 @@ if you are offline, seed it with `npx wrangler kv key put --local --binding FEED
 
 ## First deployment
 
+Wrangler 4 needs Node.js 22 or later (`.node-version` pins it for nodenv and similar tools).
+The steps below were done on 2026-10-29: KV `FEEDS`, the Worker and the Pages project (direct upload, not Git-connected) exist.
+
 1. Log in: `npx wrangler login`
 2. Create the KV namespace and paste its id into **both** `wrangler.toml` and `workers/feeds/wrangler.toml`:
    ```sh

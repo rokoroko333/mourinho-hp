@@ -3,6 +3,7 @@
 import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { HIGHLIGHTS_URL } from '../lib/feeds.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'dist');
@@ -76,7 +77,7 @@ ${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternat
 <meta name="theme-color" content="#121212">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/styles.css">
-<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
 </head>`;
 }
 
@@ -194,7 +195,7 @@ ${header(lang, 'home')}
 <section id="matches" class="section">
   <div class="section-head"><div><h2>${esc(h.matchesHeading)}</h2><p class="sub">${esc(h.matchesSub)}</p></div></div>
   <div class="grid grid-2" id="match-list"><p class="loading">${esc(h.loading)}</p></div>
-  <a class="card card-link highlights" href="https://www.youtube.com/@realmadrid/videos" target="_blank" rel="noopener">
+  <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">
     <div><h3>${esc(h.highlights)}</h3><p class="muted">${esc(h.highlightsSub)}</p></div>
     <span class="btn btn-red">${icon.play}${esc(h.watch)}</span>
   </a>

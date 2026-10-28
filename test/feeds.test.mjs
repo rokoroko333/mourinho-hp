@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNewsWithReport, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, outletItems, fetchNewsWithReport, langForRun, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -82,6 +82,42 @@ test('fetchNews queries every outlet with site: and mixes its items in', async (
   assert.deepEqual(r.emptyOutlets, [OUTLETS.es.at(-1).name]);
 });
 
+test('fetchNewsWithReport fetches Google News one feed at a time and retries once on 503', async () => {
+  const seen = new Map();
+  let open = 0;
+  let maxOpen = 0;
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    open++;
+    maxOpen = Math.max(maxOpen, open);
+    await new Promise((r) => setTimeout(r, 5));
+    open--;
+    const n = (seen.get(url) || 0) + 1;
+    seen.set(url, n);
+    // Only the first general feed is rate-limited, and only on the first attempt.
+    if (n === 1 && !url.includes('site%3A') && url.includes('gl=PT')) return new Response('busy', { status: 503 });
+    return new Response(`<rss><item><title>Mourinho ${seen.size} - Wire</title><link>https://news.google.com/${seen.size}</link>
+<pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate><source url="https://x">Wire</source></item></rss>`);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport('pt', new Date('2026-10-28T00:00:00Z'));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(maxOpen, 1);
+  assert.deepEqual([...seen.values()].sort(), [1, 1, 1, 1, 2]);
+  // Both general feeds made it in, including the one that needed the retry.
+  assert.equal(r.items.length, 2);
+  assert.equal(r.failedFeeds, 0);
+});
+
+test('langForRun cycles through every language on consecutive 20-minute cron runs', () => {
+  const runs = [0, 20, 40, 60].map((m) => langForRun(new Date(Date.UTC(2026, 9, 28, 16, m))));
+  assert.deepEqual([...new Set(runs.slice(0, 3))].sort(), ['en', 'es', 'pt']);
+  assert.equal(runs[3], runs[0]);
+});
+
 const ev = (id, date, completed, hs = '1', as = '0') => ({
   id, date, league: { name: 'LaLiga' },
   competitions: [{ status: { type: { completed } }, competitors: [
@@ -107,15 +143,17 @@ test('pickMatches returns latest completed and next upcoming', () => {
 test('refreshAll keeps the last good copy when upstream fails', async () => {
   const store = new Map([[KV_KEYS.news('en'), 'old']]);
   const kv = { put: async (k, v) => store.set(k, v) };
+  let report;
   const realFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response('boom', { status: 500 });
   try {
-    await refreshAll(kv);
+    report = await refreshAll(kv, new Date(), ['en']);
   } finally {
     globalThis.fetch = realFetch;
   }
   assert.equal(store.get(KV_KEYS.news('en')), 'old');
   assert.equal(store.has(KV_KEYS.matches), false);
+  assert.equal(report['feeds:en:failed'], 2 + OUTLETS.en.length);
 });
 
 test('scheduleUrls covers the current season in both halves of the year, plus upcoming fixtures', () => {

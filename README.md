@@ -18,6 +18,9 @@ To attach screenshots to a PR, run `npm run dev` and then `npm run screenshot --
 
 ## First deployment
 
+Wrangler 4 needs Node.js 22 or later (`.node-version` pins it for nodenv and similar tools).
+The steps below were done on 2026-10-29: KV `FEEDS`, the Worker and the Pages project (direct upload, not Git-connected) exist.
+
 1. Log in: `npx wrangler login`
 2. Create the KV namespace and paste its id into **both** `wrangler.toml` and `workers/feeds/wrangler.toml`:
    ```sh
@@ -45,4 +48,4 @@ To attach screenshots to a PR, run `npm run dev` and then `npm run screenshot --
 - `/api/*` Functions: about 2 calls per home page view. Responses are edge-cached for 5 minutes, but every
   Function invocation still counts toward the Workers free limit of 100,000 requests/day, which covers roughly
   50,000 home page views/day. Beyond that, move to Workers Paid ($5/month).
-- KV: 288 writes/day from the cron (limit 1,000); reads are mostly absorbed by the edge cache.
+- KV: 144 writes/day from the cron (limit 1,000; matches every 20 minutes, each language's news hourly); reads are mostly absorbed by the edge cache.

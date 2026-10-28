@@ -50,7 +50,9 @@ function capture(chrome, url, size, file) {
 // Keeps images out of the code branches: they go to an orphan branch, one folder per PR.
 function publish(pr, files) {
   const git = (args, cwd = ROOT) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
-  const repo = git(['remote', 'get-url', 'origin']).replace(/^git@github\.com:|^https:\/\/github\.com\/|\.git$/g, '');
+  // Only owner/repo: the remote URL may embed credentials, which must never reach the PR text.
+  const repo = git(['remote', 'get-url', 'origin']).match(/github\.com[/:]([\w.-]+\/[\w.-]+?)(?:\.git)?$/)?.[1];
+  if (!repo) throw new Error('origin is not a GitHub remote');
   const dir = mkdtempSync(join(tmpdir(), 'shots-'));
   git(['worktree', 'add', '--detach', dir]);
   try {

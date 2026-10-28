@@ -3,6 +3,7 @@ main = "src/index.js"
 compatibility_date = "2026-10-01"
 
 # Every 20 minutes. 4 KV keys x 72 runs = 288 writes/day (free plan allows 1,000).
+# The outlet feeds in lib/feeds.js add subrequests, not keys.
 [triggers]
 crons = ["*/20 * * * *"]
 

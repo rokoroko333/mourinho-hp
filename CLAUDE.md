@@ -1,27 +1,43 @@
-# mourinho-hp
+# Infinito Mourinho（mourinho-hp）
 
+José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイル版（https://magenta-otter-30fcbe.netlify.app/）を置き換える。
 このファイルは、このリポジトリで作業するエージェントが毎回読む前提です。
-短く保ち（100行以内）、手順の詳細は `docs/` と `.claude/skills/` に置きます。
+短く保ち（100行以内）、手順の詳細は `docs/`・`.claude/skills/`・`README.md` に置きます。
+
+## 目的と読者
+
+- 読者は世界中の英語・スペイン語・ポルトガル語話者（日本語ではない）。オーナーは日本語で依頼する。
+- 人気の海外ファンサイト並みの流入が目標。全ページを en/es/pt で用意し、hreflang・canonical・
+  sitemap の alternates・言語ごとのスラッグを付ける。
+- Cloudflare 無料プランで 1日15,000訪問以上に耐える設計にする。
 
 ## 構成
 
-<!-- TODO: コードが入ったら、主要ディレクトリと役割を3〜5行で書く（初回の記入は「ルール」の例外） -->
-- `docs/dev-flow.md` 開発フローの詳細
-- `docs/review-lessons.md` 過去の指摘メモ（指摘・うまくいった手順・環境の事実）
-- `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）
-- `.claude/hooks/verify.sh` 作業終了時の自動検証
+- `scripts/build.mjs` 依存ゼロの静的生成。`src/content/*.json` を `dist/` に出力する。
+  英語は `/`、スペイン語は `/es/`、ポルトガル語は `/pt/`（`/history/`、`/es/historia/`、`/pt/frases/` など）。
+- `src/content/` 全テキスト（`ui.json`・`quotes.json`・`episodes.json`・`history.json`・`videos.json`）。
+  表示する文字列は必ず `en`・`es`・`pt` をそろえる。
+- `src/assets/` `styles.css` と `app.js`（素の JS。フレームワーク・Tailwind・CDN は使わない）。
+  `src/public/` は `dist/` 直下にコピーする（`_headers`・`_redirects`・favicon）。
+- `lib/feeds.js` Google News RSS（言語ごとに2エディション）と、現所属クラブの ESPN 日程をサーバー側で取得・解析。
+  `TEAM_ID`（86 = Real Madrid）は移籍したら変える。
+- `workers/feeds/` Cron Trigger（20分ごと）で `FEEDS` KV に JSON を書く Worker。空の結果では上書きしない。
+- `functions/api/news.js`・`functions/api/matches.js` KV をエッジキャッシュ経由で返す Pages Functions（`lib/serve.js`）。
+  ブラウザが呼ぶのは自サイトの `/api/*` だけ。
+- `docs/dev-flow.md` 開発フローの詳細。`docs/review-lessons.md` 過去の指摘メモ。
+- `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/hooks/verify.sh` 作業終了時の自動検証。
+
+デプロイ手順（Pages プロジェクト `infinito-mourinho`、Worker `infinito-mourinho-feeds`、共有の KV `FEEDS`）は `README.md` を読む。
 
 ## コマンド
 
-<!-- TODO: 実際のコマンドに置き換える。週1の整理で実行して確かめる -->
-仮の内容です（`package.json` はまだありません）。
+- 依存の導入: `npm ci`（wrangler のみ、開発用）
+- ビルド: `npm run build`。`SITE_URL` に本番のオリジンを設定する（未設定なら pages.dev の URL）
+- テスト: `npm test`（フィード解析とフォールバックの単体テスト、`node --test`）
+- ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み）
+- Worker のローカル実行: `npm run feeds:dev` のあと `curl "http://localhost:8787/__scheduled"`
 
-- 依存の導入: `npm ci`
-- lint: `npm run lint`
-- 型チェック: `npm run typecheck`
-- テスト: `npm test`
-
-`package.json` に存在するスクリプトだけが、Hooks で自動実行されます。
+lint と型チェックのスクリプトはまだない。`package.json` に存在するスクリプトだけが、Hooks で自動実行されます。
 
 ## 作業の流れ
 
@@ -42,11 +58,20 @@
 
 詳しくは `docs/dev-flow.md` を読むこと。
 
-## ルール
+## サイトのルール
+
+- ニュースや外部 API をブラウザから取得しない。無料の CORS/RSS プロキシ（rss2json、allorigins など）も使わない
+  （旧サイトのニュースが壊れた原因）。
+- フィードの文字列を `innerHTML` に入れない。`textContent` で DOM を組み立てる（`app.js` を参照）。
+- 名言・エピソード・経歴は検証できる事実だけを書く。年や細部が不確かなら書かない。
+- ページはサーバー側で描画する。内容は HTML に含め、JS は補助に限る。
+- ブラウザの言語で自動リダイレクトしない（SEO に悪い）。`app.js` は閉じられる提案バナーを出すだけ。
+
+## 運用のルール
 
 - CLAUDE.md・`.claude/` の設定は作業中に編集しない。変更は週1回の整理 PR にまとめる
   （先頭部分が変わるとキャッシュが効かなくなるため）。
-  例外は、ユーザーがその変更を依頼したときと、上の TODO を初めて埋めるとき。
+  例外は、ユーザーがその変更を依頼したとき。
 - CLAUDE.md に日付など毎回変わる値を書かない。
 - 使わない MCP サーバー・サブエージェント・スキルを登録しない。
 - 1つの依頼に1つのスレッド。別の作業は新しいスレッドで始める。

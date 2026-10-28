@@ -1,0 +1,19 @@
+{
+  "name": "infinito-mourinho",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "dev": "npm run build && wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "feeds:dev": "wrangler dev --config workers/feeds/wrangler.toml --test-scheduled",
+    "feeds:deploy": "wrangler deploy --config workers/feeds/wrangler.toml"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

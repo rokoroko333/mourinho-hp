@@ -1,0 +1,14 @@
+name = "infinito-mourinho-feeds"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Every 20 minutes. 4 KV keys x 72 runs = 288 writes/day (free plan allows 1,000).
+[triggers]
+crons = ["*/20 * * * *"]
+
+# Same namespace as the Pages project. Create it once with:
+#   npx wrangler kv namespace create FEEDS
+# and paste the id here and in ../../wrangler.toml.
+[[kv_namespaces]]
+binding = "FEEDS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

@@ -45,4 +45,4 @@ The steps below were done on 2026-10-29: KV `FEEDS`, the Worker and the Pages pr
 - `/api/*` Functions: about 2 calls per home page view. Responses are edge-cached for 5 minutes, but every
   Function invocation still counts toward the Workers free limit of 100,000 requests/day, which covers roughly
   50,000 home page views/day. Beyond that, move to Workers Paid ($5/month).
-- KV: 288 writes/day from the cron (limit 1,000); reads are mostly absorbed by the edge cache.
+- KV: 144 writes/day from the cron (limit 1,000; matches every 20 minutes, each language's news hourly); reads are mostly absorbed by the edge cache.

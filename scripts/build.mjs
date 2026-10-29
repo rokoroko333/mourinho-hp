@@ -4,6 +4,7 @@ import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL } from '../lib/feeds.js';
+import { withYears } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'dist');
@@ -18,8 +19,7 @@ const [ui, quotes, episodes, history, videos] = await Promise.all(
   ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json'].map(load),
 );
 
-// A quote's year comes from its `date` (YYYY or YYYY-MM-DD), so the two can never disagree.
-for (const q of quotes) q.year = q.date ? Number(q.date.slice(0, 4)) : null;
+withYears(quotes);
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);

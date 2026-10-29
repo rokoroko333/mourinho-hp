@@ -9,13 +9,14 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { capture, findChrome } from './chrome.mjs';
+import { withYears } from './content.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = join(ROOT, 'src/public/og');
 const OG_SIZE = { width: 1200, height: 630 };
 
 const quotes = JSON.parse(readFileSync(join(ROOT, 'src/content/quotes.json'), 'utf8'));
-for (const q of quotes) q.year = q.date ? Number(q.date.slice(0, 4)) : null;
+withYears(quotes);
 const logo = readFileSync(join(ROOT, 'src/public/favicon.svg'), 'utf8');
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);

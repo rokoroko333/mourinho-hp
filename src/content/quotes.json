@@ -1,148 +1,323 @@
 [
   {
     "id": "special-one",
-    "year": 2004,
+    "date": "2004-06-02",
+    "era": "chelsea-1",
     "text": "Please don't call me arrogant, but I'm European champion and I think I'm a special one.",
     "context": {
       "en": "First press conference as Chelsea manager",
       "es": "Primera rueda de prensa como entrenador del Chelsea",
       "pt": "Primeira conferência de imprensa como treinador do Chelsea"
-    }
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/15116/11522231/special-one-remembering-jose-mourinho-s-first-ever-chelsea-press-conference",
+        "publisher": "Sky Sports",
+        "date": "2018-10-18"
+      },
+      {
+        "url": "https://www.premierleague.com/en/news/2739364",
+        "publisher": "Premier League",
+        "date": "2022-08-15"
+      },
+      {
+        "url": "https://www.goal.com/en-us/news/why-is-jose-mourinho-called-the-special-one/13p8v38i8kaqe1kh38esm08jc5",
+        "publisher": "Goal.com",
+        "date": "2020-09-16"
+      }
+    ]
   },
   {
     "id": "prefer-not-to-speak",
-    "year": 2014,
-    "text": "I prefer not to speak. If I speak, I am in big trouble.",
+    "date": "2014-03-15",
+    "era": "chelsea-2",
+    "text": "I prefer not to speak. If I speak I will be in trouble.",
     "context": {
-      "en": "Chelsea, a famous non-answer about refereeing",
-      "es": "Chelsea, su famosa no-respuesta sobre el arbitraje",
-      "pt": "Chelsea, a famosa não-resposta sobre a arbitragem"
-    }
+      "en": "Chelsea, asked about the referee after a 1-0 defeat at Aston Villa",
+      "es": "Chelsea, preguntado por el árbitro tras perder 1-0 ante el Aston Villa",
+      "pt": "Chelsea, questionado sobre o árbitro depois de perder 1-0 com o Aston Villa"
+    },
+    "tags": [
+      "referees",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://sg.news.yahoo.com/football-mystified-mourinho-awaits-red-card-fate-010416977--sow.html",
+        "publisher": "Yahoo News (wire report)",
+        "date": "2014-03-16"
+      },
+      {
+        "url": "https://africa.espn.com/football/story/_/id/37340386/jose-mourinho-questions-ref-chris-foy-dismissals",
+        "publisher": "ESPN",
+        "date": "2014-03-15"
+      }
+    ]
   },
   {
     "id": "specialist-in-failure",
-    "year": 2014,
+    "date": "2014-02-14",
+    "era": "chelsea-2",
     "text": "He is a specialist in failure. I'm not.",
     "context": {
       "en": "On Arsène Wenger",
       "es": "Sobre Arsène Wenger",
       "pt": "Sobre Arsène Wenger"
-    }
+    },
+    "tags": [
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.ksl.com/article/sports/soccer/mourinho-calls-wenger-a-specialist-in-failure/28722816",
+        "publisher": "Associated Press",
+        "date": "2014-02-15"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/11096/10037024/arsene-wenger-v-jose-mourinho-the-history-of-their-rivalry-in-quotes",
+        "publisher": "Sky Sports",
+        "date": "2015-10-21"
+      }
+    ]
   },
   {
     "id": "respect",
-    "year": 2018,
-    "text": "Respect, respect, respect. I won more Premier Leagues alone than the other 19 managers together.",
+    "date": "2018-08-27",
+    "era": "man-utd",
+    "text": "Three Premierships, and I won more Premierships alone than the other 19 managers together. … Respect, respect, respect.",
     "context": {
-      "en": "Manchester United press conference, holding up three fingers",
-      "es": "Rueda de prensa con el Manchester United, mostrando tres dedos",
-      "pt": "Conferência de imprensa no Manchester United, a mostrar três dedos"
-    }
-  },
-  {
-    "id": "pressure",
-    "text": "Pressure? What pressure? Pressure is poor people in the world trying to feed their families.",
-    "context": {
-      "en": "Chelsea, on the 'pressure' of a title race",
-      "es": "Chelsea, sobre la 'presión' de pelear la liga",
-      "pt": "Chelsea, sobre a 'pressão' de lutar pelo título"
-    }
+      "en": "Manchester United, walking out of the press conference after a 3-0 home defeat by Tottenham",
+      "es": "Manchester United, al dejar la rueda de prensa tras perder 0-3 en casa ante el Tottenham",
+      "pt": "Manchester United, ao sair da conferência de imprensa depois de perder 0-3 em casa com o Tottenham"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://africa.espn.com/football/story/_/id/37560690/manchester-united-jose-mourinho-walks-demanding-respect-loss",
+        "publisher": "ESPN",
+        "date": "2018-08-27"
+      },
+      {
+        "url": "https://www.goal.com/en-gb/news/respect---angry-mourinho-storms-out-of-man-utd-press-conference/5n6soap3bhny1ftcvua29gdto",
+        "publisher": "Goal.com",
+        "date": "2018-08-28"
+      }
+    ]
   },
   {
     "id": "harry-potter",
-    "text": "I am not Harry Potter.",
+    "date": "2010",
+    "era": "real-madrid-1",
+    "text": "Look, I'm a coach, I'm not Harry Potter.",
     "context": {
-      "en": "Chelsea, asked to perform miracles",
-      "es": "Chelsea, cuando le pedían milagros",
-      "pt": "Chelsea, quando lhe pediam milagres"
-    }
+      "en": "Real Madrid, warning fans not to expect miracles after his first league match",
+      "es": "Real Madrid, pidiendo a la afición que no esperara milagros tras su primer partido de Liga",
+      "pt": "Real Madrid, a pedir aos adeptos que não esperassem milagres depois do primeiro jogo da Liga"
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11835/6352515/jose-im-not-harry-potter",
+        "publisher": "Sky Sports",
+        "date": "2010-09-01"
+      }
+    ]
   },
   {
     "id": "omelettes",
+    "date": "2007-09-17",
+    "era": "chelsea-1",
     "text": "Omelettes, eggs. No eggs, no omelettes. And it depends on the quality of the eggs.",
     "context": {
       "en": "Chelsea, on building a squad without new signings",
       "es": "Chelsea, sobre armar un equipo sin fichajes",
       "pt": "Chelsea, sobre construir uma equipa sem contratações"
-    }
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://gulfnews.com/sport/football/jose-mourinhos-five-best-quotes-1.1835836",
+        "publisher": "Gulf News (AFP)",
+        "date": "2018-09-15"
+      },
+      {
+        "url": "https://www.irishtimes.com/sport/mourinho-speak-jose-s-quotes-lest-we-forget-1.964297",
+        "publisher": "The Irish Times",
+        "date": "2007-09-21"
+      }
+    ]
   },
   {
     "id": "easy-job",
-    "year": 2004,
+    "date": "2004",
+    "era": "chelsea-1",
     "text": "If I wanted to have an easy job I would have stayed at Porto – beautiful blue chair, the UEFA Champions League trophy, God, and after God, me.",
     "context": {
       "en": "Chelsea, explaining why he left Porto",
       "es": "Chelsea, explicando por qué dejó el Oporto",
       "pt": "Chelsea, a explicar porque deixou o FC Porto"
-    }
+    },
+    "tags": [
+      "self-belief",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://inside.fifa.com/news/-1033132",
+        "publisher": "FIFA",
+        "date": "2016-05-27"
+      }
+    ]
   },
   {
     "id": "melons",
-    "text": "Young players are a little bit like melons. Only when you open and taste the melon are you 100% sure that the melon is good.",
+    "text": "Young players are like melons. Only when you open and taste the melon are you 100% sure that the melon is good.",
     "context": {
-      "en": "Chelsea, on developing young players",
-      "es": "Chelsea, sobre la formación de jóvenes",
-      "pt": "Chelsea, sobre a formação de jovens"
-    }
+      "en": "On developing young players",
+      "es": "Sobre la formación de jóvenes",
+      "pt": "Sobre a formação de jovens"
+    },
+    "tags": [
+      "youth",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://gulfnews.com/sport/football/jose-mourinhos-five-best-quotes-1.1835836",
+        "publisher": "Gulf News (AFP)",
+        "date": "2018-09-15"
+      },
+      {
+        "url": "https://www.irishexaminer.com/sport/soccer/arid-20372192.html",
+        "publisher": "Irish Examiner",
+        "date": "2015-12-18"
+      }
+    ]
   },
   {
     "id": "bus",
-    "year": 2004,
+    "date": "2004-09-19",
+    "era": "chelsea-1",
     "text": "As we say in Portugal, they brought the bus and they left the bus in front of the goal.",
     "context": {
       "en": "After a 0-0 against Tottenham – the birth of 'parking the bus'",
       "es": "Tras un 0-0 ante el Tottenham: nace 'aparcar el autobús'",
       "pt": "Depois de um 0-0 com o Tottenham: nasce 'estacionar o autocarro'"
-    }
+    },
+    "tags": [
+      "tactics",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en-gb/news/parking-the-bus-mean-football-defensive-tactics-term-explained-teams/1x1f2u4ueg7f513ij98yn7qqid",
+        "publisher": "Goal.com",
+        "date": "2022-05-28"
+      }
+    ]
   },
   {
     "id": "beautiful-defeat",
-    "year": 2010,
+    "date": "2010-04-28",
+    "era": "inter",
     "text": "It was the most beautiful defeat of my life.",
     "context": {
       "en": "Inter, after reaching the Champions League final at Camp Nou with ten men",
       "es": "Inter, tras clasificarse para la final de la Champions en el Camp Nou con diez",
       "pt": "Inter, depois de chegar à final da Champions em Camp Nou com dez jogadores"
-    }
+    },
+    "tags": [
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.theguardian.com/football/2010/apr/29/jose-mourino-internazionale-barcelona",
+        "publisher": "The Guardian",
+        "date": "2010-04-28"
+      }
+    ]
   },
   {
     "id": "happy-one",
-    "year": 2013,
+    "date": "2013-06-10",
+    "era": "chelsea-2",
     "text": "I'm the happy one.",
     "context": {
       "en": "On returning to Chelsea",
       "es": "En su regreso al Chelsea",
       "pt": "No regresso ao Chelsea"
-    }
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10366917/what-do-jose-mourinhos-previous-unveilings-tell-us-ahead-of-manchester-united-bow",
+        "publisher": "Sky Sports",
+        "date": "2016-07-04"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/11668/10102554/chelsea-sack-jose-mourinho-the-managers-most-memorable-quotes",
+        "publisher": "Sky Sports",
+        "date": "2015-12-17"
+      }
+    ]
   },
   {
     "id": "19th-century",
-    "year": 2014,
+    "date": "2014-01-29",
+    "era": "chelsea-2",
     "text": "This is football from the 19th century.",
     "context": {
       "en": "Chelsea, on West Ham's defensive approach",
       "es": "Chelsea, sobre el planteamiento defensivo del West Ham",
       "pt": "Chelsea, sobre a abordagem defensiva do West Ham"
-    }
-  },
-  {
-    "id": "poor-rival",
-    "year": 2010,
-    "text": "One day some poor rival is going to pay for the chances we've missed today.",
-    "context": {
-      "en": "Inter, after a goalless draw",
-      "es": "Inter, tras un empate sin goles",
-      "pt": "Inter, depois de um empate sem golos"
-    }
+    },
+    "tags": [
+      "tactics",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "http://en.espn.co.uk/football/sport/story/278301.html",
+        "publisher": "ESPN",
+        "date": "2014-01-29"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/11668/9140653/jose-mourinho-west-ham-play-football-from-19th-century",
+        "publisher": "Sky Sports",
+        "date": "2014-01-29"
+      }
+    ]
   },
   {
     "id": "one-of-you",
-    "year": 2013,
+    "date": "2013-06-03",
+    "era": "chelsea-2",
     "text": "I'm one of you.",
     "context": {
-      "en": "To the Chelsea supporters on his return",
-      "es": "A la afición del Chelsea en su regreso",
-      "pt": "Aos adeptos do Chelsea no regresso"
-    }
+      "en": "To Chelsea fans, in his first interview after returning",
+      "es": "A la afición del Chelsea, en su primera entrevista tras volver",
+      "pt": "Aos adeptos do Chelsea, na primeira entrevista após o regresso"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11668/8755818/jose-mourinho-tells-chelsea-fans-it-was-an-easy-decision-to-return-as-manager",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      }
+    ]
   }
 ]

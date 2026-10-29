@@ -18,6 +18,9 @@ const [ui, quotes, episodes, history, videos] = await Promise.all(
   ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json'].map(load),
 );
 
+// A quote's year comes from its `date` (YYYY or YYYY-MM-DD), so the two can never disagree.
+for (const q of quotes) q.year = q.date ? Number(q.date.slice(0, 4)) : null;
+
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -335,6 +338,13 @@ function relatedCards(lang, kind, id) {
     .join('\n      ');
 }
 
+// Where the quote was reported. Every quote must have at least one (test/build.test.mjs checks).
+function sourceList(sources, lang) {
+  return `<p class="sources"><span class="card-label">${esc(ui[lang].detail.sources)}</span> ${sources
+    .map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.publisher)}${s.date ? ` (${esc(s.date)})` : ''}</a>`)
+    .join(' · ')}</p>`;
+}
+
 // Plain links to each network's own share page, so sharing works without JavaScript and without
 // loading any third-party SDK. app.js reveals the phone's share sheet (first) and the copy button.
 function shareButtons(lang, url, title, text) {
@@ -372,12 +382,23 @@ function detailPage(lang, kind, id) {
       title: `${fill(d.quoteTitle, { text: clip(q.text, 70) })} | ${u.siteName}`,
       description: clip(fill(d.quoteDescription, { text: q.text, context: q.context[lang] + year }), 160),
     };
-    mainEntity = { '@type': 'Quotation', text: q.text, inLanguage: 'en', creator: MOURINHO, ...(q.year && { dateCreated: String(q.year) }) };
+    mainEntity = {
+      '@type': 'Quotation',
+      text: q.original?.text ?? q.text,
+      inLanguage: q.original?.lang ?? 'en',
+      creator: MOURINHO,
+      ...(q.date && { dateCreated: q.date }),
+      citation: q.sources.map((s) => s.url),
+    };
     shareText = `“${q.text}” — José Mourinho`;
     image = `/og/quotes/${q.id}.png`;
+    const era = history.find((h) => h.id === q.era);
     body = `<p class="card-label">${esc(d.quoteLabel)}</p>
     <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
-    <p class="quote-context">— ${esc(q.context[lang])}${year}</p>`;
+    ${q.original ? `<p class="quote-original" lang="${esc(q.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(q.original.text)}”</p>` : ''}
+    <p class="quote-context">— ${esc(q.context[lang])}${year}</p>
+    ${era ? `<p class="quote-era"><a class="pill" href="${eraPaths(era.id)[lang]}">${esc(era.years)} · ${esc(era.club[lang])}</a></p>` : ''}
+    ${sourceList(q.sources, lang)}`;
   } else {
     const e = episodes.find((x) => x.id === id);
     t = {
@@ -445,6 +466,22 @@ function trophyLine(h, lang) {
   return `<p class="trophies">${icon.trophy}<span><span class="sr-only">${esc(ui[lang].history.trophies)}: </span>${esc(h.trophies[lang])}</span></p>`;
 }
 
+// Quotes are tied to an era only through their explicit `era`, never guessed from the year (PR #13).
+function eraQuotes(eraId, lang) {
+  const list = quotes.filter((q) => q.era === eraId);
+  if (!list.length) return '';
+  return `<section class="section">
+    <h2>${esc(ui[lang].history.eraQuotes)}</h2>
+    <div class="grid grid-2">
+      ${list
+        .map(
+          (q) => `<a class="card card-quote card-link" href="${detailPaths('quotes', q.id)[lang]}">${quoteBody(q, lang)}</a>`,
+        )
+        .join('\n      ')}
+    </div>
+  </section>`;
+}
+
 function eraPage(lang, index) {
   const u = ui[lang];
   const p = u.history;
@@ -477,6 +514,7 @@ ${header(lang, paths, 'history')}
     ${trophyLine(h, lang)}
     <ul class="era-points">${h.points[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
   </article>
+  ${eraQuotes(h.id, lang)}
   <nav class="grid grid-2 era-steps" aria-label="${esc(p.chapters)}">
     ${step(index - 1, p.previous, 'era-prev')}
     ${step(index + 1, p.next, 'era-next')}

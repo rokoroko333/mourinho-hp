@@ -206,3 +206,25 @@ test('links that open a new tab do not give the opened page access to ours', asy
     }
   }
 });
+
+// Phase 2 rule: no quote without a source. Tags are a fixed list so tag pages stay meaningful.
+const QUOTE_TAGS = ['self-belief', 'rivals', 'humour', 'referees', 'tactics', 'youth', 'fans'];
+
+test('every quote has a dated source, a known era and known tags', async () => {
+  const quotes = await load('quotes.json');
+  const eras = new Set((await load('history.json')).map((h) => h.id));
+  for (const q of quotes) {
+    assert.ok(Array.isArray(q.sources) && q.sources.length > 0, `${q.id}: at least one source`);
+    for (const s of q.sources) {
+      // http is allowed: a few archived reports (ESPN.co.uk) exist only there, and these are plain links.
+      assert.match(s.url, /^https?:\/\/[^\s]+$/, `${q.id}: source url`);
+      assert.ok(s.publisher, `${q.id}: source publisher`);
+      if (s.date) assert.match(s.date, /^\d{4}-\d{2}-\d{2}$/, `${q.id}: source date`);
+    }
+    if (q.date) assert.match(q.date, /^\d{4}(-\d{2}-\d{2})?$/, `${q.id}: date is YYYY or YYYY-MM-DD`);
+    if (q.era) assert.ok(eras.has(q.era), `${q.id}: era ${q.era} exists in history.json`);
+    for (const t of q.tags ?? []) assert.ok(QUOTE_TAGS.includes(t), `${q.id}: tag ${t}`);
+    if (q.original) assert.ok(q.original.lang && q.original.text, `${q.id}: original needs lang and text`);
+    assert.ok(!('year' in q), `${q.id}: the year comes from date, not a separate field`);
+  }
+});

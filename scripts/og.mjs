@@ -15,6 +15,7 @@ const OUT = join(ROOT, 'src/public/og');
 const OG_SIZE = { width: 1200, height: 630 };
 
 const quotes = JSON.parse(readFileSync(join(ROOT, 'src/content/quotes.json'), 'utf8'));
+for (const q of quotes) q.year = q.date ? Number(q.date.slice(0, 4)) : null;
 const logo = readFileSync(join(ROOT, 'src/public/favicon.svg'), 'utf8');
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);

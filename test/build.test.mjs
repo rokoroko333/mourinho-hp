@@ -65,6 +65,47 @@ test('every quote and story has its own page in all three languages, linked from
   }
 });
 
+test('every career era has its own page in all three languages, linked from the timeline and in order', async () => {
+  await build();
+  const history = await load('history.json');
+  const base = { en: 'history', es: 'es/historia', pt: 'pt/historia' };
+  const timelines = Object.fromEntries(await Promise.all(Object.entries(base).map(async ([l, b]) => [l, await page(b)])));
+  history.forEach((h, i) => {
+    const paths = Object.fromEntries(Object.entries(base).map(([l, b]) => [l, `/${b}/${h.id}/`]));
+    for (const [lang, path] of Object.entries(paths)) {
+      assert.ok(timelines[lang].includes(`href="${path}"`), `${lang} timeline links to ${path}`);
+    }
+  });
+  for (const [lang, b] of Object.entries(base)) {
+    for (const [i, h] of history.entries()) {
+      const path = `/${b}/${h.id}/`;
+      const html = await page(path);
+      assert.match(html, new RegExp(`<html lang="${lang}">`), path);
+      assert.ok(html.includes(`<link rel="canonical" href="https://infinito-mourinho.pages.dev${path}">`), `${path}: canonical`);
+      for (const [l, bb] of Object.entries(base)) {
+        assert.ok(html.includes(`hreflang="${l}" href="https://infinito-mourinho.pages.dev/${bb}/${h.id}/"`), `${path}: hreflang ${l}`);
+      }
+      const prev = history[i - 1] && `/${b}/${history[i - 1].id}/`;
+      const next = history[i + 1] && `/${b}/${history[i + 1].id}/`;
+      assert.equal(html.includes('class="card card-link era-prev"'), Boolean(prev), `${path}: previous link`);
+      assert.equal(html.includes('class="card card-link era-next"'), Boolean(next), `${path}: next link`);
+      if (prev) assert.ok(html.includes(`era-prev" href="${prev}"`), `${path}: previous is ${prev}`);
+      if (next) assert.ok(html.includes(`era-next" href="${next}"`), `${path}: next is ${next}`);
+    }
+  }
+});
+
+test('era descriptions mention trophies only for finished eras that won some', async () => {
+  await build();
+  const history = await load('history.json');
+  const description = async (id) => (await page(`history/${id}`)).match(/<meta name="description" content="([^"]*)"/)[1];
+  const current = history.at(-1);
+  assert.ok(current.years.endsWith('–'), 'the last era is the one in progress');
+  assert.ok(!(await description(current.id)).startsWith('Trophies:'));
+  assert.ok(!(await description('leiria')).startsWith('Trophies:'), 'an era without trophies');
+  assert.ok((await description('inter')).startsWith('Trophies: Champions League'));
+});
+
 test('related links on detail pages point to other existing pages', async () => {
   await build();
   const html = await page('stories/special-one');

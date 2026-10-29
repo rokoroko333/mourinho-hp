@@ -368,16 +368,62 @@ ${header(lang, pathsOf('history'), 'history')}
     ${history
       .map(
         (h) => `<li class="timeline-item" id="${h.id}">
-      <article class="card">
+      <a class="card card-link" href="${eraPaths(h.id)[lang]}">
         <p class="pill">${esc(h.years)} · ${esc(h.era[lang])}</p>
         <h2>${esc(h.club[lang])}</h2>
-        <p class="trophies">${icon.trophy}<span><span class="sr-only">${esc(p.trophies)}: </span>${esc(h.trophies[lang])}</span></p>
-        <ul>${h.points[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
-      </article>
+        ${trophyLine(h, lang)}
+      </a>
     </li>`,
       )
       .join('\n    ')}
   </ol>
+</main>
+${footer(lang)}`;
+}
+
+// Era pages live under the history page: /history/inter/, /es/historia/inter/, /pt/historia/inter/.
+const eraPaths = (id) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'history')}${id}/`]));
+
+function trophyLine(h, lang) {
+  return `<p class="trophies">${icon.trophy}<span><span class="sr-only">${esc(ui[lang].history.trophies)}: </span>${esc(h.trophies[lang])}</span></p>`;
+}
+
+function eraPage(lang, index) {
+  const u = ui[lang];
+  const p = u.history;
+  const h = history[index];
+  const paths = eraPaths(h.id);
+  const values = { club: h.club[lang], years: h.years, era: h.era[lang] };
+  // "—" marks an era without trophies, and the current era ("2026–") has no final tally yet; their
+  // descriptions start with what happened instead.
+  const won = h.trophies[lang] === '—' || h.years.endsWith('–') ? [] : [`${p.trophies}: ${h.trophies[lang]}.`];
+  const t = {
+    title: `${fill(p.eraTitle, values)} | ${u.siteName}`,
+    description: clip([...won, ...h.points[lang]].join(' '), 160),
+  };
+  const step = (i, label, cls) =>
+    history[i]
+      ? `<a class="card card-link ${cls}" href="${eraPaths(history[i].id)[lang]}">
+        <p class="card-label">${esc(label)} · ${esc(history[i].years)}</p>
+        <h3>${esc(history[i].club[lang])}</h3>
+        <p class="muted">${esc(history[i].era[lang])}</p>
+      </a>`
+      : '';
+  return `${head(lang, paths, t)}
+<body data-lang="${lang}">
+${header(lang, paths, 'history')}
+<main class="wrap page">
+  <p class="more back"><a href="${pathOf(lang, 'history')}">${icon.arrow}${esc(p.back)}</a></p>
+  <article class="card detail era">
+    <p class="pill">${esc(h.years)} · ${esc(h.era[lang])}</p>
+    <h1 class="detail-title">${esc(h.club[lang])}</h1>
+    ${trophyLine(h, lang)}
+    <ul class="era-points">${h.points[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+  </article>
+  <nav class="grid grid-2 era-steps" aria-label="${esc(p.chapters)}">
+    ${step(index - 1, p.previous, 'era-prev')}
+    ${step(index + 1, p.next, 'era-next')}
+  </nav>
 </main>
 ${footer(lang)}`;
 }
@@ -414,6 +460,7 @@ await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 const render = { home: homePage, quotes: quotesPage, history: historyPage };
 const routes = [
   ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
+  ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),
   ...ITEMS.map(({ kind, id }) => ({
     paths: detailPaths(kind, id),
     changefreq: 'yearly',

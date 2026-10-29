@@ -87,7 +87,7 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .card p { margin: 0; }
 .card-label { color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 .card-link:hover { border-color: var(--gold); }
-.card-link:hover h3 { color: var(--gold); }
+.card-link:hover h2, .card-link:hover h3 { color: var(--gold); }
 .card-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
 .quote-text { margin: 0; font-family: var(--serif); font-size: clamp(19px, 2.4vw, 24px); color: #fff; line-height: 1.5; }
 .quote-context { color: var(--muted); font-size: 13px; }
@@ -135,6 +135,11 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .detail-quote { font-size: clamp(24px, 4vw, 36px); }
 .detail-title { font-size: clamp(28px, 5vw, 44px); font-weight: 900; color: #fff; }
 .detail-text { color: var(--muted); font-size: 18px; line-height: 1.7; }
+.era-points { margin: 4px 0 0; padding: 18px 18px 18px 36px; background: rgb(18 18 18 / 0.6); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: #d4d4d4; }
+.era-points li::marker { color: var(--gold-dark); }
+.era-next { text-align: right; }
+.era-next .card-label { align-self: flex-end; }
+@media (min-width: 720px) { .era-next { grid-column: 2; } }
 .pill { align-self: flex-start; background: rgb(92 69 16 / 0.35); color: var(--gold); border: 1px solid rgb(92 69 16 / 0.7); font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 999px; }
 .trophies { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--muted); }
 .trophies svg { color: var(--gold); margin-top: 3px; }

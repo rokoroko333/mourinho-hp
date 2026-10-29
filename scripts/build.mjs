@@ -12,11 +12,11 @@ const OUT = join(ROOT, 'dist');
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt'];
-const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'remarks'];
+const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
-const [ui, quotes, episodes, history, videos, trophies, stats, remarks] = await Promise.all(
-  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json', 'remarks.json'].map(load),
+const [ui, quotes, episodes, history, videos, trophies, stats, remarks, rivals] = await Promise.all(
+  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json', 'remarks.json', 'rivals.json'].map(load),
 );
 // Newest first. Added by hand with their sources, never from the feeds (docs/plans/phase2.md, item 6).
 remarks.sort((a, b) => b.date.localeCompare(a.date));
@@ -692,6 +692,106 @@ ${header(lang, pathsOf('remarks'), 'remarks')}
 ${footer(lang)}`;
 }
 
+// Rival pages: /rivals/guardiola/, /es/rivales/guardiola/, /pt/rivais/guardiola/.
+const rivalPaths = (id) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'rivals')}${id}/`]));
+
+// A match date as precise as its source: "3 May 2011", "February 2007" or "2005".
+function fuzzyDate(date, lang) {
+  if (date.length === 10) return longDate(date, lang);
+  if (date.length === 7)
+    return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}-01`));
+  return date;
+}
+
+// Head-to-head from Mourinho's side, exactly as one source counted it on its date (docs/plans/phase2.md, item 4).
+function h2hLine(r, lang) {
+  const p = ui[lang].rivals;
+  const h = r.h2h;
+  return fill(p.record, { matches: num(h.matches, lang), wins: num(h.wins, lang), draws: num(h.draws, lang), losses: num(h.losses, lang) });
+}
+
+function rivalsPage(lang) {
+  const u = ui[lang];
+  const p = u.rivals;
+  return `${head(lang, pathsOf('rivals'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('rivals'), 'history')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+  </div>
+  <div class="grid grid-2">
+    ${rivals
+      .map(
+        (r) => `<a class="card card-link rival-card" href="${rivalPaths(r.id)[lang]}">
+      <h2>${esc(r.name)}</h2>
+      <p>${esc(h2hLine(r, lang))}</p>
+      <p class="card-label">${esc(fill(p.asOf, { date: longDate(r.h2h.asOf, lang) }))}</p>
+    </a>`,
+      )
+      .join('\n    ')}
+  </div>
+  <p class="muted stats-note">${esc(p.note)}</p>
+</main>
+${footer(lang)}`;
+}
+
+function rivalPage(lang, r) {
+  const u = ui[lang];
+  const p = u.rivals;
+  const h = r.h2h;
+  const paths = rivalPaths(r.id);
+  const t = {
+    title: fill(p.detailTitle, { name: r.name }),
+    description: clip(fill(p.detailDescription, { name: r.name, record: h2hLine(r, lang), date: longDate(h.asOf, lang) }), 160),
+  };
+  const quoteCard = (q) => `<article class="card card-quote">
+        <p class="card-label">${esc(fill(q.by === 'mourinho' ? p.byMourinho : p.byRival, { name: r.name }))}${q.said ? ` · ${esc(q.said)}` : ''}</p>
+        <blockquote class="quote-text">“${esc(q.text)}”</blockquote>
+        ${sourceList(q.sources, lang)}
+      </article>`;
+  return `${head(lang, paths, t)}
+<body data-lang="${lang}">
+${header(lang, paths, 'history')}
+<main class="wrap page">
+  <p class="more back"><a href="${pathOf(lang, 'rivals')}">${icon.arrow}${esc(p.back)}</a></p>
+  <article class="card detail">
+    <p class="pill">${esc(p.vs)}</p>
+    <h1 class="detail-title">José Mourinho – ${esc(r.name)}</h1>
+    <div class="h2h">
+      ${[['matches', h.matches], ['wins', h.wins], ['draws', h.draws], ['losses', h.losses]]
+        .map(([k, v]) => `<p><span class="stat-value">${num(v, lang)}</span><span class="card-label">${esc(p[k])}</span></p>`)
+        .join('')}
+    </div>
+    <p class="muted">${esc(fill(p.asOfNote, { date: longDate(h.asOf, lang) }))}</p>
+    ${sourceList(h.sources, lang)}
+  </article>
+  <section class="section">
+    <div class="section-head"><h2>${esc(p.games)}</h2></div>
+    <ul class="trophy-list">
+      ${r.games
+        .map(
+          (g) => `<li class="card trophy">
+        <p class="card-label">${esc(fuzzyDate(g.date, lang))} · ${esc(g.competition[lang])}</p>
+        <h3>${esc(g.home)} ${esc(g.score)} ${esc(g.away)}</h3>
+        ${g.note ? `<p class="muted">${esc(g.note[lang])}</p>` : ''}
+        ${sourceList(g.sources, lang)}
+      </li>`,
+        )
+        .join('\n      ')}
+    </ul>
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>${esc(p.quotes)}</h2></div>
+    <div class="grid grid-2">
+      ${r.quotes.map(quoteCard).join('\n      ')}
+    </div>
+  </section>
+</main>
+${footer(lang)}`;
+}
+
 // The same cards as the trophies page, so every title on an era page shows its sources too.
 function eraTrophies(eraId, lang) {
   const list = trophies.filter((t) => t.era === eraId);
@@ -843,7 +943,7 @@ await rm(OUT, { recursive: true, force: true });
 await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
-const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, remarks: remarksPage };
+const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, rivals: rivalsPage, remarks: remarksPage };
 // Built like every page, but never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },
@@ -853,6 +953,7 @@ const routes = [
   ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
   ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),
   ...TAGS.map((tag) => ({ paths: tagPaths(tag), changefreq: 'monthly', render: (lang) => tagPage(lang, tag) })),
+  ...rivals.map((r) => ({ paths: rivalPaths(r.id), changefreq: 'monthly', render: (lang) => rivalPage(lang, r) })),
   ...ITEMS.map(({ kind, id }) => ({
     paths: detailPaths(kind, id),
     changefreq: 'yearly',

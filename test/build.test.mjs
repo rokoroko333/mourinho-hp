@@ -435,3 +435,47 @@ test('the remarks page lists every remark with its sources, and the home page th
     remarks.forEach((r, i) => assert.equal(front.includes(`id="${r.id}"`), i < 3, `${home || 'en'} home: ${r.id}`));
   }
 });
+
+// Head-to-heads are as one source counted them on a date; every match and quote has its own source.
+test('every rival has a dated, sourced head-to-head that adds up, and sourced matches and quotes', async () => {
+  const rivals = await load('rivals.json');
+  const ids = new Set();
+  const sourced = (x, label) => {
+    assert.ok(x.sources?.length > 0, `${label}: at least one source`);
+    for (const s of x.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${label}: source url`);
+  };
+  for (const r of rivals) {
+    assert.match(r.id, /^[a-z-]+$/, `${r.id}: id`);
+    assert.ok(!ids.has(r.id), `${r.id}: unique`);
+    ids.add(r.id);
+    const h = r.h2h;
+    assert.match(h.asOf, /^\d{4}-\d{2}-\d{2}$/, `${r.id}: as-of date`);
+    assert.equal(h.wins + h.draws + h.losses, h.matches, `${r.id}: record adds up`);
+    sourced(h, `${r.id} h2h`);
+    for (const g of r.games) {
+      assert.match(g.date, /^\d{4}(-\d{2}(-\d{2})?)?$/, `${r.id}: match date`);
+      for (const l of ['en', 'es', 'pt']) assert.ok(g.competition[l], `${r.id}: competition in ${l}`);
+      sourced(g, `${r.id} ${g.date}`);
+    }
+    for (const q of r.quotes) {
+      assert.ok(['mourinho', 'rival'].includes(q.by) && q.text, `${r.id}: quote`);
+      sourced(q, `${r.id} quote`);
+    }
+  }
+});
+
+test('rival pages exist in three languages, are in the sitemap and show every source', async () => {
+  await build();
+  const rivals = await load('rivals.json');
+  const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
+  for (const base of ['rivals', 'es/rivales', 'pt/rivais']) {
+    const index = await page(base);
+    for (const r of rivals) {
+      assert.ok(index.includes(`href="/${base}/${r.id}/"`), `${base}: links to ${r.id}`);
+      assert.ok(xml.includes(`/${base}/${r.id}/</loc>`), `${base}/${r.id}: in the sitemap`);
+      const html = await page(`${base}/${r.id}`);
+      const urls = [r.h2h, ...r.games, ...r.quotes].flatMap((x) => x.sources.map((s) => s.url));
+      for (const url of urls) assert.ok(html.includes(`href="${url}"`), `${base}/${r.id}: source ${url}`);
+    }
+  }
+});

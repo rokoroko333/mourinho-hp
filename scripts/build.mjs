@@ -270,6 +270,7 @@ ${header(lang, pathsOf('quotes'), 'quotes')}
     <h1>${esc(p.heading)}</h1>
     <p class="hero-tag">${esc(p.sub)}</p>
   </div>
+  ${tagNav(lang)}
   <section class="section">
     <h2>${esc(p.quotesHeading)}</h2>
     <div class="grid grid-2">
@@ -294,6 +295,46 @@ ${header(lang, pathsOf('quotes'), 'quotes')}
         .join('\n      ')}
     </div>
   </section>
+</main>
+${footer(lang)}`;
+}
+
+// Tag pages: /quotes/tag/rivals/, /es/frases/tema/rivals/, /pt/frases/tema/rivals/ — the tag id is shared
+// across languages, its name is translated. Only tags that some quote uses get a page.
+const TAGS = [...new Set(quotes.flatMap((q) => q.tags))].sort();
+const tagPaths = (tag) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'tags')}${tag}/`]));
+const tagName = (tag, lang) => ui[lang].quotes.tagNames[tag];
+
+function tagNav(lang, current) {
+  return `<nav class="tag-list" aria-label="${esc(ui[lang].quotes.byTag)}">
+    ${TAGS.map((t) => {
+      const n = quotes.filter((q) => q.tags.includes(t)).length;
+      return `<a class="pill" href="${tagPaths(t)[lang]}"${t === current ? ' aria-current="page"' : ''}>${esc(tagName(t, lang))} <span class="count">${n}</span></a>`;
+    }).join('\n    ')}
+  </nav>`;
+}
+
+function tagPage(lang, tag) {
+  const u = ui[lang];
+  const p = u.quotes;
+  const list = quotes.filter((q) => q.tags.includes(tag));
+  const name = tagName(tag, lang);
+  const t = {
+    title: fill(p.tagTitle, { tag: name }),
+    description: fill(p.tagDescription, { tag: name, tagLower: name.toLowerCase(), count: list.length }),
+  };
+  return `${head(lang, tagPaths(tag), t)}
+<body data-lang="${lang}">
+${header(lang, tagPaths(tag), 'quotes')}
+<main class="wrap page">
+  <p class="more back"><a href="${pathOf(lang, 'quotes')}">${icon.arrow}${esc(u.detail.back)}</a></p>
+  <div class="page-head">
+    <h1>${esc(name)}</h1>
+  </div>
+  ${tagNav(lang, tag)}
+  <div class="grid grid-2">
+    ${list.map((q) => `<a class="card card-quote card-link" href="${detailPaths('quotes', q.id)[lang]}">${quoteBody(q, lang)}</a>`).join('\n    ')}
+  </div>
 </main>
 ${footer(lang)}`;
 }
@@ -397,7 +438,9 @@ function detailPage(lang, kind, id) {
     <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
     ${q.original ? `<p class="quote-original" lang="${esc(q.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(q.original.text)}”</p>` : ''}
     <p class="quote-context">— ${esc(q.context[lang])}${year}</p>
-    ${era ? `<p class="quote-era"><a class="pill" href="${eraPaths(era.id)[lang]}">${esc(era.years)} · ${esc(era.club[lang])}</a></p>` : ''}
+    <p class="quote-era">${era ? `<a class="pill" href="${eraPaths(era.id)[lang]}">${esc(era.years)} · ${esc(era.club[lang])}</a>` : ''}${q.tags
+      .map((tg) => ` <a class="pill pill-tag" href="${tagPaths(tg)[lang]}">${esc(tagName(tg, lang))}</a>`)
+      .join('')}</p>
     ${sourceList(q.sources, lang)}`;
   } else {
     const e = episodes.find((x) => x.id === id);
@@ -556,6 +599,7 @@ const render = { home: homePage, quotes: quotesPage, history: historyPage };
 const routes = [
   ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
   ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),
+  ...TAGS.map((tag) => ({ paths: tagPaths(tag), changefreq: 'monthly', render: (lang) => tagPage(lang, tag) })),
   ...ITEMS.map(({ kind, id }) => ({
     paths: detailPaths(kind, id),
     changefreq: 'yearly',

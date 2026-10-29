@@ -228,3 +228,27 @@ test('every quote has a dated source, a known era and known tags', async () => {
     assert.ok(!('year' in q), `${q.id}: the year comes from date, not a separate field`);
   }
 });
+
+test('each tag has a page in all three languages listing exactly its quotes, linked from the list and the quotes', async () => {
+  await build();
+  const quotes = await load('quotes.json');
+  const base = { en: 'quotes/tag', es: 'es/frases/tema', pt: 'pt/frases/tema' };
+  const detail = { en: 'quotes', es: 'es/frases', pt: 'pt/frases' };
+  const lists = { en: await page('quotes'), es: await page('es/frases'), pt: await page('pt/frases') };
+  for (const tag of new Set(quotes.flatMap((q) => q.tags))) {
+    for (const [lang, b] of Object.entries(base)) {
+      const path = `/${b}/${tag}/`;
+      const html = await page(path);
+      const main = html.slice(html.indexOf('<div class="grid grid-2">'), html.indexOf('</main>'));
+      const shown = [...main.matchAll(/href="\/[^"]*\/([^/"]+)\/"/g)].map((m) => m[1]).sort();
+      assert.deepEqual(shown, quotes.filter((q) => q.tags.includes(tag)).map((q) => q.id).sort(), `${path}: its quotes`);
+      assert.ok(lists[lang].includes(`href="${path}"`), `${lang} list links to ${path}`);
+      for (const l of Object.keys(base)) assert.ok(html.includes(`hreflang="${l}" href="https://infinito-mourinho.pages.dev/${base[l]}/${tag}/"`), `${path}: hreflang ${l}`);
+    }
+  }
+  const q = quotes.find((x) => x.tags.length);
+  for (const [lang, b] of Object.entries(base)) {
+    const html = await page(`${detail[lang]}/${q.id}`);
+    for (const tag of q.tags) assert.ok(html.includes(`href="/${b}/${tag}/"`), `${q.id} (${lang}) links to its tag ${tag}`);
+  }
+});

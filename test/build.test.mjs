@@ -117,11 +117,16 @@ test('related links on detail pages point to other existing pages', async () => 
   for (const link of links) await page(link);
 });
 
+// The live news and matches pages are filled by app.js and kept out of the sitemap on purpose.
+const LIVE_PAGES = ['/news/', '/es/noticias/', '/pt/noticias/', '/matches/', '/es/partidos/', '/pt/jogos/'];
+
 test('the sitemap lists every built page exactly once, with all three languages', async () => {
   await build();
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
   const locs = [...xml.matchAll(/<loc>https:\/\/infinito-mourinho\.pages\.dev([^<]*)<\/loc>/g)].map((m) => m[1]);
-  const pages = (await htmlFiles()).map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'));
+  const pages = (await htmlFiles())
+    .map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'))
+    .filter((p) => !LIVE_PAGES.includes(p));
   assert.deepEqual([...locs].sort(), [...pages].sort());
   assert.equal(new Set(locs).size, locs.length);
   for (const block of xml.split('<url>').slice(1)) assert.equal((block.match(/hreflang=/g) || []).length, 4);
@@ -323,5 +328,22 @@ test('each era page lists its own trophies with sources and none from other eras
         for (const s of t.sources) assert.ok(item.includes(`href="${s.url}"`), `${lang} ${h.id}: ${t.id} source ${s.url}`);
       }
     }
+  }
+});
+
+test('the news and matches pages exist in three languages and the header links to them', async () => {
+  await build();
+  const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
+  for (const path of LIVE_PAGES) {
+    const html = await page(path.slice(1));
+    assert.ok(html.includes('id="strings"'), `${path}: strings for app.js`);
+    assert.ok(/id="(news-list|result-list)"/.test(html), `${path}: list to fill`);
+    assert.ok(!xml.includes(`${path}</loc>`), `${path}: not in the sitemap`);
+  }
+  for (const [home, news, matches] of [['', '/news/', '/matches/'], ['es', '/es/noticias/', '/es/partidos/'], ['pt', '/pt/noticias/', '/pt/jogos/']]) {
+    const html = await page(home);
+    const nav = html.slice(html.indexOf('<nav id="site-nav"'), html.indexOf('</nav>'));
+    assert.ok(nav.includes(`href="${news}"`) && nav.includes(`href="${matches}"`), `${home || 'en'}: header links`);
+    assert.ok(html.includes('id="news-list" data-limit="6"'), `${home || 'en'}: home shows the newest few`);
   }
 });

@@ -75,7 +75,7 @@
 
   const strings = readJson('strings');
   suggestLanguage();
-  if (!strings) return; // Only the home page has the dynamic sections below.
+  if (!strings) return; // Only the home, news and matches pages have the dynamic sections below.
 
   // Quote & story of the day
   const daily = readJson('daily-data');
@@ -120,14 +120,15 @@
   const showMessage = (container, text) =>
     container.replaceChildren(el('p', { class: 'loading muted' }, text));
 
-  // News
+  // News: the home page shows the newest few (data-limit), /news/ all of them.
   const newsList = $('#news-list');
-  getJson(`/api/news?lang=${lang}`)
+  if (newsList) getJson(`/api/news?lang=${lang}`)
     .then((data) => {
       if (!data.items?.length) return showMessage(newsList, strings.newsEmpty);
+      const limit = Number(newsList.dataset.limit) || data.items.length;
       newsList.replaceChildren(
         // The newest story leads, larger and across the whole row.
-        ...data.items.map((item, i) =>
+        ...data.items.slice(0, limit).map((item, i) =>
           el('a', { class: `card card-link news-card${i === 0 ? ' news-lead' : ''}`, href: item.link, target: '_blank', rel: 'noopener' },
             el('div', { class: 'news-meta' },
               item.publishedAt ? el('time', { datetime: item.publishedAt }, relative(item.publishedAt)) : el('span'),
@@ -156,14 +157,43 @@
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
         teamEl(m.away, strings.away)),
       el('p', { class: 'match-date' }, dateFmt.format(new Date(m.date)), m.competition ? el('br') : null, m.competition || null));
-  getJson('/api/matches')
+  // One line per match on /matches/: date, home, score (or kick-off time), away, competition.
+  const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short' });
+  const timeFmt = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit' });
+  // Without a kick-off time only the day is known, so it is read in UTC rather than shifted by the
+  // placeholder time into the next or previous day.
+  const tbdDayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' });
+  const matchRow = (m) => {
+    const d = new Date(m.date);
+    const score = m.completed ? `${m.home.score ?? 0} - ${m.away.score ?? 0}` : m.timeTbd ? strings.tbd : timeFmt.format(d);
+    return el('li', { class: 'match-row' },
+      el('time', { datetime: m.date }, (m.timeTbd ? tbdDayFmt : dayFmt).format(d)),
+      el('span', { class: 'row-team home' }, m.home.name),
+      el('strong', { class: 'row-score' }, score),
+      el('span', { class: 'row-team' }, m.away.name),
+      el('small', { class: 'muted' }, m.competition || ''));
+  };
+  const fillRows = (list, matches) =>
+    matches?.length
+      ? list.replaceChildren(...matches.map(matchRow))
+      : list.replaceChildren(el('li', { class: 'loading muted' }, strings.matchesEmpty));
+  const resultList = $('#result-list');
+  const fixtureList = $('#fixture-list');
+  if (matchList || resultList) getJson('/api/matches')
     .then((data) => {
-      const cards = [data.latest && matchCard(data.latest, false), data.next && matchCard(data.next, true)].filter(Boolean);
-      if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
-      matchList.replaceChildren(...cards);
+      if (resultList) fillRows(resultList, data.results);
+      if (fixtureList) fillRows(fixtureList, data.fixtures);
+      if (matchList) {
+        const cards = [data.latest && matchCard(data.latest, false), data.next && matchCard(data.next, true)].filter(Boolean);
+        if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
+        matchList.replaceChildren(...cards);
+      }
       if (data.next) startCountdown(new Date(data.next.date));
     })
-    .catch(() => showMessage(matchList, strings.matchesEmpty));
+    .catch(() => {
+      if (matchList) showMessage(matchList, strings.matchesEmpty);
+      for (const list of [resultList, fixtureList]) if (list) fillRows(list, []);
+    });
 
   // "Kick-off in 2 d 4 h 13 m", hidden once the match has started. Checked every 15 s rather than every
   // minute, so the minute shown turns over at most 15 s late instead of up to a minute.

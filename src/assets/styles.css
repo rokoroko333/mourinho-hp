@@ -205,3 +205,16 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .lang-banner button { background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+/* /matches/: one row per match */
+.match-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.match-row { display: grid; grid-template-columns: 64px 1fr auto 1fr; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.match-row time { color: var(--gold); font-weight: 700; font-size: 13px; }
+.match-row .row-team.home { text-align: right; }
+.match-row .row-score { min-width: 64px; text-align: center; }
+.match-row small { grid-column: 2 / -1; text-align: center; font-size: 12px; }
+@media (max-width: 600px) {
+  .match-row { grid-template-columns: 1fr auto 1fr; }
+  .match-row time { grid-column: 1 / -1; }
+  .match-row small { grid-column: 1 / -1; }
+}

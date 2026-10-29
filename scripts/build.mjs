@@ -104,8 +104,8 @@ function header(lang, paths, active) {
   const home = pathOf(lang, 'home');
   const links = [
     [pathOf(lang, 'quotes'), u.nav.quotes],
-    [`${home}#news`, u.nav.news],
-    [`${home}#matches`, u.nav.matches],
+    [pathOf(lang, 'news'), u.nav.news],
+    [pathOf(lang, 'matches'), u.nav.matches],
     [`${home}#videos`, u.nav.videos],
   ];
   const langLinks = LANGS.map(
@@ -159,6 +159,18 @@ function videoCard(v, lang) {
     </a>`;
 }
 
+// Text app.js needs for the live news and match cards, on every page that has them.
+function liveStrings(lang) {
+  const h = ui[lang].home;
+  return {
+    newsEmpty: h.newsEmpty, newsUpdated: h.newsUpdated, readArticle: h.readArticle,
+    matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
+    kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL, tbd: ui[lang].matches.tbd,
+  };
+}
+const stringsScript = (lang) =>
+  `<script type="application/json" id="strings">${JSON.stringify(liveStrings(lang)).replace(/</g, '\\u003c')}</script>`;
+
 function homePage(lang) {
   const u = ui[lang];
   const h = u.home;
@@ -171,11 +183,7 @@ function homePage(lang) {
     quotes: quotes.map((x) => ({ text: x.text, context: x.context[lang], year: x.year || null, path: detailPaths('quotes', x.id)[lang] })),
     episodes: episodes.map((x) => ({ title: x.title[lang], text: x.text[lang], path: detailPaths('stories', x.id)[lang] })),
   };
-  const strings = {
-    newsEmpty: h.newsEmpty, newsUpdated: h.newsUpdated, readArticle: h.readArticle,
-    matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
-    kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL,
-  };
+  const strings = liveStrings(lang);
   const more = (href, label, id) => `<a class="more-link"${id ? ` id="${id}"` : ''} href="${href}">${esc(label)} ${icon.arrow}</a>`;
   return `${head(lang, pathsOf('home'), t, { type: 'WebSite' })}
 <body data-lang="${lang}">
@@ -197,6 +205,7 @@ ${header(lang, pathsOf('home'), 'home')}
     <div><h3>${esc(h.highlights)}</h3><p class="muted">${esc(h.highlightsSub)}</p></div>
     <span class="btn btn-red">${icon.play}${esc(h.watch)}</span>
   </a>
+  <p class="more"><a href="${pathOf(lang, 'matches')}">${esc(u.matches.all)} ${icon.arrow}</a></p>
 </section>
 
 <section id="news" class="section">
@@ -204,7 +213,8 @@ ${header(lang, pathsOf('home'), 'home')}
     <div><h2>${esc(h.newsHeading)}</h2><p class="sub">${esc(h.newsSub)}</p></div>
     <p class="sub" id="news-updated"></p>
   </div>
-  <div class="grid grid-3" id="news-list" aria-live="polite"><p class="loading">${esc(h.loading)}</p></div>
+  <div class="grid grid-3" id="news-list" data-limit="6" aria-live="polite"><p class="loading">${esc(h.loading)}</p></div>
+  <p class="more"><a href="${pathOf(lang, 'news')}">${esc(u.news.all)} ${icon.arrow}</a></p>
 </section>
 
 <section id="daily" class="section">
@@ -629,6 +639,55 @@ ${header(lang, paths, 'history')}
 ${footer(lang)}`;
 }
 
+// /news/ and /matches/ are shells that app.js fills from /api/*. Their content changes all the time and
+// only the heading is in the HTML, so they are left out of the sitemap (docs/plans/phase2.md, item 7).
+function newsPage(lang) {
+  const u = ui[lang];
+  const p = u.news;
+  return `${head(lang, pathsOf('news'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('news'), 'news')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(u.home.newsSub)}</p>
+    <p class="muted" id="news-updated"></p>
+  </div>
+  <div class="grid grid-3" id="news-list" aria-live="polite"><p class="loading">${esc(u.home.loading)}</p></div>
+  ${stringsScript(lang)}
+</main>
+${footer(lang)}`;
+}
+
+function matchesPage(lang) {
+  const u = ui[lang];
+  const p = u.matches;
+  return `${head(lang, pathsOf('matches'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('matches'), 'matches')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+  </div>
+  <p class="countdown" id="countdown" hidden></p>
+  <section class="section">
+    <div class="section-head"><h2>${esc(p.fixtures)}</h2></div>
+    <ol class="match-rows" id="fixture-list"><li class="loading">${esc(u.home.loading)}</li></ol>
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>${esc(p.results)}</h2></div>
+    <ol class="match-rows" id="result-list"><li class="loading">${esc(u.home.loading)}</li></ol>
+  </section>
+  <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">
+    <div><h3>${esc(u.home.highlights)}</h3><p class="muted">${esc(u.home.highlightsSub)}</p></div>
+    <span class="btn btn-red">${icon.play}${esc(u.home.watch)}</span>
+  </a>
+  ${stringsScript(lang)}
+</main>
+${footer(lang)}`;
+}
+
 // One entry per page and language, each listing all three languages as alternates.
 function sitemap(routes) {
   const entries = routes.flatMap(({ paths, changefreq }) =>
@@ -659,6 +718,11 @@ await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
 const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage };
+// Built like every page, but never listed in the sitemap.
+const liveRoutes = [
+  { paths: pathsOf('news'), render: newsPage },
+  { paths: pathsOf('matches'), render: matchesPage },
+];
 const routes = [
   ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
   ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),
@@ -669,10 +733,10 @@ const routes = [
     render: (lang) => detailPage(lang, kind, id),
   })),
 ];
-for (const { paths, render: page } of routes) {
+for (const { paths, render: page } of [...routes, ...liveRoutes]) {
   for (const lang of LANGS) await write(join(paths[lang], 'index.html'), page(lang));
 }
 await write('sitemap.xml', sitemap(routes));
 await write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
-console.log(`Built ${LANGS.length * routes.length} pages into dist/ for ${SITE_URL}`);
+console.log(`Built ${LANGS.length * (routes.length + liveRoutes.length)} pages into dist/ for ${SITE_URL}`);

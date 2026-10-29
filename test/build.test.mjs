@@ -263,6 +263,7 @@ test('every quote with an era and a date falls within that era', async () => {
   const quotes = await load('quotes.json');
   const eras = Object.fromEntries((await load('history.json')).map((h) => [h.id, h.years]));
   for (const q of quotes.filter((x) => x.era && x.date)) {
+    assert.ok(eras[q.era], `${q.id}: era ${q.era} exists in history.json`);
     const [from, to] = eras[q.era].split('–');
     const year = Number(q.date.slice(0, 4));
     const last = to === undefined ? Number(from) : to === '' ? Infinity : Number(to);

@@ -218,3 +218,19 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
   .match-row time { grid-column: 1 / -1; }
   .match-row small { grid-column: 1 / -1; }
 }
+
+/* /stats/ */
+.stat-value { margin: 0; font-size: 56px; font-weight: 900; line-height: 1; color: var(--gold); letter-spacing: -0.02em; }
+.stat-milestone { align-items: flex-start; }
+.stat-milestone p, .stat p { margin: 0; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.stats-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.stats-table th, .stats-table td { padding: 12px 14px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.stats-table th[scope="row"], .stats-table thead th:first-child { text-align: left; }
+.stats-table td:last-child, .stats-table thead th:last-child { text-align: left; white-space: normal; min-width: 200px; font-size: 13px; }
+.stats-table thead th { color: var(--gold); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.stats-table tbody tr:last-child > * { border-bottom: 0; }
+.stats-table a { color: inherit; }
+.stats-note { font-size: 14px; margin: 12px 0 0; }
+.era-record { margin-top: 16px; }
+.era-record p { margin: 0 0 6px; }

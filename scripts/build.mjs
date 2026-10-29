@@ -12,11 +12,11 @@ const OUT = join(ROOT, 'dist');
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt'];
-const PAGES = ['home', 'quotes', 'history', 'trophies'];
+const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
-const [ui, quotes, episodes, history, videos, trophies] = await Promise.all(
-  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json'].map(load),
+const [ui, quotes, episodes, history, videos, trophies, stats] = await Promise.all(
+  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json'].map(load),
 );
 
 withYears(quotes);
@@ -502,6 +502,7 @@ ${header(lang, pathsOf('history'), 'history')}
     <p class="hero-tag">${esc(p.sub)}</p>
     <p class="muted intro">${esc(p.intro)}</p>
     <p class="more"><a href="${pathOf(lang, 'trophies')}">${icon.trophy} ${esc(u.trophies.heading)} ${icon.arrow}</a></p>
+    <p class="more"><a href="${pathOf(lang, 'stats')}">${esc(u.stats.link)} ${icon.arrow}</a></p>
   </div>
   <ol class="timeline">
     ${history
@@ -542,6 +543,7 @@ ${header(lang, pathsOf('trophies'), 'history')}
     <h1>${esc(p.heading)}</h1>
     <p class="hero-tag">${esc(p.sub)}</p>
     <p class="muted">${esc(fill(p.count, { count: trophies.length }))}</p>
+    <p class="more"><a href="${pathOf(lang, 'stats')}">${esc(u.stats.link)} ${icon.arrow}</a></p>
   </div>
   ${eras
     .map(
@@ -565,6 +567,87 @@ const eraPaths = (id) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'h
 
 function trophyLine(h, lang) {
   return `<p class="trophies">${icon.trophy}<span><span class="sr-only">${esc(ui[lang].history.trophies)}: </span>${esc(h.trophies[lang])}</span></p>`;
+}
+
+// "12 September 2021" in the page's language. Dates are calendar days, so they are read in UTC.
+const longDate = (iso, lang) =>
+  new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso));
+// 63.8% in English, 63,8 % in Spanish and Portuguese.
+const winRate = (r, lang) =>
+  new Intl.NumberFormat(lang, { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(r.wins / r.matches);
+const num = (n, lang) => (n == null ? '—' : n.toLocaleString(lang));
+
+// The era's record in all competitions, with its sources (stats.json). Nothing for eras without one.
+function eraRecord(eraId, lang) {
+  const r = stats.clubs.find((c) => c.era === eraId);
+  if (!r) return '';
+  const p = ui[lang].stats;
+  return `<div class="era-record">
+      <p><span class="card-label">${esc(p.record)}</span> ${esc(fill(p.recordLine, { matches: num(r.matches, lang), wins: num(r.wins, lang), rate: winRate(r, lang) }))}${
+        r.draws == null ? '' : ` · ${esc(fill(p.drawsLosses, { draws: num(r.draws, lang), losses: num(r.losses, lang) }))}`
+      }</p>
+      ${sourceList(r.sources, lang)}
+    </div>`;
+}
+
+// Numbers only from stats.json, each with its sources and the date it holds for (docs/plans/phase2.md, item 3).
+function statsPage(lang) {
+  const u = ui[lang];
+  const p = u.stats;
+  const m = stats.milestone;
+  const eraOf = (id) => history.find((h) => h.id === id);
+  return `${head(lang, pathsOf('stats'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('stats'), 'history')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+  </div>
+  <section class="section">
+    <article class="card stat-milestone">
+      <p class="stat-value">${num(m.matches, lang)}</p>
+      <p>${esc(fill(p.milestone, { wins: num(m.wins, lang), draws: num(m.draws, lang), losses: num(m.losses, lang), rate: winRate(m, lang) }))}</p>
+      <p class="muted">${esc(fill(p.asOf, { date: longDate(m.asOf, lang) }))}</p>
+      ${sourceList(m.sources, lang)}
+    </article>
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>${esc(p.recordsHeading)}</h2></div>
+    <div class="grid grid-2">
+      ${stats.records
+        .map(
+          (r) => `<article class="card stat" id="${r.id}">
+        <p class="stat-value">${esc(r.value)}</p>
+        <p>${esc(r.text[lang])}</p>
+        ${sourceList(r.sources, lang)}
+      </article>`,
+        )
+        .join('\n      ')}
+    </div>
+  </section>
+  <section class="section" id="clubs">
+    <div class="section-head"><div><h2>${esc(p.clubsHeading)}</h2><p class="sub">${esc(p.clubsSub)}</p></div></div>
+    <div class="table-wrap">
+      <table class="stats-table">
+        <thead><tr><th scope="col">${esc(p.club)}</th><th scope="col">${esc(p.matches)}</th><th scope="col">${esc(p.wins)}</th><th scope="col">${esc(p.draws)}</th><th scope="col">${esc(p.losses)}</th><th scope="col">${esc(p.rate)}</th><th scope="col">${esc(u.detail.sources)}</th></tr></thead>
+        <tbody>
+          ${stats.clubs
+            .map((r) => {
+              const h = eraOf(r.era);
+              return `<tr id="${r.era}"><th scope="row"><a href="${eraPaths(r.era)[lang]}">${esc(h.club[lang])}</a> <span class="muted">${esc(h.years)}</span></th><td>${num(r.matches, lang)}</td><td>${num(r.wins, lang)}</td><td>${num(r.draws, lang)}</td><td>${num(r.losses, lang)}</td><td>${winRate(r, lang)}</td><td>${r.sources
+                .map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.publisher)}</a>`)
+                .join(', ')}</td></tr>`;
+            })
+            .join('\n          ')}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted stats-note">${esc(p.dashNote)}</p>
+    <p class="muted stats-note">${esc(p.currentNote)}</p>
+  </section>
+</main>
+${footer(lang)}`;
 }
 
 // The same cards as the trophies page, so every title on an era page shows its sources too.
@@ -628,6 +711,7 @@ ${header(lang, paths, 'history')}
     <h1 class="detail-title">${esc(h.club[lang])}</h1>
     ${trophyLine(h, lang)}
     <ul class="era-points">${h.points[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+    ${eraRecord(h.id, lang)}
   </article>
   ${eraTrophies(h.id, lang)}
   ${eraQuotes(h.id, lang)}
@@ -717,7 +801,7 @@ await rm(OUT, { recursive: true, force: true });
 await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
-const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage };
+const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage };
 // Built like every page, but never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },

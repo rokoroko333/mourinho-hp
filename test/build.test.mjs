@@ -347,3 +347,59 @@ test('the news and matches pages exist in three languages and the header links t
     assert.ok(html.includes('id="news-list" data-limit="6"'), `${home || 'en'}: home shows the newest few`);
   }
 });
+
+// Numbers follow the facts rules: every one has a source, records add up, and eras exist.
+test('every stat has a source, a consistent record and a known era', async () => {
+  const stats = await load('stats.json');
+  const eras = new Set((await load('history.json')).map((h) => h.id));
+  const sourced = (x, label) => {
+    assert.ok(x.sources?.length > 0, `${label}: at least one source`);
+    for (const s of x.sources) {
+      assert.match(s.url, /^https?:\/\/\S+$/, `${label}: source url`);
+      assert.match(s.date, /^\d{4}(-\d{2}-\d{2})?$/, `${label}: source date`);
+      assert.ok(s.publisher, `${label}: publisher`);
+    }
+  };
+  const m = stats.milestone;
+  sourced(m, 'milestone');
+  assert.match(m.asOf, /^\d{4}-\d{2}-\d{2}$/, 'milestone: as-of date');
+  assert.equal(m.wins + m.draws + m.losses, m.matches, 'milestone adds up');
+  const seen = new Set();
+  for (const c of stats.clubs) {
+    assert.ok(eras.has(c.era) && !seen.has(c.era), `${c.era}: a known era, once`);
+    seen.add(c.era);
+    sourced(c, c.era);
+    // Draws and losses are left out together when the sources disagree on them.
+    assert.equal(c.draws == null, c.losses == null, `${c.era}: draws and losses both given or both left out`);
+    if (c.draws != null) assert.equal(c.wins + c.draws + c.losses, c.matches, `${c.era}: adds up`);
+    else assert.ok(c.wins <= c.matches, `${c.era}: wins within matches`);
+  }
+  for (const r of stats.records) {
+    sourced(r, r.id);
+    assert.ok(eras.has(r.era), `${r.id}: era ${r.era} exists`);
+    for (const l of ['en', 'es', 'pt']) assert.ok(r.text?.[l], `${r.id}: text in ${l}`);
+  }
+});
+
+test('the stats page and era pages show each number with its sources in all three languages', async () => {
+  await build();
+  const stats = await load('stats.json');
+  for (const [lang, path, history] of [['en', 'stats', 'history'], ['es', 'es/estadisticas', 'es/historia'], ['pt', 'pt/estatisticas', 'pt/historia']]) {
+    const html = await page(path);
+    for (const s of stats.milestone.sources) assert.ok(html.includes(`href="${s.url}"`), `${lang}: milestone source`);
+    for (const r of stats.records) {
+      const at = html.indexOf(`id="${r.id}"`);
+      assert.ok(at > 0, `${lang}: ${r.id} shown`);
+      const card = html.slice(at, html.indexOf('</article>', at));
+      for (const s of r.sources) assert.ok(card.includes(`href="${s.url}"`), `${lang}: ${r.id} source`);
+    }
+    for (const c of stats.clubs) {
+      const at = html.indexOf(`<tr id="${c.era}"`);
+      assert.ok(at > 0, `${lang}: ${c.era} row`);
+      const row = html.slice(at, html.indexOf('</tr>', at));
+      for (const s of c.sources) assert.ok(row.includes(`href="${s.url}"`), `${lang}: ${c.era} source`);
+      const era = await page(`${history}/${c.era}`);
+      assert.ok(era.includes('class="era-record"'), `${lang}: ${c.era} era page shows its record`);
+    }
+  }
+});

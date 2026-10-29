@@ -1,0 +1,425 @@
+{
+  "milestone": {
+    "matches": 1000,
+    "wins": 638,
+    "draws": 205,
+    "losses": 157,
+    "asOf": "2021-09-12",
+    "sources": [
+      {
+        "url": "https://www.dnoticias.pt/2021/9/12/276796-jose-mourinho-celebra-milesimo-jogo-da-carreia-com-638o-triunfo/",
+        "publisher": "DNoticias (Lusa)",
+        "date": "2021-09-12"
+      }
+    ]
+  },
+  "clubs": [
+    {
+      "era": "benfica-2000",
+      "matches": 11,
+      "wins": 6,
+      "draws": 3,
+      "losses": 2,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "leiria",
+      "matches": 20,
+      "wins": 9,
+      "draws": 7,
+      "losses": 4,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "porto",
+      "matches": 127,
+      "wins": 91,
+      "draws": 21,
+      "losses": 15,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "chelsea-1",
+      "matches": 185,
+      "wins": 124,
+      "draws": 40,
+      "losses": 21,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "inter",
+      "matches": 108,
+      "wins": 67,
+      "draws": 26,
+      "losses": 15,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.inter.it/en/news/200-times-inzaghi-coach-of-inter",
+          "publisher": "Inter",
+          "date": "2025-03-12"
+        }
+      ]
+    },
+    {
+      "era": "real-madrid-1",
+      "matches": 178,
+      "wins": 128,
+      "draws": 28,
+      "losses": 22,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "chelsea-2",
+      "matches": 136,
+      "wins": 80,
+      "draws": null,
+      "losses": null,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "man-utd",
+      "matches": 144,
+      "wins": 84,
+      "draws": null,
+      "losses": null,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "tottenham",
+      "matches": 86,
+      "wins": 44,
+      "draws": 19,
+      "losses": 23,
+      "sources": [
+        {
+          "url": "https://sport.sky.it/calcio/2021/09/09/mourinho-carriera-1000-panchine",
+          "publisher": "Sky Sport Italia",
+          "date": "2021-09-09"
+        },
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.sportsmole.co.uk/football/spurs/feature/a-closer-look-at-jose-mourinhos-club-by-club-managerial-record_443823.html",
+          "publisher": "Sports Mole",
+          "date": "2021-04-19"
+        }
+      ]
+    },
+    {
+      "era": "roma",
+      "matches": 138,
+      "wins": 68,
+      "draws": 31,
+      "losses": 39,
+      "sources": [
+        {
+          "url": "https://www.football365.com/news/jose-mourinho-stats-facts-numbers-signings-trophies-chelsea-real-madrid-roma-man-utd-spurs",
+          "publisher": "Football365",
+          "date": "2024-01-16"
+        },
+        {
+          "url": "https://www.yardbarker.com/soccer/articles/jose_mourinho_fired_by_roma_after_recording_lowest_win_percentage_of_his_career/s1_17023_39821736",
+          "publisher": "Sports Illustrated (FanNation)",
+          "date": "2024-01-16"
+        }
+      ]
+    },
+    {
+      "era": "fenerbahce",
+      "matches": 62,
+      "wins": 37,
+      "draws": 14,
+      "losses": 11,
+      "sources": [
+        {
+          "url": "https://www.hurriyetdailynews.com/fenerbahce-sack-coach-jose-mourinho-213045",
+          "publisher": "Hürriyet Daily News",
+          "date": "2025-08-29"
+        },
+        {
+          "url": "https://www.beinsports.com/en-us/soccer/sper-lig/articles/fenerbah%C3%A7e-sack-jos%C3%A9-mourinho-after-failing-to-qualify-for-the-champions-league-2025-08-29",
+          "publisher": "beIN Sports",
+          "date": "2025-08-29"
+        }
+      ]
+    },
+    {
+      "era": "benfica-2025",
+      "matches": 45,
+      "wins": 27,
+      "draws": 10,
+      "losses": 8,
+      "sources": [
+        {
+          "url": "https://www.abola.pt/noticias/e-oficial-benfica-despede-se-de-jose-mourinho-2026060921090373901",
+          "publisher": "A Bola",
+          "date": "2026-06-09"
+        },
+        {
+          "url": "https://istoe.com.br/jose-mourinho-retorna-real-madrid-deixa-benfica",
+          "publisher": "IstoÉ",
+          "date": "2026-06-09"
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "chelsea-home-run",
+      "era": "chelsea-2",
+      "value": "77",
+      "text": {
+        "en": "Premier League home matches unbeaten as Chelsea manager, across both of his spells. Sunderland ended the run in April 2014.",
+        "es": "partidos de Premier League en casa sin perder como entrenador del Chelsea, sumando sus dos etapas. El Sunderland cortó la racha en abril de 2014.",
+        "pt": "jogos da Premier League em casa sem perder como treinador do Chelsea, somando as duas passagens. O Sunderland pôs fim à série em abril de 2014."
+      },
+      "sources": [
+        {
+          "url": "https://www.uefa.com/news-media/news/0214-0e8a31e9eb7a-c3e8607c1d39-1000--sunderland-end-mourinho-run-dent-chelsea-hopes",
+          "publisher": "UEFA",
+          "date": "2014-04-19"
+        },
+        {
+          "url": "https://www.aljazeera.com/sports/2014/4/20/borini-penalty-stuns-chelsea",
+          "publisher": "Al Jazeera (AP)",
+          "date": "2014-04-20"
+        }
+      ]
+    },
+    {
+      "id": "chelsea-2004-05-defence",
+      "era": "chelsea-1",
+      "value": "15",
+      "text": {
+        "en": "goals conceded in 38 Premier League games in 2004-05, still the fewest in a Premier League season (as of November 2025). Chelsea won the league with a then-record 95 points.",
+        "es": "goles encajados en 38 partidos de Premier League en 2004-05, todavía el mínimo en una temporada de la Premier (a noviembre de 2025). El Chelsea ganó la liga con 95 puntos, récord en aquel momento.",
+        "pt": "golos sofridos em 38 jogos da Premier League em 2004-05, ainda o mínimo numa época da Premier (em novembro de 2025). O Chelsea foi campeão com 95 pontos, recorde na altura."
+      },
+      "sources": [
+        {
+          "url": "https://www.premierleague.com/news/2737934",
+          "publisher": "Premier League",
+          "date": "2022-08-15"
+        },
+        {
+          "url": "https://theanalyst.com/articles/fewest-goals-conceded-in-a-premier-league-season",
+          "publisher": "Opta Analyst",
+          "date": "2025-11-01"
+        }
+      ]
+    },
+    {
+      "id": "real-madrid-2011-12",
+      "era": "real-madrid-1",
+      "value": "100",
+      "text": {
+        "en": "points and 121 goals in La Liga in 2011-12, both records at the time.",
+        "es": "puntos y 121 goles en LaLiga 2011-12, dos récords en aquel momento.",
+        "pt": "pontos e 121 golos na LaLiga 2011-12, dois recordes na altura."
+      },
+      "sources": [
+        {
+          "url": "https://www.sowetan.co.za/sport/2012-05-23-mourinho-to-stay-with-real-madrid/",
+          "publisher": "Sowetan",
+          "date": "2012-05-23"
+        },
+        {
+          "url": "https://www.espn.com/soccer/story/_/id/48860973/how-many-trophies-jose-mourinho-win-real-madrid-how-many-won-since",
+          "publisher": "ESPN",
+          "date": "2026-06-11"
+        }
+      ]
+    },
+    {
+      "id": "two-club-european-cup",
+      "era": "inter",
+      "value": "2",
+      "text": {
+        "en": "clubs with which he won the European Cup: Porto (2004) and Inter (2010). In 2010 he became the third coach to do it, after Ernst Happel and Ottmar Hitzfeld.",
+        "es": "clubes con los que ganó la Copa de Europa: Oporto (2004) e Inter (2010). En 2010 fue el tercer entrenador en lograrlo, tras Ernst Happel y Ottmar Hitzfeld.",
+        "pt": "clubes com que ganhou a Taça dos Campeões Europeus: FC Porto (2004) e Inter (2010). Em 2010 foi o terceiro treinador a consegui-lo, depois de Ernst Happel e Ottmar Hitzfeld."
+      },
+      "sources": [
+        {
+          "url": "https://www.thenationalnews.com/sport/football/on-this-day-may-22-2010-jose-mourinho-seals-stunning-treble-with-inter-milan-1.1023143",
+          "publisher": "The National",
+          "date": "2020-05-22"
+        },
+        {
+          "url": "https://www.aljazeera.com/sports/2010/5/22/mourinhos-inter-are-special-ones",
+          "publisher": "Al Jazeera",
+          "date": "2010-05-22"
+        }
+      ]
+    },
+    {
+      "id": "inter-treble",
+      "era": "inter",
+      "value": "3",
+      "text": {
+        "en": "trophies with Inter in 2009-10: Serie A, the Coppa Italia and the Champions League in one season.",
+        "es": "títulos con el Inter en 2009-10: Serie A, Copa de Italia y Liga de Campeones en una sola temporada.",
+        "pt": "títulos com o Inter em 2009-10: Serie A, Taça de Itália e Liga dos Campeões numa só época."
+      },
+      "sources": [
+        {
+          "url": "https://www.aljazeera.com/sports/2010/5/22/mourinhos-inter-are-special-ones",
+          "publisher": "Al Jazeera",
+          "date": "2010-05-22"
+        },
+        {
+          "url": "https://www.thenationalnews.com/sport/football/on-this-day-may-22-2010-jose-mourinho-seals-stunning-treble-with-inter-milan-1.1023143",
+          "publisher": "The National",
+          "date": "2020-05-22"
+        }
+      ]
+    },
+    {
+      "id": "european-finals",
+      "era": "roma",
+      "value": "5",
+      "text": {
+        "en": "European finals won in a row before his first defeat in one, the 2023 Europa League final, lost on penalties to Sevilla.",
+        "es": "finales europeas ganadas seguidas antes de perder la primera, la de la Europa League 2023, en los penaltis ante el Sevilla.",
+        "pt": "finais europeias ganhas seguidas antes da primeira derrota, na final da Liga Europa de 2023, nos penáltis frente ao Sevilha."
+      },
+      "sources": [
+        {
+          "url": "https://thestar.com.my/sport/football/2023/06/01/soccer-sevilla-beat-roma-4-1-on-penalties-to-win-seventh-europa-league-title",
+          "publisher": "The Star (Reuters)",
+          "date": "2023-06-01"
+        },
+        {
+          "url": "https://www.dawn.com/news/1757391",
+          "publisher": "Dawn",
+          "date": "2023-06-02"
+        }
+      ]
+    }
+  ]
+}

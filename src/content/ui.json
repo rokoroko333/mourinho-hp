@@ -5,7 +5,7 @@
     "langName": "English",
     "siteName": "Infinito Mourinho",
     "tagline": "Of Mourinho, by Mourinho, for Mourinho",
-    "slugs": { "home": "", "history": "history", "quotes": "quotes" },
+    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories" },
     "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History" },
     "home": {
       "title": "Infinito Mourinho – José Mourinho fan hub: news, quotes & history",
@@ -44,6 +44,7 @@
       "intro": "From interpreter under Bobby Robson to European champion with Porto and Inter, and back to the Bernabéu in 2026: every chapter of José Mourinho's career.",
       "trophies": "Trophies"
     },
+    "detail": { "quoteLabel": "Quote", "storyLabel": "Story", "quoteTitle": "“{text}” – José Mourinho quote", "quoteDescription": "{context}: “{text}” — José Mourinho", "storyTitle": "{title} – a José Mourinho story", "related": "More quotes and stories", "back": "All quotes and stories" },
     "quotes": {
       "title": "José Mourinho's best quotes and stories | Infinito Mourinho",
       "description": "The Special One in his own words: José Mourinho's most famous quotes with their context, plus the legendary stories behind them.",
@@ -61,7 +62,7 @@
     "langName": "Español",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases" },
+    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas" },
     "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia" },
     "home": {
       "title": "Infinito Mourinho – web de fans de José Mourinho: noticias, frases e historia",
@@ -100,6 +101,7 @@
       "intro": "De traductor a las órdenes de Bobby Robson a campeón de Europa con el Oporto y el Inter, y de vuelta al Bernabéu en 2026: cada capítulo de la carrera de José Mourinho.",
       "trophies": "Títulos"
     },
+    "detail": { "quoteLabel": "Frase", "storyLabel": "Anécdota", "quoteTitle": "“{text}” – frase de José Mourinho", "quoteDescription": "{context}: “{text}” — José Mourinho", "storyTitle": "{title} – anécdota de José Mourinho", "related": "Más frases y anécdotas", "back": "Todas las frases y anécdotas" },
     "quotes": {
       "title": "Las mejores frases y anécdotas de José Mourinho | Infinito Mourinho",
       "description": "El Special One en sus propias palabras: las frases más famosas de José Mourinho con su contexto y las anécdotas legendarias que hay detrás.",
@@ -117,7 +119,7 @@
     "langName": "Português",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases" },
+    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias" },
     "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História" },
     "home": {
       "title": "Infinito Mourinho – site de fãs de José Mourinho: notícias, frases e história",
@@ -156,6 +158,7 @@
       "intro": "De tradutor de Bobby Robson a campeão europeu com o FC Porto e o Inter, e de volta ao Bernabéu em 2026: cada capítulo da carreira de José Mourinho.",
       "trophies": "Títulos"
     },
+    "detail": { "quoteLabel": "Frase", "storyLabel": "História", "quoteTitle": "“{text}” – frase de José Mourinho", "quoteDescription": "{context}: “{text}” — José Mourinho", "storyTitle": "{title} – uma história de José Mourinho", "related": "Mais frases e histórias", "back": "Todas as frases e histórias" },
     "quotes": {
       "title": "As melhores frases e histórias de José Mourinho | Infinito Mourinho",
       "description": "O Special One nas suas próprias palavras: as frases mais famosas de José Mourinho com o seu contexto e as histórias lendárias por trás delas.",

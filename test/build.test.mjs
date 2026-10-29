@@ -126,3 +126,36 @@ test('the sitemap lists every built page exactly once, with all three languages'
   assert.equal(new Set(locs).size, locs.length);
   for (const block of xml.split('<url>').slice(1)) assert.equal((block.match(/hreflang=/g) || []).length, 4);
 });
+
+// Width and height from a PNG's IHDR chunk.
+const pngSize = (buf) => ({ width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) });
+
+test('every page has a 1200×630 share image that exists, and quotes get their own', async () => {
+  await build();
+  const quotes = await load('quotes.json');
+  for (const file of await htmlFiles()) {
+    const html = await readFile(join(DIST, file), 'utf8');
+    const image = html.match(/<meta property="og:image" content="https:\/\/infinito-mourinho\.pages\.dev([^"]+)">/)?.[1];
+    assert.ok(image, `${file}: og:image`);
+    assert.deepEqual(pngSize(await readFile(join(DIST, image))), { width: 1200, height: 630 }, `${file}: ${image}`);
+    assert.match(html, /<meta name="twitter:card" content="summary_large_image">/, file);
+  }
+  for (const q of quotes) {
+    for (const path of [`quotes/${q.id}`, `es/frases/${q.id}`, `pt/frases/${q.id}`]) {
+      assert.ok((await page(path)).includes(`/og/quotes/${q.id}.png"`), `${path} uses its own image (run npm run og?)`);
+    }
+  }
+});
+
+test('share buttons link to each network with the page URL, without loading third-party scripts', async () => {
+  await build();
+  const html = await page('es/anecdotas/medal');
+  const url = encodeURIComponent('https://infinito-mourinho.pages.dev/es/anecdotas/medal/');
+  assert.ok(html.includes(`https://www.facebook.com/sharer/sharer.php?u=${url}`));
+  assert.ok(html.includes(`&amp;url=${url}`), 'X');
+  assert.ok(html.includes(`https://wa.me/?text=`) && html.includes(url), 'WhatsApp');
+  // The phone share sheet and copy button start hidden; app.js reveals them where they work.
+  assert.match(html, /class="btn btn-gold btn-sm share-native" hidden>/);
+  assert.match(html, /class="btn btn-dark btn-sm share-copy" data-copied="[^"]+" hidden>/);
+  for (const [tag] of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.match(tag, /src="\//, 'scripts are same-origin');
+});

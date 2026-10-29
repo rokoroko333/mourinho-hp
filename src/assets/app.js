@@ -29,6 +29,28 @@
     nav.addEventListener('click', (e) => e.target.closest('a') && set(false));
   }
 
+  // Share buttons on quote and story pages. The network links work without JS; this adds the phone's
+  // own share sheet (placed first, touch screens only) and copying the link.
+  for (const box of document.querySelectorAll('.share')) {
+    const { shareTitle: title, shareText: text, shareUrl: url } = box.dataset;
+    const native = box.querySelector('.share-native');
+    if (native && navigator.share && matchMedia('(pointer: coarse)').matches) {
+      native.hidden = false;
+      native.addEventListener('click', () => navigator.share({ title, text, url }).catch(() => {}));
+    }
+    const copy = box.querySelector('.share-copy');
+    if (copy && navigator.clipboard) {
+      copy.hidden = false;
+      copy.addEventListener('click', () =>
+        navigator.clipboard.writeText(url).then(() => {
+          copy.textContent = copy.dataset.copied;
+          // Announced by screen readers, which do not report a button's label changing.
+          box.querySelector('.share-status').textContent = copy.dataset.copied;
+        }, () => {}),
+      );
+    }
+  }
+
   const strings = readJson('strings');
   suggestLanguage();
   if (!strings) return; // Only the home page has the dynamic sections below.

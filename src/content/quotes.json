@@ -2161,5 +2161,197 @@
         "date": "2019-11-20"
       }
     ]
+  },
+  {
+    "id": "fairness-and-sense",
+    "date": "2005",
+    "era": "chelsea-1",
+    "text": "Nobody speaking with fairness and sense can say we don't deserve this title. But the players deserve this more than anybody and I'm very happy for the fans.",
+    "context": {
+      "en": "Chelsea, after the win at Bolton that sealed the club's first league title in 50 years",
+      "es": "Chelsea, tras la victoria en Bolton que dio al club su primera liga en 50 años",
+      "pt": "Chelsea, depois da vitória em Bolton que deu ao clube o primeiro campeonato em 50 anos"
+    },
+    "tags": [
+      "self-belief",
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.taipeitimes.com/News/sport/archives/2005/05/02/2003252903",
+        "publisher": "Taipei Times (AP)",
+        "date": "2005-05-02"
+      }
+    ]
+  },
+  {
+    "id": "cow-in-the-middle",
+    "date": "2014",
+    "era": "chelsea-2",
+    "text": "You may as well put a cow in the middle of the pitch. And then stop the game because there was a cow.",
+    "context": {
+      "en": "Chelsea, after a defeat at Newcastle, on time-wasting",
+      "es": "Chelsea, tras perder en Newcastle, sobre la pérdida de tiempo",
+      "pt": "Chelsea, depois de perder em Newcastle, sobre o antijogo"
+    },
+    "tags": [
+      "humour",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://the42.ie/1820887",
+        "publisher": "The42",
+        "date": "2014-12-08"
+      },
+      {
+        "url": "https://www.goal.com/en-om/news/uefalona-cows-for-footballs-and-mourinhos-top-10-excuses/dit0cwjg8gir12d8fi6pc97tv",
+        "publisher": "Goal.com",
+        "date": "2017-04-06"
+      }
+    ]
+  },
+  {
+    "id": "first-to-go-out",
+    "date": "2018",
+    "era": "man-utd",
+    "text": "I'm not going to run away, disappear, cry, because I heard a few boos. I won't disappear from the tunnel running immediately, the next match I'll be first to go out.",
+    "context": {
+      "en": "Manchester United, defending his record after a Champions League exit",
+      "es": "Manchester United, defendiendo su trayectoria tras caer en la Champions",
+      "pt": "Manchester United, a defender o seu registo depois da eliminação da Liga dos Campeões"
+    },
+    "tags": [
+      "self-belief",
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/news/i-wont-run-away-or-cry-mourinho-delivers-impassioned-defence-man-utd-tenure",
+        "publisher": "FourFourTwo",
+        "date": "2018-03-16"
+      },
+      {
+        "url": "https://the42.ie/3908448",
+        "publisher": "The42",
+        "date": "2018-03-16"
+      }
+    ]
+  },
+  {
+    "id": "attacking-football-needs-the-ball",
+    "date": "2018",
+    "era": "man-utd",
+    "text": "Because for me you can only play attacking football when you have the ball. You need the ball. When the opposition has the ball you have to defend.",
+    "context": {
+      "en": "Manchester United, asked why his side attacked only when behind",
+      "es": "Manchester United, preguntado por qué su equipo solo atacaba cuando perdía",
+      "pt": "Manchester United, questionado sobre porque a equipa só atacava quando estava a perder"
+    },
+    "tags": [
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en/news/mourinho-i-dont-understand-story-of-attacking-football/h9kamvgq9f4g1r5hpim6evzb1",
+        "publisher": "Goal.com",
+        "date": "2018-10-19"
+      }
+    ]
+  },
+  {
+    "id": "beat-anyone",
+    "date": "2010",
+    "era": "inter",
+    "text": "I learned we can beat anyone because Chelsea are not just 'anyone', they are one of the best.",
+    "context": {
+      "en": "Inter, after knocking his former club Chelsea out of the Champions League at Stamford Bridge",
+      "es": "Inter, tras eliminar a su exequipo, el Chelsea, de la Champions en Stamford Bridge",
+      "pt": "Inter, depois de eliminar o antigo clube, o Chelsea, da Liga dos Campeões em Stamford Bridge"
+    },
+    "tags": [
+      "self-belief",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/news/newsid=940801.html",
+        "publisher": "UEFA",
+        "date": "2010-03-16"
+      }
+    ]
+  },
+  {
+    "id": "giant-club-without-trophy-room",
+    "date": "2022",
+    "era": "roma",
+    "text": "This is a giant club without the trophy room in relation to the social dimension of the club. So, this is not a trophy, it's only the final but it means a lot for them.",
+    "context": {
+      "en": "Roma, after reaching the club's first European final in 31 years",
+      "es": "Roma, tras alcanzar la primera final europea del club en 31 años",
+      "pt": "Roma, depois de chegar à primeira final europeia do clube em 31 anos"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.euronews.com/2022/05/06/soccer-europaconf-rom-lei",
+        "publisher": "Euronews (Reuters)",
+        "date": "2022-05-06"
+      },
+      {
+        "url": "https://thenationalnews.com/sport/football/2022/05/06/emotional-mourinho-shed-a-tear-as-roma-reach-europa-conference-league-final",
+        "publisher": "The National",
+        "date": "2022-05-06"
+      }
+    ]
+  },
+  {
+    "id": "no-words-treble",
+    "date": "2003",
+    "era": "porto",
+    "text": "There are no words to explain the feeling. We have won all the competitions, of course I am very happy.",
+    "context": {
+      "en": "FC Porto, after the Portuguese Cup final that completed a treble",
+      "es": "FC Porto, tras la final de la Copa de Portugal que completó un triplete",
+      "pt": "FC Porto, depois da final da Taça de Portugal que completou um triplete"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/news/newsid=74886.html",
+        "publisher": "UEFA",
+        "date": "2003-06-15"
+      }
+    ]
+  },
+  {
+    "id": "full-of-real-support",
+    "date": "2016",
+    "era": "man-utd",
+    "text": "Today the stadium was full – not full of people, full of real support – and it looks like the love that people have for the club is bigger than bad results, bigger than three bad seasons.",
+    "context": {
+      "en": "Manchester United, praising the Old Trafford crowd after a League Cup win",
+      "es": "Manchester United, elogiando a la afición de Old Trafford tras ganar en la Copa de la Liga",
+      "pt": "Manchester United, a elogiar os adeptos de Old Trafford depois de uma vitória na Taça da Liga"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/news/mourinho-ive-never-had-fans-these",
+        "publisher": "FourFourTwo",
+        "date": "2016-10-26"
+      },
+      {
+        "url": "https://www.the42.ie/mourinho-ive-never-had-fans-like-these-3050138-Oct2016/",
+        "publisher": "The42",
+        "date": "2016-10-27"
+      }
+    ]
   }
 ]

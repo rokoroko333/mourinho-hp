@@ -165,7 +165,8 @@
     })
     .catch(() => showMessage(matchList, strings.matchesEmpty));
 
-  // "Kick-off in 2 d 4 h 13 m", refreshed every minute and hidden once the match has started.
+  // "Kick-off in 2 d 4 h 13 m", hidden once the match has started. Checked every 15 s rather than every
+  // minute, so the minute shown turns over at most 15 s late instead of up to a minute.
   function startCountdown(kickoff) {
     const box = $('#countdown');
     const u = strings.units;
@@ -181,7 +182,7 @@
       box.replaceChildren(el('span', { class: 'card-label' }, strings.kickoffIn), ' ', el('strong', {}, parts.join(' ')));
       box.hidden = false;
     };
-    const timer = setInterval(tick, 60000);
+    const timer = setInterval(tick, 15000);
     tick();
   }
 

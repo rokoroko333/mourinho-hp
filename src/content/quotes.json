@@ -1695,5 +1695,225 @@
         "date": "2020-02-03"
       }
     ]
+  },
+  {
+    "id": "polls-or-ai",
+    "date": "2026",
+    "era": "real-madrid-2",
+    "text": "The day will come when polls, or AI, pick the team. But until then, I think, coaches pick the team and take decisions...",
+    "context": {
+      "en": "Real Madrid, asked whether he would change his midfield after criticism",
+      "es": "Real Madrid, preguntado si cambiaría su centro del campo tras las críticas",
+      "pt": "Real Madrid, questionado se mudaria o meio-campo depois das críticas"
+    },
+    "tags": [
+      "humour",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.espn.com/story/_/id/50200546",
+        "publisher": "ESPN",
+        "date": "2026-10-17"
+      }
+    ]
+  },
+  {
+    "id": "bigger-chelsea-bigger-jose",
+    "date": "2025",
+    "era": "benfica-2025",
+    "text": "I am part of their history and they are part of my history. I helped them become a bigger Chelsea and they helped me to become a bigger Jose.",
+    "context": {
+      "en": "Benfica, at Stamford Bridge before facing Chelsea in the Champions League",
+      "es": "Benfica, en Stamford Bridge antes de enfrentarse al Chelsea en la Champions",
+      "pt": "Benfica, em Stamford Bridge antes de defrontar o Chelsea na Liga dos Campeões"
+    },
+    "tags": [
+      "fans",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.foxsports.com/articles/soccer/mourinho-will-always-be-a-blue-as-he-returns-to-chelsea-with-new-club-benfica",
+        "publisher": "Fox Sports (AP)",
+        "date": "2025-09-29"
+      }
+    ]
+  },
+  {
+    "id": "special-one-ancient-history",
+    "date": "2022",
+    "era": "roma",
+    "text": "The Special One story doesn't make any sense. It's something that was said at the beginning of my career. But, as you progress, you grow and you think more about helping others rather than yourself. So that's ancient history for me. Tomorrow I'll just try to help others.",
+    "context": {
+      "en": "Roma, on the eve of the Europa Conference League final",
+      "es": "Roma, en la víspera de la final de la Conference League",
+      "pt": "Roma, na véspera da final da Liga Conferência"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en/news/special-one-comment-now-ancient-history-says-roma-boss-mourinho-ahead-of-conference-league-final/bltac2c25a5e8140a22",
+        "publisher": "Goal.com",
+        "date": "2022-05-24"
+      }
+    ]
+  },
+  {
+    "id": "fantastic-for-the-country",
+    "date": "2004",
+    "era": "porto",
+    "text": "We played well in a difficult atmosphere and being in the quarter-finals is amazing for us. It's fantastic not only for the club and the players but also for the country.",
+    "context": {
+      "en": "FC Porto, after knocking Manchester United out of the Champions League at Old Trafford",
+      "es": "FC Porto, tras eliminar al Manchester United de la Champions en Old Trafford",
+      "pt": "FC Porto, depois de eliminar o Manchester United da Liga dos Campeões em Old Trafford"
+    },
+    "tags": [
+      "fans",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/019b-0e6aced4b27e-265d5782d521-1000--mourinho-pride-at-porto-progress/",
+        "publisher": "UEFA",
+        "date": "2004-03-09"
+      }
+    ]
+  },
+  {
+    "id": "best-debut",
+    "date": "2017",
+    "era": "man-utd",
+    "text": "But I think the best debut for a young player is in the middle of an experienced structure, where he can be supported. To play so many kids at the same time, honestly, I don't think it's good.",
+    "context": {
+      "en": "Manchester United, on fielding several academy players at once",
+      "es": "Manchester United, sobre alinear a varios canteranos a la vez",
+      "pt": "Manchester United, sobre utilizar vários jogadores da formação ao mesmo tempo"
+    },
+    "tags": [
+      "youth"
+    ],
+    "sources": [
+      {
+        "url": "https://www.thedailystar.net/sports/united-kids-need-more-time-admits-mourinho-1407712",
+        "publisher": "The Daily Star (AFP)",
+        "date": "2017-05-19"
+      }
+    ]
+  },
+  {
+    "id": "loss-not-humiliation",
+    "date": "2010",
+    "era": "real-madrid-1",
+    "text": "One team played to their potential and one didn't. Loss, yes - humiliation, no. It was a defeat we deserved, we just weren't good enough.",
+    "context": {
+      "en": "Real Madrid, after a 5-0 defeat at Barcelona",
+      "es": "Real Madrid, tras perder 5-0 en el campo del Barcelona",
+      "pt": "Real Madrid, depois de perder 5-0 no campo do Barcelona"
+    },
+    "tags": [
+      "rivals",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "http://news.bbc.co.uk/sport2/hi/football/europe/9240329.stm",
+        "publisher": "BBC Sport",
+        "date": "2010-11-29"
+      }
+    ]
+  },
+  {
+    "id": "loved-before-victories",
+    "date": "2024",
+    "era": "fenerbahce",
+    "text": "Normally, a coach is loved after victories. In this case I feel that I am loved before victories.",
+    "context": {
+      "en": "Fenerbahçe, speaking to the fans at his unveiling",
+      "es": "Fenerbahçe, ante la afición en su presentación",
+      "pt": "Fenerbahçe, aos adeptos na apresentação"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/12040/13145939/jose-mourinho-fenerbahce-appoint-former-manchester-united-and-chelsea-boss-as-coach",
+        "publisher": "Sky Sports",
+        "date": "2024-06-02"
+      }
+    ]
+  },
+  {
+    "id": "most-important-because-last",
+    "date": "2017",
+    "era": "man-utd",
+    "text": "For me, it is the most important trophy of my career because it is the last. That's the way I look at things.",
+    "context": {
+      "en": "Manchester United, after winning the Europa League final",
+      "es": "Manchester United, tras ganar la final de la Europa League",
+      "pt": "Manchester United, depois de ganhar a final da Liga Europa"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://skysports.com/football/news/11667/10891972/jose-mourinho-europa-league-win-means-manchester-united-season-was-a-success",
+        "publisher": "Sky Sports",
+        "date": "2017-05-25"
+      }
+    ]
+  },
+  {
+    "id": "close-your-mouth",
+    "date": "2005",
+    "era": "chelsea-1",
+    "text": "The signal of close your mouth was not for them but for the press. They speak too much and in my opinion they try to do everything to disturb Chelsea. Wait, don't speak too soon.",
+    "context": {
+      "en": "Chelsea, explaining his gesture during the League Cup final win over Liverpool",
+      "es": "Chelsea, explicando su gesto en la final de la Copa de la Liga ganada al Liverpool",
+      "pt": "Chelsea, a explicar o gesto na final da Taça da Liga ganha ao Liverpool"
+    },
+    "tags": [
+      "humour",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "http://news.bbc.co.uk/sport2/hi/football/league_cup/4296791.stm",
+        "publisher": "BBC Sport",
+        "date": "2005-02-27"
+      }
+    ]
+  },
+  {
+    "id": "thank-them-by-giving-everything",
+    "date": "2015",
+    "era": "chelsea-2",
+    "text": "I don't have another way to thank them than by giving everything I have, which I have always, which I will do always. It's the only way to thank them for this reaction.",
+    "context": {
+      "en": "Chelsea, thanking the fans who sang his name during a difficult run",
+      "es": "Chelsea, agradeciendo a la afición que coreó su nombre en una mala racha",
+      "pt": "Chelsea, a agradecer aos adeptos que cantaram o seu nome numa fase difícil"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11668/10056209/chelsea-2-1-dynamo-kiev-jose-mourinho-thanks-fans-for-support",
+        "publisher": "Sky Sports",
+        "date": "2015-11-05"
+      },
+      {
+        "url": "https://www.irishnews.com/sport/2015/11/05/news/mourinho-hails-chelsea-champions-league-win-as-my-moment--315369/",
+        "publisher": "The Irish News (PA)",
+        "date": "2015-11-05"
+      }
+    ]
   }
 ]

@@ -428,5 +428,137 @@
         "date": "2025-09-18"
       }
     ]
+  },
+  {
+    "id": "chelsea-league-cup-2014-15",
+    "era": "chelsea-2",
+    "season": "2014-15",
+    "competition": {
+      "en": "League Cup",
+      "es": "Copa de la Liga inglesa",
+      "pt": "Taça da Liga inglesa"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/11667/10295906/jose-mourinho-in-numbers-new-manchester-united-managers-career-statistics",
+        "publisher": "Sky Sports",
+        "date": "2016-05-27"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-premier-league-2014-15",
+    "era": "chelsea-2",
+    "season": "2014-15",
+    "competition": {
+      "en": "Premier League",
+      "es": "Premier League",
+      "pt": "Premier League"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11667/10295906/jose-mourinho-in-numbers-new-manchester-united-managers-career-statistics",
+        "publisher": "Sky Sports",
+        "date": "2016-05-27"
+      },
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/49857747/can-mourinho-lead-real-madrid-champions-league-glory-prove-how-special-is",
+        "publisher": "ESPN",
+        "date": "2026-09-07"
+      }
+    ]
+  },
+  {
+    "id": "man-utd-community-shield-2016-17",
+    "era": "man-utd",
+    "season": "2016-17",
+    "competition": {
+      "en": "FA Community Shield",
+      "es": "Community Shield",
+      "pt": "Community Shield"
+    },
+    "sources": [
+      {
+        "url": "https://www.thefa.com/news/2016/aug/07/leicester-city-manchester-united-report-070816",
+        "publisher": "The FA",
+        "date": "2016-08-07"
+      },
+      {
+        "url": "https://www.goal.com/br/not%C3%ADcias/quantos-titulos-jose-mourinho-tem-na-carreira/blt906d0aa7b353759c",
+        "publisher": "Goal.com",
+        "date": "2025-09-18"
+      }
+    ]
+  },
+  {
+    "id": "man-utd-league-cup-2016-17",
+    "era": "man-utd",
+    "season": "2016-17",
+    "competition": {
+      "en": "League Cup",
+      "es": "Copa de la Liga inglesa",
+      "pt": "Taça da Liga inglesa"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      },
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/49857747/can-mourinho-lead-real-madrid-champions-league-glory-prove-how-special-is",
+        "publisher": "ESPN",
+        "date": "2026-09-07"
+      }
+    ]
+  },
+  {
+    "id": "man-utd-europa-league-2016-17",
+    "era": "man-utd",
+    "season": "2016-17",
+    "competition": {
+      "en": "UEFA Europa League",
+      "es": "Europa League",
+      "pt": "Liga Europa"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0250-0c5117a4c425-9136199d2703-1000--manchester-united-beat-ajax-to-claim-europa-league-title/",
+        "publisher": "UEFA",
+        "date": "2017-05-24"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0281-1812ecd1d018-1e6b993bc29a-1000--jose-mourinho-eyeing-sixth-uefa-final-win-out-of-six/",
+        "publisher": "UEFA",
+        "date": "2023-05-31"
+      }
+    ]
+  },
+  {
+    "id": "roma-conference-league-2021-22",
+    "era": "roma",
+    "season": "2021-22",
+    "competition": {
+      "en": "UEFA Europa Conference League",
+      "es": "Conference League",
+      "pt": "Liga Conferência"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaconferenceleague/news/0275-153b4c3b58ce-9dd2bc95bfd0-1000--roma-1-0-feyenoord-zaniolo-strike-wins-the-first-europa-con/",
+        "publisher": "UEFA",
+        "date": "2022-05-25"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0281-1812ecd1d018-1e6b993bc29a-1000--jose-mourinho-eyeing-sixth-uefa-final-win-out-of-six/",
+        "publisher": "UEFA",
+        "date": "2023-05-31"
+      }
+    ]
   }
 ]

@@ -1033,5 +1033,231 @@
         "date": "2026-10-26"
       }
     ]
+  },
+  {
+    "id": "referees-like-this-one",
+    "date": "2024",
+    "era": "fenerbahce",
+    "text": "If we have referees like this one in every match of the title contenders, the championship will be a beautiful championship and the winner will deserve to win.",
+    "context": {
+      "en": "Fenerbahçe, praising the referee after a 1-0 derby defeat at Beşiktaş",
+      "es": "Fenerbahçe, elogiando al árbitro tras perder 1-0 el derbi ante el Beşiktaş",
+      "pt": "Fenerbahçe, a elogiar o árbitro depois de perder 1-0 o dérbi com o Beşiktaş"
+    },
+    "tags": [
+      "referees",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://global.espn.com/football/story/_/id/42870537/jose-mourinho-fenerbahce-boss-praises-referee-besiktas-loss",
+        "publisher": "ESPN",
+        "date": "2024-12-09"
+      }
+    ]
+  },
+  {
+    "id": "pay-me-the-bonus",
+    "date": "2024-10-23",
+    "era": "fenerbahce",
+    "text": "I think we still have a chance to win that league because maybe they punish Man City with points and maybe we win that league and they have to pay me the bonus and give me the medal.",
+    "context": {
+      "en": "Fenerbahçe, joking about the 2017-18 Premier League title before facing Manchester United",
+      "es": "Fenerbahçe, bromeando sobre la Premier League 2017-18 antes de enfrentarse al Manchester United",
+      "pt": "Fenerbahçe, a brincar com a Premier League de 2017-18 antes de defrontar o Manchester United"
+    },
+    "tags": [
+      "humour",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/sport/soccer/2024/10/23/jose-mourinho-mischievously-suggests-he-may-still-win-league-title-with-manchester-united/",
+        "publisher": "The Irish Times",
+        "date": "2024-10-23"
+      }
+    ]
+  },
+  {
+    "id": "more-altruistic",
+    "date": "2025-09-18",
+    "era": "benfica-2025",
+    "text": "I'm more altruistic, less egocentric. I don't think about me as much.",
+    "context": {
+      "en": "Benfica, at his presentation, on how he has changed",
+      "es": "Benfica, en su presentación, sobre cómo ha cambiado",
+      "pt": "Benfica, na apresentação, sobre como mudou"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.clickondetroit.com/news/2025/09/18/benfica-negotiations-with-mourinho-to-be-finalized-soon-coach-nears-return-to-portugal/",
+        "publisher": "Associated Press",
+        "date": "2025-09-18"
+      },
+      {
+        "url": "https://infonews.ca/?p=7355443",
+        "publisher": "Associated Press",
+        "date": "2025-09-18"
+      }
+    ]
+  },
+  {
+    "id": "tour-of-switzerland",
+    "date": "2026-10-09",
+    "era": "real-madrid-2",
+    "text": "As for the bicycle in Switzerland. It was in a hotel, made up of small houses, which makes them available so guests can ride to the communal areas, and you would have us believe he was competing in the Tour of Switzerland.",
+    "context": {
+      "en": "Real Madrid, defending Kylian Mbappé against criticism",
+      "es": "Real Madrid, defendiendo a Kylian Mbappé de las críticas",
+      "pt": "Real Madrid, a defender Kylian Mbappé das críticas"
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.thescore.com/news/3619013/mourinho-lashes-out-at-ridiculous-criticism-of-mbappe",
+        "publisher": "theScore (AFP)",
+        "date": "2026-10-09"
+      },
+      {
+        "url": "https://citizen.digital/article/mourinho-lashes-out-at-ridiculous-criticism-of-mbappe-n391727",
+        "publisher": "Citizen Digital (AFP)",
+        "date": "2026-10-09"
+      }
+    ]
+  },
+  {
+    "id": "some-people-hate-me",
+    "date": "2013-04-30",
+    "era": "real-madrid-1",
+    "text": "… in Spain the situation is a bit different because some people hate me. And many of you are in this room.",
+    "context": {
+      "en": "Real Madrid, after going out of the Champions League semi-finals to Borussia Dortmund",
+      "es": "Real Madrid, tras caer en las semifinales de la Champions ante el Borussia Dortmund",
+      "pt": "Real Madrid, depois de cair nas meias-finais da Liga dos Campeões com o Borussia Dortmund"
+    },
+    "tags": [
+      "rivals",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.foxnews.com/sports/mourinho-gives-more-hints-hes-leaving-madrid-and-returning-to-england-where-i-am-loved",
+        "publisher": "Associated Press",
+        "date": "2013-04-30"
+      }
+    ]
+  },
+  {
+    "id": "poets-dont-win-titles",
+    "date": "2017-05-24",
+    "era": "man-utd",
+    "text": "There are lots of poets in football but poets, they don't win many titles.",
+    "context": {
+      "en": "Manchester United, after winning the Europa League final against Ajax",
+      "es": "Manchester United, tras ganar la final de la Europa League ante el Ajax",
+      "pt": "Manchester United, depois de ganhar a final da Liga Europa ao Ajax"
+    },
+    "tags": [
+      "self-belief",
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en/news/mourinho-lots-of-poets-in-football-but-poets-dont-win-titles/1csgj1h77nzul1gxpu26ywcg9n",
+        "publisher": "Goal.com",
+        "date": "2017-05-25"
+      }
+    ]
+  },
+  {
+    "id": "forty-nine-academy-players",
+    "date": "2016-07-05",
+    "era": "man-utd",
+    "text": "Do you know how many players I have brought through from the academy to the first team? Forty-nine. If anyone is interested I can give you the names.",
+    "context": {
+      "en": "Manchester United, at his first press conference, answering criticism over young players",
+      "es": "Manchester United, en su primera rueda de prensa, respondiendo a las críticas sobre los jóvenes",
+      "pt": "Manchester United, na primeira conferência de imprensa, a responder às críticas sobre os jovens"
+    },
+    "tags": [
+      "youth",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11667/10424219/jose-mourinhos-first-manchester-united-news-conference-the-full-transcript-from-old-trafford",
+        "publisher": "Sky Sports",
+        "date": "2016-07-05"
+      }
+    ]
+  },
+  {
+    "id": "brilliant-ball-boy",
+    "date": "2019-11-26",
+    "era": "tottenham",
+    "text": "I love intelligent ball boys, like I was. I was a brilliant ball boy as a kid. This kid today was brilliant. He reads the game, understands the game and made an important assist.",
+    "context": {
+      "en": "Tottenham, praising the ball boy whose quick throw set up an equaliser against Olympiacos",
+      "es": "Tottenham, elogiando al recogepelotas cuyo saque rápido propició un empate ante el Olympiacos",
+      "pt": "Tottenham, a elogiar o apanha-bolas cuja reposição rápida deu origem a um empate frente ao Olympiacos"
+    },
+    "tags": [
+      "youth",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://global.espn.com/football/story/_/id/37579227/tottenham-boss-jose-mourinho-champions-league-hero-was-not-harry-kane-ball-boy",
+        "publisher": "ESPN",
+        "date": "2019-11-27"
+      }
+    ]
+  },
+  {
+    "id": "pressure-is-bird-flu",
+    "date": "2006",
+    "era": "chelsea-1",
+    "text": "For me, pressure is bird flu; I am feeling a lot of pressure with the swan in Scotland.",
+    "context": {
+      "en": "Chelsea, asked about the pressure of the title race",
+      "es": "Chelsea, preguntado por la presión de la lucha por el título",
+      "pt": "Chelsea, questionado sobre a pressão da luta pelo título"
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/sport/pressure-for-the-birds-says-chirpy-mourinho-1.1035811",
+        "publisher": "The Irish Times",
+        "date": "2006-04-08"
+      }
+    ]
+  },
+  {
+    "id": "win-when-it-feels-immortal",
+    "date": "2022",
+    "era": "roma",
+    "text": "It is one thing to win when everyone expects it, when you made the investments to win, but it's quite another to win when something feels immortal, that feels truly special.",
+    "context": {
+      "en": "Roma, after winning the first Europa Conference League final",
+      "es": "Roma, tras ganar la primera final de la Conference League",
+      "pt": "Roma, depois de ganhar a primeira final da Liga Conferência"
+    },
+    "tags": [
+      "self-belief",
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.asroma.com/en/club/history/a-brief-history-of-as-roma",
+        "publisher": "AS Roma"
+      }
+    ]
   }
 ]

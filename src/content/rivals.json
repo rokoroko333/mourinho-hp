@@ -1,0 +1,628 @@
+[
+  {
+    "id": "guardiola",
+    "name": "Pep Guardiola",
+    "h2h": {
+      "matches": 18,
+      "wins": 4,
+      "draws": 6,
+      "losses": 8,
+      "asOf": "2017-01-15",
+      "sources": [
+        {
+          "url": "https://www.skysports.com/football/news/10722140/is-this-joses-nemesis",
+          "publisher": "Sky Sports",
+          "date": "2017-01-15"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2011-04-20",
+        "home": "Barcelona",
+        "away": "Real Madrid",
+        "score": "0-1",
+        "competition": {
+          "en": "Copa del Rey final",
+          "es": "final de la Copa del Rey",
+          "pt": "final da Taça do Rei"
+        },
+        "sources": [
+          {
+            "url": "https://www.uefa.com/news/0231-0e94e7a8c259-362e4afe7d78-1000--mourinho-v-guardiola-the-clasico-years/",
+            "publisher": "UEFA",
+            "date": "2016-09-09"
+          }
+        ]
+      },
+      {
+        "date": "2011-04-27",
+        "home": "Real Madrid",
+        "away": "Barcelona",
+        "score": "0-2",
+        "competition": {
+          "en": "Champions League semi-final",
+          "es": "semifinal de la Liga de Campeones",
+          "pt": "meia-final da Liga dos Campeões"
+        },
+        "sources": [
+          {
+            "url": "https://www.uefa.com/news/0231-0e94e7a8c259-362e4afe7d78-1000--mourinho-v-guardiola-the-clasico-years/",
+            "publisher": "UEFA",
+            "date": "2016-09-09"
+          }
+        ]
+      },
+      {
+        "date": "2011-05-03",
+        "home": "Barcelona",
+        "away": "Real Madrid",
+        "score": "1-1",
+        "competition": {
+          "en": "Champions League semi-final",
+          "es": "semifinal de la Liga de Campeones",
+          "pt": "meia-final da Liga dos Campeões"
+        },
+        "sources": [
+          {
+            "url": "https://www.uefa.com/news/0231-0e94e7a8c259-362e4afe7d78-1000--mourinho-v-guardiola-the-clasico-years/",
+            "publisher": "UEFA",
+            "date": "2016-09-09"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "With him I remember more the three years we fought on the same side, working together at the same club.",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11095/11923445/jose-mourinho-says-tottenham-vs-manchester-city-is-not-about-his-pep-guardiola-rivalry",
+            "publisher": "Sky Sports",
+            "date": "2020-02-02"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "And always [Mourinho] is a huge competitor and his teams are always tough.",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11095/11923445/jose-mourinho-says-tottenham-vs-manchester-city-is-not-about-his-pep-guardiola-rivalry",
+            "publisher": "Sky Sports",
+            "date": "2020-02-02"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wenger",
+    "name": "Arsène Wenger",
+    "h2h": {
+      "matches": 16,
+      "wins": 8,
+      "draws": 7,
+      "losses": 1,
+      "asOf": "2017-01-15",
+      "sources": [
+        {
+          "url": "https://www.skysports.com/football/news/10722140/is-this-joses-nemesis",
+          "publisher": "Sky Sports",
+          "date": "2017-01-15"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2007-02",
+        "home": "Chelsea",
+        "away": "Arsenal",
+        "score": "2-1",
+        "competition": {
+          "en": "League Cup final",
+          "es": "final de la Copa de la Liga inglesa",
+          "pt": "final da Taça da Liga inglesa"
+        },
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11661/9085963/wenger-v-mourinho",
+            "publisher": "Sky Sports",
+            "date": "2013-12-23"
+          }
+        ]
+      },
+      {
+        "date": "2014-03",
+        "home": "Chelsea",
+        "away": "Arsenal",
+        "score": "6-0",
+        "competition": {
+          "en": "Premier League",
+          "es": "Premier League",
+          "pt": "Premier League"
+        },
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/15118/10656164/arsene-wenger-has-won-just-one-of-15-matches-against-jose-mourinho",
+            "publisher": "Sky Sports",
+            "date": "2016-11-18"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "I hope I play against him again.",
+        "sources": [
+          {
+            "url": "https://www.nationthailand.com/life/30344268",
+            "publisher": "The Nation",
+            "date": "2018-04-30"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "If you would like to compare every manager you give each one the same amount of resources",
+        "said": "2007",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11661/9085963/wenger-v-mourinho",
+            "publisher": "Sky Sports",
+            "date": "2013-12-23"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "klopp",
+    "name": "Jürgen Klopp",
+    "h2h": {
+      "matches": 9,
+      "wins": 2,
+      "draws": 4,
+      "losses": 3,
+      "asOf": "2018-12-15",
+      "sources": [
+        {
+          "url": "https://www.goal.com/en/news/mourinho-vs-klopp-head-to-head-record-who-comes-out-on-top/1i3u7ld3s6l3e1ck7nartivlmp",
+          "publisher": "Goal",
+          "date": "2018-12-15"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2013-04-24",
+        "home": "Borussia Dortmund",
+        "away": "Real Madrid",
+        "score": "4-1",
+        "competition": {
+          "en": "Champions League semi-final",
+          "es": "semifinal de la Liga de Campeones",
+          "pt": "meia-final da Liga dos Campeões"
+        },
+        "sources": [
+          {
+            "url": "https://www.goal.com/en/news/mourinho-vs-klopp-head-to-head-record-who-comes-out-on-top/1i3u7ld3s6l3e1ck7nartivlmp",
+            "publisher": "Goal",
+            "date": "2018-12-15"
+          }
+        ]
+      },
+      {
+        "date": "2013-04-30",
+        "home": "Real Madrid",
+        "away": "Borussia Dortmund",
+        "score": "2-0",
+        "competition": {
+          "en": "Champions League semi-final",
+          "es": "semifinal de la Liga de Campeones",
+          "pt": "meia-final da Liga dos Campeões"
+        },
+        "sources": [
+          {
+            "url": "https://www.goal.com/en/news/mourinho-vs-klopp-head-to-head-record-who-comes-out-on-top/1i3u7ld3s6l3e1ck7nartivlmp",
+            "publisher": "Goal",
+            "date": "2018-12-15"
+          }
+        ]
+      },
+      {
+        "date": "2018-03-10",
+        "home": "Manchester United",
+        "away": "Liverpool",
+        "score": "2-1",
+        "competition": {
+          "en": "Premier League",
+          "es": "Premier League",
+          "pt": "Premier League"
+        },
+        "sources": [
+          {
+            "url": "https://www.goal.com/en/news/mourinho-vs-klopp-head-to-head-record-who-comes-out-on-top/1i3u7ld3s6l3e1ck7nartivlmp",
+            "publisher": "Goal",
+            "date": "2018-12-15"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "Since the day of the draw, Klopp talks every day.",
+        "said": "2013",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11662/11069417/jurgen-klopp-v-jose-mourinho-liverpool-and-manchester-united-managers-head-to-head-records",
+            "publisher": "Sky Sports",
+            "date": "2017-10-09"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "I feel for him of course, but it's work.",
+        "said": "2015",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11662/11069417/jurgen-klopp-v-jose-mourinho-liverpool-and-manchester-united-managers-head-to-head-records",
+            "publisher": "Sky Sports",
+            "date": "2017-10-09"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "benitez",
+    "name": "Rafael Benítez",
+    "h2h": {
+      "matches": 16,
+      "wins": 7,
+      "draws": 4,
+      "losses": 5,
+      "asOf": "2017-11-18",
+      "sources": [
+        {
+          "url": "https://www.mancunianmatters.co.uk/?p=103334",
+          "publisher": "Mancunian Matters",
+          "date": "2017-11-18"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2005",
+        "home": "Chelsea",
+        "away": "Liverpool",
+        "score": "3-2",
+        "competition": {
+          "en": "League Cup final",
+          "es": "final de la Copa de la Liga inglesa",
+          "pt": "final da Taça da Liga inglesa"
+        },
+        "note": {
+          "en": "after extra time",
+          "es": "en la prórroga",
+          "pt": "após prolongamento"
+        },
+        "sources": [
+          {
+            "url": "https://www.mancunianmatters.co.uk/?p=103334",
+            "publisher": "Mancunian Matters",
+            "date": "2017-11-18"
+          }
+        ]
+      },
+      {
+        "date": "2006",
+        "home": "Liverpool",
+        "away": "Chelsea",
+        "score": "2-1",
+        "competition": {
+          "en": "FA Cup semi-final",
+          "es": "semifinal de la FA Cup",
+          "pt": "meia-final da Taça de Inglaterra"
+        },
+        "sources": [
+          {
+            "url": "https://www.mancunianmatters.co.uk/?p=103334",
+            "publisher": "Mancunian Matters",
+            "date": "2017-11-18"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "I don't think the rivalry was with Rafael, I think the rivalry was between our clubs rather than between us.",
+        "sources": [
+          {
+            "url": "https://skysports.com/amp/football/news/11667/11128747/jose-mourinho-says-he-has-no-problem-with-rafael-benitez",
+            "publisher": "Sky Sports",
+            "date": "2017-11-16"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "Mourinho talks a lot about a lot of people, but I prefer to talk about facts.",
+        "said": "2014",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11095/11239062/rafa-benitez-v-jose-mourinho-a-rivalry-in-quotes-ahead-of-man-uniteds-trip-to-newcastle",
+            "publisher": "Sky Sports",
+            "date": "2018-02-11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "conte",
+    "name": "Antonio Conte",
+    "h2h": {
+      "matches": 5,
+      "wins": 1,
+      "draws": 1,
+      "losses": 3,
+      "asOf": "2018-02-23",
+      "sources": [
+        {
+          "url": "https://jerseyeveningpost.com/uksport/2018/02/23/jose-mourinho-v-antonio-conte-tale-of-the-tape/",
+          "publisher": "Press Association",
+          "date": "2018-02-23"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2016-10",
+        "home": "Chelsea",
+        "away": "Manchester United",
+        "score": "4-0",
+        "competition": {
+          "en": "Premier League",
+          "es": "Premier League",
+          "pt": "Premier League"
+        },
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11668/11254854/jose-mourinho-v-antonio-conte-a-timeline-of-quotes-between-the-rival-managers",
+            "publisher": "Sky Sports",
+            "date": "2018-05-19"
+          }
+        ]
+      },
+      {
+        "date": "2018-02-25",
+        "home": "Manchester United",
+        "away": "Chelsea",
+        "score": "2-1",
+        "competition": {
+          "en": "Premier League",
+          "es": "Premier League",
+          "pt": "Premier League"
+        },
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11668/11254854/jose-mourinho-v-antonio-conte-a-timeline-of-quotes-between-the-rival-managers",
+            "publisher": "Sky Sports",
+            "date": "2018-05-19"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "I think the handshake doesn't need any words.",
+        "said": "2018",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11668/11254854/jose-mourinho-v-antonio-conte-a-timeline-of-quotes-between-the-rival-managers",
+            "publisher": "Sky Sports",
+            "date": "2018-05-19"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ancelotti",
+    "name": "Carlo Ancelotti",
+    "h2h": {
+      "matches": 5,
+      "wins": 3,
+      "draws": 0,
+      "losses": 2,
+      "asOf": "2017-01-15",
+      "sources": [
+        {
+          "url": "https://www.skysports.com/football/news/10722140/is-this-joses-nemesis",
+          "publisher": "Sky Sports",
+          "date": "2017-01-15"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2021-02",
+        "home": "Everton",
+        "away": "Tottenham Hotspur",
+        "score": "5-4",
+        "competition": {
+          "en": "FA Cup fifth round",
+          "es": "octavos de final de la FA Cup",
+          "pt": "oitavos de final da Taça de Inglaterra"
+        },
+        "note": {
+          "en": "after extra time",
+          "es": "en la prórroga",
+          "pt": "após prolongamento"
+        },
+        "sources": [
+          {
+            "url": "https://thehimalayantimes.com/sports/bernard-seals-everton-win-in-nine-goal-cup-classic-against-spurs",
+            "publisher": "Reuters",
+            "date": "2021-02-11"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "He's not a social media coach, he's a proper coach.",
+        "sources": [
+          {
+            "url": "https://football-italia.net/mourinho-ancelotti-not-social-media-coach/",
+            "publisher": "Football Italia",
+            "date": "2024-06-02"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "He's been successful even if the Giallorossi are not considered among the best teams.",
+        "sources": [
+          {
+            "url": "https://www.goal.com/en/news/jose-mourinho-praised-real-madrid-boss-carlo-ancelotti-roma-success/blta321b7b472535ec6",
+            "publisher": "Goal",
+            "date": "2023-08-23"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "van-gaal",
+    "name": "Louis van Gaal",
+    "h2h": {
+      "matches": 3,
+      "wins": 2,
+      "draws": 1,
+      "losses": 0,
+      "asOf": "2017-01-15",
+      "sources": [
+        {
+          "url": "https://www.skysports.com/football/news/10722140/is-this-joses-nemesis",
+          "publisher": "Sky Sports",
+          "date": "2017-01-15"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2010-05-22",
+        "home": "Bayern Munich",
+        "away": "Inter",
+        "score": "0-2",
+        "competition": {
+          "en": "Champions League final",
+          "es": "final de la Liga de Campeones",
+          "pt": "final da Liga dos Campeões"
+        },
+        "sources": [
+          {
+            "url": "https://www.inter.it/en/news/2020/05/22/10-unforgettable-moments-from-inter-2-0-bayern.html",
+            "publisher": "Inter",
+            "date": "2020-05-22"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "Louis was the best coach in the World Cup and he is a good friend - really, a friend for life.",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11667/9388253/premier-league-jose-mourinho-left-unruffled-by-louis-van-gaals-arrival-at-manchester-united",
+            "publisher": "Sky Sports",
+            "date": "2014-07-20"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "He is a very modest and emotional human being, and I like that.",
+        "sources": [
+          {
+            "url": "https://www.skysports.com/football/news/11667/9532668/manchester-uniteds-van-gaal-plays-down-influence-on-mourinho",
+            "publisher": "Sky Sports",
+            "date": "2014-10-26"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pochettino",
+    "name": "Mauricio Pochettino",
+    "h2h": {
+      "matches": 11,
+      "wins": 9,
+      "draws": 1,
+      "losses": 1,
+      "asOf": "2017-01-15",
+      "sources": [
+        {
+          "url": "https://www.skysports.com/football/news/10722140/is-this-joses-nemesis",
+          "publisher": "Sky Sports",
+          "date": "2017-01-15"
+        }
+      ]
+    },
+    "games": [
+      {
+        "date": "2018-04",
+        "home": "Manchester United",
+        "away": "Tottenham Hotspur",
+        "score": "2-1",
+        "competition": {
+          "en": "FA Cup semi-final",
+          "es": "semifinal de la FA Cup",
+          "pt": "meia-final da Taça de Inglaterra"
+        },
+        "sources": [
+          {
+            "url": "https://www.tntsports.co.uk/football/the-emirates-fa-cup/2017-2018/alexis-sanchez-inspired-united-hit-back-to-end-tottenham-s-fa-cup-dream_sto6721704/story.shtml",
+            "publisher": "TNT Sports",
+            "date": "2018-04-21"
+          }
+        ]
+      }
+    ],
+    "quotes": [
+      {
+        "by": "mourinho",
+        "text": "This club will always be his home, this training ground his training ground. He is always welcome here.",
+        "sources": [
+          {
+            "url": "https://www.goal.com/en/news/pochettino-is-always-welcome-at-tottenham-mourinho-hails/d6g82yny5vp1nq1wnhkxl7xd",
+            "publisher": "Goal",
+            "date": "2019-11-21"
+          }
+        ]
+      },
+      {
+        "by": "rival",
+        "text": "I am so happy he is at Tottenham, replacing me.",
+        "sources": [
+          {
+            "url": "https://english.aawsat.com/node/2378121",
+            "publisher": "Asharq Al-Awsat (The Guardian)",
+            "date": "2020-07-08"
+          }
+        ]
+      }
+    ]
+  }
+]

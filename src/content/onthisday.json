@@ -395,5 +395,181 @@
         "date": "2017-05-11"
       }
     ]
+  },
+  {
+    "date": "2007-02-25",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Two Didier Drogba goals beat Arsenal 2-1 in Cardiff, and Chelsea won the League Cup.",
+      "es": "Dos goles de Didier Drogba ante el Arsenal (2-1) en Cardiff dieron al Chelsea la Copa de la Liga inglesa.",
+      "pt": "Dois golos de Didier Drogba frente ao Arsenal (2-1) em Cardiff deram ao Chelsea a Taça da Liga inglesa."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.ph/football/match/_/gameId/213572/arsenal-chelsea",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2008-06-02",
+    "era": "inter",
+    "text": {
+      "en": "Inter named Mourinho as their new coach.",
+      "es": "El Inter nombró a Mourinho su nuevo entrenador.",
+      "pt": "O Inter nomeou Mourinho como novo treinador."
+    },
+    "sources": [
+      {
+        "url": "https://archivio.blitzquotidiano.it/sport/inter-auguri-mourinho-218949/",
+        "publisher": "Blitz Quotidiano",
+        "date": "2010-01-26"
+      }
+    ]
+  },
+  {
+    "date": "2011-04-20",
+    "era": "real-madrid-1",
+    "text": {
+      "en": "Cristiano Ronaldo's extra-time header beat Barcelona 1-0 at Mestalla, and Real Madrid won the Copa del Rey.",
+      "es": "Un cabezazo de Cristiano Ronaldo en la prórroga ante el Barcelona (1-0) en Mestalla dio al Real Madrid la Copa del Rey.",
+      "pt": "Um cabeceamento de Cristiano Ronaldo no prolongamento frente ao Barcelona (1-0) no Mestalla deu ao Real Madrid a Taça do Rei."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/313675",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2013-06-03",
+    "era": "chelsea-2",
+    "text": {
+      "en": "Chelsea confirmed that Mourinho had returned to the club as manager on a four-year contract.",
+      "es": "El Chelsea confirmó el regreso de Mourinho como entrenador con un contrato de cuatro años.",
+      "pt": "O Chelsea confirmou o regresso de Mourinho como treinador, com um contrato de quatro anos."
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/12028/8755577/mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      },
+      {
+        "url": "https://www.yahoo.com/news/factbox-soccer-tottenham-hotspur-manager-070613795.html",
+        "publisher": "Reuters",
+        "date": "2019-11-20"
+      }
+    ]
+  },
+  {
+    "date": "2015-03-01",
+    "era": "chelsea-2",
+    "text": {
+      "en": "Chelsea beat Tottenham 2-0 at Wembley to win the League Cup.",
+      "es": "El Chelsea venció 2-0 al Tottenham en Wembley y ganó la Copa de la Liga inglesa.",
+      "pt": "O Chelsea venceu o Tottenham por 2-0 em Wembley e conquistou a Taça da Liga inglesa."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/414230",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2015-05-03",
+    "era": "chelsea-2",
+    "text": {
+      "en": "Eden Hazard's goal beat Crystal Palace 1-0 and won Chelsea the Premier League title.",
+      "es": "Un gol de Eden Hazard ante el Crystal Palace (1-0) dio al Chelsea el título de la Premier League.",
+      "pt": "Um golo de Eden Hazard frente ao Crystal Palace (1-0) deu ao Chelsea o título da Premier League."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/395447",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.yahoo.com/news/factbox-soccer-tottenham-hotspur-manager-070613795.html",
+        "publisher": "Reuters",
+        "date": "2019-11-20"
+      }
+    ]
+  },
+  {
+    "date": "2016-05-27",
+    "era": "man-utd",
+    "text": {
+      "en": "Manchester United named Mourinho as manager on a three-year contract.",
+      "es": "El Manchester United nombró a Mourinho entrenador con un contrato de tres años.",
+      "pt": "O Manchester United nomeou Mourinho como treinador, com um contrato de três anos."
+    },
+    "sources": [
+      {
+        "url": "https://www.yahoo.com/news/factbox-soccer-tottenham-hotspur-manager-070613795.html",
+        "publisher": "Reuters",
+        "date": "2019-11-20"
+      }
+    ]
+  },
+  {
+    "date": "2017-02-26",
+    "era": "man-utd",
+    "text": {
+      "en": "Zlatan Ibrahimović's late winner beat Southampton 3-2 at Wembley, and Manchester United won the League Cup.",
+      "es": "Un gol de Zlatan Ibrahimović al final ante el Southampton (3-2) en Wembley dio al Manchester United la Copa de la Liga inglesa.",
+      "pt": "Um golo de Zlatan Ibrahimović no fim frente ao Southampton (3-2) em Wembley deu ao Manchester United a Taça da Liga inglesa."
+    },
+    "sources": [
+      {
+        "url": "https://www.nbcsports.com/soccer/news/zlatan-the-hero-as-manchester-united-wins-efl-cup",
+        "publisher": "NBC Sports",
+        "date": "2017-02-26"
+      }
+    ]
+  },
+  {
+    "date": "2025-09-18",
+    "era": "benfica-2025",
+    "text": {
+      "en": "Mourinho returned to Benfica, 25 years after his first spell, and was presented at the Benfica Campus.",
+      "es": "Mourinho volvió al Benfica, 25 años después de su primera etapa, y fue presentado en el Benfica Campus.",
+      "pt": "Mourinho regressou ao Benfica, 25 anos depois da primeira passagem, e foi apresentado no Benfica Campus."
+    },
+    "sources": [
+      {
+        "url": "https://www.noticiasaominuto.com/desporto/3002970/oficial-benfica-despede-se-de-jose-mourinho-e-recebe-15-milhoes-de-euros",
+        "publisher": "Notícias ao Minuto",
+        "date": "2026-06-09"
+      },
+      {
+        "url": "https://www.abola.pt/noticias/benfica-desconto-para-a-saida-de-mourinho-acaba-sexta-feira-2026052612170920114",
+        "publisher": "A Bola",
+        "date": "2026-05-26"
+      }
+    ]
+  },
+  {
+    "date": "2026-06-11",
+    "era": "real-madrid-2",
+    "text": {
+      "en": "Real Madrid's board announced Mourinho as head coach until June 2029.",
+      "es": "La junta directiva del Real Madrid anunció a Mourinho como entrenador hasta junio de 2029.",
+      "pt": "A direção do Real Madrid anunciou Mourinho como treinador até junho de 2029."
+    },
+    "sources": [
+      {
+        "url": "https://www.beinsports.com/en-us/soccer/la-liga/articles/real-madrid-announce-jos%C3%A9-mourinho-as-new-head-coach-on-world-cup-2026-opening-day-2026-06-11",
+        "publisher": "beIN Sports",
+        "date": "2026-06-11"
+      },
+      {
+        "url": "https://www.sportsmole.co.uk/football/real-madrid/news/mourinhos-official-start-date-revealed-as-real-madrid-return-is-confirmed_599012.html",
+        "publisher": "Sports Mole",
+        "date": "2026-06-11"
+      }
+    ]
   }
 ]

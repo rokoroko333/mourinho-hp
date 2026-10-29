@@ -7,32 +7,57 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const appJs = () => readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
+// Only the source folders: walking the root would also walk dist/, which build.test.mjs rebuilds in parallel.
+const sourceFiles = async (dirs, pattern) => {
+  const files = [];
+  for (const dir of dirs) {
+    files.push(...(await readdir(join(ROOT, dir), { recursive: true })).map((f) => join(dir, f)));
+  }
+  return files.filter((f) => pattern.test(f));
+};
 // Comments may mention what the code avoids, so they are left out before matching.
 const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+const read = async (f) => code(await readFile(join(ROOT, f), 'utf8'));
+// Every script the browser runs: src/assets/ is copied to dist/assets/.
+const browserScripts = async () => {
+  const files = await sourceFiles(['src/assets'], /\.m?js$/);
+  assert.ok(files.includes(join('src/assets', 'app.js')), 'src/assets/app.js is missing; update this test');
+  return Promise.all(files.map(async (f) => [f, await read(f)]));
+};
 
-test('app.js never parses strings as HTML (feed text could inject markup)', async () => {
-  const src = code(await appJs());
-  for (const sink of ['innerHTML', 'outerHTML', 'insertAdjacentHTML', 'document.write', 'createContextualFragment']) {
-    assert.ok(!src.includes(sink), `app.js uses ${sink}; build the DOM with el() and textContent instead`);
+// The text from `start` (an opening bracket) to its matching closing bracket.
+function balanced(src, start) {
+  const open = src[start], close = { '(': ')', '{': '}' }[open];
+  let depth = 0;
+  for (let i = start; i < src.length; i++) {
+    if (src[i] === open) depth++;
+    else if (src[i] === close && --depth === 0) return src.slice(start, i + 1);
+  }
+  return src.slice(start);
+}
+
+test('browser scripts never parse strings as HTML (feed text could inject markup)', async () => {
+  for (const [f, src] of await browserScripts()) {
+    for (const sink of ['innerHTML', 'outerHTML', 'insertAdjacentHTML', 'document.write', 'createContextualFragment', 'DOMParser']) {
+      assert.ok(!src.includes(sink), `${f} uses ${sink}; build the DOM with el() and textContent instead`);
+    }
   }
 });
 
 test('the browser fetches only our own /api/* endpoints, never a news site or a CORS/RSS proxy', async () => {
-  const src = code(await appJs());
-  const calls = [...src.matchAll(/\b(?:fetch|getJson)\(\s*([^)]*)\)/g)].map((m) => m[1].trim());
-  assert.ok(calls.length, 'no fetch calls found; update this test if app.js changed how it loads data');
-  for (const arg of calls) {
-    // `url` is getJson's own parameter; every caller passes a literal checked here.
-    if (arg === 'url') continue;
-    assert.match(arg, /^[`'"]\/api\//, `app.js fetches ${arg}; read external data on the server (lib/feeds.js) instead`);
+  let checked = 0;
+  for (const [f, src] of await browserScripts()) {
+    // getJson's own body passes its parameter on; every call of getJson is checked below instead.
+    const body = src.match(/const getJson = async \(url\) => \{\s*const res = await fetch\(url\);/);
+    const rest = body ? src.replace(body[0], '') : src;
+    for (const m of rest.matchAll(/\b(?:fetch|getJson|XMLHttpRequest|EventSource|WebSocket|sendBeacon)\b\s*\(/g)) {
+      const arg = balanced(rest, m.index + m[0].length - 1).slice(1, -1).trim();
+      assert.match(arg, /^[`'"]\/api\//, `${f} requests ${arg || '(nothing)'}; read external data on the server (lib/feeds.js) instead`);
+      checked++;
+    }
   }
-  // Only the source folders: walking the root would also walk dist/, which build.test.mjs rebuilds in parallel.
-  const files = [];
-  for (const dir of ['src', 'lib', 'functions', 'workers', 'scripts']) {
-    files.push(...(await readdir(join(ROOT, dir), { recursive: true })).map((f) => join(dir, f)));
-  }
-  for (const f of files.filter((f) => /\.(m?js|json|html|toml)$/.test(f))) {
+  assert.ok(checked >= 2, 'expected the news and match requests; update this test if app.js changed how it loads data');
+  for (const f of await sourceFiles(['src', 'lib', 'functions', 'workers', 'scripts'], /\.(m?js|json|html|toml)$/)) {
     const text = await readFile(join(ROOT, f), 'utf8');
     for (const proxy of ['rss2json', 'allorigins', 'corsproxy', 'cors-anywhere', 'thingproxy']) {
       assert.ok(!text.includes(proxy), `${f} mentions ${proxy}; free proxies broke the old site's news`);
@@ -40,38 +65,62 @@ test('the browser fetches only our own /api/* endpoints, never a news site or a 
   }
 });
 
-test('the site never redirects by browser language (bad for search); it only offers a banner', async () => {
-  const src = code(await appJs());
-  assert.doesNotMatch(src, /location\s*(\.href\s*=|\.assign\(|\.replace\(|=)/, 'app.js changes location');
-  const pub = await readFile(join(ROOT, 'src/public/_redirects'), 'utf8');
-  assert.doesNotMatch(pub, /Language=|Accept-Language|\bCountry=/i, '_redirects redirects by language or country');
+test('the site never redirects by browser language or country (bad for search); it only offers a banner', async () => {
+  for (const [f, src] of await browserScripts()) {
+    assert.doesNotMatch(src, /\blocation\b(\.(href|pathname|search|hash))?\s*=(?!=)|\blocation\.(assign|replace)\(/, `${f} changes location`);
+  }
+  // Pages Functions and their helpers are where a server-side redirect by language would go.
+  for (const f of await sourceFiles(['functions', 'lib'], /\.m?js$/)) {
+    assert.doesNotMatch(await read(f), /accept-language|\bcf\.country\b|cf-ipcountry/i, `${f} reads the visitor's language or country`);
+  }
+  const redirects = await readFile(join(ROOT, 'src/public/_redirects'), 'utf8');
+  assert.doesNotMatch(redirects, /Language=|Accept-Language|\bCountry=/i, '_redirects redirects by language or country');
 });
 
 // Built pages are checked in build.test.mjs, which owns dist/: test files run in parallel, and two builds
 // into the same folder at once fail.
-test('links app.js opens in a new tab do not give the opened page access to ours', async () => {
-  const src = code(await appJs());
-  for (const [call] of src.matchAll(/el\('a',\s*\{[^}]*target:\s*'_blank'[^}]*\}/g)) {
-    assert.match(call, /rel:\s*'[^']*noopener/, `app.js: ${call}`);
+test('links scripts open in a new tab do not give the opened page access to ours', async () => {
+  let links = 0;
+  for (const [f, src] of await browserScripts()) {
+    for (const m of src.matchAll(/\bel\(\s*'a'\s*,\s*\{/g)) {
+      const attrs = balanced(src, m.index + m[0].length - 1);
+      if (!/target:\s*'_blank'/.test(attrs)) continue;
+      assert.match(attrs, /rel:\s*'[^']*noopener/, `${f}: ${attrs}`);
+      links++;
+    }
+    for (const m of src.matchAll(/window\.open\(/g)) {
+      const call = balanced(src, m.index + m[0].length - 1);
+      assert.match(call, /noopener/, `${f}: window.open${call}`);
+    }
   }
-  for (const [call] of src.matchAll(/window\.open\([^)]*\)/g)) {
-    assert.match(call, /noopener/, `app.js: ${call}`);
-  }
+  assert.ok(links >= 2, 'expected the news cards and the video label; update this test if app.js changed');
 });
 
 test('the hidden attribute wins over classes that set display (#14)', async () => {
-  const css = await readFile(join(ROOT, 'src/assets/styles.css'), 'utf8');
+  const css = (await readFile(join(ROOT, 'src/assets/styles.css'), 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '');
   assert.match(css, /\[hidden\]\s*\{\s*display:\s*none\s*!important;?\s*\}/);
 });
 
 test('in-page click handlers on links keep Cmd/Ctrl/Shift-click and middle-click (#15)', async () => {
-  const src = code(await appJs());
-  // Every handler that cancels a click must first let modified and non-left clicks through.
-  const handlers = [...src.matchAll(/addEventListener\('click',\s*\((\w+)\)\s*=>\s*\{([\s\S]*?)\1\.preventDefault\(\)/g)];
-  assert.ok(handlers.length, 'no click handler with preventDefault() found; update this test if app.js changed');
-  for (const [, e, before] of handlers) {
-    for (const key of ['metaKey', 'ctrlKey', 'shiftKey', 'button']) {
-      assert.ok(before.includes(`${e}.${key}`), `a click handler calls preventDefault() without checking ${e}.${key} first`);
+  let handlers = 0;
+  for (const [f, src] of await browserScripts()) {
+    const prevents = (src.match(/\.preventDefault\(\)/g) ?? []).length;
+    let found = 0;
+    for (const m of src.matchAll(/addEventListener\(\s*(['"])(\w+)\1\s*,\s*/g)) {
+      // The handler is everything up to the call's closing bracket, whatever form the function takes.
+      const handler = balanced(src, m.index + 'addEventListener'.length);
+      const e = handler.match(/\(\s*['"]\w+['"]\s*,\s*(?:async\s*)?(?:function\s*\w*\s*)?\(?\s*(\w+)/)?.[1];
+      const cut = e ? handler.indexOf(`${e}.preventDefault()`) : -1;
+      if (cut < 0) continue;
+      found += (handler.match(/\.preventDefault\(\)/g) ?? []).length;
+      if (m[2] !== 'click') continue;
+      for (const key of ['metaKey', 'ctrlKey', 'shiftKey', 'button']) {
+        assert.ok(handler.slice(0, cut).includes(`${e}.${key}`), `${f}: a click handler calls preventDefault() without checking ${e}.${key} first`);
+      }
+      handlers++;
     }
+    // A preventDefault() this test could not tie to a handler would go unchecked.
+    assert.equal(found, prevents, `${f}: a preventDefault() is outside any addEventListener handler this test understands`);
   }
+  assert.ok(handlers, 'no click handler with preventDefault() found; update this test if app.js changed');
 });

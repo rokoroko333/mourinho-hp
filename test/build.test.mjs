@@ -487,7 +487,8 @@ test('every on-this-day event has an exact date, a known era, text in three lang
   const dates = new Set();
   for (const e of events) {
     assert.match(e.date, /^\d{4}-\d{2}-\d{2}$/, `${e.date}: exact date`);
-    assert.ok(!Number.isNaN(Date.parse(`${e.date}T00:00:00Z`)), `${e.date}: a real day`);
+    // A round trip, since Date.parse accepts days like 2001-02-31.
+    assert.equal(new Date(`${e.date}T00:00:00Z`).toISOString().slice(0, 10), e.date, `${e.date}: a real day`);
     assert.ok(!dates.has(e.date), `${e.date}: one event per date`);
     dates.add(e.date);
     assert.ok(e.era === null || eras.has(e.era), `${e.date}: era ${e.era}`);

@@ -284,8 +284,12 @@ function relatedTo(kind, id) {
     .map(({ x }) => x);
 }
 
-// Cuts at a word boundary and drops punctuation left dangling before the ellipsis.
-const clip = (s, max) => (s.length <= max ? s : `${s.slice(0, s.lastIndexOf(' ', max - 1)).replace(/[\s,;:.–—-]+$/, '')}…`);
+// Cuts at a word boundary (or at `max` when there is none) and drops punctuation left before the ellipsis.
+const clip = (s, max) => {
+  if (s.length <= max) return s;
+  const cut = s.lastIndexOf(' ', max - 1);
+  return `${s.slice(0, cut > 0 ? cut : max - 1).replace(/[\s,;:.–—-]+$/, '')}…`;
+};
 const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, k) => values[k] ?? '');
 
 function relatedCards(lang, kind, id) {

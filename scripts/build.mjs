@@ -12,11 +12,11 @@ const OUT = join(ROOT, 'dist');
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt'];
-const PAGES = ['home', 'quotes', 'history'];
+const PAGES = ['home', 'quotes', 'history', 'trophies'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
-const [ui, quotes, episodes, history, videos] = await Promise.all(
-  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json'].map(load),
+const [ui, quotes, episodes, history, videos, trophies] = await Promise.all(
+  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json'].map(load),
 );
 
 withYears(quotes);
@@ -491,6 +491,7 @@ ${header(lang, pathsOf('history'), 'history')}
     <h1>${esc(p.heading)}</h1>
     <p class="hero-tag">${esc(p.sub)}</p>
     <p class="muted intro">${esc(p.intro)}</p>
+    <p class="more"><a href="${pathOf(lang, 'trophies')}">${icon.trophy} ${esc(u.trophies.heading)} ${icon.arrow}</a></p>
   </div>
   <ol class="timeline">
     ${history
@@ -505,6 +506,44 @@ ${header(lang, pathsOf('history'), 'history')}
       )
       .join('\n    ')}
   </ol>
+</main>
+${footer(lang)}`;
+}
+
+// Trophies as a head coach, grouped by era in career order. Each one carries its own sources
+// (trophies.json; test/build.test.mjs checks that none is missing).
+function trophiesPage(lang) {
+  const u = ui[lang];
+  const p = u.trophies;
+  const eras = history.filter((h) => trophies.some((t) => t.era === h.id));
+  return `${head(lang, pathsOf('trophies'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('trophies'), 'history')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+    <p class="muted">${esc(fill(p.count, { count: trophies.length }))}</p>
+  </div>
+  ${eras
+    .map(
+      (h) => `<section class="section trophy-era" id="${h.id}">
+    <h2><a href="${eraPaths(h.id)[lang]}">${esc(h.club[lang])}</a> <span class="pill">${esc(h.years)}</span></h2>
+    <ul class="trophy-list">
+      ${trophies
+        .filter((t) => t.era === h.id)
+        .map(
+          (t) => `<li class="card trophy" id="${t.id}">
+        <p class="card-label">${esc(t.season)}</p>
+        <h3>${icon.trophy}${esc(t.competition[lang])}</h3>
+        ${sourceList(t.sources, lang)}
+      </li>`,
+        )
+        .join('\n      ')}
+    </ul>
+  </section>`,
+    )
+    .join('\n  ')}
 </main>
 ${footer(lang)}`;
 }
@@ -602,7 +641,7 @@ await rm(OUT, { recursive: true, force: true });
 await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
-const render = { home: homePage, quotes: quotesPage, history: historyPage };
+const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage };
 const routes = [
   ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
   ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),

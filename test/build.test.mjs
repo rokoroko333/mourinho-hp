@@ -270,3 +270,37 @@ test('every quote with an era and a date falls within that era', async () => {
     assert.ok(year >= Number(from) && year <= last, `${q.id}: ${q.date} is outside ${q.era} (${eras[q.era]})`);
   }
 });
+
+// Trophies follow the same rule as quotes: each one has a source, and its season falls in its era.
+test('every trophy has a source, a known era and a season within that era', async () => {
+  const trophies = await load('trophies.json');
+  const eras = Object.fromEntries((await load('history.json')).map((h) => [h.id, h.years]));
+  const ids = new Set();
+  for (const t of trophies) {
+    assert.ok(!ids.has(t.id), `${t.id}: unique id`);
+    ids.add(t.id);
+    assert.ok(t.sources?.length > 0, `${t.id}: at least one source`);
+    for (const s of t.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${t.id}: source url`);
+    for (const l of ['en', 'es', 'pt']) assert.ok(t.competition?.[l], `${t.id}: competition name in ${l}`);
+    const m = t.season.match(/^(\d{4})-(\d{2})$/);
+    assert.ok(m && (Number(m[1]) + 1) % 100 === Number(m[2]), `${t.id}: season like 2003-04`);
+    assert.ok(eras[t.era], `${t.id}: era ${t.era} exists`);
+    const [from, to] = eras[t.era].split('–');
+    const last = to === undefined ? Number(from) : to === '' ? Infinity : Number(to);
+    assert.ok(Number(m[1]) >= Number(from) && Number(m[1]) <= last, `${t.id}: ${t.season} is outside ${t.era} (${eras[t.era]})`);
+  }
+});
+
+test('the trophies page lists every trophy with its source in all three languages', async () => {
+  await build();
+  const trophies = await load('trophies.json');
+  for (const [lang, path] of [['en', 'trophies'], ['es', 'es/titulos'], ['pt', 'pt/titulos']]) {
+    const html = await page(path);
+    for (const t of trophies) {
+      const item = html.slice(html.indexOf(`id="${t.id}"`), html.indexOf('</li>', html.indexOf(`id="${t.id}"`)));
+      assert.ok(item.length > 0, `${lang}: ${t.id} listed`);
+      assert.ok(item.includes(t.competition[lang].replace(/'/g, '&#39;')), `${lang}: ${t.id} name`);
+      assert.ok(item.includes(`href="${t.sources[0].url}"`), `${lang}: ${t.id} source link`);
+    }
+  }
+});

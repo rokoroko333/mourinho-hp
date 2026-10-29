@@ -1,0 +1,212 @@
+[
+  {
+    "id": "porto-liga-2002-03",
+    "era": "porto",
+    "season": "2002-03",
+    "competition": {
+      "en": "Primeira Liga",
+      "es": "Primeira Liga",
+      "pt": "Primeira Liga"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/025a-0eaae2d4aef0-8d3790dac4c0-1000--raise-a-glass-to-porto/",
+        "publisher": "UEFA",
+        "date": "2003-06-24"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  },
+  {
+    "id": "porto-taca-2002-03",
+    "era": "porto",
+    "season": "2002-03",
+    "competition": {
+      "en": "Taça de Portugal",
+      "es": "Copa de Portugal",
+      "pt": "Taça de Portugal"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/025a-0eaae2d4aef0-8d3790dac4c0-1000--raise-a-glass-to-porto/",
+        "publisher": "UEFA",
+        "date": "2003-06-24"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      }
+    ]
+  },
+  {
+    "id": "porto-uefa-cup-2002-03",
+    "era": "porto",
+    "season": "2002-03",
+    "competition": {
+      "en": "UEFA Cup",
+      "es": "Copa de la UEFA",
+      "pt": "Taça UEFA"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0252-0cd9ce958ed0-c7a5ba88c4b5-1000--derlei-decides-dramatic-final/",
+        "publisher": "UEFA",
+        "date": "2003-05-21"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0281-1812ecd1d018-1e6b993bc29a-1000--jose-mourinho-eyeing-sixth-uefa-final-win-out-of-six/",
+        "publisher": "UEFA",
+        "date": "2023-05-31"
+      }
+    ]
+  },
+  {
+    "id": "porto-supertaca-2003-04",
+    "era": "porto",
+    "season": "2003-04",
+    "competition": {
+      "en": "Portuguese Super Cup",
+      "es": "Supercopa de Portugal",
+      "pt": "Supertaça Cândido de Oliveira"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/news/newsid=89499.html",
+        "publisher": "UEFA",
+        "date": "2003-08-10"
+      }
+    ]
+  },
+  {
+    "id": "porto-liga-2003-04",
+    "era": "porto",
+    "season": "2003-04",
+    "competition": {
+      "en": "Primeira Liga",
+      "es": "Primeira Liga",
+      "pt": "Primeira Liga"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  },
+  {
+    "id": "porto-ucl-2003-04",
+    "era": "porto",
+    "season": "2003-04",
+    "competition": {
+      "en": "UEFA Champions League",
+      "es": "Liga de Campeones",
+      "pt": "Liga dos Campeões"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/019d-0e6ae58c88d7-e192409025b9-1000--mourinho-leaves-on-a-high/",
+        "publisher": "UEFA",
+        "date": "2004-05-26"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0281-1812ecd1d018-1e6b993bc29a-1000--jose-mourinho-eyeing-sixth-uefa-final-win-out-of-six/",
+        "publisher": "UEFA",
+        "date": "2023-05-31"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-league-cup-2004-05",
+    "era": "chelsea-1",
+    "season": "2004-05",
+    "competition": {
+      "en": "League Cup",
+      "es": "Copa de la Liga inglesa",
+      "pt": "Taça da Liga inglesa"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-premier-league-2004-05",
+    "era": "chelsea-1",
+    "season": "2004-05",
+    "competition": {
+      "en": "Premier League",
+      "es": "Premier League",
+      "pt": "Premier League"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-community-shield-2005-06",
+    "era": "chelsea-1",
+    "season": "2005-06",
+    "competition": {
+      "en": "FA Community Shield",
+      "es": "Community Shield",
+      "pt": "Community Shield"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11667/10521567/jose-mourinho-s-community-shield-record-and-what-s-happened-next",
+        "publisher": "Sky Sports",
+        "date": "2016-08-07"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-premier-league-2005-06",
+    "era": "chelsea-1",
+    "season": "2005-06",
+    "competition": {
+      "en": "Premier League",
+      "es": "Premier League",
+      "pt": "Premier League"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  }
+]

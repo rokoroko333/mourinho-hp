@@ -1479,5 +1479,221 @@
         "date": "2025-09-20"
       }
     ]
+  },
+  {
+    "id": "commitment-is-mandatory",
+    "date": "2026",
+    "era": "real-madrid-2",
+    "text": "What we need is to not negotiate things that are non-negotiable. Commitment is mandatory.",
+    "context": {
+      "en": "Real Madrid, at his first press conference of his second spell",
+      "es": "Real Madrid, en su primera rueda de prensa de su segunda etapa",
+      "pt": "Real Madrid, na primeira conferência de imprensa da segunda passagem"
+    },
+    "tags": [
+      "self-belief",
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://citizen.digital/article/mourinho-returns-with-calm-words-and-hard-edge-as-real-reset-begins-n388792",
+        "publisher": "Citizen Digital (Reuters)",
+        "date": "2026-08-22"
+      }
+    ]
+  },
+  {
+    "id": "toughest-league-title",
+    "date": "2012",
+    "era": "real-madrid-1",
+    "text": "I won the league title in Portugal, Italy and England, but this one has been the toughest.",
+    "context": {
+      "en": "Real Madrid, after clinching the 2011-12 league title",
+      "es": "Real Madrid, tras ganar la Liga 2011-12",
+      "pt": "Real Madrid, depois de conquistar a Liga de 2011-12"
+    },
+    "tags": [
+      "self-belief",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.foxsports.com/stories/soccer/mourinho-celebrates-toughest-title",
+        "publisher": "Fox Sports",
+        "date": "2012-05-03"
+      }
+    ]
+  },
+  {
+    "id": "no-one-can-take-the-story",
+    "date": "2025",
+    "era": "benfica-2025",
+    "text": "I always say that they can steal everything from me, but the story I created, no one can take away from me.",
+    "context": {
+      "en": "Benfica, in an interview with UEFA before playing Chelsea",
+      "es": "Benfica, en una entrevista con la UEFA antes de jugar ante el Chelsea",
+      "pt": "Benfica, numa entrevista à UEFA antes de defrontar o Chelsea"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/029d-1ed6567bfeb3-c088c6df027d-1000--champions-league-jose-mourinho-on-benfica-returning-to-c/",
+        "publisher": "UEFA",
+        "date": "2025-09-30"
+      }
+    ]
+  },
+  {
+    "id": "respect-the-game",
+    "date": "2003",
+    "era": "porto",
+    "text": "The best way to respect the game is to play well, to play to win.",
+    "context": {
+      "en": "FC Porto, before the UEFA Super Cup against AC Milan",
+      "es": "FC Porto, antes de la Supercopa de Europa ante el AC Milan",
+      "pt": "FC Porto, antes da Supertaça Europeia com o AC Milan"
+    },
+    "tags": [
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefasupercup/news/0250-0c50f1dcb18a-631a3679cb58-1000--mourinho-targets-new-high",
+        "publisher": "UEFA",
+        "date": "2003-08-27"
+      }
+    ]
+  },
+  {
+    "id": "close-the-academy",
+    "date": "2014",
+    "era": "chelsea-2",
+    "text": "If you don't bring kids through the academy, the best thing is to close the academy. If the kids are not good enough or the work not good enough, and you don't bring kids through, then close the door and use the money to buy players.",
+    "context": {
+      "en": "Chelsea, before a Champions League match in which he gave an academy player his debut",
+      "es": "Chelsea, antes de un partido de Champions en el que hizo debutar a un canterano",
+      "pt": "Chelsea, antes de um jogo da Liga dos Campeões em que estreou um jogador da formação"
+    },
+    "tags": [
+      "youth"
+    ],
+    "sources": [
+      {
+        "url": "https://www.theguardian.com/football/2014/dec/09/ruben-loftus-cheek-debut-chelsea-champions-league-sporting-lisbon",
+        "publisher": "The Guardian",
+        "date": "2014-12-09"
+      }
+    ]
+  },
+  {
+    "id": "millionaire-another-club",
+    "date": "2007",
+    "era": "chelsea-1",
+    "text": "If the club decides to sack me because of bad results, that's part of the game. If that happens, I'll be a millionaire and I will get another club a couple of months later.",
+    "context": {
+      "en": "Chelsea, asked about his future before a Champions League match against Porto",
+      "es": "Chelsea, preguntado por su futuro antes de un partido de Champions ante el Oporto",
+      "pt": "Chelsea, questionado sobre o futuro antes de um jogo da Liga dos Campeões com o FC Porto"
+    },
+    "tags": [
+      "self-belief",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/sport/mourinho-full-of-praise-for-his-players-1.1198374",
+        "publisher": "The Irish Times",
+        "date": "2007-03-06"
+      }
+    ]
+  },
+  {
+    "id": "dream-not-obsession",
+    "date": "2010",
+    "era": "inter",
+    "text": "What I want to say to my players is to follow the dream, not make it an obsession, because for us this is a dream and not an obsession - for Barcelona it's not a dream, it's an obsession.",
+    "context": {
+      "en": "Inter, before the Champions League semi-final second leg at Camp Nou",
+      "es": "Inter, antes de la vuelta de la semifinal de la Champions en el Camp Nou",
+      "pt": "Inter, antes da segunda mão da meia-final da Liga dos Campeões em Camp Nou"
+    },
+    "tags": [
+      "rivals",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://amp.foxsports.com/stories/soccer/mourinho-barca-obsessed-with-madrid-dream",
+        "publisher": "Fox Sports",
+        "date": "2010-04-27"
+      }
+    ]
+  },
+  {
+    "id": "cities-to-work",
+    "date": "2016",
+    "era": "man-utd",
+    "text": "I don't go to cities to enjoy cities, I go to work. If I wanted to enjoy places I would go to Los Angeles and go to the beach every day.",
+    "context": {
+      "en": "Manchester United, denying he was unhappy living in Manchester",
+      "es": "Manchester United, negando que no fuera feliz viviendo en Mánchester",
+      "pt": "Manchester United, a negar que estivesse infeliz a viver em Manchester"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/sport/soccer/english-soccer/i-don-t-go-to-cities-to-enjoy-cities-mourinho-denies-being-unhappy-in-manchester-1.2917916",
+        "publisher": "The Irish Times",
+        "date": "2016-12-26"
+      }
+    ]
+  },
+  {
+    "id": "no-trophies-in-september",
+    "date": "2024",
+    "era": "fenerbahce",
+    "text": "The 'Mourinho effect' is winning trophies. It's September; you can't win trophies in September.",
+    "context": {
+      "en": "Fenerbahçe, asked about the 'Mourinho effect' after a Europa League win",
+      "es": "Fenerbahçe, preguntado por el «efecto Mourinho» tras ganar en la Europa League",
+      "pt": "Fenerbahçe, questionado sobre o «efeito Mourinho» depois de uma vitória na Liga Europa"
+    },
+    "tags": [
+      "self-belief",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.dailysabah.com/sports/football/fenerbahce-launch-europa-league-with-narrow-2-1-win-over-union-sg",
+        "publisher": "Daily Sabah",
+        "date": "2024-09-27"
+      }
+    ]
+  },
+  {
+    "id": "wouldnt-like-to-be-a-referee",
+    "date": "2020",
+    "era": "tottenham",
+    "text": "I know that Mike Dean has a difficult job. He's on the pitch and it's 200 miles an hour. I wouldn't like to be a referee because it's so difficult. Sometimes I try in training sessions and I realise that it's too difficult.",
+    "context": {
+      "en": "Tottenham, defending the referee after beating Manchester City",
+      "es": "Tottenham, defendiendo al árbitro tras ganar al Manchester City",
+      "pt": "Tottenham, a defender o árbitro depois de vencer o Manchester City"
+    },
+    "tags": [
+      "referees",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://fourfourtwo.com/news/tottenham-boss-jose-mourinho-not-impressed-var",
+        "publisher": "FourFourTwo",
+        "date": "2020-02-03"
+      }
+    ]
   }
 ]

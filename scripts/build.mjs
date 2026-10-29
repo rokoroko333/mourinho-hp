@@ -660,12 +660,14 @@ ${header(lang, pathsOf('stats'), 'history')}
 ${footer(lang)}`;
 }
 
-// A remark as reported, with the occasion, the date and where it was printed. Remarks made in Spanish
+// A remark as reported, with the occasion, the date it was reported (sources rarely state the day it
+// was said, and we never guess it) and where it was printed. Remarks made in Spanish
 // or Portuguese keep the original next to the English translation, as quotes do.
 function remarkCard(r, lang) {
   const d = ui[lang].detail;
   return `<article class="card card-quote remark" id="${esc(r.id)}">
-      <p class="card-label"><time datetime="${esc(r.date)}">${esc(longDate(r.date, lang))}</time> · ${esc(r.occasion[lang])}</p>
+      <p class="card-label"><time datetime="${esc(r.date)}">${esc(fill(ui[lang].remarks.reported, { date: longDate(r.date, lang) }))}</time></p>
+      <p class="muted remark-occasion">${esc(r.occasion[lang])}</p>
       <blockquote class="quote-text">“${esc(r.text)}”</blockquote>
       ${r.original ? `<p class="quote-original" lang="${esc(r.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(r.original.text)}”</p>` : ''}
       ${sourceList(r.sources, lang)}

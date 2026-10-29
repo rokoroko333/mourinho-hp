@@ -49,7 +49,10 @@ const icon = {
   menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
 };
 
-function head(lang, paths, t, { type = 'WebPage', mainEntity } = {}) {
+// Share images are made by `npm run og` (scripts/og.mjs) and committed under src/public/og/.
+const OG_IMAGE = { path: '/og/default.png', width: 1200, height: 630 };
+
+function head(lang, paths, t, { type = 'WebPage', mainEntity, image = OG_IMAGE.path, imageAlt = ui[lang].siteName } = {}) {
   const urls = Object.fromEntries(LANGS.map((l) => [l, SITE_URL + paths[l]]));
   const alternates = LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${urls[l]}">`).join('\n');
   const jsonLd = {
@@ -60,6 +63,7 @@ function head(lang, paths, t, { type = 'WebPage', mainEntity } = {}) {
     inLanguage: lang,
     description: t.description,
     about: MOURINHO,
+    image: SITE_URL + image,
     ...(mainEntity && { mainEntity }),
   };
   return `<!doctype html>
@@ -79,7 +83,11 @@ ${alternates}
 <meta property="og:url" content="${urls[lang]}">
 <meta property="og:locale" content="${ui[lang].ogLocale}">
 ${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternate" content="${ui[l].ogLocale}">`).join('\n')}
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE_URL + image}">
+<meta property="og:image:width" content="${OG_IMAGE.width}">
+<meta property="og:image:height" content="${OG_IMAGE.height}">
+<meta property="og:image:alt" content="${esc(imageAlt)}">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#121212">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/styles.css">
@@ -306,6 +314,26 @@ function relatedCards(lang, kind, id) {
     .join('\n      ');
 }
 
+// Plain links to each network's own share page, so sharing works without JavaScript and without
+// loading any third-party SDK. app.js reveals the phone's share sheet (first) and the copy button.
+function shareButtons(lang, url, title, text) {
+  const u = ui[lang];
+  const e = encodeURIComponent;
+  const links = [
+    ['WhatsApp', `https://wa.me/?text=${e(`${text} ${url}`)}`],
+    ['X', `https://twitter.com/intent/tweet?text=${e(text)}&url=${e(url)}`],
+    ['Facebook', `https://www.facebook.com/sharer/sharer.php?u=${e(url)}`],
+  ];
+  return `<div class="card-foot share" data-share-title="${esc(title)}" data-share-text="${esc(text)}" data-share-url="${esc(url)}">
+      <p class="card-label">${esc(u.home.share)}</p>
+      <div class="share-buttons">
+        <button type="button" class="btn btn-gold btn-sm share-native" hidden>${esc(u.home.share)}</button>
+        ${links.map(([name, href]) => `<a class="btn btn-dark btn-sm" href="${esc(href)}" target="_blank" rel="noopener">${name}</a>`).join('\n        ')}
+        <button type="button" class="btn btn-dark btn-sm share-copy" data-copied="${esc(u.detail.copied)}" hidden>${esc(u.detail.copy)}</button>
+      </div>
+    </div>`;
+}
+
 function detailPage(lang, kind, id) {
   const u = ui[lang];
   const d = u.detail;
@@ -313,6 +341,8 @@ function detailPage(lang, kind, id) {
   let t;
   let body;
   let mainEntity;
+  let shareText;
+  let image;
   if (kind === 'quotes') {
     const q = quotes.find((x) => x.id === id);
     const year = q.year ? `, ${q.year}` : '';
@@ -321,6 +351,8 @@ function detailPage(lang, kind, id) {
       description: clip(fill(d.quoteDescription, { text: q.text, context: q.context[lang] + year }), 160),
     };
     mainEntity = { '@type': 'Quotation', text: q.text, inLanguage: 'en', creator: MOURINHO, ...(q.year && { dateCreated: String(q.year) }) };
+    shareText = `“${q.text}” — José Mourinho`;
+    image = `/og/quotes/${q.id}.png`;
     body = `<p class="card-label">${esc(d.quoteLabel)}</p>
     <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
     <p class="quote-context">— ${esc(q.context[lang])}${year}</p>`;
@@ -330,17 +362,20 @@ function detailPage(lang, kind, id) {
       title: `${fill(d.storyTitle, { title: e.title[lang] })} | ${u.siteName}`,
       description: clip(e.text[lang], 160),
     };
+    mainEntity = { '@type': 'Article', headline: e.title[lang], description: t.description, inLanguage: lang, about: MOURINHO };
+    shareText = `${e.title[lang]} — José Mourinho`;
     body = `<p class="card-label">${esc(d.storyLabel)} · ${e.year}</p>
     <h1 class="detail-title">${esc(e.title[lang])}</h1>
     <p class="detail-text">${esc(e.text[lang])}</p>`;
   }
-  return `${head(lang, paths, t, { mainEntity })}
+  return `${head(lang, paths, t, { mainEntity, ...(image && { image, imageAlt: shareText }) })}
 <body data-lang="${lang}">
 ${header(lang, paths, 'quotes')}
 <main class="wrap page">
   <p class="more back"><a href="${pathOf(lang, 'quotes')}">${icon.arrow}${esc(d.back)}</a></p>
   <article class="card detail${kind === 'quotes' ? ' card-quote' : ''}">
     ${body}
+    ${shareButtons(lang, SITE_URL + paths[lang], t.title, shareText)}
   </article>
   <section class="section">
     <h2>${esc(d.related)}</h2>

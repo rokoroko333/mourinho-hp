@@ -16,6 +16,10 @@ if you are offline, seed it with `npx wrangler kv key put --local --binding FEED
 To attach screenshots to a PR, run `npm run dev` and then `npm run screenshot -- --pr <number> / /es/ /pt/`
 (uses the local Chrome in headless mode; see `docs/dev-flow.md`).
 
+Share images (`src/public/og/`, 1200×630 PNG) are generated with the local Chrome and committed: after adding or
+editing a quote, run `npm run og` and commit the result. The build itself never needs a browser, and
+`npm test` fails if a quote has no image.
+
 ## First deployment
 
 Wrangler 4 needs Node.js 22 or later (`.node-version` pins it for nodenv and similar tools).

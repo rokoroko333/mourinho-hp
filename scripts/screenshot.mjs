@@ -8,24 +8,17 @@
 // Options: --base <origin> (default http://localhost:8788), --height <px> (default 2200; anything below
 // is cut off, so raise it for long pages such as the history), CHROME=<path to the Chrome binary>.
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { capture, findChrome } from './chrome.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = join(ROOT, 'screenshots');
 const BRANCH = 'screenshots';
 // Headless Chrome will not make a window narrower than 500px, so that is the phone-sized shot.
 const WIDTHS = { desktop: 1280, mobile: 500 };
-
-const CHROME_CANDIDATES = [
-  process.env.CHROME,
-  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
-  '/usr/bin/google-chrome',
-  '/usr/bin/chromium',
-].filter(Boolean);
 
 function parseArgs(argv) {
   const opts = { base: 'http://localhost:8788', height: 2200, pr: null, paths: [] };
@@ -41,21 +34,6 @@ function parseArgs(argv) {
 }
 
 const fileName = (path, size) => `${path.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home'}-${size}.png`;
-
-function capture(chrome, url, size, height, file) {
-  // A throwaway profile, so the run neither waits on nor touches a Chrome the user has open.
-  const profile = mkdtempSync(join(tmpdir(), 'shots-profile-'));
-  try {
-    // The virtual time budget lets app.js fill the news and match cards from /api/* before the shot.
-    execFileSync(chrome, [
-      '--headless=new', '--hide-scrollbars', '--disable-gpu', '--virtual-time-budget=8000', `--user-data-dir=${profile}`,
-      '--no-first-run', '--no-default-browser-check',
-      `--window-size=${WIDTHS[size]},${height}`, `--screenshot=${file}`, url,
-    ], { stdio: 'ignore', timeout: 60_000 }); // headless Chrome occasionally hangs; fail instead of waiting
-  } finally {
-    rmSync(profile, { recursive: true, force: true });
-  }
-}
 
 // Keeps images out of the code branches: they go to an orphan branch, one folder per PR.
 function publish(pr, files) {
@@ -101,8 +79,7 @@ try {
 } catch {
   throw new Error(`${opts.base} is not reachable; start it with \`npm run dev\` first`);
 }
-const chrome = CHROME_CANDIDATES.find((c) => existsSync(c));
-if (!chrome) throw new Error('Chrome not found; set CHROME=/path/to/chrome');
+const chrome = findChrome();
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT);
 
@@ -110,7 +87,7 @@ const rows = [];
 for (const path of opts.paths) {
   const shots = Object.keys(WIDTHS).map((size) => {
     const f = fileName(path, size);
-    capture(chrome, opts.base + path, size, opts.height, join(OUT, f));
+    capture(chrome, opts.base + path, { width: WIDTHS[size], height: opts.height, file: join(OUT, f) });
     return f;
   });
   rows.push({ path, shots });

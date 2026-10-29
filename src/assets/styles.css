@@ -20,6 +20,8 @@ body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(
 ::selection { background: var(--gold); color: #fff; }
 a { color: inherit; text-decoration: none; }
 svg { width: 1em; height: 1em; flex-shrink: 0; }
+/* Classes such as .btn set display, which would otherwise override the hidden attribute. */
+[hidden] { display: none !important; }
 h1, h2, h3 { margin: 0; line-height: 1.2; }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 .gold { color: var(--gold); }
@@ -140,6 +142,8 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .era-next { text-align: right; }
 .era-next .card-label { align-self: flex-end; }
 @media (min-width: 720px) { .era-next { grid-column: 2; } }
+.share { justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.share-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
 .pill { align-self: flex-start; background: rgb(92 69 16 / 0.35); color: var(--gold); border: 1px solid rgb(92 69 16 / 0.7); font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 999px; }
 .trophies { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--muted); }
 .trophies svg { color: var(--gold); margin-top: 3px; }

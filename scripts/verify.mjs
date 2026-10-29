@@ -30,9 +30,10 @@ class Blocked extends Error {}
 function parseArgs(argv) {
   const opts = { base: 'http://localhost:8788', files: [] };
   for (let i = 0; i < argv.length; i++) {
-    if (argv[i] === '--base') opts.base = argv[++i].replace(/\/$/, '');
+    if (argv[i] === '--base') opts.base = (argv[++i] ?? '').replace(/\/$/, '');
     else opts.files.push(argv[i]);
   }
+  if (!/^https?:\/\//.test(opts.base)) throw new Error('--base needs an origin such as http://localhost:8788');
   if (!opts.files.length) {
     opts.files = readdirSync(FLOWS).filter((f) => f.endsWith('.json')).sort().map((f) => join(FLOWS, f));
   }
@@ -49,7 +50,10 @@ async function launch(chrome) {
     ...(process.getuid?.() === 0 ? ['--no-sandbox'] : []), 'about:blank',
   ], { stdio: ['ignore', 'ignore', 'pipe'], detached: true }); // its own process group, so close() ends the helpers too
   const port = await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Blocked('Chrome did not start within 15 s')), 15_000);
+    const timer = setTimeout(() => {
+      try { process.kill(-proc.pid); } catch {}
+      reject(new Blocked('Chrome did not start within 15 s'));
+    }, 15_000);
     let err = '';
     proc.stderr.on('data', (d) => {
       err += d;
@@ -90,7 +94,12 @@ async function connect(port) {
     pending.set(++id, { resolve, reject });
     ws.send(JSON.stringify({ id, method, params }));
   });
-  return { send, on: (fn) => listeners.push(fn), close: () => ws.close() };
+  // Closing the tab, not just the connection, so a page (a playing video) does not run on into the next flow.
+  const close = async () => {
+    ws.close();
+    await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`).catch(() => {});
+  };
+  return { send, on: (fn) => listeners.push(fn), close };
 }
 
 // Runs `expr` in the page until it returns a truthy value or the step times out.
@@ -113,15 +122,24 @@ async function runStep(cdp, step, base, saved) {
     const url = base + step.goto;
     const res = await fetch(url, { redirect: 'manual' }).catch(() => null);
     if (!res) throw new Blocked(`server not reachable at ${base} (run \`npm run dev\`)`);
+    // A missing page is a flow pointing at the wrong place; a server error is the site's own failure.
+    if (res.status >= 500) throw new Error(`${step.goto} returned ${res.status}`);
     if (res.status >= 400) throw new Blocked(`${step.goto} returned ${res.status}`);
     await cdp.send('Page.navigate', { url });
     await waitFor(cdp, `document.readyState === 'complete'`, 'the page to load');
+    // Without a 404.html, Pages answers unknown paths with the home page and status 200. Every built page names
+    // itself in its canonical link, so a page that names another path is that fallback, not the page asked for.
+    const [path, canonical] = await waitFor(cdp, `[location.pathname, document.querySelector('link[rel=canonical]')?.href ?? null]`, 'the page path');
+    if (canonical && new URL(canonical).pathname !== path) {
+      throw new Blocked(`${step.goto} does not exist (the server returned ${new URL(canonical).pathname} instead)`);
+    }
     return `opened ${step.goto}`;
   }
   if (step.click) {
     await waitFor(cdp, `!!document.querySelector(${q(step.click)})`, `${step.click} to exist`);
     // A real mouse click at the element's centre, so handlers that check e.button or modifiers see a normal click.
-    const box = await waitFor(cdp, `(() => { const e = document.querySelector(${q(step.click)}); e.scrollIntoView({ block: 'center', behavior: 'instant' }); // instant: the site scrolls smoothly, which would move the target after we measure it
+    // Instant: the site scrolls smoothly, which would move the target after it is measured.
+    const box = await waitFor(cdp, `(() => { const e = document.querySelector(${q(step.click)}); e.scrollIntoView({ block: 'center', behavior: 'instant' });
       const r = e.getBoundingClientRect(); return r.width && r.height && { x: r.x + r.width / 2, y: r.y + r.height / 2 }; })()`,
     `${step.click} to be visible`);
     for (const type of ['mousePressed', 'mouseReleased']) {
@@ -134,10 +152,15 @@ async function runStep(cdp, step, base, saved) {
       `${step.visible} to be visible`);
     return `${step.visible} is visible`;
   }
+  // `hidden` needs the element to exist, so a mistyped selector fails instead of passing; `absent` is for removed elements.
   if (step.hidden) {
-    await waitFor(cdp, `(() => { const e = document.querySelector(${q(step.hidden)}); return !e || !e.checkVisibility(); })()`,
-      `${step.hidden} to be hidden`);
+    await waitFor(cdp, `(() => { const e = document.querySelector(${q(step.hidden)}); return !!e && !e.checkVisibility(); })()`,
+      `${step.hidden} to exist and be hidden`);
     return `${step.hidden} is hidden`;
+  }
+  if (step.absent) {
+    await waitFor(cdp, `!document.querySelector(${q(step.absent)})`, `${step.absent} to be gone`);
+    return `${step.absent} is gone`;
   }
   if (step.text) {
     const { selector, includes } = step.text;
@@ -150,6 +173,7 @@ async function runStep(cdp, step, base, saved) {
   }
   if (step.attr) {
     const { selector, name, equals, save, changedFrom } = step.attr;
+    if (changedFrom && !(changedFrom in saved)) throw new Error(`no earlier step saved "${changedFrom}"`);
     const expr = read(selector, `getAttribute(${q(name)})`);
     const check = equals !== undefined ? `v === ${q(equals)}` : changedFrom ? `v !== ${q(saved[changedFrom])}` : 'v !== null';
     const value = await waitFor(cdp, `(() => { const v = ${expr}; return ${check} ? { v } : false; })()`,
@@ -166,8 +190,13 @@ async function runStep(cdp, step, base, saved) {
 }
 
 async function runFlow(port, file, base) {
-  const flow = JSON.parse(readFileSync(file, 'utf8'));
   const name = basename(file, '.json');
+  let flow;
+  try {
+    flow = JSON.parse(readFileSync(file, 'utf8'));
+  } catch (e) {
+    return { name, verdict: 'FAIL', steps: [{ ok: false, note: `cannot read the flow: ${e.message}` }], problems: [], notes: [] };
+  }
   const report = { name, description: flow.description, verdict: 'PASS', steps: [], problems: [], notes: [] };
   const cdp = await connect(port);
   const origin = new URL(base).origin;
@@ -222,7 +251,7 @@ async function runFlow(port, file, base) {
       writeFileSync(join(ROOT, report.screenshot), Buffer.from(data, 'base64'));
     }
   } finally {
-    cdp.close();
+    await cdp.close();
   }
   return report;
 }
@@ -249,7 +278,11 @@ try {
 }
 const reports = [];
 try {
-  for (const file of opts.files) reports.push(await runFlow(chrome.port, file, opts.base));
+  for (const file of opts.files) {
+    // One broken flow (or a lost connection to Chrome) is reported as that flow's failure, not the end of the run.
+    reports.push(await runFlow(chrome.port, file, opts.base).catch((e) =>
+      ({ name: basename(file, '.json'), verdict: 'FAIL', steps: [{ ok: false, note: e.message }], problems: [], notes: [] })));
+  }
 } finally {
   await chrome.close();
 }

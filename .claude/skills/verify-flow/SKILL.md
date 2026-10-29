@@ -17,7 +17,7 @@ description: 変更したページを実際に動かして確かめる。src/ �
 4. 結果ごとに次のように扱う。
    - **PASS**: 完了の証拠として、出力を PR の「検証結果」に貼る。
    - **FAIL**: 実装を直して再実行する。フローの期待が間違っていたときだけフローを直し、理由を PR に書く。
-   - **BLOCKED**: 前提がそろっていない（サーバーが動いていない、Chrome がない、ページが 404 など）。
+   - **BLOCKED**: 前提がそろっていない（サーバーが動いていない、Chrome がない、開いたページが存在しないなど）。
      検証できていないので、完了とせず、何が足りないかを PR とユーザーへの報告に書く。
 5. `screenshots/verify/` のスクショを自分で見て、崩れがないか確かめる。
 
@@ -36,7 +36,8 @@ FAIL を消すためにステップを削ったり、期待値を実際の結果
     { "goto": "/es/" },
     { "click": ".menu-btn" },
     { "visible": "#site-nav" },
-    { "hidden": ".lang-banner" },
+    { "hidden": "#countdown" },
+    { "absent": ".lang-banner" },
     { "text": { "selector": "h1", "includes": "Mourinho" } },
     { "attr": { "selector": "#daily-quote-link", "name": "href", "save": "before" } },
     { "attr": { "selector": "#daily-quote-link", "name": "href", "changedFrom": "before" } },
@@ -46,6 +47,7 @@ FAIL を消すためにステップを削ったり、期待値を実際の結果
 ```
 
 - `viewport` と `languages`（ブラウザの言語設定）は省略できる。幅の既定は1280。
+- `hidden` は要素があって見えていないこと、`absent` は要素がないこと。セレクタの打ち間違いで通らないよう、`hidden` は要素がないと失敗する。
 - 各ステップは5秒まで待つ。`eval` は true を返す式（Promise も可）で、他のステップで書けないときだけ使う。
 - コンソールのエラー、捕まえていない例外、CSP などでブロックされたリクエストがあれば、ステップが通っても FAIL になる。
   届かない外部ホスト（オフラインやクラウドのネットワーク制限）は「-」で一覧に出るだけで、FAIL にはしない。

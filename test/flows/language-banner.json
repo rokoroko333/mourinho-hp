@@ -6,6 +6,6 @@
     { "visible": ".lang-banner" },
     { "attr": { "selector": ".lang-banner a", "name": "href" } },
     { "click": ".lang-banner button" },
-    { "hidden": ".lang-banner" }
+    { "absent": ".lang-banner" }
   ]
 }

@@ -57,7 +57,7 @@ Issue で依頼するときは `.github/ISSUE_TEMPLATE/request.md` を使いま�
 ボタン・メニュー・言語の提案・動画など、操作で動きが変わる PR は、`.claude/skills/verify-flow/` の手順で
 `npm run verify` を実行し、PASS・FAIL・BLOCKED と出力を PR の「検証結果」に貼ります。
 フローは `test/flows/*.json` にあり、変更した動作のフローがなければ同じ PR で足します。
-BLOCKED（サーバーや Chrome がない、ページが 404）は検証できていないということなので、完了としません。
+BLOCKED（サーバーや Chrome がない、開いたページが存在しない）は検証できていないということなので、完了としません。
 
 Chrome を動かすので CI では実行せず、PR ごとに実装スレッドが実行します。
 

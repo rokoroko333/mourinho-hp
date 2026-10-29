@@ -776,6 +776,7 @@ ${header(lang, paths, 'history')}
         <p class="card-label">${esc(fuzzyDate(g.date, lang))} · ${esc(g.competition[lang])}</p>
         <h3>${esc(g.home)} ${esc(g.score)} ${esc(g.away)}</h3>
         ${g.note ? `<p class="muted">${esc(g.note[lang])}</p>` : ''}
+        ${g.date > h.asOf ? `<p class="muted">${esc(p.later)}</p>` : ''}
         ${sourceList(g.sources, lang)}
       </li>`,
         )
@@ -783,7 +784,7 @@ ${header(lang, paths, 'history')}
     </ul>
   </section>
   <section class="section">
-    <div class="section-head"><h2>${esc(p.quotes)}</h2></div>
+    <div class="section-head"><div><h2>${esc(p.quotes)}</h2><p class="sub">${esc(p.quotesSub)}</p></div></div>
     <div class="grid grid-2">
       ${r.quotes.map(quoteCard).join('\n      ')}
     </div>

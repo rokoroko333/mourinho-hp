@@ -52,10 +52,9 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 }
 
 /* Hero */
-.hero { min-height: 52vh; display: flex; align-items: center; background: linear-gradient(135deg, #121212, #1e1e1e 50%, #000); text-align: center; padding: 64px 0; }
+.hero { display: flex; align-items: center; background: linear-gradient(135deg, #121212, #1e1e1e 50%, #000); text-align: center; padding: 40px 0 32px; }
 .hero-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.hero-icon { color: var(--gold); font-size: 36px; }
-.hero h1 { font-size: clamp(40px, 9vw, 84px); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; color: #fff; }
+.hero h1 { font-size: clamp(34px, 7vw, 64px); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; color: #fff; }
 .hero-tag { font-family: var(--serif); font-style: italic; color: var(--gold); font-size: clamp(18px, 2.6vw, 24px); margin: 0; }
 
 /* Buttons */
@@ -148,6 +147,18 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 @media (min-width: 720px) { .era-next { grid-column: 2; } }
 .share { justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 .share-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.countdown { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 0 0 20px; font-size: clamp(22px, 4vw, 32px); color: #fff; }
+.countdown strong { font-weight: 900; letter-spacing: 0.02em; }
+.news-lead { grid-column: 1 / -1; }
+/* The rest read as a list: compact, and the whole card is already the link. */
+.news-card:not(.news-lead) { padding: 16px 20px; gap: 8px; }
+.news-card:not(.news-lead) .read { display: none; }
+.news-lead h3 { font-size: clamp(20px, 3vw, 28px); -webkit-line-clamp: 3; }
+.daily-foot { justify-content: space-between; align-items: center; }
+.more-link { display: inline-flex; align-items: center; gap: 6px; color: var(--gold); font-weight: 700; font-size: 14px; }
+.era-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.era-card { padding: 18px; gap: 6px; }
+.era-card h3 { font-size: 15px; }
 .pill { align-self: flex-start; background: rgb(92 69 16 / 0.35); color: var(--gold); border: 1px solid rgb(92 69 16 / 0.7); font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 999px; }
 .trophies { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--muted); }
 .trophies svg { color: var(--gold); margin-top: 3px; }

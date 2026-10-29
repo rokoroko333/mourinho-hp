@@ -88,18 +88,23 @@
       el('blockquote', { class: 'quote-text' }, `“${q.text}”`),
       el('p', { class: 'quote-context' }, `— ${q.context}${q.year ? `, ${q.year}` : ''}`),
     );
+    $('#daily-quote-link').setAttribute('href', q.path);
     $('#daily-episode-title').textContent = e.title;
     $('#daily-episode-text').textContent = e.text;
+    $('#daily-episode-link').setAttribute('href', e.path);
   });
+  // Shares the quote's own page, which has its share image, rather than the home page.
   $('#share-quote')?.addEventListener('click', () => {
     const text = `${$('#daily-quote .quote-text').textContent} — José Mourinho #Mourinho`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href.split('#')[0])}`;
+    const page = strings.siteUrl + $('#daily-quote-link').getAttribute('href');
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(page)}`;
     window.open(url, '_blank', 'noopener');
   });
 
   const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
   const relative = (iso) => {
-    const diff = (new Date(iso) - Date.now()) / 1000;
+    // Never in the future: a server clock slightly ahead of the visitor's showed "in 1 second".
+    const diff = Math.min(0, (new Date(iso) - Date.now()) / 1000);
     const steps = [['minute', 60], ['hour', 3600], ['day', 86400]];
     let unit = 'second', value = diff;
     for (const [u, s] of steps) if (Math.abs(diff) >= s) { unit = u; value = diff / s; }
@@ -121,8 +126,9 @@
     .then((data) => {
       if (!data.items?.length) return showMessage(newsList, strings.newsEmpty);
       newsList.replaceChildren(
-        ...data.items.map((item) =>
-          el('a', { class: 'card card-link news-card', href: item.link, target: '_blank', rel: 'noopener' },
+        // The newest story leads, larger and across the whole row.
+        ...data.items.map((item, i) =>
+          el('a', { class: `card card-link news-card${i === 0 ? ' news-lead' : ''}`, href: item.link, target: '_blank', rel: 'noopener' },
             el('div', { class: 'news-meta' },
               item.publishedAt ? el('time', { datetime: item.publishedAt }, relative(item.publishedAt)) : el('span'),
               el('span', {}, item.source || '')),
@@ -155,8 +161,29 @@
       const cards = [data.latest && matchCard(data.latest, false), data.next && matchCard(data.next, true)].filter(Boolean);
       if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
       matchList.replaceChildren(...cards);
+      if (data.next) startCountdown(new Date(data.next.date));
     })
     .catch(() => showMessage(matchList, strings.matchesEmpty));
+
+  // "Kick-off in 2 d 4 h 13 m", refreshed every minute and hidden once the match has started.
+  function startCountdown(kickoff) {
+    const box = $('#countdown');
+    const u = strings.units;
+    const tick = () => {
+      const mins = Math.floor((kickoff - Date.now()) / 60000);
+      if (!(mins >= 0)) {
+        box.hidden = true;
+        return clearInterval(timer);
+      }
+      const d = Math.floor(mins / 1440);
+      const h = Math.floor((mins % 1440) / 60);
+      const parts = [d && `${d} ${u.d}`, (d || h) && `${h} ${u.h}`, `${mins % 60} ${u.m}`].filter(Boolean);
+      box.replaceChildren(el('span', { class: 'card-label' }, strings.kickoffIn), ' ', el('strong', {}, parts.join(' ')));
+      box.hidden = false;
+    };
+    const timer = setInterval(tick, 60000);
+    tick();
+  }
 
   // Offer (never force) the visitor's own language. Search engines are not redirected.
   function suggestLanguage() {

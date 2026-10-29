@@ -100,7 +100,7 @@ function header(lang, paths, active) {
   const u = ui[lang];
   const home = pathOf(lang, 'home');
   const links = [
-    [`${home}#daily`, u.nav.quotes],
+    [pathOf(lang, 'quotes'), u.nav.quotes],
     [`${home}#news`, u.nav.news],
     [`${home}#matches`, u.nav.matches],
     [`${home}#videos`, u.nav.videos],
@@ -165,49 +165,35 @@ function homePage(lang) {
   const q = quotes[day % quotes.length];
   const e = episodes[day % episodes.length];
   const daily = {
-    quotes: quotes.map((x) => ({ text: x.text, context: x.context[lang], year: x.year || null })),
-    episodes: episodes.map((x) => ({ title: x.title[lang], text: x.text[lang] })),
+    quotes: quotes.map((x) => ({ text: x.text, context: x.context[lang], year: x.year || null, path: detailPaths('quotes', x.id)[lang] })),
+    episodes: episodes.map((x) => ({ title: x.title[lang], text: x.text[lang], path: detailPaths('stories', x.id)[lang] })),
   };
   const strings = {
     newsEmpty: h.newsEmpty, newsUpdated: h.newsUpdated, readArticle: h.readArticle,
     matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
+    kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL,
   };
+  const more = (href, label, id) => `<a class="more-link"${id ? ` id="${id}"` : ''} href="${href}">${esc(label)} ${icon.arrow}</a>`;
   return `${head(lang, pathsOf('home'), t, { type: 'WebSite' })}
 <body data-lang="${lang}">
 ${header(lang, pathsOf('home'), 'home')}
 <main>
 <section class="hero">
   <div class="wrap hero-inner">
-    <div class="hero-icon">${icon.infinity}</div>
     <h1>Infinito <span class="gold">Mourinho</span></h1>
     <p class="hero-tag">“${esc(u.tagline)}”</p>
-    <a class="btn btn-gold" href="${pathOf(lang, 'history')}">${esc(h.heroCta)}</a>
   </div>
 </section>
 
 <div class="wrap sections">
-<section id="daily" class="section">
-  <div class="section-head">
-    <h2>${esc(h.dailyHeading)}</h2>
-    <button type="button" class="btn btn-gold btn-sm" id="shuffle">${icon.shuffle}${esc(h.shuffle)}</button>
-  </div>
-  <div class="grid grid-2">
-    <article class="card card-quote">
-      <p class="card-label">${esc(h.quoteLabel)}</p>
-      <div id="daily-quote">${quoteBody(q, lang)}</div>
-      <div class="card-foot">
-        <button type="button" class="btn btn-dark btn-sm" id="share-quote">𝕏 ${esc(h.share)}</button>
-      </div>
-    </article>
-    <article class="card">
-      <p class="card-label">${esc(h.episodeLabel)}</p>
-      <h3 id="daily-episode-title">${esc(e.title[lang])}</h3>
-      <p id="daily-episode-text" class="muted">${esc(e.text[lang])}</p>
-    </article>
-  </div>
-  <p class="more"><a href="${pathOf(lang, 'quotes')}">${esc(h.allQuotes)} ${icon.arrow}</a></p>
-  <script type="application/json" id="daily-data">${JSON.stringify(daily).replace(/</g, '\\u003c')}</script>
-  <script type="application/json" id="strings">${JSON.stringify(strings).replace(/</g, '\\u003c')}</script>
+<section id="matches" class="section">
+  <div class="section-head"><div><h2>${esc(h.matchesHeading)}</h2><p class="sub">${esc(h.matchesSub)}</p></div></div>
+  <p class="countdown" id="countdown" hidden></p>
+  <div class="grid grid-2" id="match-list"><p class="loading">${esc(h.loading)}</p></div>
+  <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">
+    <div><h3>${esc(h.highlights)}</h3><p class="muted">${esc(h.highlightsSub)}</p></div>
+    <span class="btn btn-red">${icon.play}${esc(h.watch)}</span>
+  </a>
 </section>
 
 <section id="news" class="section">
@@ -218,13 +204,45 @@ ${header(lang, pathsOf('home'), 'home')}
   <div class="grid grid-3" id="news-list" aria-live="polite"><p class="loading">${esc(h.loading)}</p></div>
 </section>
 
-<section id="matches" class="section">
-  <div class="section-head"><div><h2>${esc(h.matchesHeading)}</h2><p class="sub">${esc(h.matchesSub)}</p></div></div>
-  <div class="grid grid-2" id="match-list"><p class="loading">${esc(h.loading)}</p></div>
-  <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">
-    <div><h3>${esc(h.highlights)}</h3><p class="muted">${esc(h.highlightsSub)}</p></div>
-    <span class="btn btn-red">${icon.play}${esc(h.watch)}</span>
-  </a>
+<section id="daily" class="section">
+  <div class="section-head">
+    <h2>${esc(h.dailyHeading)}</h2>
+    <button type="button" class="btn btn-gold btn-sm" id="shuffle">${icon.shuffle}${esc(h.shuffle)}</button>
+  </div>
+  <div class="grid grid-2">
+    <article class="card card-quote">
+      <p class="card-label">${esc(h.quoteLabel)}</p>
+      <div id="daily-quote">${quoteBody(q, lang)}</div>
+      <div class="card-foot daily-foot">
+        ${more(detailPaths('quotes', q.id)[lang], u.detail.readMore, 'daily-quote-link')}
+        <button type="button" class="btn btn-dark btn-sm" id="share-quote">𝕏 ${esc(h.share)}</button>
+      </div>
+    </article>
+    <article class="card">
+      <p class="card-label">${esc(h.episodeLabel)}</p>
+      <h3 id="daily-episode-title">${esc(e.title[lang])}</h3>
+      <p id="daily-episode-text" class="muted">${esc(e.text[lang])}</p>
+      <div class="card-foot daily-foot">${more(detailPaths('stories', e.id)[lang], u.detail.readMore, 'daily-episode-link')}</div>
+    </article>
+  </div>
+  <p class="more"><a href="${pathOf(lang, 'quotes')}">${esc(h.allQuotes)} ${icon.arrow}</a></p>
+  <script type="application/json" id="daily-data">${JSON.stringify(daily).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="strings">${JSON.stringify(strings).replace(/</g, '\\u003c')}</script>
+</section>
+
+<section id="eras" class="section">
+  <div class="section-head"><h2>${esc(u.history.chapters)}</h2></div>
+  <div class="era-grid">
+    ${history
+      .map(
+        (x) => `<a class="card card-link era-card" href="${eraPaths(x.id)[lang]}">
+      <p class="card-label">${esc(x.years)}</p>
+      <h3>${esc(x.club[lang])}</h3>
+    </a>`,
+      )
+      .join('\n    ')}
+  </div>
+  <p class="more"><a href="${pathOf(lang, 'history')}">${esc(h.heroCta)} ${icon.arrow}</a></p>
 </section>
 
 <section id="videos" class="section">

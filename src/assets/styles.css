@@ -159,6 +159,12 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .era-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
 .era-card { padding: 18px; gap: 6px; }
 .era-card h3 { font-size: 15px; }
+.quote-original { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 17px; }
+.quote-original .card-label { font-style: normal; margin-right: 6px; }
+.quote-era { margin: 4px 0 0; }
+.sources { font-size: 13px; color: var(--muted); }
+.sources .card-label { margin-right: 6px; }
+.sources a { color: var(--text); text-decoration: underline; text-decoration-color: var(--gold-dark); text-underline-offset: 3px; }
 .pill { align-self: flex-start; background: rgb(92 69 16 / 0.35); color: var(--gold); border: 1px solid rgb(92 69 16 / 0.7); font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 999px; }
 .trophies { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--muted); }
 .trophies svg { color: var(--gold); margin-top: 3px; }

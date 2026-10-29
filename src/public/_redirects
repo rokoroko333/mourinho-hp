@@ -1,2 +1,10 @@
 /en/ / 301
 /en/* /:splat 301
+
+# Quotes removed in PR #20 because no reliable source could be found: send their old pages to the list.
+/quotes/pressure/ /quotes/ 301
+/es/frases/pressure/ /es/frases/ 301
+/pt/frases/pressure/ /pt/frases/ 301
+/quotes/poor-rival/ /quotes/ 301
+/es/frases/poor-rival/ /es/frases/ 301
+/pt/frases/poor-rival/ /pt/frases/ 301

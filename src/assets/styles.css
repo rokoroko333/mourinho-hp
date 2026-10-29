@@ -115,8 +115,12 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 
 /* Videos */
 .video { position: relative; padding-top: 0; overflow: hidden; }
-.video-play { margin: 0 -28px 8px; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 40%, #2d2d2d, #000); font-size: 22px; color: #fff; }
+.video-thumb { position: relative; margin: 0 -28px 8px; aspect-ratio: 16 / 9; background: #000; overflow: hidden; display: block; }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; transition: opacity 0.2s; }
+.video:hover .video-thumb img { opacity: 1; }
+.video-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; }
 .video-play svg { width: 52px; height: 52px; padding: 14px; background: rgb(220 38 38 / 0.9); border-radius: 50%; transition: transform 0.2s; }
+.video-frame { margin: 0 -28px 8px; width: calc(100% + 56px); aspect-ratio: 16 / 9; border: 0; display: block; }
 .video:hover .video-play svg { transform: scale(1.1); }
 
 /* Inner pages */

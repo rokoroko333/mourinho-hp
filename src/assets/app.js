@@ -51,6 +51,23 @@
     }
   }
 
+  // Videos: play in place with YouTube's privacy-enhanced player instead of leaving the site.
+  // The card stays a plain link to YouTube for videos that cannot be embedded, or without JS.
+  for (const card of document.querySelectorAll('.video[data-video-id]')) {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = card.dataset.videoId;
+      const frame = el('iframe', {
+        class: 'video-frame',
+        src: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`,
+        title: card.querySelector('h3').textContent,
+        allow: 'autoplay; encrypted-media; picture-in-picture; fullscreen',
+        allowfullscreen: '',
+      });
+      card.replaceWith(el('div', { class: 'card video' }, frame, ...[...card.children].slice(1)));
+    });
+  }
+
   const strings = readJson('strings');
   suggestLanguage();
   if (!strings) return; // Only the home page has the dynamic sections below.

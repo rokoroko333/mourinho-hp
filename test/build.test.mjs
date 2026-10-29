@@ -159,3 +159,21 @@ test('share buttons link to each network with the page URL, without loading thir
   assert.match(html, /class="btn btn-dark btn-sm share-copy" data-copied="[^"]+" hidden>/);
   for (const [tag] of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.match(tag, /src="\//, 'scripts are same-origin');
 });
+
+test('videos show real thumbnails and play only from hosts the Content-Security-Policy allows', async () => {
+  await build();
+  const videos = await load('videos.json');
+  const csp = (await readFile(join(ROOT, 'src/public/_headers'), 'utf8')).match(/Content-Security-Policy: (.*)/)[1];
+  const directive = (name) => csp.match(new RegExp(`${name} ([^;]*)`))[1].split(' ');
+  assert.ok(directive('img-src').includes('https://i.ytimg.com'), 'thumbnails');
+  assert.ok(directive('frame-src').includes('https://www.youtube-nocookie.com'), 'player');
+  const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
+  assert.ok(app.includes('https://www.youtube-nocookie.com/embed/'), 'app.js embeds from the allowed host');
+  const home = await page('es');
+  for (const v of videos) {
+    assert.match(v.id, /^[\w-]{11}$/, `${v.id}: YouTube video id`);
+    assert.ok(home.includes(`src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg"`), `${v.id}: thumbnail`);
+    assert.ok(home.includes(`href="https://www.youtube.com/watch?v=${v.id}"`), `${v.id}: link to YouTube`);
+    assert.equal(home.includes(`data-video-id="${v.id}"`), v.embed !== false, `${v.id}: plays in place unless embedding is off`);
+  }
+});

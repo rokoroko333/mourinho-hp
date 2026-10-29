@@ -256,3 +256,17 @@ test('each tag has a page in all three languages listing exactly its quotes, lin
     for (const tag of q.tags) assert.ok(html.includes(`href="/${b}/${tag}/"`), `${q.id} (${lang}) links to its tag ${tag}`);
   }
 });
+
+// A quote tied to an era must have been said during it ("2004–2007", "2000", or "2026–" for the
+// current one). Catches a wrong `era` or `date` such as the Chelsea/Real Madrid mix-up found in PR #20.
+test('every quote with an era and a date falls within that era', async () => {
+  const quotes = await load('quotes.json');
+  const eras = Object.fromEntries((await load('history.json')).map((h) => [h.id, h.years]));
+  for (const q of quotes.filter((x) => x.era && x.date)) {
+    assert.ok(eras[q.era], `${q.id}: era ${q.era} exists in history.json`);
+    const [from, to] = eras[q.era].split('–');
+    const year = Number(q.date.slice(0, 4));
+    const last = to === undefined ? Number(from) : to === '' ? Infinity : Number(to);
+    assert.ok(year >= Number(from) && year <= last, `${q.id}: ${q.date} is outside ${q.era} (${eras[q.era]})`);
+  }
+});

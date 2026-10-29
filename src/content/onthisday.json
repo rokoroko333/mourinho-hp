@@ -571,5 +571,152 @@
         "date": "2026-06-11"
       }
     ]
+  },
+  {
+    "date": "2000-12-03",
+    "era": "benfica-2000",
+    "text": {
+      "en": "Benfica beat the reigning champions Sporting 3-0 at home in the league.",
+      "es": "El Benfica venció en casa 3-0 al Sporting, vigente campeón, en la liga.",
+      "pt": "O Benfica venceu em casa o Sporting, então campeão, por 3-0 no campeonato."
+    },
+    "sources": [
+      {
+        "url": "https://www.rtp.pt/noticias/benfica/mourinho-estreou-se-como-treinador-principal-no-benfica-em-aventura-de-76-dias_d1684584",
+        "publisher": "RTP"
+      }
+    ]
+  },
+  {
+    "date": "2000-12-05",
+    "era": "benfica-2000",
+    "text": {
+      "en": "Mourinho resigned as Benfica coach.",
+      "es": "Mourinho dimitió como entrenador del Benfica.",
+      "pt": "Mourinho demitiu-se de treinador do Benfica."
+    },
+    "sources": [
+      {
+        "url": "https://www.rtp.pt/noticias/benfica/mourinho-estreou-se-como-treinador-principal-no-benfica-em-aventura-de-76-dias_d1684584",
+        "publisher": "RTP"
+      }
+    ]
+  },
+  {
+    "date": "2007-09-20",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Chelsea and Mourinho parted company by mutual consent.",
+      "es": "El Chelsea y Mourinho rescindieron su contrato de mutuo acuerdo.",
+      "pt": "O Chelsea e Mourinho rescindiram o contrato por mútuo acordo."
+    },
+    "sources": [
+      {
+        "url": "https://archivio.blitzquotidiano.it/sport/inter-auguri-mourinho-218949/",
+        "publisher": "Blitz Quotidiano",
+        "date": "2010-01-26"
+      },
+      {
+        "url": "https://www.dawn.com/news/267424/special-one-mourinho-leaves-chelsea",
+        "publisher": "Dawn (AFP)",
+        "date": "2007-09-21"
+      }
+    ]
+  },
+  {
+    "date": "2008-08-24",
+    "era": "inter",
+    "text": {
+      "en": "Inter beat Roma on penalties to win the Supercoppa Italiana.",
+      "es": "El Inter venció a la Roma en los penaltis y ganó la Supercopa de Italia.",
+      "pt": "O Inter venceu a Roma nos penáltis e conquistou a Supertaça de Itália."
+    },
+    "sources": [
+      {
+        "url": "https://archivio.blitzquotidiano.it/sport/inter-auguri-mourinho-218949/",
+        "publisher": "Blitz Quotidiano",
+        "date": "2010-01-26"
+      }
+    ]
+  },
+  {
+    "date": "2009-05-16",
+    "era": "inter",
+    "text": {
+      "en": "Inter clinched the Serie A title in his first season in Italy.",
+      "es": "El Inter se aseguró el título de la Serie A en su primera temporada en Italia.",
+      "pt": "O Inter garantiu o título da Serie A na sua primeira época em Itália."
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/12028/8755577/mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      }
+    ]
+  },
+  {
+    "date": "2015-12-17",
+    "era": "chelsea-2",
+    "text": {
+      "en": "Chelsea announced that Mourinho was leaving the club.",
+      "es": "El Chelsea anunció la salida de Mourinho del club.",
+      "pt": "O Chelsea anunciou a saída de Mourinho do clube."
+    },
+    "sources": [
+      {
+        "url": "https://www.yahoo.com/news/factbox-soccer-tottenham-hotspur-manager-070613795.html",
+        "publisher": "Reuters",
+        "date": "2019-11-20"
+      }
+    ]
+  },
+  {
+    "date": "2018-12-18",
+    "era": "man-utd",
+    "text": {
+      "en": "Manchester United announced that Mourinho had left the club.",
+      "es": "El Manchester United anunció la salida de Mourinho del club.",
+      "pt": "O Manchester United anunciou a saída de Mourinho do clube."
+    },
+    "sources": [
+      {
+        "url": "https://www.yahoo.com/news/factbox-soccer-tottenham-hotspur-manager-070613795.html",
+        "publisher": "Reuters",
+        "date": "2019-11-20"
+      }
+    ]
+  },
+  {
+    "date": "2021-04-19",
+    "era": "tottenham",
+    "text": {
+      "en": "Tottenham dismissed Mourinho, days before the League Cup final.",
+      "es": "El Tottenham destituyó a Mourinho, a pocos días de la final de la Copa de la Liga inglesa.",
+      "pt": "O Tottenham despediu Mourinho, a poucos dias da final da Taça da Liga inglesa."
+    },
+    "sources": [
+      {
+        "url": "https://www.outlookindia.com/sports/football/on-this-day-in-2021-april-19-tottenham-hotspur-sack-jose-mourinho-days-before-league-cup-final",
+        "publisher": "Outlook India",
+        "date": "2024-04-19"
+      }
+    ]
+  },
+  {
+    "date": "2024-06-02",
+    "era": "fenerbahce",
+    "text": {
+      "en": "Mourinho was presented as Fenerbahçe head coach in front of fans at the Şükrü Saracoğlu Stadium in Istanbul.",
+      "es": "Mourinho fue presentado como entrenador del Fenerbahçe ante la afición en el estadio Şükrü Saracoğlu de Estambul.",
+      "pt": "Mourinho foi apresentado como treinador do Fenerbahçe perante os adeptos no estádio Şükrü Saracoğlu, em Istambul."
+    },
+    "sources": [
+      {
+        "url": "https://www.thenationalnews.com/sport/football/2024/06/03/jose-mourinho-presented-as-fenerbahce-manager",
+        "publisher": "The National (AP)",
+        "date": "2024-06-03"
+      }
+    ]
   }
 ]

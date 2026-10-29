@@ -319,5 +319,253 @@
         "date": "2013-06-03"
       }
     ]
+  },
+  {
+    "id": "porto-ferguson",
+    "date": "2004",
+    "era": "porto",
+    "text": "I understand why he is emotional. You would be sad if your team got dominated by opponents who have been built with 10 per cent of your budget.",
+    "context": {
+      "en": "FC Porto, on Sir Alex Ferguson after beating Manchester United in the Champions League",
+      "es": "FC Porto, sobre Sir Alex Ferguson tras ganar al Manchester United en la Champions",
+      "pt": "FC Porto, sobre Sir Alex Ferguson depois de vencer o Manchester United na Liga dos Campeões"
+    },
+    "tags": [
+      "rivals",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/news/managing-just-fine-1.477303",
+        "publisher": "The Irish Times",
+        "date": "2005-08-06"
+      }
+    ]
+  },
+  {
+    "id": "intellectual-prostitution",
+    "date": "2009-03-03",
+    "era": "inter",
+    "text": "I don't like intellectual prostitution, I like intellectual honesty. … We haven't talked about Milan, who will finish the season with zero titles.",
+    "original": {
+      "lang": "it",
+      "text": "A me non piace la prostituzione intellettuale, a me piace l'onestà intellettuale. … Non si è parlato del Milan che ha 11 punti meno di noi e chiuderà la stagione con zero titoli."
+    },
+    "context": {
+      "en": "Inter, at a press conference after a row over a penalty against Roma",
+      "es": "Inter, en rueda de prensa tras la polémica por un penalti ante la Roma",
+      "pt": "Inter, em conferência de imprensa após a polémica de um penálti contra a Roma"
+    },
+    "tags": [
+      "rivals",
+      "referees"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/features/jose-mourinhos-greatest-hits",
+        "publisher": "FourFourTwo",
+        "date": "2009-03-18"
+      },
+      {
+        "url": "https://sport.sky.it/calcio/mourinho-frasi",
+        "publisher": "Sky Sport Italia",
+        "date": "2023-09-21"
+      }
+    ]
+  },
+  {
+    "id": "ranieri",
+    "date": "2008-08-04",
+    "era": "inter",
+    "text": "At almost 70 years of age has won a Super Cup and another small cup. He is too old to change his mentality.",
+    "original": {
+      "lang": "it",
+      "text": "A quasi 70 anni ha vinto una Supercoppa e un'altra piccola Coppa. È troppo vecchio per cambiare mentalità."
+    },
+    "context": {
+      "en": "Inter, replying to Juventus coach Claudio Ranieri",
+      "es": "Inter, respondiendo al entrenador de la Juventus, Claudio Ranieri",
+      "pt": "Inter, a responder ao treinador da Juventus, Claudio Ranieri"
+    },
+    "tags": [
+      "rivals",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/37436132/claudio-ranieri-jose-mourinho-reunion-contrast-fortunes",
+        "publisher": "ESPN",
+        "date": "2015-12-09"
+      },
+      {
+        "url": "https://sport.sky.it/calcio/mourinho-frasi",
+        "publisher": "Sky Sport Italia",
+        "date": "2023-09-21"
+      }
+    ]
+  },
+  {
+    "id": "lo-monaco",
+    "date": "2008-09-15",
+    "era": "inter",
+    "text": "As for Lo Monaco, I do not know who he is. With the name Monaco, I have heard of Bayern Monaco (Munich) and the Monaco GP, the Tibetan Monaco (Monk) and the Principality of Monaco. I've never heard of any others.",
+    "original": {
+      "lang": "it",
+      "text": "Io conosco il monaco del Tibet, il Principato di Monaco, il Bayern Monaco, il Gran Prix di Monaco. Non ne conosco altri."
+    },
+    "context": {
+      "en": "Inter, replying to Catania's chief executive Pietro Lo Monaco",
+      "es": "Inter, respondiendo al consejero delegado del Catania, Pietro Lo Monaco",
+      "pt": "Inter, a responder ao administrador do Catania, Pietro Lo Monaco"
+    },
+    "tags": [
+      "humour",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/37426743/jose-mourinho-list-feuds-portugal-premier-league",
+        "publisher": "ESPN",
+        "date": "2015-07-28"
+      },
+      {
+        "url": "https://sport.sky.it/calcio/mourinho-frasi",
+        "publisher": "Sky Sport Italia",
+        "date": "2023-09-21"
+      }
+    ]
+  },
+  {
+    "id": "por-que",
+    "date": "2011-04-27",
+    "era": "real-madrid-1",
+    "text": "If I tell UEFA what I really think and feel, my career would end now. Instead, I will just ask a question to which I hope one day to get a response: Why? Why Ovrebo? Why Busacca? Why De Bleeckere? Why Stark? Why? Because every semi-final the same things happen.",
+    "context": {
+      "en": "Real Madrid, after the Champions League semi-final first-leg defeat by Barcelona",
+      "es": "Real Madrid, tras perder la ida de la semifinal de la Champions ante el Barcelona",
+      "pt": "Real Madrid, depois de perder a primeira mão da meia-final da Liga dos Campeões com o Barcelona"
+    },
+    "tags": [
+      "referees",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11096/10630777/jose-mourinho-v-pep-guardiola-the-story-of-the-rivalry",
+        "publisher": "Sky Sports",
+        "date": "2016-10-26"
+      }
+    ]
+  },
+  {
+    "id": "voyeur",
+    "date": "2005",
+    "era": "chelsea-1",
+    "text": "I think he is one of these people who is a voyeur. He likes to watch other people.",
+    "context": {
+      "en": "Chelsea, on Arsène Wenger's comments about the club",
+      "es": "Chelsea, sobre los comentarios de Arsène Wenger acerca del club",
+      "pt": "Chelsea, sobre os comentários de Arsène Wenger acerca do clube"
+    },
+    "tags": [
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/9497741/jose-mourinho-v-arsene-wenger",
+        "publisher": "Sky Sports",
+        "date": "2014-10-03"
+      }
+    ]
+  },
+  {
+    "id": "nothing-new",
+    "date": "2018-03-13",
+    "era": "man-utd",
+    "text": "I've sat in this chair twice before in the Champions League, and I knock Man Utd out at home twice, with Porto - Man Utd out, and with Real Madrid - Man Utd out. So this is nothing new for this football club.",
+    "context": {
+      "en": "Manchester United, after a Champions League exit to Sevilla at Old Trafford",
+      "es": "Manchester United, tras caer eliminado de la Champions ante el Sevilla en Old Trafford",
+      "pt": "Manchester United, depois da eliminação da Liga dos Campeões frente ao Sevilha em Old Trafford"
+    },
+    "tags": [
+      "self-belief",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11667/11288984/jose-mourinho-man-utds-european-exit-is-nothing-new",
+        "publisher": "Sky Sports",
+        "date": "2018-03-14"
+      }
+    ]
+  },
+  {
+    "id": "same-coach",
+    "date": "2021-04-04",
+    "era": "tottenham",
+    "text": "Same coach, different players.",
+    "context": {
+      "en": "Tottenham, asked why his side kept losing leads",
+      "es": "Tottenham, preguntado por qué su equipo perdía ventajas",
+      "pt": "Tottenham, questionado sobre porque a equipa perdia vantagens"
+    },
+    "tags": [
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37615733/same-coach-different-players",
+        "publisher": "ESPN",
+        "date": "2021-04-04"
+      },
+      {
+        "url": "https://www.goal.com/en/news/same-coach-different-players-mourinho-admits-his-spurs-side/4tydlvntzak51kk23syfnjoss",
+        "publisher": "Goal.com",
+        "date": "2021-04-05"
+      }
+    ]
+  },
+  {
+    "id": "i-am-staying",
+    "date": "2022-05-25",
+    "era": "roma",
+    "text": "Now I am staying, there are no doubts. Even if some rumours emerge, I only want to remain at Roma.",
+    "context": {
+      "en": "Roma, after winning the Europa Conference League final",
+      "es": "Roma, tras ganar la final de la Conference League",
+      "pt": "Roma, depois de ganhar a final da Liga Conferência"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11095/12621539/jose-mourinho-after-romas-europa-conference-league-title-we-wrote-history",
+        "publisher": "Sky Sports",
+        "date": "2022-05-26"
+      }
+    ]
+  },
+  {
+    "id": "shirt-is-my-skin",
+    "date": "2024-06-02",
+    "era": "fenerbahce",
+    "text": "This shirt is my skin.",
+    "context": {
+      "en": "Fenerbahçe, at his unveiling in Istanbul",
+      "es": "Fenerbahçe, en su presentación en Estambul",
+      "pt": "Fenerbahçe, na apresentação em Istambul"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://hurriyetdailynews.com/special-one-takes-over-fenerbahce-post-194221",
+        "publisher": "Hürriyet Daily News",
+        "date": "2024-06-03"
+      }
+    ]
   }
 ]

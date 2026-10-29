@@ -5,7 +5,7 @@
     "langName": "English",
     "siteName": "Infinito Mourinho",
     "tagline": "Of Mourinho, by Mourinho, for Mourinho",
-    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories" },
+    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag" },
     "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History" },
     "home": {
       "title": "Infinito Mourinho – José Mourinho fan hub: news, quotes & history",
@@ -53,7 +53,11 @@
       "heading": "Quotes & stories",
       "sub": "The Special One in his own words",
       "quotesHeading": "Quotes",
-      "episodesHeading": "Legendary stories"
+      "episodesHeading": "Legendary stories",
+      "byTag": "Browse by theme",
+      "tagTitle": "José Mourinho quotes: {tag} | Infinito Mourinho",
+      "tagDescription": "{count} José Mourinho quotes on {tagLower}, each with its context and a link to where it was reported.",
+      "tagNames": { "self-belief": "Self-belief", "rivals": "Rivals", "humour": "Humour", "referees": "Referees", "tactics": "Tactics", "youth": "Young players", "fans": "Fans" }
     },
     "footer": "Unofficial fan site. Not affiliated with José Mourinho or any club. News headlines link to their original publishers.",
     "suggest": "This page is also available in English."
@@ -64,7 +68,7 @@
     "langName": "Español",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas" },
+    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema" },
     "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia" },
     "home": {
       "title": "Infinito Mourinho – web de fans de José Mourinho: noticias, frases e historia",
@@ -112,7 +116,11 @@
       "heading": "Frases y anécdotas",
       "sub": "El Special One en sus propias palabras",
       "quotesHeading": "Frases",
-      "episodesHeading": "Anécdotas legendarias"
+      "episodesHeading": "Anécdotas legendarias",
+      "byTag": "Por tema",
+      "tagTitle": "Frases de José Mourinho: {tag} | Infinito Mourinho",
+      "tagDescription": "{count} frases de José Mourinho sobre {tagLower}, cada una con su contexto y un enlace a dónde se publicó.",
+      "tagNames": { "self-belief": "Confianza", "rivals": "Rivales", "humour": "Humor", "referees": "Árbitros", "tactics": "Táctica", "youth": "Jóvenes", "fans": "Afición" }
     },
     "footer": "Web de fans no oficial. Sin relación con José Mourinho ni con ningún club. Los titulares enlazan a sus medios originales.",
     "suggest": "Esta página también está disponible en español."
@@ -123,7 +131,7 @@
     "langName": "Português",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias" },
+    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema" },
     "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História" },
     "home": {
       "title": "Infinito Mourinho – site de fãs de José Mourinho: notícias, frases e história",
@@ -171,7 +179,11 @@
       "heading": "Frases e histórias",
       "sub": "O Special One nas suas próprias palavras",
       "quotesHeading": "Frases",
-      "episodesHeading": "Histórias lendárias"
+      "episodesHeading": "Histórias lendárias",
+      "byTag": "Por tema",
+      "tagTitle": "Frases de José Mourinho: {tag} | Infinito Mourinho",
+      "tagDescription": "{count} frases de José Mourinho sobre {tagLower}, cada uma com o seu contexto e uma ligação para onde foi publicada.",
+      "tagNames": { "self-belief": "Autoconfiança", "rivals": "Rivais", "humour": "Humor", "referees": "Árbitros", "tactics": "Tática", "youth": "Jovens", "fans": "Adeptos" }
     },
     "footer": "Site de fãs não oficial. Sem ligação a José Mourinho nem a qualquer clube. As manchetes ligam aos meios de comunicação originais.",
     "suggest": "Esta página também está disponível em português."

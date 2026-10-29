@@ -1259,5 +1259,225 @@
         "publisher": "AS Roma"
       }
     ]
+  },
+  {
+    "id": "boring-ten-years",
+    "date": "2015-04-26",
+    "era": "chelsea-2",
+    "text": "You know, I think boring is 10 years without a title. That's very boring.",
+    "context": {
+      "en": "Chelsea, after a 0-0 draw at Arsenal, answering the home fans' 'boring' chants",
+      "es": "Chelsea, tras empatar 0-0 ante el Arsenal, respondiendo a los cánticos de «aburrido» de la afición local",
+      "pt": "Chelsea, depois de empatar 0-0 com o Arsenal, a responder aos cânticos de «aborrecido» dos adeptos da casa"
+    },
+    "tags": [
+      "rivals",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11668/9824909/jose-mourinho-hails-john-terrys-display-against-arsenal",
+        "publisher": "Sky Sports",
+        "date": "2015-04-27"
+      },
+      {
+        "url": "https://www.irishexaminer.com/sport/soccer/arid-30674517.html",
+        "publisher": "Irish Examiner",
+        "date": "2015-04-27"
+      }
+    ]
+  },
+  {
+    "id": "fair-play-cup",
+    "date": "2020-07-06",
+    "era": "tottenham",
+    "text": "A team of good boys, a team of nice boys, the only thing they can win at the end of the season is the Fair Play Cup. Something I have never won and have no interest in winning that.",
+    "context": {
+      "en": "Tottenham, asked about a half-time argument between two of his players",
+      "es": "Tottenham, preguntado por una discusión entre dos de sus jugadores en el descanso",
+      "pt": "Tottenham, questionado sobre uma discussão entre dois jogadores ao intervalo"
+    },
+    "tags": [
+      "self-belief",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11675/12022638/lloris-and-son-in-furious-tottenham-bust-up",
+        "publisher": "Sky Sports",
+        "date": "2020-07-06"
+      },
+      {
+        "url": "https://www.fourfourtwo.com/news/spurs-boss-jose-mourinho-happy-with-heated-exchange-between-team-mates-1594074335000",
+        "publisher": "FourFourTwo (PA)",
+        "date": "2020-07-06"
+      },
+      {
+        "url": "https://www.sportinglife.com/football/news/mourinho-nice-boys-win-nothing/181724",
+        "publisher": "Sporting Life (PA)",
+        "date": "2020-07-07"
+      }
+    ]
+  },
+  {
+    "id": "stats-badly-cooked",
+    "date": "2020",
+    "era": "tottenham",
+    "text": "So the stats, many, many times are like an incredible piece of meat or fish but badly cooked. It doesn't tell me much.",
+    "context": {
+      "en": "Tottenham, answering criticism of his side’s low possession at Liverpool",
+      "es": "Tottenham, respondiendo a las críticas por la poca posesión de su equipo ante el Liverpool",
+      "pt": "Tottenham, a responder às críticas pela pouca posse de bola da equipa contra o Liverpool"
+    },
+    "tags": [
+      "tactics",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://global.espn.com/football/story/_/id/37609837/badly-cooked-meat",
+        "publisher": "ESPN",
+        "date": "2020-12-18"
+      }
+    ]
+  },
+  {
+    "id": "we-wrote-history",
+    "date": "2022-05-25",
+    "era": "roma",
+    "text": "This was not work tonight, this was history. We had to write history. We wrote it.",
+    "context": {
+      "en": "Roma, on the night they won the first Europa Conference League final",
+      "es": "Roma, la noche en que ganó la primera final de la Conference League",
+      "pt": "Roma, na noite em que ganhou a primeira final da Liga Conferência"
+    },
+    "tags": [
+      "fans",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.thescore.com/uefa/news/2364400/tearful-mourinho-hails-historic-win-says-hell-remain-at-roma",
+        "publisher": "theScore (AFP)",
+        "date": "2022-05-25"
+      },
+      {
+        "url": "https://www.omanobserver.om/article/1119820/sports/football/tearful-mourinho-hails-history-for-roma",
+        "publisher": "Oman Observer (AFP)",
+        "date": "2022-05-26"
+      }
+    ]
+  },
+  {
+    "id": "very-special-people",
+    "date": "2022-05-14",
+    "era": "roma",
+    "text": "Because when you win, the family is always there around you. But when you don't win, it can be a different story. This club has always been – something I didn't realise, but now I do – a very special club, with very special people.",
+    "context": {
+      "en": "Roma, thanking the fans after a home draw with Venezia",
+      "es": "Roma, agradeciendo a la afición tras empatar en casa ante el Venezia",
+      "pt": "Roma, a agradecer aos adeptos depois de empatar em casa com o Venezia"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.asroma.com/en/news/63899/mourinho-thanks-special-fans-despite-frustrating-night",
+        "publisher": "AS Roma",
+        "date": "2022-05-14"
+      }
+    ]
+  },
+  {
+    "id": "english-football-misses-me",
+    "date": "2010",
+    "era": "inter",
+    "text": "I miss English football and English football misses me, there's no doubt.",
+    "context": {
+      "en": "Inter, before a Champions League quarter-final against CSKA Moscow",
+      "es": "Inter, antes de los cuartos de final de la Champions ante el CSKA de Moscú",
+      "pt": "Inter, antes dos quartos de final da Liga dos Campeões com o CSKA de Moscovo"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishexaminer.com/sport/soccer/arid-30452124.html",
+        "publisher": "Irish Examiner",
+        "date": "2010-03-31"
+      },
+      {
+        "url": "https://amp.foxsports.com/stories/soccer/mourinho-not-happy-in-italian-football",
+        "publisher": "Fox Sports",
+        "date": "2010-03-30"
+      }
+    ]
+  },
+  {
+    "id": "not-defensive-at-old-trafford",
+    "date": "2004-02-25",
+    "era": "porto",
+    "text": "What I will promise is that we will not go to Manchester and play defensive football.",
+    "context": {
+      "en": "FC Porto, after beating Manchester United 2-1 in the Champions League first leg",
+      "es": "FC Porto, tras ganar 2-1 al Manchester United en la ida de la Champions",
+      "pt": "FC Porto, depois de vencer o Manchester United por 2-1 na primeira mão da Liga dos Campeões"
+    },
+    "tags": [
+      "tactics",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/newsid=148608.html",
+        "publisher": "UEFA",
+        "date": "2004-02-25"
+      }
+    ]
+  },
+  {
+    "id": "club-without-uefa-competitions",
+    "date": "2024-10-24",
+    "era": "fenerbahce",
+    "text": "The best thing I have to do is when I leave Fenerbahce, I go to a club that doesn't play in UEFA competition. So, if any club in England from the bottom of the table needs a coach in two years, I'm ready to go.",
+    "context": {
+      "en": "Fenerbahçe, joking after being sent off against Manchester United",
+      "es": "Fenerbahçe, bromeando tras ser expulsado ante el Manchester United",
+      "pt": "Fenerbahçe, a brincar depois de ser expulso contra o Manchester United"
+    },
+    "tags": [
+      "humour",
+      "referees"
+    ],
+    "sources": [
+      {
+        "url": "https://global.espn.com/football/story/_/id/41985202/jose-mourinho-mocks-referee-red-card-man-united",
+        "publisher": "ESPN",
+        "date": "2024-10-24"
+      }
+    ]
+  },
+  {
+    "id": "not-changed-my-nature",
+    "date": "2025-09-20",
+    "era": "benfica-2025",
+    "text": "At the end of the game, I thought about the 25 years that have flown by, but 25 years that have not changed my nature, that have not changed my passion, that have not changed my way of being, of living, that have not changed anything at all.",
+    "context": {
+      "en": "Benfica, after his first match back in charge",
+      "es": "Benfica, tras su primer partido de vuelta en el banquillo",
+      "pt": "Benfica, depois do primeiro jogo de regresso ao banco"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://africa.espn.com/football/story/_/id/46327115/mourinho-benfica-return-25-years-not-changed-my-nature",
+        "publisher": "ESPN",
+        "date": "2025-09-20"
+      }
+    ]
   }
 ]

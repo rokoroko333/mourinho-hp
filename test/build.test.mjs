@@ -177,3 +177,21 @@ test('videos show real thumbnails and play only from hosts the Content-Security-
     assert.equal(home.includes(`data-video-id="${v.id}"`), v.embed !== false, `${v.id}: plays in place unless embedding is off`);
   }
 });
+
+test('home page: matches first, then news, the daily quote, career chapters and videos', async () => {
+  await build();
+  for (const [lang, path, quotesPath] of [['en', '', '/quotes/'], ['es', 'es', '/es/frases/'], ['pt', 'pt', '/pt/frases/']]) {
+    const html = await page(path);
+    const order = ['matches', 'news', 'daily', 'eras', 'videos'].map((id) => html.indexOf(`<section id="${id}"`));
+    assert.ok(order.every((i, n) => i > 0 && (n === 0 || i > order[n - 1])), `${lang}: section order ${order}`);
+    const nav = html.slice(html.indexOf('<nav id="site-nav"'), html.indexOf('</nav>'));
+    assert.ok(nav.includes(`href="${quotesPath}"`), `${lang}: Quotes in the header opens the quotes page`);
+    // Every link the daily cards can show (first render and after Shuffle) points to a built page.
+    const daily = JSON.parse(html.match(/<script type="application\/json" id="daily-data">([\s\S]*?)<\/script>/)[1]);
+    const shown = [...html.matchAll(/id="daily-(?:quote|episode)-link" href="([^"]+)"/g)].map((m) => m[1]);
+    assert.equal(shown.length, 2, `${lang}: daily quote and story link to their pages`);
+    for (const p of [...shown, ...daily.quotes.map((q) => q.path), ...daily.episodes.map((e) => e.path)]) await page(p);
+    const eras = [...html.slice(html.indexOf('<section id="eras"')).matchAll(/class="card card-link era-card" href="([^"]+)"/g)];
+    assert.equal(eras.length, (await load('history.json')).length, `${lang}: one card per era`);
+  }
+});

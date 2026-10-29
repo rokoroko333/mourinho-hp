@@ -119,7 +119,7 @@ function footer(lang) {
     <p class="footer-note">${esc(u.footer)}</p>
   </div>
 </footer>
-<script type="application/json" id="lang-suggest">${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, ui[l].suggest])))}</script>
+<script type="application/json" id="lang-suggest">${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, ui[l].suggest]))).replace(/</g, '\\u003c')}</script>
 <script src="/assets/app.js" defer></script>
 </body>
 </html>`;

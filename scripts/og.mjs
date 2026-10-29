@@ -41,7 +41,7 @@ const page = (body) => `<!doctype html><html><head><meta charset="utf-8"><style>
 const brand = `<div class="brand">${logo}<span>INFINITO <span class="gold">MOURINHO</span></span></div>`;
 
 // Longer quotes get a smaller size so every one fits in the card without being cut.
-const quoteSize = (text) => (text.length < 60 ? 68 : text.length < 110 ? 54 : 44);
+const quoteSize = (text) => (text.length < 60 ? 68 : text.length < 110 ? 54 : text.length < 180 ? 44 : 38);
 
 function quoteImage(q) {
   return page(`${brand}

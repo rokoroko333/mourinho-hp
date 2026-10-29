@@ -53,4 +53,5 @@
 - 2026-10-29 #18 クラウドのセッションは root で動くので、Chrome は `--no-sandbox` がないと起動しない。ヘルパープロセスが残ってプロファイルを消せないので、プロセスグループごと止める。サイトは `scroll-behavior: smooth` なので、クリック前のスクロールは `behavior: 'instant'` にする（検証: 2026-10-29）
 - 2026-10-29 #19 `node --test` はテストファイルを並列で実行する。複数のファイルが dist/ をビルドすると ENOTEMPTY で落ちるので、ビルドは build.test.mjs だけで行う（検証: 2026-10-29）
 - 2026-10-29 #20 `npm run dev` はポート 8788 が使用中だと起動に失敗するが、`npm run verify` や撮影はその別のサーバーを相手に走ってしまう。起動後にログの `Address already in use` と `lsof -iTCP:8788` を確かめる（検証: 2026-10-29）
+- 2026-10-29 #21 ポート 8788 は、同じ PC の別プロジェクト（pj_kiroko_electoric）の開発サーバーも使う。`npm run dev` の起動直後はログにエラーが出ないことがあるので、`curl localhost:8788 | grep 'Infinito Mourinho'` で自分のサイトか確かめるか、`npx wrangler pages dev dist --port 8790` と `--base http://localhost:8790` を使う（検証: 2026-10-29）
 <!-- 例: - 2026-11-01 #12 E2E テストは遅いので単体で回す（検証: 2026-11-01） -->

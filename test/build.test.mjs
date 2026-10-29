@@ -195,3 +195,14 @@ test('home page: matches first, then news, the daily quote, career chapters and 
     assert.equal(eras.length, (await load('history.json')).length, `${lang}: one card per era`);
   }
 });
+
+// Guards the CLAUDE.md rules together with test/rules.test.mjs, which checks app.js.
+test('links that open a new tab do not give the opened page access to ours', async () => {
+  await build();
+  for (const f of await htmlFiles()) {
+    const html = await readFile(join(DIST, f), 'utf8');
+    for (const [tag] of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) {
+      assert.match(tag, /rel="[^"]*noopener/, `${f}: ${tag}`);
+    }
+  }
+});

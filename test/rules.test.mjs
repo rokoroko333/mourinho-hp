@@ -2,17 +2,11 @@
 // in CI instead of relying on someone remembering them. Each test names the rule it guards.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFile } from 'node:child_process';
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { promisify } from 'node:util';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const DIST = join(ROOT, 'dist');
-
-let built;
-const build = () => (built ??= promisify(execFile)(process.execPath, [join(ROOT, 'scripts/build.mjs')]));
 const appJs = () => readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
 // Comments may mention what the code avoids, so they are left out before matching.
 const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
@@ -33,8 +27,12 @@ test('the browser fetches only our own /api/* endpoints, never a news site or a 
     if (arg === 'url') continue;
     assert.match(arg, /^[`'"]\/api\//, `app.js fetches ${arg}; read external data on the server (lib/feeds.js) instead`);
   }
-  const files = await readdir(ROOT, { recursive: true });
-  for (const f of files.filter((f) => /\.(m?js|json|html|toml)$/.test(f) && !/^(node_modules|dist|\.wrangler|test)\//.test(f))) {
+  // Only the source folders: walking the root would also walk dist/, which build.test.mjs rebuilds in parallel.
+  const files = [];
+  for (const dir of ['src', 'lib', 'functions', 'workers', 'scripts']) {
+    files.push(...(await readdir(join(ROOT, dir), { recursive: true })).map((f) => join(dir, f)));
+  }
+  for (const f of files.filter((f) => /\.(m?js|json|html|toml)$/.test(f))) {
     const text = await readFile(join(ROOT, f), 'utf8');
     for (const proxy of ['rss2json', 'allorigins', 'corsproxy', 'cors-anywhere', 'thingproxy']) {
       assert.ok(!text.includes(proxy), `${f} mentions ${proxy}; free proxies broke the old site's news`);
@@ -49,15 +47,9 @@ test('the site never redirects by browser language (bad for search); it only off
   assert.doesNotMatch(pub, /Language=|Accept-Language|\bCountry=/i, '_redirects redirects by language or country');
 });
 
-test('links that open a new tab do not give the opened page access to ours', async () => {
-  await build();
-  const pages = (await readdir(DIST, { recursive: true })).filter((f) => f.endsWith('.html'));
-  for (const f of pages) {
-    const html = await readFile(join(DIST, f), 'utf8');
-    for (const [tag] of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) {
-      assert.match(tag, /rel="[^"]*noopener/, `${f}: ${tag}`);
-    }
-  }
+// Built pages are checked in build.test.mjs, which owns dist/: test files run in parallel, and two builds
+// into the same folder at once fail.
+test('links app.js opens in a new tab do not give the opened page access to ours', async () => {
   const src = code(await appJs());
   for (const [call] of src.matchAll(/el\('a',\s*\{[^}]*target:\s*'_blank'[^}]*\}/g)) {
     assert.match(call, /rel:\s*'[^']*noopener/, `app.js: ${call}`);

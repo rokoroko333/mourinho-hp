@@ -11,6 +11,7 @@ const CANDIDATES = [
   '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
   '/usr/bin/google-chrome',
   '/usr/bin/chromium',
+  '/opt/pw-browsers/chromium', // Claude Code cloud sessions
 ].filter(Boolean);
 
 export function findChrome() {

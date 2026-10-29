@@ -1,0 +1,9 @@
+{
+  "description": "Clicking a video plays it in place with the privacy-enhanced YouTube player, which the CSP allows",
+  "steps": [
+    { "goto": "/" },
+    { "click": ".video[data-video-id]" },
+    { "visible": "iframe.video-frame" },
+    { "attr": { "selector": "iframe.video-frame", "name": "src" } }
+  ]
+}

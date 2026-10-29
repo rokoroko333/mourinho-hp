@@ -79,7 +79,7 @@
 
   // On this day: the HTML holds the event picked on the build's date (UTC). Builds are not daily, so pick
   // again for the visitor's UTC day and swap the text in only when it differs. Same rule as
-  // pickOnThisDay in scripts/build.mjs: change both together.
+  // pickOnThisDay in scripts/content.mjs: change both together.
   const otd = readJson('otd-data');
   const otdCard = $('#on-this-day');
   if (otd && otdCard && otdCard.dataset.built !== new Date().toISOString().slice(0, 10)) {

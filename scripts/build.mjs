@@ -25,7 +25,17 @@ const pathOf = (lang, page) => {
   const slug = ui[lang].slugs[page];
   return slug ? `/${slug}/` : '/';
 };
-const urlOf = (lang, page) => SITE_URL + pathOf(lang, page);
+// Every page exists in all three languages; `paths` maps each language to that page's path.
+const pathsOf = (page) => Object.fromEntries(LANGS.map((l) => [l, pathOf(l, page)]));
+// Individual quote and story pages share their id across languages: /quotes/special-one/,
+// /es/frases/special-one/, /pt/frases/special-one/ (and /stories/, /es/anecdotas/, /pt/historias/).
+const detailPaths = (kind, id) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, kind)}${id}/`]));
+
+const MOURINHO = {
+  '@type': 'Person',
+  name: 'José Mourinho',
+  sameAs: ['https://en.wikipedia.org/wiki/Jos%C3%A9_Mourinho', 'https://www.wikidata.org/wiki/Q49589'],
+};
 
 const icon = {
   infinity:
@@ -39,22 +49,18 @@ const icon = {
   menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
 };
 
-function head(lang, page, t) {
-  const alternates = LANGS.map(
-    (l) => `<link rel="alternate" hreflang="${l}" href="${urlOf(l, page)}">`,
-  ).join('\n');
+function head(lang, paths, t, { type = 'WebPage', mainEntity } = {}) {
+  const urls = Object.fromEntries(LANGS.map((l) => [l, SITE_URL + paths[l]]));
+  const alternates = LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${urls[l]}">`).join('\n');
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': page === 'home' ? 'WebSite' : 'WebPage',
-    name: page === 'home' ? ui[lang].siteName : t.title,
-    url: urlOf(lang, page),
+    '@type': type,
+    name: type === 'WebSite' ? ui[lang].siteName : t.title,
+    url: urls[lang],
     inLanguage: lang,
     description: t.description,
-    about: {
-      '@type': 'Person',
-      name: 'José Mourinho',
-      sameAs: ['https://en.wikipedia.org/wiki/Jos%C3%A9_Mourinho', 'https://www.wikidata.org/wiki/Q49589'],
-    },
+    about: MOURINHO,
+    ...(mainEntity && { mainEntity }),
   };
   return `<!doctype html>
 <html lang="${lang}">
@@ -63,14 +69,14 @@ function head(lang, page, t) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(t.title)}</title>
 <meta name="description" content="${esc(t.description)}">
-<link rel="canonical" href="${urlOf(lang, page)}">
+<link rel="canonical" href="${urls[lang]}">
 ${alternates}
-<link rel="alternate" hreflang="x-default" href="${urlOf('en', page)}">
-<meta property="og:type" content="website">
+<link rel="alternate" hreflang="x-default" href="${urls.en}">
+<meta property="og:type" content="${type === 'WebSite' ? 'website' : 'article'}">
 <meta property="og:site_name" content="${esc(ui[lang].siteName)}">
 <meta property="og:title" content="${esc(t.title)}">
 <meta property="og:description" content="${esc(t.description)}">
-<meta property="og:url" content="${urlOf(lang, page)}">
+<meta property="og:url" content="${urls[lang]}">
 <meta property="og:locale" content="${ui[lang].ogLocale}">
 ${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternate" content="${ui[l].ogLocale}">`).join('\n')}
 <meta name="twitter:card" content="summary">
@@ -81,7 +87,8 @@ ${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternat
 </head>`;
 }
 
-function header(lang, page) {
+// `active` is the top-level section to highlight; the language switch links to this page in each language.
+function header(lang, paths, active) {
   const u = ui[lang];
   const home = pathOf(lang, 'home');
   const links = [
@@ -92,7 +99,7 @@ function header(lang, page) {
   ];
   const langLinks = LANGS.map(
     (l) =>
-      `<a href="${pathOf(l, page)}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${l.toUpperCase()}</a>`,
+      `<a href="${paths[l]}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${l.toUpperCase()}</a>`,
   ).join('');
   return `<header class="site-header">
   <div class="wrap header-row">
@@ -100,7 +107,7 @@ function header(lang, page) {
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">${icon.menu}</button>
     <nav id="site-nav" class="site-nav">
       ${links.map(([href, label]) => `<a href="${href}">${esc(label)}</a>`).join('\n      ')}
-      <a class="nav-history${page === 'history' ? ' active' : ''}" href="${pathOf(lang, 'history')}">${esc(u.nav.history)}</a>
+      <a class="nav-history${active === 'history' ? ' active' : ''}" href="${pathOf(lang, 'history')}">${esc(u.nav.history)}</a>
       <div class="lang-switch" aria-label="Language">${langLinks}</div>
     </nav>
   </div>
@@ -146,9 +153,9 @@ function homePage(lang) {
     newsEmpty: h.newsEmpty, newsUpdated: h.newsUpdated, readArticle: h.readArticle,
     matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
   };
-  return `${head(lang, 'home', t)}
+  return `${head(lang, pathsOf('home'), t, { type: 'WebSite' })}
 <body data-lang="${lang}">
-${header(lang, 'home')}
+${header(lang, pathsOf('home'), 'home')}
 <main>
 <section class="hero">
   <div class="wrap hero-inner">
@@ -223,9 +230,9 @@ ${footer(lang)}`;
 function quotesPage(lang) {
   const u = ui[lang];
   const p = u.quotes;
-  return `${head(lang, 'quotes', p)}
+  return `${head(lang, pathsOf('quotes'), p)}
 <body data-lang="${lang}">
-${header(lang, 'quotes')}
+${header(lang, pathsOf('quotes'), 'quotes')}
 <main class="wrap page">
   <div class="page-head">
     <h1>${esc(p.heading)}</h1>
@@ -234,7 +241,11 @@ ${header(lang, 'quotes')}
   <section class="section">
     <h2>${esc(p.quotesHeading)}</h2>
     <div class="grid grid-2">
-      ${quotes.map((q) => `<article class="card card-quote" id="${q.id}">${quoteBody(q, lang)}</article>`).join('\n      ')}
+      ${quotes
+        .map(
+          (q) => `<a class="card card-quote card-link" id="${q.id}" href="${detailPaths('quotes', q.id)[lang]}">${quoteBody(q, lang)}</a>`,
+        )
+        .join('\n      ')}
     </div>
   </section>
   <section class="section">
@@ -242,13 +253,99 @@ ${header(lang, 'quotes')}
     <div class="grid grid-2">
       ${episodes
         .map(
-          (e) => `<article class="card" id="${e.id}">
+          (e) => `<a class="card card-link" id="${e.id}" href="${detailPaths('stories', e.id)[lang]}">
         <p class="card-label">${e.year}</p>
         <h3>${esc(e.title[lang])}</h3>
         <p class="muted">${esc(e.text[lang])}</p>
-      </article>`,
+      </a>`,
         )
         .join('\n      ')}
+    </div>
+  </section>
+</main>
+${footer(lang)}`;
+}
+
+// Quotes and stories in one list, so a page can point to related ones of either kind.
+const ITEMS = [
+  ...quotes.map((q) => ({ kind: 'quotes', id: q.id, year: q.year, item: q })),
+  ...episodes.map((e) => ({ kind: 'stories', id: e.id, year: e.year, item: e })),
+];
+const RELATED_COUNT = 4;
+
+// The quote and story sharing an id come first (they tell the same moment), then the closest in time;
+// ties keep the content order, so the links are stable from build to build.
+function relatedTo(kind, id) {
+  const self = ITEMS.find((x) => x.kind === kind && x.id === id);
+  return ITEMS.filter((x) => x !== self)
+    .map((x, order) => ({ x, order, twin: x.id === id ? 0 : 1, gap: Math.abs((x.year ?? 9999) - (self.year ?? 9999)) }))
+    .sort((a, b) => a.twin - b.twin || a.gap - b.gap || a.order - b.order)
+    .slice(0, RELATED_COUNT)
+    .map(({ x }) => x);
+}
+
+// Cuts at a word boundary (or at `max` when there is none) and drops punctuation left before the ellipsis.
+const clip = (s, max) => {
+  if (s.length <= max) return s;
+  const cut = s.lastIndexOf(' ', max - 1);
+  return `${s.slice(0, cut > 0 ? cut : max - 1).replace(/[\s,;:.–—-]+$/, '')}…`;
+};
+const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, k) => values[k] ?? '');
+
+function relatedCards(lang, kind, id) {
+  const d = ui[lang].detail;
+  return relatedTo(kind, id)
+    .map(({ kind: k, id: rid, year, item }) => {
+      const label = `${k === 'quotes' ? d.quoteLabel : d.storyLabel}${year ? ` · ${year}` : ''}`;
+      const title = k === 'quotes' ? `“${clip(item.text, 90)}”` : item.title[lang];
+      return `<a class="card card-link" href="${detailPaths(k, rid)[lang]}">
+        <p class="card-label">${esc(label)}</p>
+        <h3>${esc(title)}</h3>
+      </a>`;
+    })
+    .join('\n      ');
+}
+
+function detailPage(lang, kind, id) {
+  const u = ui[lang];
+  const d = u.detail;
+  const paths = detailPaths(kind, id);
+  let t;
+  let body;
+  let mainEntity;
+  if (kind === 'quotes') {
+    const q = quotes.find((x) => x.id === id);
+    const year = q.year ? `, ${q.year}` : '';
+    t = {
+      title: `${fill(d.quoteTitle, { text: clip(q.text, 70) })} | ${u.siteName}`,
+      description: clip(fill(d.quoteDescription, { text: q.text, context: q.context[lang] + year }), 160),
+    };
+    mainEntity = { '@type': 'Quotation', text: q.text, inLanguage: 'en', creator: MOURINHO, ...(q.year && { dateCreated: String(q.year) }) };
+    body = `<p class="card-label">${esc(d.quoteLabel)}</p>
+    <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
+    <p class="quote-context">— ${esc(q.context[lang])}${year}</p>`;
+  } else {
+    const e = episodes.find((x) => x.id === id);
+    t = {
+      title: `${fill(d.storyTitle, { title: e.title[lang] })} | ${u.siteName}`,
+      description: clip(e.text[lang], 160),
+    };
+    body = `<p class="card-label">${esc(d.storyLabel)} · ${e.year}</p>
+    <h1 class="detail-title">${esc(e.title[lang])}</h1>
+    <p class="detail-text">${esc(e.text[lang])}</p>`;
+  }
+  return `${head(lang, paths, t, { mainEntity })}
+<body data-lang="${lang}">
+${header(lang, paths, 'quotes')}
+<main class="wrap page">
+  <p class="more back"><a href="${pathOf(lang, 'quotes')}">${icon.arrow}${esc(d.back)}</a></p>
+  <article class="card detail${kind === 'quotes' ? ' card-quote' : ''}">
+    ${body}
+  </article>
+  <section class="section">
+    <h2>${esc(d.related)}</h2>
+    <div class="grid grid-2">
+      ${relatedCards(lang, kind, id)}
     </div>
   </section>
 </main>
@@ -258,9 +355,9 @@ ${footer(lang)}`;
 function historyPage(lang) {
   const u = ui[lang];
   const p = u.history;
-  return `${head(lang, 'history', p)}
+  return `${head(lang, pathsOf('history'), p)}
 <body data-lang="${lang}">
-${header(lang, 'history')}
+${header(lang, pathsOf('history'), 'history')}
 <main class="wrap page">
   <div class="page-head">
     <h1>${esc(p.heading)}</h1>
@@ -285,14 +382,15 @@ ${header(lang, 'history')}
 ${footer(lang)}`;
 }
 
-function sitemap() {
-  const entries = PAGES.flatMap((page) =>
+// One entry per page and language, each listing all three languages as alternates.
+function sitemap(routes) {
+  const entries = routes.flatMap(({ paths, changefreq }) =>
     LANGS.map(
       (lang) => `  <url>
-    <loc>${urlOf(lang, page)}</loc>
-${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${urlOf(l, page)}"/>`).join('\n')}
-    <xhtml:link rel="alternate" hreflang="x-default" href="${urlOf('en', page)}"/>
-    <changefreq>${page === 'home' ? 'hourly' : 'monthly'}</changefreq>
+    <loc>${SITE_URL + paths[lang]}</loc>
+${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${SITE_URL + paths[l]}"/>`).join('\n')}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL + paths.en}"/>
+    <changefreq>${changefreq}</changefreq>
   </url>`,
     ),
   );
@@ -314,12 +412,18 @@ await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
 const render = { home: homePage, quotes: quotesPage, history: historyPage };
-for (const lang of LANGS) {
-  for (const page of PAGES) {
-    await write(join(pathOf(lang, page), 'index.html'), render[page](lang));
-  }
+const routes = [
+  ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
+  ...ITEMS.map(({ kind, id }) => ({
+    paths: detailPaths(kind, id),
+    changefreq: 'yearly',
+    render: (lang) => detailPage(lang, kind, id),
+  })),
+];
+for (const { paths, render: page } of routes) {
+  for (const lang of LANGS) await write(join(paths[lang], 'index.html'), page(lang));
 }
-await write('sitemap.xml', sitemap());
+await write('sitemap.xml', sitemap(routes));
 await write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
-console.log(`Built ${LANGS.length * PAGES.length} pages into dist/ for ${SITE_URL}`);
+console.log(`Built ${LANGS.length * routes.length} pages into dist/ for ${SITE_URL}`);

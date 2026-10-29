@@ -43,11 +43,18 @@ function parseArgs(argv) {
 const fileName = (path, size) => `${path.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home'}-${size}.png`;
 
 function capture(chrome, url, size, height, file) {
-  // The virtual time budget lets app.js fill the news and match cards from /api/* before the shot.
-  execFileSync(chrome, [
-    '--headless=new', '--hide-scrollbars', '--disable-gpu', '--virtual-time-budget=8000',
-    `--window-size=${WIDTHS[size]},${height}`, `--screenshot=${file}`, url,
-  ], { stdio: 'ignore', timeout: 60_000 }); // headless Chrome occasionally hangs; fail instead of waiting
+  // A throwaway profile, so the run neither waits on nor touches a Chrome the user has open.
+  const profile = mkdtempSync(join(tmpdir(), 'shots-profile-'));
+  try {
+    // The virtual time budget lets app.js fill the news and match cards from /api/* before the shot.
+    execFileSync(chrome, [
+      '--headless=new', '--hide-scrollbars', '--disable-gpu', '--virtual-time-budget=8000', `--user-data-dir=${profile}`,
+      '--no-first-run', '--no-default-browser-check',
+      `--window-size=${WIDTHS[size]},${height}`, `--screenshot=${file}`, url,
+    ], { stdio: 'ignore', timeout: 60_000 }); // headless Chrome occasionally hangs; fail instead of waiting
+  } finally {
+    rmSync(profile, { recursive: true, force: true });
+  }
 }
 
 // Keeps images out of the code branches: they go to an orphan branch, one folder per PR.
@@ -61,11 +68,13 @@ function publish(pr, files) {
   try {
     let exists = true;
     try {
-      git(['fetch', 'origin', BRANCH]);
+      // Into a remote-tracking ref: FETCH_HEAD belongs to the main worktree and is not visible from `dir`.
+      // --no-prune: with `fetch.prune` set, git deletes the very ref this refspec writes.
+      git(['fetch', '--no-prune', 'origin', `${BRANCH}:refs/remotes/origin/${BRANCH}`]);
     } catch {
       exists = false;
     }
-    if (exists) git(['checkout', '-B', BRANCH, 'FETCH_HEAD'], dir);
+    if (exists) git(['checkout', '-B', BRANCH, `origin/${BRANCH}`], dir);
     else {
       git(['checkout', '--orphan', BRANCH], dir);
       git(['rm', '-rfq', '.'], dir);

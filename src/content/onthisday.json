@@ -199,5 +199,201 @@
         "date": "2022-05-25"
       }
     ]
+  },
+  {
+    "date": "2000-09-20",
+    "era": "benfica-2000",
+    "text": {
+      "en": "Mourinho was presented as Benfica head coach, his first job as a head coach.",
+      "es": "Mourinho fue presentado como entrenador del Benfica, su primer puesto como primer entrenador.",
+      "pt": "Mourinho foi apresentado como treinador do Benfica, o seu primeiro cargo como treinador principal."
+    },
+    "sources": [
+      {
+        "url": "https://www.rtp.pt/noticias/benfica/mourinho-estreou-se-como-treinador-principal-no-benfica-em-aventura-de-76-dias_d1684584",
+        "publisher": "RTP"
+      },
+      {
+        "url": "https://bolanarede.pt/especial-bola-na-rede/atualidade/de-setembro-de-2000-a-setembro-de-2025-jose-mourinho-vai-assumir-o-benfica-apos-25-anos-da-sua-experiencia-no-clube-encarnado/",
+        "publisher": "Bola na Rede"
+      }
+    ]
+  },
+  {
+    "date": "2005-02-27",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Chelsea beat Liverpool 3-2 after extra time in Cardiff to win the League Cup.",
+      "es": "El Chelsea ganó la Copa de la Liga inglesa al vencer 3-2 al Liverpool en la prórroga en Cardiff.",
+      "pt": "O Chelsea venceu o Liverpool por 3-2 após prolongamento em Cardiff e conquistou a Taça da Liga inglesa."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.ph/football/match/_/gameId/173466/chelsea-liverpool",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/12028/8755577/mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      }
+    ]
+  },
+  {
+    "date": "2006-04-29",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Chelsea beat Manchester United 3-0 at Stamford Bridge and were crowned Premier League champions again.",
+      "es": "El Chelsea venció 3-0 al Manchester United en Stamford Bridge y volvió a proclamarse campeón de la Premier League.",
+      "pt": "O Chelsea venceu o Manchester United por 3-0 em Stamford Bridge e voltou a ser campeão da Premier League."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/186097",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.dawn.com/news/amp/190077",
+        "publisher": "Dawn (AFP)",
+        "date": "2006-04-30"
+      }
+    ]
+  },
+  {
+    "date": "2007-05-19",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Didier Drogba's extra-time goal beat Manchester United 1-0 in the first FA Cup final at the new Wembley.",
+      "es": "Un gol de Didier Drogba en la prórroga dio al Chelsea la FA Cup ante el Manchester United (1-0), en la primera final del nuevo Wembley.",
+      "pt": "Um golo de Didier Drogba no prolongamento deu ao Chelsea a Taça de Inglaterra frente ao Manchester United (1-0), na primeira final do novo Wembley."
+    },
+    "sources": [
+      {
+        "url": "https://africa.espn.com/football/match/_/gameId/216319",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://jerseyeveningpost.com/uksport/2024/05/19/on-this-day-in-2007-didier-drogbas-goal-wins-the-fa-cup-for-chelsea-at-wembley/",
+        "publisher": "Press Association",
+        "date": "2024-05-19"
+      }
+    ]
+  },
+  {
+    "date": "2010-04-20",
+    "era": "inter",
+    "text": {
+      "en": "Inter beat holders Barcelona 3-1 at San Siro in the first leg of the Champions League semi-final.",
+      "es": "El Inter venció 3-1 al Barcelona, vigente campeón, en San Siro en la ida de las semifinales de la Liga de Campeones.",
+      "pt": "O Inter venceu o Barcelona, detentor do título, por 3-1 em San Siro na primeira mão das meias-finais da Liga dos Campeões."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/290735",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.aljazeera.com/sports/2010/4/20/three-goal-inter-shock-barcelona",
+        "publisher": "Al Jazeera",
+        "date": "2010-04-20"
+      }
+    ]
+  },
+  {
+    "date": "2010-05-05",
+    "era": "inter",
+    "text": {
+      "en": "Inter beat Roma 1-0 to win the Coppa Italia, the first trophy of their treble.",
+      "es": "El Inter venció 1-0 a la Roma y ganó la Copa de Italia, el primer título de su triplete.",
+      "pt": "O Inter venceu a Roma por 1-0 e conquistou a Taça de Itália, o primeiro título do triplete."
+    },
+    "sources": [
+      {
+        "url": "https://inter.it/en/news/2020-05-05-10-memorable-moments-from-the-coppa-italia-final-2010-inter-roma",
+        "publisher": "Inter",
+        "date": "2020-05-05"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/12028/8755577/mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      }
+    ]
+  },
+  {
+    "date": "2010-05-16",
+    "era": "inter",
+    "text": {
+      "en": "Diego Milito's goal won 1-0 at Siena and gave Inter the Serie A title.",
+      "es": "Un gol de Diego Milito dio al Inter la victoria por 1-0 en Siena y el título de la Serie A.",
+      "pt": "Um golo de Diego Milito deu ao Inter a vitória por 1-0 em Siena e o título da Serie A."
+    },
+    "sources": [
+      {
+        "url": "https://inter.it/en/news/2020-05-16-10-unforgettable-moments-from-siena-0-1-inter-2010",
+        "publisher": "Inter",
+        "date": "2020-05-16"
+      },
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/278289",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2010-05-31",
+    "era": "real-madrid-1",
+    "text": {
+      "en": "Mourinho was unveiled as Real Madrid coach.",
+      "es": "Mourinho fue presentado como entrenador del Real Madrid.",
+      "pt": "Mourinho foi apresentado como treinador do Real Madrid."
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/12028/8755577/mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      }
+    ]
+  },
+  {
+    "date": "2012-05-02",
+    "era": "real-madrid-1",
+    "text": {
+      "en": "Real Madrid won 3-0 at Athletic Bilbao to clinch the La Liga title.",
+      "es": "El Real Madrid ganó 3-0 en San Mamés ante el Athletic y se aseguró el título de LaLiga.",
+      "pt": "O Real Madrid venceu o Athletic por 3-0 em Bilbau e garantiu o título da LaLiga."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/323856",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/12028/8755577/mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-06-03"
+      }
+    ]
+  },
+  {
+    "date": "2017-05-24",
+    "era": "man-utd",
+    "text": {
+      "en": "Manchester United beat Ajax 2-0 in Stockholm to win the UEFA Europa League.",
+      "es": "El Manchester United venció 2-0 al Ajax en Estocolmo y ganó la Europa League.",
+      "pt": "O Manchester United venceu o Ajax por 2-0 em Estocolmo e conquistou a Liga Europa."
+    },
+    "sources": [
+      {
+        "url": "https://africa.espn.com/football/match/_/gameId/478698/manchester-united-ajax-amsterdam",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/newsid=2467736.html",
+        "publisher": "UEFA",
+        "date": "2017-05-11"
+      }
+    ]
   }
 ]

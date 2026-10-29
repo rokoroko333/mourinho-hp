@@ -304,3 +304,24 @@ test('the trophies page lists every trophy with its source in all three language
     }
   }
 });
+
+// Era pages show only that era's trophies (by explicit `era`), each with its sources.
+test('each era page lists its own trophies with sources and none from other eras', async () => {
+  await build();
+  const trophies = await load('trophies.json');
+  for (const h of await load('history.json')) {
+    for (const [lang, path] of [['en', `history/${h.id}`], ['es', `es/historia/${h.id}`], ['pt', `pt/historia/${h.id}`]]) {
+      const html = await page(path);
+      for (const t of trophies) {
+        const at = html.indexOf(`id="${t.id}"`);
+        if (t.era !== h.id) {
+          assert.equal(at, -1, `${lang} ${h.id}: ${t.id} belongs to ${t.era}`);
+          continue;
+        }
+        assert.ok(at > 0, `${lang} ${h.id}: ${t.id} listed`);
+        const item = html.slice(at, html.indexOf('</li>', at));
+        for (const s of t.sources) assert.ok(item.includes(`href="${s.url}"`), `${lang} ${h.id}: ${t.id} source ${s.url}`);
+      }
+    }
+  }
+});

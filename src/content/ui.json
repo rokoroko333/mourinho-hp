@@ -45,7 +45,7 @@
       "heading": "History of Mourinho",
       "sub": "The chronicle of the Special One",
       "intro": "From interpreter under Bobby Robson to European champion with Porto and Inter, and back to the Bernabéu in 2026: every chapter of José Mourinho's career.",
-      "trophies": "Trophies", "eraTitle": "{club} ({years}): {era} – José Mourinho's career", "back": "Full career timeline", "chapters": "Career chapters", "previous": "Previous chapter", "next": "Next chapter", "eraQuotes": "Quotes from this era"
+      "trophies": "Trophies", "eraTitle": "{club} ({years}): {era} – José Mourinho's career", "back": "Full career timeline", "chapters": "Career chapters", "previous": "Previous chapter", "next": "Next chapter", "eraQuotes": "Quotes from this era", "eraTrophies": "Trophies in this era", "allTrophies": "All trophies"
     },
     "detail": { "quoteLabel": "Quote", "storyLabel": "Story", "quoteTitle": "“{text}” – José Mourinho quote", "quoteDescription": "{context}: “{text}” — José Mourinho", "storyTitle": "{title} – a José Mourinho story", "related": "More quotes and stories", "back": "All quotes and stories", "copy": "Copy link", "copied": "Link copied", "readMore": "Read more", "sources": "Source", "original": "Original" },
     "quotes": {
@@ -109,7 +109,7 @@
       "heading": "Historia de Mourinho",
       "sub": "La crónica del Special One",
       "intro": "De traductor a las órdenes de Bobby Robson a campeón de Europa con el Oporto y el Inter, y de vuelta al Bernabéu en 2026: cada capítulo de la carrera de José Mourinho.",
-      "trophies": "Títulos", "eraTitle": "{club} ({years}): {era} – la carrera de José Mourinho", "back": "Toda la trayectoria", "chapters": "Capítulos de su carrera", "previous": "Capítulo anterior", "next": "Capítulo siguiente", "eraQuotes": "Frases de esta etapa"
+      "trophies": "Títulos", "eraTitle": "{club} ({years}): {era} – la carrera de José Mourinho", "back": "Toda la trayectoria", "chapters": "Capítulos de su carrera", "previous": "Capítulo anterior", "next": "Capítulo siguiente", "eraQuotes": "Frases de esta etapa", "eraTrophies": "Títulos de esta etapa", "allTrophies": "Todos los títulos"
     },
     "detail": { "quoteLabel": "Frase", "storyLabel": "Anécdota", "quoteTitle": "“{text}” – frase de José Mourinho", "quoteDescription": "{context}: “{text}” — José Mourinho", "storyTitle": "{title} – anécdota de José Mourinho", "related": "Más frases y anécdotas", "back": "Todas las frases y anécdotas", "copy": "Copiar enlace", "copied": "Enlace copiado", "readMore": "Leer más", "sources": "Fuente", "original": "Original" },
     "quotes": {
@@ -173,7 +173,7 @@
       "heading": "História de Mourinho",
       "sub": "A crónica do Special One",
       "intro": "De tradutor de Bobby Robson a campeão europeu com o FC Porto e o Inter, e de volta ao Bernabéu em 2026: cada capítulo da carreira de José Mourinho.",
-      "trophies": "Títulos", "eraTitle": "{club} ({years}): {era} – a carreira de José Mourinho", "back": "Toda a carreira", "chapters": "Capítulos da carreira", "previous": "Capítulo anterior", "next": "Capítulo seguinte", "eraQuotes": "Frases desta época"
+      "trophies": "Títulos", "eraTitle": "{club} ({years}): {era} – a carreira de José Mourinho", "back": "Toda a carreira", "chapters": "Capítulos da carreira", "previous": "Capítulo anterior", "next": "Capítulo seguinte", "eraQuotes": "Frases desta época", "eraTrophies": "Títulos desta época", "allTrophies": "Todos os títulos"
     },
     "detail": { "quoteLabel": "Frase", "storyLabel": "História", "quoteTitle": "“{text}” – frase de José Mourinho", "quoteDescription": "{context}: “{text}” — José Mourinho", "storyTitle": "{title} – uma história de José Mourinho", "related": "Mais frases e histórias", "back": "Todas as frases e histórias", "copy": "Copiar link", "copied": "Link copiado", "readMore": "Ler mais", "sources": "Fonte", "original": "Original" },
     "quotes": {

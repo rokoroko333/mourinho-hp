@@ -567,5 +567,242 @@
         "date": "2024-06-03"
       }
     ]
+  },
+  {
+    "id": "we-won-everything",
+    "date": "2004-05-26",
+    "era": "porto",
+    "text": "I have been here two-and-a-half years, and it was fantastic. We won everything",
+    "context": {
+      "en": "FC Porto, after winning the Champions League final",
+      "es": "FC Porto, tras ganar la final de la Champions",
+      "pt": "FC Porto, depois de ganhar a final da Liga dos Campeões"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/newsid=182498.html",
+        "publisher": "UEFA",
+        "date": "2004-05-26"
+      }
+    ]
+  },
+  {
+    "id": "i-dont-change",
+    "date": "2010-05-31",
+    "era": "real-madrid-1",
+    "text": "I am Jose Mourinho and I don't change. I arrive with all my qualities and my defects.",
+    "context": {
+      "en": "Real Madrid, at his unveiling at the Santiago Bernabéu",
+      "es": "Real Madrid, en su presentación en el Santiago Bernabéu",
+      "pt": "Real Madrid, na apresentação no Santiago Bernabéu"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.foxsports.com/stories/soccer/mourinho-unveiled-as-new-real-boss",
+        "publisher": "Fox Sports",
+        "date": "2010-05-31"
+      }
+    ]
+  },
+  {
+    "id": "coming-home",
+    "date": "2026-08-18",
+    "era": "real-madrid-2",
+    "text": "This is coming home. Emotionally, it's even better than the first time",
+    "original": {
+      "lang": "es",
+      "text": "… es volver a casa. Emocionalmente es más bonito que la primera vez que vine …"
+    },
+    "context": {
+      "en": "Real Madrid, at his presentation for a second spell",
+      "es": "Real Madrid, en su presentación para una segunda etapa",
+      "pt": "Real Madrid, na apresentação para uma segunda passagem"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.aljazeera.com/sports/2026/8/18/real-madrid-officially-presents-mourinho-in-bizarre-closed-door-ceremony",
+        "publisher": "Al Jazeera (Reuters)",
+        "date": "2026-08-18"
+      },
+      {
+        "url": "https://www.prensa.com/deportes/mourinho-emocionalmente-es-mas-bonito-que-la-primera-vez-que-vine/",
+        "publisher": "La Prensa (EFE)",
+        "date": "2026-08-18"
+      }
+    ]
+  },
+  {
+    "id": "live-for-benfica",
+    "date": "2025-09-18",
+    "era": "benfica-2025",
+    "text": "My promise is I will live for Benfica, live for my mission",
+    "original": {
+      "lang": "pt",
+      "text": "… a promessa é muito clara, vou viver para o Benfica, para a minha missão."
+    },
+    "context": {
+      "en": "Benfica, at his presentation 25 years after his first spell",
+      "es": "Benfica, en su presentación 25 años después de su primera etapa",
+      "pt": "Benfica, na apresentação 25 anos depois da primeira passagem"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.thestar.com.my/sport/football/2025/09/18/benfica-hires-jose-mourinho-as-manager",
+        "publisher": "The Star (Reuters)",
+        "date": "2025-09-18"
+      },
+      {
+        "url": "https://www.abola.pt/noticias/tudo-o-que-disse-mourinho-na-apresentacao-pelo-benfica-2025091816162633009",
+        "publisher": "A Bola",
+        "date": "2025-09-18"
+      }
+    ]
+  },
+  {
+    "id": "trubin",
+    "date": "2026-01-28",
+    "era": "benfica-2025",
+    "text": "Our goalkeeper Trubin, who is two metres tall, went into the box and scored a fantastic goal, a historic goal",
+    "context": {
+      "en": "Benfica, after his goalkeeper's late header beat Real Madrid 4-2 in the Champions League",
+      "es": "Benfica, tras el gol de cabeza de su portero en el descuento para ganar 4-2 al Real Madrid en la Champions",
+      "pt": "Benfica, depois do golo de cabeça do guarda-redes nos descontos para vencer o Real Madrid por 4-2 na Liga dos Campeões"
+    },
+    "tags": [
+      "humour",
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.khaleejtimes.com/sports/football/benficas-mourinho-hails-keepers-late-goal-arbeloa-laments-real-collapse",
+        "publisher": "Khaleej Times (Reuters)",
+        "date": "2026-01-29"
+      }
+    ]
+  },
+  {
+    "id": "second-place",
+    "date": "2018-08-09",
+    "era": "man-utd",
+    "text": "I won eight championships and three Premier Leagues but I keep saying and thinking and feeling that second position last season was one of my biggest achievements in the game.",
+    "context": {
+      "en": "Manchester United, looking back on finishing second the season before",
+      "es": "Manchester United, sobre el segundo puesto de la temporada anterior",
+      "pt": "Manchester United, sobre o segundo lugar da época anterior"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/news/mourinho-rails-against-negative-manchester-united-coverage",
+        "publisher": "FourFourTwo",
+        "date": "2018-08-09"
+      }
+    ]
+  },
+  {
+    "id": "hegel",
+    "date": "2018-08-31",
+    "era": "man-utd",
+    "text": "Just as an example, Hegel says the truth is in the whole, it's always in the whole that you find the truth.",
+    "context": {
+      "en": "Manchester United, answering criticism at a press conference",
+      "es": "Manchester United, respondiendo a las críticas en rueda de prensa",
+      "pt": "Manchester United, a responder às críticas em conferência de imprensa"
+    },
+    "tags": [
+      "humour",
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/news/mourinho-cites-philosopher-latest-bizarre-news-conference",
+        "publisher": "FourFourTwo",
+        "date": "2018-08-31"
+      }
+    ]
+  },
+  {
+    "id": "new-mistakes",
+    "date": "2019-11-21",
+    "era": "tottenham",
+    "text": "Don't ask me what mistakes they are but I realise that during my career I have made mistakes. And I'm not going to make the same mistakes. I'm going to make new mistakes.",
+    "context": {
+      "en": "Tottenham, at his first press conference",
+      "es": "Tottenham, en su primera rueda de prensa",
+      "pt": "Tottenham, na primeira conferência de imprensa"
+    },
+    "tags": [
+      "humour",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11675/11866411/jose-mourinho-turning-over-new-leaf-at-tottenham-its-not-about-myself",
+        "publisher": "Sky Sports",
+        "date": "2019-11-21"
+      }
+    ]
+  },
+  {
+    "id": "referee-seemed-spanish",
+    "date": "2023-05-31",
+    "era": "roma",
+    "text": "It was an intense, vibrant game with a referee who seemed Spanish. It was yellow, yellow, yellow all the time.",
+    "context": {
+      "en": "Roma, after losing the Europa League final to Sevilla on penalties",
+      "es": "Roma, tras perder la final de la Europa League ante el Sevilla en los penaltis",
+      "pt": "Roma, depois de perder a final da Liga Europa com o Sevilha nos penáltis"
+    },
+    "tags": [
+      "referees",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11095/12894013/jose-mourinho-future-uncertain-at-roma-after-europa-league-final-defeat",
+        "publisher": "Sky Sports",
+        "date": "2023-05-31"
+      }
+    ]
+  },
+  {
+    "id": "your-dreams",
+    "date": "2024-06-02",
+    "era": "fenerbahce",
+    "text": "From the moment I signed my contract, your dreams are now my dreams.",
+    "context": {
+      "en": "Fenerbahçe, speaking to fans at his unveiling",
+      "es": "Fenerbahçe, ante la afición en su presentación",
+      "pt": "Fenerbahçe, aos adeptos na apresentação"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/12040/13145939/jose-mourinho-fenerbahce-appoint-former-manchester-united-and-chelsea-boss-as-coach",
+        "publisher": "Sky Sports",
+        "date": "2024-06-02"
+      },
+      {
+        "url": "https://global.espn.com/football/story/_/id/40261456/turkish-club-fenerbahce-announce-jose-mourinho-manager",
+        "publisher": "ESPN (AP)",
+        "date": "2024-06-02"
+      }
+    ]
   }
 ]

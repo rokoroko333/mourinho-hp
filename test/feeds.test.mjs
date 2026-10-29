@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNewsWithReport, langForRun, pickMatches, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, outletItems, fetchNewsWithReport, langForRun, pickMatches, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -198,4 +198,13 @@ test('fetchMatches merges completed and fixture lists without the bot User-Agent
   assert.deepEqual(userAgents, [undefined, undefined, undefined]);
   assert.equal(r.latest.id, '2');
   assert.equal(r.next.id, '3');
+});
+
+test('normalizeEvent keeps only https logo URLs', () => {
+  const e = ev('9', '2026-11-01T19:00Z', false);
+  e.competitions[0].competitors[0].team.logo = 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png';
+  e.competitions[0].competitors[1].team.logo = 'javascript:alert(1)';
+  const m = normalizeEvent(e);
+  assert.equal(m.home.logo, 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png');
+  assert.equal(m.away.logo, '');
 });

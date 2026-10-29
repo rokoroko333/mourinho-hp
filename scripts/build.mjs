@@ -379,6 +379,15 @@ function relatedCards(lang, kind, id) {
     .join('\n      ');
 }
 
+// The quote's era and tags as links; nothing at all when it has neither.
+function eraAndTags(era, tags, lang) {
+  const links = [
+    ...(era ? [`<a class="pill" href="${eraPaths(era.id)[lang]}">${esc(era.years)} · ${esc(era.club[lang])}</a>`] : []),
+    ...tags.map((tg) => `<a class="pill pill-tag" href="${tagPaths(tg)[lang]}">${esc(tagName(tg, lang))}</a>`),
+  ];
+  return links.length ? `<p class="quote-era">${links.join(' ')}</p>` : '';
+}
+
 // Where the quote was reported. Every quote must have at least one (test/build.test.mjs checks).
 function sourceList(sources, lang) {
   return `<p class="sources"><span class="card-label">${esc(ui[lang].detail.sources)}</span> ${sources
@@ -438,9 +447,7 @@ function detailPage(lang, kind, id) {
     <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
     ${q.original ? `<p class="quote-original" lang="${esc(q.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(q.original.text)}”</p>` : ''}
     <p class="quote-context">— ${esc(q.context[lang])}${year}</p>
-    <p class="quote-era">${era ? `<a class="pill" href="${eraPaths(era.id)[lang]}">${esc(era.years)} · ${esc(era.club[lang])}</a>` : ''}${q.tags
-      .map((tg) => ` <a class="pill pill-tag" href="${tagPaths(tg)[lang]}">${esc(tagName(tg, lang))}</a>`)
-      .join('')}</p>
+    ${eraAndTags(era, q.tags, lang)}
     ${sourceList(q.sources, lang)}`;
   } else {
     const e = episodes.find((x) => x.id === id);

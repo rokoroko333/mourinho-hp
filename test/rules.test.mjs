@@ -71,7 +71,7 @@ test('the site never redirects by browser language or country (bad for search); 
   }
   // Pages Functions and their helpers are where a server-side redirect by language would go.
   for (const f of await sourceFiles(['functions', 'lib'], /\.m?js$/)) {
-    assert.doesNotMatch(await read(f), /accept-language|\bcf\.country\b|cf-ipcountry/i, `${f} reads the visitor's language or country`);
+    assert.doesNotMatch(await read(f), /accept-language|\bcf\??\.country\b|cf-ipcountry/i, `${f} reads the visitor's language or country`);
   }
   const redirects = await readFile(join(ROOT, 'src/public/_redirects'), 'utf8');
   assert.doesNotMatch(redirects, /Language=|Accept-Language|\bCountry=/i, '_redirects redirects by language or country');
@@ -120,7 +120,7 @@ test('in-page click handlers on links keep Cmd/Ctrl/Shift-click and middle-click
       handlers++;
     }
     // A preventDefault() this test could not tie to a handler would go unchecked.
-    assert.equal(found, prevents, `${f}: a preventDefault() is outside any addEventListener handler this test understands`);
+    assert.equal(found, prevents, `${f}: a preventDefault() this test cannot tie to one handler (named functions and handlers nested in handlers are not understood); write the handler inline, or extend this test`);
   }
   assert.ok(handlers, 'no click handler with preventDefault() found; update this test if app.js changed');
 });

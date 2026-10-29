@@ -145,6 +145,17 @@ function quoteBody(q, lang) {
 <p class="quote-context">— ${esc(q.context[lang])}${q.year ? `, ${q.year}` : ''}</p>`;
 }
 
+// A link to the video on YouTube with its real thumbnail, so it works without JavaScript. app.js swaps
+// in a youtube-nocookie player on click, except for videos whose owner disabled embedding.
+// Every id was checked to exist with YouTube's oEmbed endpoint (401 there means embedding is off).
+function videoCard(v, lang) {
+  return `<a class="card card-link video" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener"${v.embed === false ? '' : ` data-video-id="${esc(v.id)}"`}>
+      <span class="video-thumb"><img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
+      <h3>${esc(v.title[lang])}</h3>
+      <p class="card-label">YouTube · ${esc(v.channel)}</p>
+    </a>`;
+}
+
 function homePage(lang) {
   const u = ui[lang];
   const h = u.home;
@@ -219,15 +230,7 @@ ${header(lang, pathsOf('home'), 'home')}
 <section id="videos" class="section">
   <div class="section-head"><div><h2>${esc(h.videosHeading)}</h2><p class="sub">${esc(h.videosSub)}</p></div></div>
   <div class="grid grid-3">
-    ${videos
-      .map(
-        (v) => `<a class="card card-link video" href="https://www.youtube.com/results?search_query=${encodeURIComponent(v.query)}" target="_blank" rel="noopener">
-      <span class="video-play">${icon.play}</span>
-      <h3>${esc(v.title[lang])}</h3>
-      <p class="card-label">YouTube</p>
-    </a>`,
-      )
-      .join('\n    ')}
+    ${videos.map((v) => videoCard(v, lang)).join('\n    ')}
   </div>
 </section>
 </div>

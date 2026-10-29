@@ -1,0 +1,203 @@
+[
+  {
+    "date": "1963-01-26",
+    "era": null,
+    "text": {
+      "en": "José Mourinho was born in Setúbal, Portugal.",
+      "es": "José Mourinho nació en Setúbal (Portugal).",
+      "pt": "José Mourinho nasceu em Setúbal."
+    },
+    "sources": [
+      {
+        "url": "https://www.asroma.com/en/news/61361/timeline-jose-mourinhos-incredible-career-so-far",
+        "publisher": "AS Roma",
+        "date": "2021-07-02"
+      },
+      {
+        "url": "https://www.abola.pt/noticias/26-de-janeiro-de-1963-2026012600132183725",
+        "publisher": "A Bola",
+        "date": "2026-01-26"
+      }
+    ]
+  },
+  {
+    "date": "2002-01-23",
+    "era": "porto",
+    "text": {
+      "en": "Mourinho was presented as FC Porto head coach.",
+      "es": "Mourinho fue presentado como entrenador del FC Porto.",
+      "pt": "Mourinho foi apresentado como treinador do FC Porto."
+    },
+    "sources": [
+      {
+        "url": "https://bolanarede.pt/nacional/porto/o-melhor-treinador-de-sempre-do-fc-porto-jose-mourinho",
+        "publisher": "Bola na Rede"
+      },
+      {
+        "url": "https://www.rtp.pt/rtpmemoria/replay/a-primeira-de-mourinho-por-rui-alves_186",
+        "publisher": "RTP Memória"
+      }
+    ]
+  },
+  {
+    "date": "2003-05-21",
+    "era": "porto",
+    "text": {
+      "en": "Porto beat Celtic 3-2 after extra time in Seville to win the UEFA Cup.",
+      "es": "El Oporto ganó la Copa de la UEFA al vencer 3-2 al Celtic en la prórroga en Sevilla.",
+      "pt": "O FC Porto venceu o Celtic por 3-2 após prolongamento em Sevilha e conquistou a Taça UEFA."
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/01d9-0e7230fabbe2-b18dbc2161c1-1000--baia-recalls-porto-s-coming-of-age-drama/",
+        "publisher": "UEFA",
+        "date": "2009-05-19"
+      },
+      {
+        "url": "https://www.tntsports.co.uk/football/celtic-v-porto-jose-mourinho-would-not-be-special-one-without-europa-league-s-greatest-night_sto7754667/story.shtml",
+        "publisher": "TNT Sports",
+        "date": "2020-05-21"
+      },
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/98023",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2004-03-09",
+    "era": "porto",
+    "text": {
+      "en": "Costinha's last-minute goal at Old Trafford knocked Manchester United out of the Champions League, and Mourinho ran down the touchline to celebrate.",
+      "es": "Un gol de Costinha en el último minuto en Old Trafford eliminó al Manchester United de la Liga de Campeones, y Mourinho lo celebró corriendo por la banda.",
+      "pt": "Um golo de Costinha no último minuto em Old Trafford eliminou o Manchester United da Liga dos Campeões, e Mourinho festejou a correr pela linha lateral."
+    },
+    "sources": [
+      {
+        "url": "https://www.mancunianmatters.co.uk/sport/09032014-a-decade-on-how-jose-mourinho-made-his-mark-on-manchester-and-changed-face-of-football-forever/",
+        "publisher": "Mancunian Matters",
+        "date": "2014-03-09"
+      },
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/143393",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2004-05-26",
+    "era": "porto",
+    "text": {
+      "en": "Porto beat Monaco 3-0 in Gelsenkirchen to win the UEFA Champions League.",
+      "es": "El Oporto ganó la Liga de Campeones al vencer 3-0 al Mónaco en Gelsenkirchen.",
+      "pt": "O FC Porto venceu o Mónaco por 3-0 em Gelsenkirchen e conquistou a Liga dos Campeões."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/151504",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2004-06-02",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Mourinho was unveiled as Chelsea manager and called himself \"a special one\" at his first press conference.",
+      "es": "Mourinho fue presentado como entrenador del Chelsea y se definió como \"a special one\" en su primera rueda de prensa.",
+      "pt": "Mourinho foi apresentado como treinador do Chelsea e definiu-se como \"a special one\" na primeira conferência de imprensa."
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/15116/11522231/special-one-remembering-jose-mourinho-s-first-ever-chelsea-press-conference",
+        "publisher": "Sky Sports",
+        "date": "2018-10-18"
+      },
+      {
+        "url": "https://www.sportsmole.co.uk/football/chelsea/on-this-day/feature/on-this-day-chelsea-appoint-jose-mourinho-for-the-first-time_401096.html",
+        "publisher": "Sports Mole",
+        "date": "2020-06-02"
+      }
+    ]
+  },
+  {
+    "date": "2005-04-30",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Two Frank Lampard goals at Bolton won Chelsea their first league title in 50 years.",
+      "es": "Dos goles de Frank Lampard en Bolton dieron al Chelsea su primera liga en 50 años.",
+      "pt": "Dois golos de Frank Lampard em Bolton deram ao Chelsea o primeiro título de campeão em 50 anos."
+    },
+    "sources": [
+      {
+        "url": "https://www.sportinglife.com/football/news/on-this-day-joses-first-pl-title/179518",
+        "publisher": "Sporting Life",
+        "date": "2020-04-30"
+      },
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/155204",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2010-04-28",
+    "era": "inter",
+    "text": {
+      "en": "Inter lost 1-0 at Camp Nou but beat Barcelona 3-2 on aggregate to reach the Champions League final.",
+      "es": "El Inter perdió 1-0 en el Camp Nou, pero eliminó al Barcelona por 3-2 en el global y se clasificó para la final de la Liga de Campeones.",
+      "pt": "O Inter perdeu por 1-0 no Camp Nou, mas eliminou o Barcelona por 3-2 no total e chegou à final da Liga dos Campeões."
+    },
+    "sources": [
+      {
+        "url": "https://www.inter.it/en/news/2020-04-28-10-unforgettable-moments-from-barcelona-inter",
+        "publisher": "Inter",
+        "date": "2020-04-28"
+      },
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/290736",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2010-05-22",
+    "era": "inter",
+    "text": {
+      "en": "Two Diego Milito goals beat Bayern Munich 2-0 in Madrid and completed Inter's treble with the Champions League.",
+      "es": "Dos goles de Diego Milito ante el Bayern de Múnich (2-0) en Madrid dieron al Inter la Liga de Campeones y el triplete.",
+      "pt": "Dois golos de Diego Milito frente ao Bayern de Munique (2-0) em Madrid deram ao Inter a Liga dos Campeões e o triplete."
+    },
+    "sources": [
+      {
+        "url": "https://inter.it/en/news/2020-05-22-10-unforgettable-moments-from-inter-2-0-bayern",
+        "publisher": "Inter",
+        "date": "2020-05-22"
+      },
+      {
+        "url": "https://africa.espn.com/football/match/_/gameId/292088/internazionale-bayern-munich",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2022-05-25",
+    "era": "roma",
+    "text": {
+      "en": "Nicolò Zaniolo's goal beat Feyenoord 1-0 in Tirana, and Roma won the first UEFA Europa Conference League.",
+      "es": "Un gol de Nicolò Zaniolo ante el Feyenoord (1-0) en Tirana dio a la Roma la primera Conference League.",
+      "pt": "Um golo de Nicolò Zaniolo frente ao Feyenoord (1-0) em Tirana deu à Roma a primeira Liga Conferência."
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/match/_/gameId/634941",
+        "publisher": "ESPN"
+      },
+      {
+        "url": "https://www.uefa.com/news/0275-151a9602a6b8-4aebcb192a62-1000--final-what-to-look-out-for/",
+        "publisher": "UEFA",
+        "date": "2022-05-25"
+      }
+    ]
+  }
+]

@@ -77,6 +77,20 @@
   suggestLanguage();
   if (!strings) return; // Only the home, news and matches pages have the dynamic sections below.
 
+  // On this day: the HTML holds the event picked on the build's date (UTC). Builds are not daily, so pick
+  // again for the visitor's UTC day and swap the text in only when it differs.
+  const otd = readJson('otd-data');
+  const otdCard = $('#on-this-day');
+  if (otd && otdCard && otdCard.dataset.built !== new Date().toISOString().slice(0, 10)) {
+    const today = new Date().toISOString().slice(5, 10);
+    const same = otd.events.find((e) => e.date.slice(5) === today);
+    const e = same || otd.events.find((x) => x.date.slice(5) > today) || otd.events[0];
+    $('#otd-label').textContent = (same ? otd.labels.today : otd.labels.next).replace('{day}', e.day);
+    $('#otd-year').textContent = e.date.slice(0, 4);
+    $('#otd-text').textContent = e.text;
+    $('#otd-link').setAttribute('href', e.path);
+  }
+
   // Quote & story of the day
   const daily = readJson('daily-data');
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];

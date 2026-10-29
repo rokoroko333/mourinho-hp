@@ -4,7 +4,7 @@
 //
 // Rendered with the local Chrome (scripts/chrome.mjs) and committed, so `npm run build`, CI and
 // Cloudflare never need a browser. test/build.test.mjs fails if a quote has no image.
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -56,15 +56,19 @@ function defaultImage() {
 
 const chrome = findChrome();
 const work = mkdtempSync(join(tmpdir(), 'og-'));
-rmSync(OUT, { recursive: true, force: true });
-mkdirSync(join(OUT, 'quotes'), { recursive: true });
+// Everything is rendered into `next` first and only then swapped in, so a Chrome failure halfway
+// leaves the committed images untouched.
+const next = join(work, 'og');
+mkdirSync(join(next, 'quotes'), { recursive: true });
 try {
   const jobs = [['default', defaultImage()], ...quotes.map((q) => [`quotes/${q.id}`, quoteImage(q)])];
   for (const [name, html] of jobs) {
     const src = join(work, `${name.replace('/', '-')}.html`);
     writeFileSync(src, html);
-    capture(chrome, pathToFileURL(src).href, { ...OG_SIZE, file: join(OUT, `${name}.png`), waitMs: 500 });
+    capture(chrome, pathToFileURL(src).href, { ...OG_SIZE, file: join(next, `${name}.png`), waitMs: 500 });
   }
+  rmSync(OUT, { recursive: true, force: true });
+  cpSync(next, OUT, { recursive: true }); // a copy, since the temp dir may be on another disk
   console.log(`Wrote ${jobs.length} share images to ${OUT}`);
 } finally {
   rmSync(work, { recursive: true, force: true });

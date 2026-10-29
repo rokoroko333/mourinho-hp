@@ -42,7 +42,11 @@
     if (copy && navigator.clipboard) {
       copy.hidden = false;
       copy.addEventListener('click', () =>
-        navigator.clipboard.writeText(url).then(() => { copy.textContent = copy.dataset.copied; }, () => {}),
+        navigator.clipboard.writeText(url).then(() => {
+          copy.textContent = copy.dataset.copied;
+          // Announced by screen readers, which do not report a button's label changing.
+          box.querySelector('.share-status').textContent = copy.dataset.copied;
+        }, () => {}),
       );
     }
   }

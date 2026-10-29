@@ -330,6 +330,7 @@ function shareButtons(lang, url, title, text) {
         <button type="button" class="btn btn-gold btn-sm share-native" hidden>${esc(u.home.share)}</button>
         ${links.map(([name, href]) => `<a class="btn btn-dark btn-sm" href="${esc(href)}" target="_blank" rel="noopener">${name}</a>`).join('\n        ')}
         <button type="button" class="btn btn-dark btn-sm share-copy" data-copied="${esc(u.detail.copied)}" hidden>${esc(u.detail.copy)}</button>
+        <span class="sr-only share-status" role="status"></span>
       </div>
     </div>`;
 }

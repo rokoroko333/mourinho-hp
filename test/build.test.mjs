@@ -300,7 +300,7 @@ test('the trophies page lists every trophy with its source in all three language
       const item = html.slice(html.indexOf(`id="${t.id}"`), html.indexOf('</li>', html.indexOf(`id="${t.id}"`)));
       assert.ok(item.length > 0, `${lang}: ${t.id} listed`);
       assert.ok(item.includes(t.competition[lang].replace(/'/g, '&#39;')), `${lang}: ${t.id} name`);
-      assert.ok(item.includes(`href="${t.sources[0].url}"`), `${lang}: ${t.id} source link`);
+      for (const s of t.sources) assert.ok(item.includes(`href="${s.url}"`), `${lang}: ${t.id} source ${s.url}`);
     }
   }
 });

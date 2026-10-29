@@ -38,7 +38,7 @@
       "kickoffIn": "Kick-off in",
       "countdownUnits": { "d": "d", "h": "h", "m": "m" }
     },
-    "trophies": { "title": "José Mourinho's trophies as a head coach | Infinito Mourinho", "description": "Every trophy José Mourinho has won as a head coach, club by club and season by season, each with a link to where it was reported.", "heading": "Trophies", "sub": "Every title as a head coach, with its source", "count": "{count} trophies listed", "source": "Source" },
+    "trophies": { "title": "José Mourinho's trophies as a head coach | Infinito Mourinho", "description": "Every trophy José Mourinho has won as a head coach, club by club and season by season, each with a link to where it was reported.", "heading": "Trophies", "sub": "Every title as a head coach, with its source", "count": "{count} trophies listed" },
     "history": {
       "title": "History of José Mourinho – full managerial career timeline | Infinito Mourinho",
       "description": "From Bobby Robson's interpreter to two Champions Leagues and a return to Real Madrid: every club, every trophy and the defining moments of José Mourinho's career.",
@@ -102,7 +102,7 @@
       "kickoffIn": "Faltan",
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
-    "trophies": { "title": "Los títulos de José Mourinho como entrenador | Infinito Mourinho", "description": "Todos los títulos que José Mourinho ha ganado como entrenador, club a club y temporada a temporada, con un enlace a dónde se publicó cada uno.", "heading": "Títulos", "sub": "Cada título como entrenador, con su fuente", "count": "{count} títulos en la lista", "source": "Fuente" },
+    "trophies": { "title": "Los títulos de José Mourinho como entrenador | Infinito Mourinho", "description": "Todos los títulos que José Mourinho ha ganado como entrenador, club a club y temporada a temporada, con un enlace a dónde se publicó cada uno.", "heading": "Títulos", "sub": "Cada título como entrenador, con su fuente", "count": "{count} títulos en la lista" },
     "history": {
       "title": "Historia de José Mourinho – trayectoria completa como entrenador | Infinito Mourinho",
       "description": "De traductor de Bobby Robson a dos Champions y la vuelta al Real Madrid: todos los clubes, todos los títulos y los momentos clave de la carrera de José Mourinho.",
@@ -166,7 +166,7 @@
       "kickoffIn": "Faltam",
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
-    "trophies": { "title": "Os títulos de José Mourinho como treinador | Infinito Mourinho", "description": "Todos os títulos que José Mourinho ganhou como treinador, clube a clube e época a época, cada um com uma ligação para onde foi publicado.", "heading": "Títulos", "sub": "Cada título como treinador, com a sua fonte", "count": "{count} títulos na lista", "source": "Fonte" },
+    "trophies": { "title": "Os títulos de José Mourinho como treinador | Infinito Mourinho", "description": "Todos os títulos que José Mourinho ganhou como treinador, clube a clube e época a época, cada um com uma ligação para onde foi publicado.", "heading": "Títulos", "sub": "Cada título como treinador, com a sua fonte", "count": "{count} títulos na lista" },
     "history": {
       "title": "História de José Mourinho – carreira completa como treinador | Infinito Mourinho",
       "description": "De tradutor de Bobby Robson a duas Ligas dos Campeões e ao regresso ao Real Madrid: todos os clubes, todos os títulos e os momentos decisivos da carreira de José Mourinho.",

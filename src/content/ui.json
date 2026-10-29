@@ -5,8 +5,8 @@
     "langName": "English",
     "siteName": "Infinito Mourinho",
     "tagline": "Of Mourinho, by Mourinho, for Mourinho",
-    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag", "trophies": "trophies", "news": "news", "matches": "matches" },
-    "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History", "trophies": "Trophies" },
+    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag", "trophies": "trophies", "stats": "stats", "news": "news", "matches": "matches" },
+    "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History", "trophies": "Trophies", "stats": "Stats" },
     "home": {
       "title": "Infinito Mourinho – José Mourinho fan hub: news, quotes & history",
       "description": "Fan hub for José Mourinho: the latest news in English, his greatest quotes and stories, Real Madrid match results and the full career history of the Special One.",
@@ -39,6 +39,7 @@
       "countdownUnits": { "d": "d", "h": "h", "m": "m" }
     },
     "trophies": { "title": "José Mourinho's trophies as a head coach | Infinito Mourinho", "description": "Every trophy José Mourinho has won as a head coach, club by club and season by season, each with a link to where it was reported.", "heading": "Trophies", "sub": "Every title as a head coach, with its source", "count": "{count} trophies listed" },
+    "stats": { "title": "José Mourinho in numbers: club-by-club record and milestones | Infinito Mourinho", "description": "José Mourinho's record at every club he has managed, his 1,000-match milestone and his best-known records, each number with its source and the date it holds for.", "heading": "Mourinho in numbers", "sub": "Every number with its source and date", "record": "Record", "recordLine": "{matches} matches, {wins} wins ({rate})", "drawsLosses": "{draws} draws, {losses} defeats", "milestone": "matches as a head coach: {wins} wins, {draws} draws and {losses} defeats ({rate} won).", "asOf": "As of {date}.", "recordsHeading": "Records", "clubsHeading": "Club by club", "clubsSub": "Completed spells, all competitions", "club": "Club", "matches": "P", "wins": "W", "draws": "D", "losses": "L", "rate": "Won", "dashNote": "— : the sources disagree on the draws and defeats for this spell, so only matches and wins are shown.", "currentNote": "His current spell at Real Madrid (from 2026) is not in the table yet. It will be added by hand with the date it holds for.", "link": "Mourinho in numbers" },
     "news": { "title": "José Mourinho news – latest headlines | Infinito Mourinho", "description": "The latest José Mourinho headlines from the English-language press, updated automatically, each linking to the original article.", "heading": "News", "all": "All the news" },
     "matches": { "title": "Real Madrid results and fixtures this season | Infinito Mourinho", "description": "Real Madrid's results and upcoming fixtures this season under José Mourinho, updated automatically.", "heading": "Matches", "sub": "This season's results and upcoming fixtures, updated automatically.", "fixtures": "Upcoming fixtures", "results": "Results this season", "tbd": "TBC", "all": "All results and fixtures" },
     "history": {
@@ -71,8 +72,8 @@
     "langName": "Español",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema", "trophies": "es/titulos", "news": "es/noticias", "matches": "es/partidos" },
-    "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia", "trophies": "Títulos" },
+    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema", "trophies": "es/titulos", "stats": "es/estadisticas", "news": "es/noticias", "matches": "es/partidos" },
+    "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia", "trophies": "Títulos", "stats": "Estadísticas" },
     "home": {
       "title": "Infinito Mourinho – web de fans de José Mourinho: noticias, frases e historia",
       "description": "La web de fans de José Mourinho: las últimas noticias en español, sus frases y anécdotas más míticas, los partidos del Real Madrid y la historia completa del Special One.",
@@ -105,6 +106,7 @@
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
     "trophies": { "title": "Los títulos de José Mourinho como entrenador | Infinito Mourinho", "description": "Todos los títulos que José Mourinho ha ganado como entrenador, club a club y temporada a temporada, con un enlace a dónde se publicó cada uno.", "heading": "Títulos", "sub": "Cada título como entrenador, con su fuente", "count": "{count} títulos en la lista" },
+    "stats": { "title": "José Mourinho en cifras: balance club a club y hitos | Infinito Mourinho", "description": "El balance de José Mourinho en cada club que ha dirigido, su partido número 1.000 y sus récords más conocidos, cada cifra con su fuente y la fecha a la que corresponde.", "heading": "Mourinho en cifras", "sub": "Cada cifra con su fuente y su fecha", "record": "Balance", "recordLine": "{matches} partidos, {wins} victorias ({rate})", "drawsLosses": "{draws} empates, {losses} derrotas", "milestone": "partidos como entrenador: {wins} victorias, {draws} empates y {losses} derrotas ({rate} de victorias).", "asOf": "A fecha de {date}.", "recordsHeading": "Récords", "clubsHeading": "Club a club", "clubsSub": "Etapas terminadas, todas las competiciones", "club": "Club", "matches": "PJ", "wins": "G", "draws": "E", "losses": "P", "rate": "Victorias", "dashNote": "— : las fuentes no coinciden en los empates y derrotas de esta etapa, así que solo se muestran los partidos y las victorias.", "currentNote": "Su etapa actual en el Real Madrid (desde 2026) aún no está en la tabla. Se añadirá a mano, con la fecha a la que corresponde.", "link": "Mourinho en cifras" },
     "news": { "title": "Noticias de José Mourinho – últimos titulares | Infinito Mourinho", "description": "Los últimos titulares sobre José Mourinho de la prensa en español, actualizados automáticamente y con enlace al artículo original.", "heading": "Noticias", "all": "Todas las noticias" },
     "matches": { "title": "Resultados y calendario del Real Madrid esta temporada | Infinito Mourinho", "description": "Los resultados y próximos partidos del Real Madrid de José Mourinho esta temporada, actualizados automáticamente.", "heading": "Partidos", "sub": "Resultados de esta temporada y próximos partidos, actualizados automáticamente.", "fixtures": "Próximos partidos", "results": "Resultados de esta temporada", "tbd": "Por confirmar", "all": "Todos los resultados y partidos" },
     "history": {
@@ -137,8 +139,8 @@
     "langName": "Português",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema", "trophies": "pt/titulos", "news": "pt/noticias", "matches": "pt/jogos" },
-    "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História", "trophies": "Títulos" },
+    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema", "trophies": "pt/titulos", "stats": "pt/estatisticas", "news": "pt/noticias", "matches": "pt/jogos" },
+    "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História", "trophies": "Títulos", "stats": "Estatísticas" },
     "home": {
       "title": "Infinito Mourinho – site de fãs de José Mourinho: notícias, frases e história",
       "description": "O site de fãs de José Mourinho: as últimas notícias em português, as frases e histórias mais icónicas, os jogos do Real Madrid e a história completa do Special One.",
@@ -171,6 +173,7 @@
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
     "trophies": { "title": "Os títulos de José Mourinho como treinador | Infinito Mourinho", "description": "Todos os títulos que José Mourinho ganhou como treinador, clube a clube e época a época, cada um com uma ligação para onde foi publicado.", "heading": "Títulos", "sub": "Cada título como treinador, com a sua fonte", "count": "{count} títulos na lista" },
+    "stats": { "title": "José Mourinho em números: registo clube a clube e marcos | Infinito Mourinho", "description": "O registo de José Mourinho em cada clube que treinou, o jogo número 1.000 e os seus recordes mais conhecidos, cada número com a sua fonte e a data a que se refere.", "heading": "Mourinho em números", "sub": "Cada número com a sua fonte e data", "record": "Registo", "recordLine": "{matches} jogos, {wins} vitórias ({rate})", "drawsLosses": "{draws} empates, {losses} derrotas", "milestone": "jogos como treinador: {wins} vitórias, {draws} empates e {losses} derrotas ({rate} de vitórias).", "asOf": "Em {date}.", "recordsHeading": "Recordes", "clubsHeading": "Clube a clube", "clubsSub": "Passagens terminadas, todas as competições", "club": "Clube", "matches": "J", "wins": "V", "draws": "E", "losses": "D", "rate": "Vitórias", "dashNote": "— : as fontes não coincidem nos empates e derrotas desta passagem, por isso só se mostram os jogos e as vitórias.", "currentNote": "A passagem atual pelo Real Madrid (desde 2026) ainda não está na tabela. Será acrescentada à mão, com a data a que se refere.", "link": "Mourinho em números" },
     "news": { "title": "Notícias de José Mourinho – últimas manchetes | Infinito Mourinho", "description": "As últimas manchetes sobre José Mourinho da imprensa em português, atualizadas automaticamente e com ligação para o artigo original.", "heading": "Notícias", "all": "Todas as notícias" },
     "matches": { "title": "Resultados e calendário do Real Madrid nesta época | Infinito Mourinho", "description": "Os resultados e os próximos jogos do Real Madrid de José Mourinho nesta época, atualizados automaticamente.", "heading": "Jogos", "sub": "Resultados desta época e próximos jogos, atualizados automaticamente.", "fixtures": "Próximos jogos", "results": "Resultados desta época", "tbd": "A confirmar", "all": "Todos os resultados e jogos" },
     "history": {

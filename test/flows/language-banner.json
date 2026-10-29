@@ -1,0 +1,11 @@
+{
+  "description": "A Spanish-speaking visitor on the English home page is offered the Spanish page, and closing the offer removes it",
+  "languages": ["es-ES", "es"],
+  "steps": [
+    { "goto": "/" },
+    { "visible": ".lang-banner" },
+    { "attr": { "selector": ".lang-banner a", "name": "href" } },
+    { "click": ".lang-banner button" },
+    { "hidden": ".lang-banner" }
+  ]
+}

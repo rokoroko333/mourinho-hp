@@ -25,7 +25,7 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 - `functions/api/news.js`・`functions/api/matches.js` KV をエッジキャッシュ経由で返す Pages Functions（`lib/serve.js`）。
   ブラウザが呼ぶのは自サイトの `/api/*` だけ。
 - `docs/dev-flow.md` 開発フローの詳細。`docs/review-lessons.md` 過去の指摘メモ。
-- `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/hooks/verify.sh` 作業終了時の自動検証。
+- `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/skills/verify-flow/` 実画面での検証（`test/flows/`）。`.claude/hooks/verify.sh` 作業終了時の自動検証。
 
 デプロイ手順（Pages プロジェクト `infinito-mourinho`、Worker `infinito-mourinho-feeds`、共有の KV `FEEDS`）は `README.md` を読む。
 
@@ -35,6 +35,7 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 - ビルド: `npm run build`。`SITE_URL` に本番のオリジンを設定する（未設定なら pages.dev の URL）
 - テスト: `npm test`（フィード解析とフォールバックの単体テスト、`node --test`）
 - ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み）
+- 実画面の検証: `npm run dev` のあと `npm run verify`（`test/flows/*.json`、PASS・FAIL・BLOCKED を返す）
 - Worker のローカル実行: `npm run feeds:dev` のあと `curl "http://localhost:8787/__scheduled"`
 
 lint と型チェックのスクリプトはまだない。`package.json` に存在するスクリプトだけが、Hooks で自動実行されます。

@@ -1,0 +1,11 @@
+{
+  "description": "On a phone-sized screen the navigation starts closed and the menu button opens it",
+  "viewport": { "width": 500, "height": 900 },
+  "steps": [
+    { "goto": "/" },
+    { "hidden": "#site-nav" },
+    { "click": ".menu-btn" },
+    { "attr": { "selector": ".menu-btn", "name": "aria-expanded", "equals": "true" } },
+    { "visible": "#site-nav" }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "description": "Shuffle on the home page shows another quote, and its Read more link goes to that quote's page",
+  "steps": [
+    {
+      "goto": "/"
+    },
+    {
+      "attr": {
+        "selector": "#daily-quote-link",
+        "name": "href",
+        "save": "before"
+      }
+    },
+    {
+      "eval": "(() => { const a = document.querySelector('#daily-quote-link'), first = a.getAttribute('href'); for (let i = 0; i < 20; i++) { document.querySelector('#shuffle').click(); if (a.getAttribute('href') !== first) return true; } })()"
+    },
+    {
+      "attr": {
+        "selector": "#daily-quote-link",
+        "name": "href",
+        "changedFrom": "before"
+      }
+    },
+    {
+      "eval": "fetch(document.querySelector('#daily-quote-link').href).then((r) => r.ok)"
+    }
+  ]
+}

@@ -479,3 +479,46 @@ test('rival pages exist in three languages, are in the sitemap and show every so
     }
   }
 });
+
+// On this day: only exact calendar days from the sources, each event under its month in all three languages.
+test('every on-this-day event has an exact date, a known era, text in three languages and a source', async () => {
+  const events = await load('onthisday.json');
+  const eras = new Set((await load('history.json')).map((h) => h.id));
+  const dates = new Set();
+  for (const e of events) {
+    assert.match(e.date, /^\d{4}-\d{2}-\d{2}$/, `${e.date}: exact date`);
+    // A round trip, since Date.parse accepts days like 2001-02-31.
+    assert.equal(new Date(`${e.date}T00:00:00Z`).toISOString().slice(0, 10), e.date, `${e.date}: a real day`);
+    assert.ok(!dates.has(e.date), `${e.date}: one event per date`);
+    dates.add(e.date);
+    assert.ok(e.era === null || eras.has(e.era), `${e.date}: era ${e.era}`);
+    for (const l of ['en', 'es', 'pt']) assert.ok(e.text?.[l], `${e.date}: text in ${l}`);
+    assert.ok(e.sources?.length > 0, `${e.date}: at least one source`);
+    for (const s of e.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${e.date}: source url`);
+  }
+});
+
+test('month pages list their events with sources, and the home page shows one event', async () => {
+  await build();
+  const events = await load('onthisday.json');
+  const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
+  const months = {
+    en: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
+    es: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+    pt: ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+  };
+  for (const [lang, base, home] of [['en', 'on-this-day', ''], ['es', 'es/efemerides', 'es'], ['pt', 'pt/neste-dia', 'pt']]) {
+    for (const e of events) {
+      const path = `${base}/${months[lang][Number(e.date.slice(5, 7)) - 1]}`;
+      assert.ok(xml.includes(`/${path}/</loc>`), `${path}: in the sitemap`);
+      const html = await page(path);
+      const at = html.indexOf(`id="${e.date}"`);
+      assert.ok(at > 0, `${path}: ${e.date}`);
+      const item = html.slice(at, html.indexOf('</li>', at));
+      for (const s of e.sources) assert.ok(item.includes(`href="${s.url}"`), `${path}: ${e.date} source`);
+    }
+    const front = await page(home);
+    const card = front.slice(front.indexOf('id="on-this-day"'), front.indexOf('</article>', front.indexOf('id="on-this-day"')));
+    assert.ok(events.some((e) => card.includes(e.text[lang].replace(/'/g, '&#39;').replace(/"/g, '&quot;'))), `${lang}: home shows an event`);
+  }
+});

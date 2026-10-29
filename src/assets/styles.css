@@ -241,3 +241,8 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .h2h { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 8px 0; }
 .h2h p { margin: 0; display: flex; flex-direction: column; gap: 6px; }
 @media (max-width: 600px) { .h2h { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* On this day */
+.otd { margin-top: 24px; }
+.otd p { margin: 0; }
+.otd-year { font-size: 40px; font-weight: 900; line-height: 1; color: var(--gold); }

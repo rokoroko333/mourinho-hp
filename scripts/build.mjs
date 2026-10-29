@@ -12,12 +12,14 @@ const OUT = join(ROOT, 'dist');
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt'];
-const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks'];
+const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks', 'onthisday'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
-const [ui, quotes, episodes, history, videos, trophies, stats, remarks, rivals] = await Promise.all(
-  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json', 'remarks.json', 'rivals.json'].map(load),
+const [ui, quotes, episodes, history, videos, trophies, stats, remarks, rivals, onThisDay] = await Promise.all(
+  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json', 'remarks.json', 'rivals.json', 'onthisday.json'].map(load),
 );
+// In calendar order (month and day), then by year.
+onThisDay.sort((a, b) => a.date.slice(5).localeCompare(b.date.slice(5)) || a.date.localeCompare(b.date));
 // Newest first. Added by hand with their sources, never from the feeds (docs/plans/phase2.md, item 6).
 remarks.sort((a, b) => b.date.localeCompare(a.date));
 
@@ -248,6 +250,7 @@ ${remarks.length ? `<section id="remarks" class="section">
       <div class="card-foot daily-foot">${more(detailPaths('stories', e.id)[lang], u.detail.readMore, 'daily-episode-link')}</div>
     </article>
   </div>
+  ${otdCard(lang)}
   <p class="more"><a href="${pathOf(lang, 'quotes')}">${esc(h.allQuotes)} ${icon.arrow}</a></p>
   <script type="application/json" id="daily-data">${JSON.stringify(daily).replace(/</g, '\\u003c')}</script>
   <script type="application/json" id="strings">${JSON.stringify(strings).replace(/</g, '\\u003c')}</script>
@@ -692,6 +695,105 @@ ${header(lang, pathsOf('remarks'), 'remarks')}
 ${footer(lang)}`;
 }
 
+// On this day: /on-this-day/may/, /es/efemerides/mayo/, /pt/neste-dia/maio/. Month slugs are the month's
+// name in each language, without accents ("março" -> "marco").
+const monthName = (m, lang) =>
+  new Intl.DateTimeFormat(lang, { month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(2000, m - 1, 1)));
+const monthSlug = (m, lang) => monthName(m, lang).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const monthPaths = (m) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'onthisday')}${monthSlug(m, l)}/`]));
+const otdMonths = [...new Set(onThisDay.map((e) => Number(e.date.slice(5, 7))))];
+const dayMonth = (mmdd, lang) =>
+  new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`2000-${mmdd}T00:00:00Z`));
+
+// Today's event (UTC), or the next one in the calendar when today has none. The build picks with its own
+// date; app.js picks again from the embedded list when the visitor's UTC day differs (builds are not daily).
+// Keep the two in step: app.js repeats this rule (search for "On this day" there).
+function pickOnThisDay(events, now = new Date()) {
+  const today = now.toISOString().slice(5, 10);
+  const same = events.find((e) => e.date.slice(5) === today);
+  return same ? { event: same, today: true } : { event: events.find((e) => e.date.slice(5) > today) || events[0], today: false };
+}
+
+function otdCard(lang) {
+  if (!onThisDay.length) return '';
+  const p = ui[lang].onthisday;
+  const { event: e, today } = pickOnThisDay(onThisDay);
+  const data = {
+    labels: { today: p.today, next: p.next },
+    events: onThisDay.map((x) => ({
+      date: x.date,
+      day: dayMonth(x.date.slice(5), lang),
+      text: x.text[lang],
+      path: monthPaths(Number(x.date.slice(5, 7)))[lang],
+    })),
+  };
+  return `<article class="card otd" id="on-this-day" data-built="${new Date().toISOString().slice(0, 10)}">
+    <p class="card-label" id="otd-label">${esc(fill(today ? p.today : p.next, { day: dayMonth(e.date.slice(5), lang) }))}</p>
+    <p class="otd-year" id="otd-year">${esc(e.date.slice(0, 4))}</p>
+    <p id="otd-text">${esc(e.text[lang])}</p>
+    <div class="card-foot"><a class="more-link" id="otd-link" href="${monthPaths(Number(e.date.slice(5, 7)))[lang]}">${esc(p.more)} ${icon.arrow}</a></div>
+    <script type="application/json" id="otd-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+  </article>`;
+}
+
+function otdEvent(e, lang) {
+  return `<li class="card trophy" id="${e.date}">
+        <p class="card-label"><time datetime="${e.date}">${esc(longDate(e.date, lang))}</time>${
+          e.era ? ` · <a href="${eraPaths(e.era)[lang]}">${esc(history.find((h) => h.id === e.era).club[lang])}</a>` : ''
+        }</p>
+        <p>${esc(e.text[lang])}</p>
+        ${sourceList(e.sources, lang)}
+      </li>`;
+}
+
+function onThisDayPage(lang) {
+  const u = ui[lang];
+  const p = u.onthisday;
+  return `${head(lang, pathsOf('onthisday'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('onthisday'), 'history')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+  </div>
+  <nav class="tag-list" aria-label="${esc(p.months)}">
+    ${otdMonths.map((m) => `<a class="pill" href="${monthPaths(m)[lang]}">${esc(monthName(m, lang))}</a>`).join(' ')}
+  </nav>
+  ${otdMonths
+    .map(
+      (m) => `<section class="section">
+    <div class="section-head"><h2><a href="${monthPaths(m)[lang]}">${esc(monthName(m, lang))}</a></h2></div>
+    <ul class="trophy-list">
+      ${onThisDay.filter((e) => Number(e.date.slice(5, 7)) === m).map((e) => otdEvent(e, lang)).join('\n      ')}
+    </ul>
+  </section>`,
+    )
+    .join('\n  ')}
+</main>
+${footer(lang)}`;
+}
+
+function monthPage(lang, m) {
+  const u = ui[lang];
+  const p = u.onthisday;
+  const name = monthName(m, lang);
+  const t = { title: fill(p.monthTitle, { month: name }), description: fill(p.monthDescription, { month: name }) };
+  return `${head(lang, monthPaths(m), t)}
+<body data-lang="${lang}">
+${header(lang, monthPaths(m), 'history')}
+<main class="wrap page">
+  <p class="more back"><a href="${pathOf(lang, 'onthisday')}">${icon.arrow}${esc(p.back)}</a></p>
+  <div class="page-head">
+    <h1>${esc(fill(p.monthHeading, { month: name }))}</h1>
+  </div>
+  <ul class="trophy-list">
+    ${onThisDay.filter((e) => Number(e.date.slice(5, 7)) === m).map((e) => otdEvent(e, lang)).join('\n    ')}
+  </ul>
+</main>
+${footer(lang)}`;
+}
+
 // Rival pages: /rivals/guardiola/, /es/rivales/guardiola/, /pt/rivais/guardiola/.
 const rivalPaths = (id) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'rivals')}${id}/`]));
 
@@ -944,7 +1046,7 @@ await rm(OUT, { recursive: true, force: true });
 await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
-const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, rivals: rivalsPage, remarks: remarksPage };
+const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, rivals: rivalsPage, remarks: remarksPage, onthisday: onThisDayPage };
 // Built like every page, but never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },
@@ -955,6 +1057,7 @@ const routes = [
   ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),
   ...TAGS.map((tag) => ({ paths: tagPaths(tag), changefreq: 'monthly', render: (lang) => tagPage(lang, tag) })),
   ...rivals.map((r) => ({ paths: rivalPaths(r.id), changefreq: 'monthly', render: (lang) => rivalPage(lang, r) })),
+  ...otdMonths.map((m) => ({ paths: monthPaths(m), changefreq: 'monthly', render: (lang) => monthPage(lang, m) })),
   ...ITEMS.map(({ kind, id }) => ({
     paths: detailPaths(kind, id),
     changefreq: 'yearly',

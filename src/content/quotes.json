@@ -804,5 +804,234 @@
         "date": "2024-06-02"
       }
     ]
+  },
+  {
+    "id": "people-know-your-name",
+    "date": "2003",
+    "era": "porto",
+    "text": "It is no secret that I want to go abroad one day, and this UEFA Cup final can mean a lot. If you win a European competition, people know your name and recognise your work.",
+    "context": {
+      "en": "FC Porto, before the UEFA Cup final against Celtic",
+      "es": "FC Porto, antes de la final de la Copa de la UEFA ante el Celtic",
+      "pt": "FC Porto, antes da final da Taça UEFA contra o Celtic"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0191-0e6aad82ca9f-79411f506d75-1000--mourinho-pushing-porto-on",
+        "publisher": "UEFA",
+        "date": "2003-05-20"
+      }
+    ]
+  },
+  {
+    "id": "image-of-their-coach",
+    "date": "2003",
+    "era": "porto",
+    "text": "I think that in two years maximum a team has to be playing in the image of their coach, doing things with their eyes closed and that isn't about having people working together for years. It's about hard work and good practice sessions.",
+    "context": {
+      "en": "FC Porto, on how quickly a coach should shape a team",
+      "es": "FC Porto, sobre cuánto tarda un entrenador en dar forma a un equipo",
+      "pt": "FC Porto, sobre quanto tempo um treinador precisa para moldar uma equipa"
+    },
+    "tags": [
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0191-0e6aad82ca9f-79411f506d75-1000--mourinho-pushing-porto-on",
+        "publisher": "UEFA",
+        "date": "2003-05-20"
+      }
+    ]
+  },
+  {
+    "id": "learned-from-robson-and-van-gaal",
+    "date": "2010",
+    "era": "inter",
+    "text": "I learned a lot from Bobby Robson and a great deal from Louis Van Gaal as well. Nothing was left to chance, everything was programmed in great detail.",
+    "context": {
+      "en": "Inter, before the Champions League final against Van Gaal’s Bayern, looking back on his years at Barcelona",
+      "es": "Inter, antes de la final de la Champions ante el Bayern de Van Gaal, recordando sus años en el Barcelona",
+      "pt": "Inter, antes da final da Liga dos Campeões com o Bayern de Van Gaal, a recordar os anos no Barcelona"
+    },
+    "tags": [
+      "tactics"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/news/mourinho-out-put-one-over-old-master",
+        "publisher": "FourFourTwo",
+        "date": "2010-05-20"
+      }
+    ]
+  },
+  {
+    "id": "non-sono-un-pirla",
+    "date": "2008",
+    "era": "inter",
+    "text": "I am not an idiot.",
+    "original": {
+      "lang": "it",
+      "text": "Non sono un pirla"
+    },
+    "context": {
+      "en": "Inter, at his first press conference, in Milanese dialect",
+      "es": "Inter, en su primera rueda de prensa, en dialecto milanés",
+      "pt": "Inter, na primeira conferência de imprensa, em dialeto milanês"
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/features/jose-swings-san-siro-expected-suave-and-swagger",
+        "publisher": "FourFourTwo",
+        "date": "2008-06-04"
+      },
+      {
+        "url": "https://www.goal.com/it/notizie/every-season-goal-2008-2009-inter-primo-scudetto-mourinho/1cj8mvdvp1lmr1ts7kv2jec0me",
+        "publisher": "Goal Italia",
+        "date": "2020-04-08"
+      }
+    ]
+  },
+  {
+    "id": "worst-season",
+    "date": "2013-05-17",
+    "era": "real-madrid-1",
+    "text": "The third season is a failure. This is the worst season of my life. For many coaches it would be good, but for me it's terrible.",
+    "context": {
+      "en": "Real Madrid, after losing the Copa del Rey final to Atlético Madrid",
+      "es": "Real Madrid, tras perder la final de la Copa del Rey ante el Atlético de Madrid",
+      "pt": "Real Madrid, depois de perder a final da Taça do Rei com o Atlético de Madrid"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.foxsports.com/stories/soccer/mourinho-worst-season-of-my-career",
+        "publisher": "Fox Sports",
+        "date": "2013-05-18"
+      }
+    ]
+  },
+  {
+    "id": "little-horse",
+    "date": "2014-02-03",
+    "era": "chelsea-2",
+    "text": "Two horses and a little horse. A little horse who needs milk and to learn how to jump.",
+    "context": {
+      "en": "Chelsea, after winning at Manchester City, on the title race",
+      "es": "Chelsea, tras ganar al Manchester City, sobre la lucha por el título",
+      "pt": "Chelsea, depois de vencer o Manchester City, sobre a luta pelo título"
+    },
+    "tags": [
+      "humour",
+      "rivals"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/news-media/news/0212-0f8a3dacd54b-3943d9225582-1000--mourinho-makes-it-a-two-and-a-half-horse-race",
+        "publisher": "UEFA",
+        "date": "2014-02-04"
+      }
+    ]
+  },
+  {
+    "id": "academy-england",
+    "date": "2014",
+    "era": "chelsea-2",
+    "text": "My conscience tells me that if, for example, Baker, Brown and Solanke are not national team players in a few years, I should blame myself.",
+    "context": {
+      "en": "Chelsea, on three academy players in pre-season",
+      "es": "Chelsea, sobre tres canteranos en la pretemporada",
+      "pt": "Chelsea, sobre três jogadores da formação na pré-época"
+    },
+    "tags": [
+      "youth",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.thefa.com/news/2014/jul/29/mourinho-pledges-commitment-to-young-lions-of-chelsea",
+        "publisher": "The FA",
+        "date": "2014-07-29"
+      }
+    ]
+  },
+  {
+    "id": "always-humble",
+    "date": "2019-11-21",
+    "era": "tottenham",
+    "text": "I was always humble but you didn't understand that.",
+    "context": {
+      "en": "Tottenham, at his first press conference, asked whether he had changed",
+      "es": "Tottenham, en su primera rueda de prensa, preguntado si había cambiado",
+      "pt": "Tottenham, na primeira conferência de imprensa, questionado se tinha mudado"
+    },
+    "tags": [
+      "self-belief",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://foxnews.com/sports/humble-one-mourinho-says-hes-emotionally-stronger-at-spurs.amp",
+        "publisher": "Associated Press",
+        "date": "2019-11-22"
+      }
+    ]
+  },
+  {
+    "id": "afena-gyan-shoes",
+    "date": "2021-11-21",
+    "era": "roma",
+    "text": "I promised him that [if he scored] I would buy him a pair of shoes that he really likes, that cost €800. … He came over to me and told me not to forget that. Tomorrow morning, I will go and buy them.",
+    "context": {
+      "en": "Roma, after 18-year-old Felix Afena-Gyan scored twice at Genoa",
+      "es": "Roma, tras el doblete del joven de 18 años Felix Afena-Gyan en Génova",
+      "pt": "Roma, depois do bis do jovem de 18 anos Felix Afena-Gyan em Génova"
+    },
+    "tags": [
+      "youth",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en/news/felix-afena-gyan-roma-wonderkid-new-boots-mourinho/blt3c335d677f99acc2",
+        "publisher": "Goal.com",
+        "date": "2021-11-24"
+      }
+    ]
+  },
+  {
+    "id": "not-playing-to-win-camp-nou",
+    "date": "2026-10-25",
+    "era": "real-madrid-2",
+    "text": "If we win today but lose at El Sardinero, it counts for nothing, because Madrid isn't playing to win at the Camp Nou.",
+    "context": {
+      "en": "Real Madrid, after winning 2-1 at Barcelona",
+      "es": "Real Madrid, tras ganar 1-2 en el campo del Barcelona",
+      "pt": "Real Madrid, depois de vencer 2-1 no campo do Barcelona"
+    },
+    "tags": [
+      "rivals",
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.khaleejtimes.com/sports/football/mourinho-gives-madrid-the-answers-to-barcelona-test-in-return-to-clasico",
+        "publisher": "Khaleej Times (Reuters)",
+        "date": "2026-10-26"
+      },
+      {
+        "url": "https://cyprus-mail.com/2026/10/26/mourinho-gives-real-madrid-the-answers-to-barcelona-test-in-return-to-clasico",
+        "publisher": "Cyprus Mail (Reuters)",
+        "date": "2026-10-26"
+      }
+    ]
   }
 ]

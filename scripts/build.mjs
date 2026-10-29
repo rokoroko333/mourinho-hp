@@ -510,6 +510,14 @@ ${header(lang, pathsOf('history'), 'history')}
 ${footer(lang)}`;
 }
 
+function trophyCard(t, lang) {
+  return `<li class="card trophy" id="${t.id}">
+        <p class="card-label">${esc(t.season)}</p>
+        <h3>${icon.trophy}${esc(t.competition[lang])}</h3>
+        ${sourceList(t.sources, lang)}
+      </li>`;
+}
+
 // Trophies as a head coach, grouped by era in career order. Each one carries its own sources
 // (trophies.json; test/build.test.mjs checks that none is missing).
 function trophiesPage(lang) {
@@ -532,13 +540,7 @@ ${header(lang, pathsOf('trophies'), 'history')}
     <ul class="trophy-list">
       ${trophies
         .filter((t) => t.era === h.id)
-        .map(
-          (t) => `<li class="card trophy" id="${t.id}">
-        <p class="card-label">${esc(t.season)}</p>
-        <h3>${icon.trophy}${esc(t.competition[lang])}</h3>
-        ${sourceList(t.sources, lang)}
-      </li>`,
-        )
+        .map((t) => trophyCard(t, lang))
         .join('\n      ')}
     </ul>
   </section>`,
@@ -553,6 +555,20 @@ const eraPaths = (id) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'h
 
 function trophyLine(h, lang) {
   return `<p class="trophies">${icon.trophy}<span><span class="sr-only">${esc(ui[lang].history.trophies)}: </span>${esc(h.trophies[lang])}</span></p>`;
+}
+
+// The same cards as the trophies page, so every title on an era page shows its sources too.
+function eraTrophies(eraId, lang) {
+  const list = trophies.filter((t) => t.era === eraId);
+  if (!list.length) return '';
+  const p = ui[lang].history;
+  return `<section class="section trophy-era">
+    <h2>${esc(p.eraTrophies)}</h2>
+    <ul class="trophy-list">
+      ${list.map((t) => trophyCard(t, lang)).join('\n      ')}
+    </ul>
+    <p class="more"><a href="${pathOf(lang, 'trophies')}#${eraId}">${esc(p.allTrophies)} ${icon.arrow}</a></p>
+  </section>`;
 }
 
 // Quotes are tied to an era only through their explicit `era`, never guessed from the year (PR #13).
@@ -603,6 +619,7 @@ ${header(lang, paths, 'history')}
     ${trophyLine(h, lang)}
     <ul class="era-points">${h.points[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
   </article>
+  ${eraTrophies(h.id, lang)}
   ${eraQuotes(h.id, lang)}
   <nav class="grid grid-2 era-steps" aria-label="${esc(p.chapters)}">
     ${step(index - 1, p.previous, 'era-prev')}

@@ -133,7 +133,14 @@ test('the feature map lists every page and every flow, and names only ids that e
   const pages = Object.keys(ui.en.slugs);
   assert.ok(pages.length >= 10, 'expected the page keys in ui.json; update this test if slugs moved');
   for (const page of pages) {
-    assert.match(map, new RegExp(`^\\| \`${page}\` \\|`, 'm'), `docs/feature-map.md has no row for the page \`${page}\``);
+    const row = map.split('\n').find((line) => line.startsWith(`| \`${page}\` |`));
+    assert.ok(row, `docs/feature-map.md has no row for the page \`${page}\``);
+    // The row's paths must follow the slugs, so a renamed slug cannot leave the map pointing at the old path.
+    for (const lang of ['en', 'es', 'pt']) {
+      const slug = ui[lang].slugs[page];
+      const path = slug ? `\`/${slug}/` : '`/`';
+      assert.ok(row.includes(path), `docs/feature-map.md: the \`${page}\` row does not have the ${lang} path ${path}\``);
+    }
   }
 
   const flows = (await readdir(join(ROOT, 'test/flows'))).filter((f) => f.endsWith('.json'));
@@ -144,7 +151,9 @@ test('the feature map lists every page and every flow, and names only ids that e
 
   // An id in the map must be one the build writes or app.js looks up.
   const sources = (await readFile(join(ROOT, 'scripts/build.mjs'), 'utf8')) + (await readFile(join(ROOT, 'src/assets/app.js'), 'utf8'));
-  const ids = [...new Set([...map.matchAll(/`[^`]*#([a-z][\w-]*)[^`]*`/g)].map((m) => m[1]))];
+  // Take the code spans first, so a span without an id cannot shift the match into the prose.
+  const spans = [...map.matchAll(/`([^`\n]*)`/g)].map((m) => m[1]);
+  const ids = [...new Set(spans.flatMap((s) => [...s.matchAll(/#([a-z][\w-]*)/g)].map((m) => m[1])))];
   assert.ok(ids.length >= 10, `expected the ids in the map's tables, found ${ids.length}; update this test if the map changed`);
   for (const id of ids) {
     assert.ok(sources.includes(`id="${id}"`) || sources.includes(`'${id}'`), `docs/feature-map.md names #${id}, which neither scripts/build.mjs nor app.js has`);

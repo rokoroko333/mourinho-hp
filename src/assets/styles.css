@@ -87,7 +87,7 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .card p { margin: 0; }
 .card-label { color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 .card-link:hover { border-color: var(--gold); }
-.card-link:hover h3 { color: var(--gold); }
+.card-link:hover h2, .card-link:hover h3 { color: var(--gold); }
 .card-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
 .quote-text { margin: 0; font-family: var(--serif); font-size: clamp(19px, 2.4vw, 24px); color: #fff; line-height: 1.5; }
 .quote-context { color: var(--muted); font-size: 13px; }

@@ -403,3 +403,35 @@ test('the stats page and era pages show each number with its sources in all thre
     }
   }
 });
+
+// Remarks are added by hand, each with its occasion in three languages and the article it was printed in.
+test('every remark has a date, an occasion, its text and a source', async () => {
+  const remarks = await load('remarks.json');
+  const ids = new Set();
+  for (const r of remarks) {
+    assert.ok(r.id && !ids.has(r.id), `${r.id}: unique id`);
+    ids.add(r.id);
+    assert.match(r.date, /^\d{4}-\d{2}-\d{2}$/, `${r.id}: date`);
+    assert.ok(r.text, `${r.id}: text`);
+    for (const l of ['en', 'es', 'pt']) assert.ok(r.occasion?.[l], `${r.id}: occasion in ${l}`);
+    if (r.original) assert.ok(['es', 'pt', 'it'].includes(r.original.lang) && r.original.text, `${r.id}: original`);
+    assert.ok(r.sources?.length > 0, `${r.id}: at least one source`);
+    for (const s of r.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${r.id}: source url`);
+  }
+});
+
+test('the remarks page lists every remark with its sources, and the home page the newest three', async () => {
+  await build();
+  const remarks = (await load('remarks.json')).sort((a, b) => b.date.localeCompare(a.date));
+  for (const [path, home] of [['remarks', ''], ['es/declaraciones', 'es'], ['pt/declaracoes', 'pt']]) {
+    const html = await page(path);
+    for (const r of remarks) {
+      const at = html.indexOf(`id="${r.id}"`);
+      assert.ok(at > 0, `${path}: ${r.id}`);
+      const card = html.slice(at, html.indexOf('</article>', at));
+      for (const s of r.sources) assert.ok(card.includes(`href="${s.url}"`), `${path}: ${r.id} source`);
+    }
+    const front = await page(home);
+    remarks.forEach((r, i) => assert.equal(front.includes(`id="${r.id}"`), i < 3, `${home || 'en'} home: ${r.id}`));
+  }
+});

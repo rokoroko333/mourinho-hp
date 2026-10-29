@@ -1,0 +1,58 @@
+[
+  {
+    "id": "camp-nou-win-the-league",
+    "date": "2026-10-26",
+    "occasion": {
+      "en": "on the Clásico against Barcelona at Camp Nou, LaLiga",
+      "es": "sobre el Clásico ante el Barcelona en el Camp Nou, LaLiga",
+      "pt": "sobre o Clássico frente ao Barcelona no Camp Nou, LaLiga"
+    },
+    "text": "If we win today but lose at El Sardinero, it counts for nothing, because Madrid isn't playing to win at the Camp Nou. They're playing to win the championship.",
+    "sources": [
+      {
+        "url": "https://www.aljazeera.com/sports/2026/10/26/real-madrid-barcelona-el-clasico-mourinho-mbappe-takeaways",
+        "publisher": "Al Jazeera",
+        "date": "2026-10-26"
+      },
+      {
+        "url": "https://english.aawsat.com/sports/5333764-mourinho-gives-real-madrid-answers-barcelona-test-return-clasico",
+        "publisher": "Asharq Al-Awsat",
+        "date": "2026-10-26"
+      }
+    ]
+  },
+  {
+    "id": "clasico-wins-titles",
+    "date": "2026-10-24",
+    "occasion": {
+      "en": "press conference before the Clásico, when it was put to him that the match would show where his side stood",
+      "es": "rueda de prensa previa al Clásico, cuando le plantearon que el partido mostraría el nivel real de su equipo",
+      "pt": "conferência de imprensa antes do Clássico, quando lhe disseram que o jogo mostraria o verdadeiro nível da equipa"
+    },
+    "text": "Real Madrid wins titles with Mourinho.",
+    "sources": [
+      {
+        "url": "https://www.si.com/soccer/jose-mourinho-vintage-press-conference-before-el-clasico",
+        "publisher": "Sports Illustrated",
+        "date": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "leipzig-bernardo-camavinga",
+    "date": "2026-10-22",
+    "occasion": {
+      "en": "after Real Madrid 4-1 RB Leipzig, Champions League",
+      "es": "tras el Real Madrid 4-1 RB Leipzig, Liga de Campeones",
+      "pt": "depois do Real Madrid 4-1 RB Leipzig, Liga dos Campeões"
+    },
+    "text": "Today Bernardo made me forget about Arda and Camavinga made me forget about Tchouaméni.",
+    "sources": [
+      {
+        "url": "https://www.beinsports.com/en-us/soccer/la-liga/articles/jos%C3%A9-mourinho-praises-bernardo-and-camavinga-after-real-madrid-s-4-1-victory-over-rb-leipzig-in-the-champions-league-2026-10-22",
+        "publisher": "beIN Sports (EFE)",
+        "date": "2026-10-22"
+      }
+    ]
+  }
+]

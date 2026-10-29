@@ -12,12 +12,14 @@ const OUT = join(ROOT, 'dist');
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt'];
-const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats'];
+const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'remarks'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
-const [ui, quotes, episodes, history, videos, trophies, stats] = await Promise.all(
-  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json'].map(load),
+const [ui, quotes, episodes, history, videos, trophies, stats, remarks] = await Promise.all(
+  ['ui.json', 'quotes.json', 'episodes.json', 'history.json', 'videos.json', 'trophies.json', 'stats.json', 'remarks.json'].map(load),
 );
+// Newest first. Added by hand with their sources, never from the feeds (docs/plans/phase2.md, item 6).
+remarks.sort((a, b) => b.date.localeCompare(a.date));
 
 withYears(quotes);
 
@@ -217,7 +219,15 @@ ${header(lang, pathsOf('home'), 'home')}
   <p class="more"><a href="${pathOf(lang, 'news')}">${esc(u.news.all)} ${icon.arrow}</a></p>
 </section>
 
-<section id="daily" class="section">
+${remarks.length ? `<section id="remarks" class="section">
+  <div class="section-head"><div><h2>${esc(u.remarks.heading)}</h2><p class="sub">${esc(u.remarks.sub)}</p></div></div>
+  <div class="grid grid-3">
+    ${remarks.slice(0, 3).map((r) => remarkCard(r, lang)).join('\n    ')}
+  </div>
+  <p class="more"><a href="${pathOf(lang, 'remarks')}">${esc(u.remarks.all)} ${icon.arrow}</a></p>
+</section>
+
+` : ''}<section id="daily" class="section">
   <div class="section-head">
     <h2>${esc(h.dailyHeading)}</h2>
     <button type="button" class="btn btn-gold btn-sm" id="shuffle">${icon.shuffle}${esc(h.shuffle)}</button>
@@ -650,6 +660,38 @@ ${header(lang, pathsOf('stats'), 'history')}
 ${footer(lang)}`;
 }
 
+// A remark as reported, with the occasion, the date it was reported (sources rarely state the day it
+// was said, and we never guess it) and where it was printed. Remarks made in Spanish
+// or Portuguese keep the original next to the English translation, as quotes do.
+function remarkCard(r, lang) {
+  const d = ui[lang].detail;
+  return `<article class="card card-quote remark" id="${esc(r.id)}">
+      <p class="card-label"><time datetime="${esc(r.date)}">${esc(fill(ui[lang].remarks.reported, { date: longDate(r.date, lang) }))}</time></p>
+      <p class="muted remark-occasion">${esc(r.occasion[lang])}</p>
+      <blockquote class="quote-text">“${esc(r.text)}”</blockquote>
+      ${r.original ? `<p class="quote-original" lang="${esc(r.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(r.original.text)}”</p>` : ''}
+      ${sourceList(r.sources, lang)}
+    </article>`;
+}
+
+function remarksPage(lang) {
+  const u = ui[lang];
+  const p = u.remarks;
+  return `${head(lang, pathsOf('remarks'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('remarks'), 'remarks')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+  </div>
+  <div class="grid grid-2">
+    ${remarks.length ? remarks.map((r) => remarkCard(r, lang)).join('\n    ') : `<p class="muted">${esc(p.empty)}</p>`}
+  </div>
+</main>
+${footer(lang)}`;
+}
+
 // The same cards as the trophies page, so every title on an era page shows its sources too.
 function eraTrophies(eraId, lang) {
   const list = trophies.filter((t) => t.era === eraId);
@@ -801,7 +843,7 @@ await rm(OUT, { recursive: true, force: true });
 await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
-const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage };
+const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, remarks: remarksPage };
 // Built like every page, but never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },

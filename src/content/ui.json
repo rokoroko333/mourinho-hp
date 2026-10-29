@@ -5,8 +5,8 @@
     "langName": "English",
     "siteName": "Infinito Mourinho",
     "tagline": "Of Mourinho, by Mourinho, for Mourinho",
-    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag" },
-    "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History" },
+    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag", "trophies": "trophies" },
+    "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History", "trophies": "Trophies" },
     "home": {
       "title": "Infinito Mourinho – José Mourinho fan hub: news, quotes & history",
       "description": "Fan hub for José Mourinho: the latest news in English, his greatest quotes and stories, Real Madrid match results and the full career history of the Special One.",
@@ -38,6 +38,7 @@
       "kickoffIn": "Kick-off in",
       "countdownUnits": { "d": "d", "h": "h", "m": "m" }
     },
+    "trophies": { "title": "José Mourinho's trophies as a head coach | Infinito Mourinho", "description": "Every trophy José Mourinho has won as a head coach, club by club and season by season, each with a link to where it was reported.", "heading": "Trophies", "sub": "Every title as a head coach, with its source", "count": "{count} trophies listed" },
     "history": {
       "title": "History of José Mourinho – full managerial career timeline | Infinito Mourinho",
       "description": "From Bobby Robson's interpreter to two Champions Leagues and a return to Real Madrid: every club, every trophy and the defining moments of José Mourinho's career.",
@@ -68,8 +69,8 @@
     "langName": "Español",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema" },
-    "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia" },
+    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema", "trophies": "es/titulos" },
+    "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia", "trophies": "Títulos" },
     "home": {
       "title": "Infinito Mourinho – web de fans de José Mourinho: noticias, frases e historia",
       "description": "La web de fans de José Mourinho: las últimas noticias en español, sus frases y anécdotas más míticas, los partidos del Real Madrid y la historia completa del Special One.",
@@ -101,6 +102,7 @@
       "kickoffIn": "Faltan",
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
+    "trophies": { "title": "Los títulos de José Mourinho como entrenador | Infinito Mourinho", "description": "Todos los títulos que José Mourinho ha ganado como entrenador, club a club y temporada a temporada, con un enlace a dónde se publicó cada uno.", "heading": "Títulos", "sub": "Cada título como entrenador, con su fuente", "count": "{count} títulos en la lista" },
     "history": {
       "title": "Historia de José Mourinho – trayectoria completa como entrenador | Infinito Mourinho",
       "description": "De traductor de Bobby Robson a dos Champions y la vuelta al Real Madrid: todos los clubes, todos los títulos y los momentos clave de la carrera de José Mourinho.",
@@ -131,8 +133,8 @@
     "langName": "Português",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema" },
-    "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História" },
+    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema", "trophies": "pt/titulos" },
+    "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História", "trophies": "Títulos" },
     "home": {
       "title": "Infinito Mourinho – site de fãs de José Mourinho: notícias, frases e história",
       "description": "O site de fãs de José Mourinho: as últimas notícias em português, as frases e histórias mais icónicas, os jogos do Real Madrid e a história completa do Special One.",
@@ -164,6 +166,7 @@
       "kickoffIn": "Faltam",
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
+    "trophies": { "title": "Os títulos de José Mourinho como treinador | Infinito Mourinho", "description": "Todos os títulos que José Mourinho ganhou como treinador, clube a clube e época a época, cada um com uma ligação para onde foi publicado.", "heading": "Títulos", "sub": "Cada título como treinador, com a sua fonte", "count": "{count} títulos na lista" },
     "history": {
       "title": "História de José Mourinho – carreira completa como treinador | Infinito Mourinho",
       "description": "De tradutor de Bobby Robson a duas Ligas dos Campeões e ao regresso ao Real Madrid: todos os clubes, todos os títulos e os momentos decisivos da carreira de José Mourinho.",

@@ -5,7 +5,7 @@
     "langName": "English",
     "siteName": "Infinito Mourinho",
     "tagline": "Of Mourinho, by Mourinho, for Mourinho",
-    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag", "trophies": "trophies" },
+    "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag", "trophies": "trophies", "news": "news", "matches": "matches" },
     "nav": { "home": "Home", "quotes": "Quotes", "news": "News", "matches": "Matches", "videos": "Videos", "history": "History", "trophies": "Trophies" },
     "home": {
       "title": "Infinito Mourinho – José Mourinho fan hub: news, quotes & history",
@@ -39,6 +39,8 @@
       "countdownUnits": { "d": "d", "h": "h", "m": "m" }
     },
     "trophies": { "title": "José Mourinho's trophies as a head coach | Infinito Mourinho", "description": "Every trophy José Mourinho has won as a head coach, club by club and season by season, each with a link to where it was reported.", "heading": "Trophies", "sub": "Every title as a head coach, with its source", "count": "{count} trophies listed" },
+    "news": { "title": "José Mourinho news – latest headlines | Infinito Mourinho", "description": "The latest José Mourinho headlines from the English-language press, updated automatically, each linking to the original article.", "heading": "News", "all": "All the news" },
+    "matches": { "title": "Real Madrid results and fixtures this season | Infinito Mourinho", "description": "Real Madrid's results and upcoming fixtures this season under José Mourinho, updated automatically.", "heading": "Matches", "sub": "This season's results and upcoming fixtures, updated automatically.", "fixtures": "Upcoming fixtures", "results": "Results this season", "tbd": "TBC", "all": "All results and fixtures" },
     "history": {
       "title": "History of José Mourinho – full managerial career timeline | Infinito Mourinho",
       "description": "From Bobby Robson's interpreter to two Champions Leagues and a return to Real Madrid: every club, every trophy and the defining moments of José Mourinho's career.",
@@ -69,7 +71,7 @@
     "langName": "Español",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema", "trophies": "es/titulos" },
+    "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema", "trophies": "es/titulos", "news": "es/noticias", "matches": "es/partidos" },
     "nav": { "home": "Inicio", "quotes": "Frases", "news": "Noticias", "matches": "Partidos", "videos": "Vídeos", "history": "Historia", "trophies": "Títulos" },
     "home": {
       "title": "Infinito Mourinho – web de fans de José Mourinho: noticias, frases e historia",
@@ -103,6 +105,8 @@
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
     "trophies": { "title": "Los títulos de José Mourinho como entrenador | Infinito Mourinho", "description": "Todos los títulos que José Mourinho ha ganado como entrenador, club a club y temporada a temporada, con un enlace a dónde se publicó cada uno.", "heading": "Títulos", "sub": "Cada título como entrenador, con su fuente", "count": "{count} títulos en la lista" },
+    "news": { "title": "Noticias de José Mourinho – últimos titulares | Infinito Mourinho", "description": "Los últimos titulares sobre José Mourinho de la prensa en español, actualizados automáticamente y con enlace al artículo original.", "heading": "Noticias", "all": "Todas las noticias" },
+    "matches": { "title": "Resultados y calendario del Real Madrid esta temporada | Infinito Mourinho", "description": "Los resultados y próximos partidos del Real Madrid de José Mourinho esta temporada, actualizados automáticamente.", "heading": "Partidos", "sub": "Resultados de esta temporada y próximos partidos, actualizados automáticamente.", "fixtures": "Próximos partidos", "results": "Resultados de esta temporada", "tbd": "Por confirmar", "all": "Todos los resultados y partidos" },
     "history": {
       "title": "Historia de José Mourinho – trayectoria completa como entrenador | Infinito Mourinho",
       "description": "De traductor de Bobby Robson a dos Champions y la vuelta al Real Madrid: todos los clubes, todos los títulos y los momentos clave de la carrera de José Mourinho.",
@@ -133,7 +137,7 @@
     "langName": "Português",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho",
-    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema", "trophies": "pt/titulos" },
+    "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema", "trophies": "pt/titulos", "news": "pt/noticias", "matches": "pt/jogos" },
     "nav": { "home": "Início", "quotes": "Frases", "news": "Notícias", "matches": "Jogos", "videos": "Vídeos", "history": "História", "trophies": "Títulos" },
     "home": {
       "title": "Infinito Mourinho – site de fãs de José Mourinho: notícias, frases e história",
@@ -167,6 +171,8 @@
       "countdownUnits": { "d": "d", "h": "h", "m": "min" }
     },
     "trophies": { "title": "Os títulos de José Mourinho como treinador | Infinito Mourinho", "description": "Todos os títulos que José Mourinho ganhou como treinador, clube a clube e época a época, cada um com uma ligação para onde foi publicado.", "heading": "Títulos", "sub": "Cada título como treinador, com a sua fonte", "count": "{count} títulos na lista" },
+    "news": { "title": "Notícias de José Mourinho – últimas manchetes | Infinito Mourinho", "description": "As últimas manchetes sobre José Mourinho da imprensa em português, atualizadas automaticamente e com ligação para o artigo original.", "heading": "Notícias", "all": "Todas as notícias" },
+    "matches": { "title": "Resultados e calendário do Real Madrid nesta época | Infinito Mourinho", "description": "Os resultados e os próximos jogos do Real Madrid de José Mourinho nesta época, atualizados automaticamente.", "heading": "Jogos", "sub": "Resultados desta época e próximos jogos, atualizados automaticamente.", "fixtures": "Próximos jogos", "results": "Resultados desta época", "tbd": "A confirmar", "all": "Todos os resultados e jogos" },
     "history": {
       "title": "História de José Mourinho – carreira completa como treinador | Infinito Mourinho",
       "description": "De tradutor de Bobby Robson a duas Ligas dos Campeões e ao regresso ao Real Madrid: todos os clubes, todos os títulos e os momentos decisivos da carreira de José Mourinho.",

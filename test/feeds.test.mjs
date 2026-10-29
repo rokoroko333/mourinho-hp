@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNewsWithReport, langForRun, pickMatches, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, outletItems, fetchNewsWithReport, langForRun, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -151,6 +151,31 @@ test('pickMatches returns latest completed and next upcoming', () => {
   assert.equal(r.latest.id, '2');
   assert.equal(r.latest.home.score, '2');
   assert.equal(r.next.id, '3');
+  assert.deepEqual(r.results.map((m) => m.id), ['2', '1']);
+  assert.deepEqual(r.fixtures.map((m) => m.id), ['3', '4']);
+  assert.equal(r.next.timeTbd, false);
+});
+
+test('normalizeEvent flags fixtures whose kick-off time is not set', () => {
+  const e = ev('5', '2026-11-29T20:00Z', false);
+  e.competitions[0].timeValid = false;
+  assert.equal(normalizeEvent(e).timeTbd, true);
+});
+
+test('pickMatches lists results from this season only, newest first', () => {
+  const now = new Date('2026-10-28T00:00:00Z');
+  const r = pickMatches([
+    ev('a', '2026-05-20T19:00Z', true),
+    ev('b', '2026-08-20T19:00Z', true),
+    ev('c', '2026-09-20T19:00Z', true),
+  ], now);
+  assert.deepEqual(r.results.map((m) => m.id), ['c', 'b']);
+  assert.equal(r.latest.id, 'c');
+});
+
+test('seasonStart switches on 1 July', () => {
+  assert.equal(seasonStart(new Date('2026-06-30T23:00:00Z')).toISOString(), '2025-07-01T00:00:00.000Z');
+  assert.equal(seasonStart(new Date('2026-07-01T00:00:00Z')).toISOString(), '2026-07-01T00:00:00.000Z');
 });
 
 test('refreshAll keeps the last good copy when upstream fails', async () => {

@@ -208,5 +208,225 @@
         "date": "2015-05-01"
       }
     ]
+  },
+  {
+    "id": "chelsea-league-cup-2006-07",
+    "era": "chelsea-1",
+    "season": "2006-07",
+    "competition": {
+      "en": "League Cup",
+      "es": "Copa de la Liga inglesa",
+      "pt": "Taça da Liga inglesa"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      }
+    ]
+  },
+  {
+    "id": "chelsea-fa-cup-2006-07",
+    "era": "chelsea-1",
+    "season": "2006-07",
+    "competition": {
+      "en": "FA Cup",
+      "es": "FA Cup",
+      "pt": "Taça de Inglaterra"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/11667/10295906/jose-mourinho-in-numbers-new-manchester-united-managers-career-statistics",
+        "publisher": "Sky Sports",
+        "date": "2016-05-27"
+      }
+    ]
+  },
+  {
+    "id": "inter-supercoppa-2008-09",
+    "era": "inter",
+    "season": "2008-09",
+    "competition": {
+      "en": "Italian Super Cup",
+      "es": "Supercopa de Italia",
+      "pt": "Supertaça de Itália"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.goal.com/br/not%C3%ADcias/quantos-titulos-jose-mourinho-tem-na-carreira/blt906d0aa7b353759c",
+        "publisher": "Goal.com",
+        "date": "2025-09-18"
+      }
+    ]
+  },
+  {
+    "id": "inter-serie-a-2008-09",
+    "era": "inter",
+    "season": "2008-09",
+    "competition": {
+      "en": "Serie A",
+      "es": "Serie A",
+      "pt": "Serie A"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  },
+  {
+    "id": "inter-serie-a-2009-10",
+    "era": "inter",
+    "season": "2009-10",
+    "competition": {
+      "en": "Serie A",
+      "es": "Serie A",
+      "pt": "Serie A"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/0250-0c50f4b42c3a-0fbc1831ccbe-1000--inter-join-exclusive-treble-club/",
+        "publisher": "UEFA",
+        "date": "2010-05-22"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  },
+  {
+    "id": "inter-coppa-italia-2009-10",
+    "era": "inter",
+    "season": "2009-10",
+    "competition": {
+      "en": "Coppa Italia",
+      "es": "Copa de Italia",
+      "pt": "Taça de Itália"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/0250-0c50f4b42c3a-0fbc1831ccbe-1000--inter-join-exclusive-treble-club/",
+        "publisher": "UEFA",
+        "date": "2010-05-22"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      }
+    ]
+  },
+  {
+    "id": "inter-ucl-2009-10",
+    "era": "inter",
+    "season": "2009-10",
+    "competition": {
+      "en": "UEFA Champions League",
+      "es": "Liga de Campeones",
+      "pt": "Liga dos Campeões"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/0250-0c50f4b42c3a-0fbc1831ccbe-1000--inter-join-exclusive-treble-club/",
+        "publisher": "UEFA",
+        "date": "2010-05-22"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0281-1812ecd1d018-1e6b993bc29a-1000--jose-mourinho-eyeing-sixth-uefa-final-win-out-of-six/",
+        "publisher": "UEFA",
+        "date": "2023-05-31"
+      }
+    ]
+  },
+  {
+    "id": "real-madrid-copa-del-rey-2010-11",
+    "era": "real-madrid-1",
+    "season": "2010-11",
+    "competition": {
+      "en": "Copa del Rey",
+      "es": "Copa del Rey",
+      "pt": "Taça do Rei"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/10769111/jose-mourinhos-impressive-cup-final-record",
+        "publisher": "Sky Sports",
+        "date": "2017-02-26"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/11667/10295906/jose-mourinho-in-numbers-new-manchester-united-managers-career-statistics",
+        "publisher": "Sky Sports",
+        "date": "2016-05-27"
+      }
+    ]
+  },
+  {
+    "id": "real-madrid-la-liga-2011-12",
+    "era": "real-madrid-1",
+    "season": "2011-12",
+    "competition": {
+      "en": "La Liga",
+      "es": "LaLiga",
+      "pt": "La Liga"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.espn.co.uk/football/story/_/id/37419141/ranking-jose-mourinho-chelsea-porto-inter-real-madrid-titles",
+        "publisher": "ESPN",
+        "date": "2015-05-01"
+      }
+    ]
+  },
+  {
+    "id": "real-madrid-supercopa-2012-13",
+    "era": "real-madrid-1",
+    "season": "2012-13",
+    "competition": {
+      "en": "Spanish Super Cup",
+      "es": "Supercopa de España",
+      "pt": "Supertaça de Espanha"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/8725137/jose-mourinho-factfile",
+        "publisher": "Sky Sports",
+        "date": "2013-05-20"
+      },
+      {
+        "url": "https://www.goal.com/br/not%C3%ADcias/quantos-titulos-jose-mourinho-tem-na-carreira/blt906d0aa7b353759c",
+        "publisher": "Goal.com",
+        "date": "2025-09-18"
+      }
+    ]
   }
 ]

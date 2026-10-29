@@ -95,6 +95,17 @@ test('every career era has its own page in all three languages, linked from the 
   }
 });
 
+test('era descriptions mention trophies only for finished eras that won some', async () => {
+  await build();
+  const history = await load('history.json');
+  const description = async (id) => (await page(`history/${id}`)).match(/<meta name="description" content="([^"]*)"/)[1];
+  const current = history.at(-1);
+  assert.ok(current.years.endsWith('–'), 'the last era is the one in progress');
+  assert.ok(!(await description(current.id)).startsWith('Trophies:'));
+  assert.ok(!(await description('leiria')).startsWith('Trophies:'), 'an era without trophies');
+  assert.ok((await description('inter')).startsWith('Trophies: Champions League'));
+});
+
 test('related links on detail pages point to other existing pages', async () => {
   await build();
   const html = await page('stories/special-one');

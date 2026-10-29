@@ -1915,5 +1915,251 @@
         "date": "2015-11-05"
       }
     ]
+  },
+  {
+    "id": "not-on-the-moon",
+    "date": "2020",
+    "era": "tottenham",
+    "text": "No no no. I have years of football experience and it is not a couple of victories that put me on the moon and it is not a couple of defeats that send me down to hell.",
+    "context": {
+      "en": "Tottenham, asked whether a bright start made them title contenders",
+      "es": "Tottenham, preguntado si el buen inicio los convertía en candidatos al título",
+      "pt": "Tottenham, questionado se o bom arranque os tornava candidatos ao título"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en/news/a-couple-of-victories-dont-put-me-on-the-moon---mourinho-not-getting-carried-away-with-tottenhams-bright-start-to-2020-21/g3wwlzgk4v3s1ogz17azugdno",
+        "publisher": "Goal.com",
+        "date": "2020-11-06"
+      }
+    ]
+  },
+  {
+    "id": "not-my-home",
+    "date": "2010",
+    "era": "inter",
+    "text": "This is not my home. This is not an easy place to work and be happy.",
+    "context": {
+      "en": "Inter, after winning the Serie A title, a week before the Champions League final",
+      "es": "Inter, tras ganar la Serie A, una semana antes de la final de la Champions",
+      "pt": "Inter, depois de ganhar a Serie A, uma semana antes da final da Liga dos Campeões"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.fourfourtwo.com/news/tearful-mourinho-undecided-future",
+        "publisher": "FourFourTwo",
+        "date": "2010-05-16"
+      },
+      {
+        "url": "https://www.aljazeera.com/sports/2010/5/16/inter-win-title-for-unhappy-jose",
+        "publisher": "Al Jazeera",
+        "date": "2010-05-16"
+      }
+    ]
+  },
+  {
+    "id": "player-for-life",
+    "date": "2026",
+    "era": "benfica-2025",
+    "text": "I leave with the conviction that, more than just a moment, we have forged a lasting bond: my player for a day, my player for life.",
+    "original": {
+      "lang": "pt",
+      "text": "Levo comigo a convicção de que, mais do que um momento, criámos uma ligação duradoura: meu jogador um dia, meu jogador para sempre."
+    },
+    "context": {
+      "en": "Benfica, in his farewell message to the players",
+      "es": "Benfica, en su mensaje de despedida a los jugadores",
+      "pt": "Benfica, na mensagem de despedida aos jogadores"
+    },
+    "tags": [
+      "fans"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en/lists/jose-mourinho-emotional-benfica-farewell-message-real-madrid-homecoming/blt6a8a8edf7f6ecc90",
+        "publisher": "Goal.com",
+        "date": "2026-06-10"
+      },
+      {
+        "url": "https://www.sabado.pt/desporto/amp/mourinho-despede-se-do-benfica-representar-este-clube-foi-uma-honra-e-um-privilegio",
+        "publisher": "Record (Sábado)",
+        "date": "2026-06-10"
+      }
+    ]
+  },
+  {
+    "id": "coachs-fault-players-fault",
+    "date": "2026",
+    "era": "real-madrid-2",
+    "text": "The first half was the coach's fault; the second half was the players' fault.",
+    "context": {
+      "en": "Real Madrid, after coming from 3-1 down to win 4-3 at Roma in the Champions League",
+      "es": "Real Madrid, tras remontar un 3-1 y ganar 3-4 en Roma en la Champions",
+      "pt": "Real Madrid, depois de recuperar de 3-1 e vencer por 4-3 em Roma na Liga dos Campeões"
+    },
+    "tags": [
+      "tactics",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/50185130/real-madrid-roma-jose-mourinho-uefa-champions-league",
+        "publisher": "ESPN",
+        "date": "2026-10-14"
+      }
+    ]
+  },
+  {
+    "id": "referees-best-feelings",
+    "date": "2026",
+    "era": "real-madrid-2",
+    "text": "I trust all the referees... whether it's the league or Champions League, before the game I always have the best feelings about the referees.",
+    "context": {
+      "en": "Real Madrid, at his press conference in Rome before the Champions League match",
+      "es": "Real Madrid, en su rueda de prensa en Roma antes del partido de Champions",
+      "pt": "Real Madrid, na conferência de imprensa em Roma antes do jogo da Liga dos Campeões"
+    },
+    "tags": [
+      "referees",
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://citizen.digital/article/real-madrids-mourinho-has-trust-in-referees-despite-complaints-n391997",
+        "publisher": "Citizen Digital (AFP)",
+        "date": "2026-10-13"
+      },
+      {
+        "url": "https://www.thescore.com/news/3623274",
+        "publisher": "theScore (AFP)",
+        "date": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "id": "titles-are-easy-promises",
+    "date": "2021",
+    "era": "roma",
+    "text": "You talk of the title and we talk of time, a project, work. Titles are words, easy promises. Titles will come.",
+    "context": {
+      "en": "Roma, at his first press conference",
+      "es": "Roma, en su primera rueda de prensa",
+      "pt": "Roma, na primeira conferência de imprensa"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.thenationalnews.com/sport/football/2021/07/08/jose-mourinho-begins-roma-reign-defends-record-at-manchester-united-and-spurs/",
+        "publisher": "The National",
+        "date": "2021-07-08"
+      },
+      {
+        "url": "https://scroll.in/field/999699/scroll_in",
+        "publisher": "Scroll.in (AFP)",
+        "date": "2021-07-08"
+      }
+    ]
+  },
+  {
+    "id": "twenty-five-coins",
+    "date": "2025",
+    "era": "fenerbahce",
+    "text": "I have 25 coins, I throw the coins in the air. The ones that stay on the table are the players that play, the ones that go on the floor, go on the bench. I do it just like this. During the week I'm having fun, I go to nightclubs every day in Istanbul. It's simple.",
+    "context": {
+      "en": "Fenerbahçe, a sarcastic reply to a question about his squad rotation",
+      "es": "Fenerbahçe, respuesta sarcástica a una pregunta sobre sus rotaciones",
+      "pt": "Fenerbahçe, resposta sarcástica a uma pergunta sobre as rotações"
+    },
+    "tags": [
+      "humour"
+    ],
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/45107907/jose-mourinho-sarcastically-explains-fenerbahce-team-selection",
+        "publisher": "ESPN",
+        "date": "2025-05-12"
+      },
+      {
+        "url": "https://www.goal.com/en/lists/throw-coins-jose-mourinho-team-selection-fenerbahce-boss-future/blt10032af52ca963c7",
+        "publisher": "Goal.com",
+        "date": "2025-05-12"
+      }
+    ]
+  },
+  {
+    "id": "won-so-much",
+    "date": "2013",
+    "era": "real-madrid-1",
+    "text": "It is my fault: I have won so, so, so much it is hard to live up to those expectations. But the points record in the league is mine and no one can take that away.",
+    "context": {
+      "en": "Real Madrid, defending his record near the end of his last season",
+      "es": "Real Madrid, defendiendo su trayectoria al final de su última temporada",
+      "pt": "Real Madrid, a defender o seu registo no fim da última época"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/sport/soccer/mourinho-defends-his-record-in-spain-1.1381741",
+        "publisher": "The Irish Times",
+        "date": "2013-05-03"
+      }
+    ]
+  },
+  {
+    "id": "most-important-match-be-happy",
+    "date": "2004",
+    "era": "porto",
+    "text": "If we are playing the most important match in the world we have to be happy.",
+    "context": {
+      "en": "FC Porto, on the eve of the Champions League final",
+      "es": "FC Porto, en la víspera de la final de la Champions",
+      "pt": "FC Porto, na véspera da final da Liga dos Campeões"
+    },
+    "tags": [
+      "self-belief"
+    ],
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/019d-0e6ae476960d-620df131912e-1000--mourinho-s-most-important-match",
+        "publisher": "UEFA",
+        "date": "2004-05-25"
+      }
+    ]
+  },
+  {
+    "id": "not-one-manager-young-players",
+    "date": "2019",
+    "era": "tottenham",
+    "text": "I really like this squad and looking to the young players – there is not one manager in the world that doesn't like to play young players and to help young players to develop – not one.",
+    "context": {
+      "en": "Tottenham, in his first interview after being appointed",
+      "es": "Tottenham, en su primera entrevista tras ser nombrado",
+      "pt": "Tottenham, na primeira entrevista depois de ser nomeado"
+    },
+    "tags": [
+      "youth"
+    ],
+    "sources": [
+      {
+        "url": "https://www.goal.com/en-my/news/mourinho-says-academies-at-previous-clubs-not-good-enough-as-he-vows-to-develop-spurs-youngsters/u8af4fuhiva81ij8muhhwg9nv",
+        "publisher": "Goal.com",
+        "date": "2019-11-20"
+      },
+      {
+        "url": "https://www.the42.ie/4900048",
+        "publisher": "The42",
+        "date": "2019-11-20"
+      }
+    ]
   }
 ]

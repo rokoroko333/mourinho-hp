@@ -33,7 +33,10 @@ function parseArgs(argv) {
     if (argv[i] === '--base') opts.base = (argv[++i] ?? '').replace(/\/$/, '');
     else opts.files.push(argv[i]);
   }
-  if (!/^https?:\/\//.test(opts.base)) throw new Error('--base needs an origin such as http://localhost:8788');
+  if (!/^https?:\/\//.test(opts.base)) {
+    console.log('BLOCKED (all flows): --base needs an origin such as http://localhost:8788');
+    process.exit(2);
+  }
   if (!opts.files.length) {
     opts.files = readdirSync(FLOWS).filter((f) => f.endsWith('.json')).sort().map((f) => join(FLOWS, f));
   }

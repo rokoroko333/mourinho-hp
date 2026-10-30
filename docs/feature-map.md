@@ -39,7 +39,7 @@
 | 言語の提案バナー | 全ページ | ブラウザの言語と違うページで `.lang-banner` を出す（自動リダイレクトはしない） | `test/flows/language-banner.json`（es）・`test/flows/language-banner-ja.json`（ja） |
 | 名言のシャッフル | `home` | `#shuffle` で `#daily-quote` と `#daily-episode-title` を入れ替える。データは `#daily-data` | `test/flows/shuffle.json` |
 | 今日の名言の共有 | `home` | `#share-quote` で X（Twitter）の投稿画面を新しいタブで開く | なし |
-| クイズ | `quiz` | 選択肢の `button[data-era]` で正誤（`.is-right`・`.is-wrong`）と `<details>` を開き、全問で `#quiz-score`。`#quiz-again` で別の10問。データは `#quiz-data` | `test/flows/quiz.json` |
+| クイズ | `quiz` | 選択肢の `button[data-era]` で正誤（`.is-right`・`.is-wrong`）と `<details>` を開き、全問で `#quiz-score` と、点数入りのシェア `#quiz-share`。`#quiz-again` で別の10問。データは `#quiz-data` | `test/flows/quiz.json` |
 | 動画の再生 | `home` | `.video[data-video-id]` をクリックすると、その場で `iframe.video-frame`（youtube-nocookie）に差し替える | `test/flows/video.json` |
 | 今日の出来事 | `home` | `#on-this-day`。ビルドした日と表示する日が違えば `#otd-data` から選び直す | なし |
 | ニュース | `home`・`news` | `/api/news?lang=` から `#news-list` と `#news-updated` を描く | なし（KV の中身しだい） |

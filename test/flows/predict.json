@@ -1,0 +1,11 @@
+{
+  "description": "Fan prediction on /matches/: before kick-off the score steppers stay within 0-15, sending shows the tally (win/draw/defeat bar, top scores) and the visitor's pick; votes are only sent on localhost, never to production",
+  "steps": [
+    { "goto": "/matches/" },
+    { "eval": "(() => { try { localStorage.clear(); } catch {} return true; })()" },
+    { "goto": "/matches/" },
+    { "eval": "(async () => { for (let i = 0; i < 50 && document.querySelector('#predict').hidden; i++) await new Promise((r) => setTimeout(r, 100)); return !document.querySelector('#predict').hidden; })()" },
+    { "eval": "(() => { const f = document.querySelector('#predict form'); if (!f) return true; const [less, , ] = f.querySelectorAll('.predict-row')[0].querySelectorAll('button'); const out = f.querySelectorAll('.predict-row')[0].querySelector('output'); for (let i = 0; i < 5; i++) less.click(); return out.textContent === '0' && /\\S/.test(less.getAttribute('aria-label')); })()" },
+    { "eval": "(async () => { const f = document.querySelector('#predict form'); if (!f || location.hostname !== 'localhost') return true; f.querySelectorAll('.predict-row')[1].querySelectorAll('button')[1].click(); f.requestSubmit(); for (let i = 0; i < 50 && document.querySelector('#predict form'); i++) await new Promise((r) => setTimeout(r, 100)); const box = document.querySelector('#predict'); return !box.querySelector('form') && (!!box.querySelector('.predict-bar') || /\\d/.test(box.textContent)); })()" }
+  ]
+}

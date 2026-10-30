@@ -2,8 +2,8 @@ name = "infinito-mourinho-feeds"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 
-# Every 20 minutes. Each run writes matches plus one language's news (en, es, pt in turn):
-# 2 KV keys x 72 runs = 144 writes/day (free plan allows 1,000).
+# Every 20 minutes. Each run writes the shared news list and the matches: 2 KV keys x 72 runs = 144
+# writes/day (free plan allows 1,000), and purges fan-prediction votes 30 days after kick-off (D1).
 [triggers]
 crons = ["*/20 * * * *"]
 
@@ -13,3 +13,10 @@ crons = ["*/20 * * * *"]
 [[kv_namespaces]]
 binding = "FEEDS"
 id = "4414d70f96524e7eb554c3f09423f8f6"
+
+# Fan predictions: the same database as the Pages project (../../wrangler.toml), for the purge only.
+[[d1_databases]]
+binding = "VOTES"
+database_name = "infinito-mourinho-votes"
+database_id = "93c5c895-c410-4d2b-a257-9e6e85018e59"
+migrations_dir = "../../migrations"

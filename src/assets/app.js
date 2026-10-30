@@ -312,6 +312,7 @@
       const redraw = (list) => list && (strings.timeZone || !list.querySelector('.match-row'));
       if (redraw(resultList)) fillRows(resultList, data.results);
       if (redraw(fixtureList)) fillRows(fixtureList, data.fixtures);
+      showPredict(data);
       if (matchList) {
         const cards = [data.next && matchCard(data.next, true), data.latest && matchCard(data.latest, false)].filter(Boolean);
         if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
@@ -324,6 +325,91 @@
       if (matchList) showMessage(matchList, strings.matchesEmpty);
       for (const list of [resultList, fixtureList]) if (list) fillRows(list, []);
     });
+
+  // Fan prediction (lib/predict.js, functions/api/predict.js). For the next match: a score to send until
+  // kick-off; after sending (or after kick-off) the tally, shown as percentages once there are enough votes,
+  // so a handful cannot look like a trend; after the match, the result and how many called it exactly.
+  // The visitor's own pick is remembered in this browser only (localStorage), to show it back.
+  function showPredict(data) {
+    const box = $('#predict');
+    const p = strings.predict;
+    if (!box || !p) return;
+    const m = data.next && !data.next.timeTbd ? data.next : data.latest;
+    if (!m) return;
+    const key = `predict:${m.id}`;
+    const mine = () => { try { return localStorage.getItem(key); } catch { return null; } };
+    const fmtPct = new Intl.NumberFormat(lang, { style: 'percent', maximumFractionDigits: 0 });
+    const club = (s) => (s.clubIsHome ? m.home.name : m.away.name);
+    const scoreText = (h, a) => `${h}-${a}`;
+    const head = (s) => el('div', { class: 'predict-head' },
+      el('span', { class: 'card-label' }, p.heading),
+      s ? el('small', { class: 'muted' }, p.votes.replace('{n}', new Intl.NumberFormat(lang).format(s.total))) : null);
+    const tally = (s) => {
+      const parts = [];
+      const pick = mine();
+      if (pick) parts.push(el('p', { class: 'predict-mine' }, p.yourPick.replace('{score}', pick)));
+      if (s.result) {
+        const pct = s.total ? fmtPct.format(s.result.hits / s.total) : fmtPct.format(0);
+        parts.push(el('p', { class: 'predict-result' }, p.result.replace('{score}', scoreText(s.result.home, s.result.away)).replace('{pct}', pct).replace('{n}', s.result.hits)));
+        if (pick) parts.push(el('p', { class: pick === scoreText(s.result.home, s.result.away) ? 'predict-hit' : 'muted' }, pick === scoreText(s.result.home, s.result.away) ? p.hit : p.miss));
+      }
+      if (s.total < s.minVotes) {
+        parts.push(el('p', { class: 'muted' }, p.tooFew.replace('{min}', s.minVotes)));
+        return parts;
+      }
+      parts.push(el('p', { class: 'card-label predict-caption' }, p.outcomes.replace('{club}', club(s))));
+      parts.push(el('div', { class: 'predict-bar' }, ...['win', 'draw', 'loss'].map((o) => {
+        const share = s.outcomes[o] / s.total;
+        const seg = el('span', { class: `seg seg-${o}${s.result?.outcome === o ? ' is-result' : ''}` });
+        seg.style.flexGrow = String(Math.max(share, 0.0001));
+        return seg;
+      })));
+      parts.push(el('ul', { class: 'predict-legend' }, ...['win', 'draw', 'loss'].map((o) =>
+        el('li', { class: `leg-${o}` }, el('strong', {}, fmtPct.format(s.outcomes[o] / s.total)), ' ', p[o]))));
+      parts.push(el('p', { class: 'card-label predict-caption' }, p.topScores));
+      parts.push(el('ol', { class: 'predict-top' }, ...s.top.map((t) =>
+        el('li', {}, el('strong', {}, scoreText(t.home, t.away)), el('small', {}, fmtPct.format(t.votes / s.total))))));
+      return parts;
+    };
+    const show = (...children) => { box.replaceChildren(...children.flat().filter(Boolean)); box.hidden = false; };
+    const form = (s) => {
+      const goals = { home: 1, away: 1 };
+      const row = (side) => {
+        const out = el('output', { class: 'predict-goals' }, String(goals[side]));
+        const step = (d) => () => { goals[side] = Math.min(15, Math.max(0, goals[side] + d)); out.textContent = String(goals[side]); };
+        const less = el('button', { type: 'button', class: 'btn btn-dark btn-sm', 'aria-label': p.less.replace('{team}', m[side].name) }, '−');
+        const more = el('button', { type: 'button', class: 'btn btn-dark btn-sm', 'aria-label': p.more.replace('{team}', m[side].name) }, '+');
+        less.addEventListener('click', step(-1));
+        more.addEventListener('click', step(1));
+        return el('div', { class: 'predict-row' }, el('span', { class: 'predict-team' }, m[side].name), less, out, more);
+      };
+      const send = el('button', { type: 'submit', class: 'btn btn-gold' }, p.submit);
+      const note = el('p', { class: 'muted predict-note' });
+      const f = el('form', { class: 'predict-form' }, row('home'), row('away'), send, note);
+      f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        send.disabled = true;
+        fetch('/api/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ match: m.id, ...goals }) })
+          .then(async (res) => {
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(res.status === 409 ? p.closed : p.error);
+            if (body.recorded) { try { localStorage.setItem(key, scoreText(goals.home, goals.away)); } catch {} }
+            show(head(body), body.duplicate && !mine() ? el('p', { class: 'muted' }, p.already) : null, tally(body));
+          })
+          .catch((err) => { note.textContent = err.message || p.error; send.disabled = false; });
+      });
+      return [head(s), f];
+    };
+    getJson(`/api/predict?match=${encodeURIComponent(m.id)}`)
+      .then((s) => {
+        const open = m === data.next && new Date(m.date) > Date.now();
+        if (open && !mine()) return show(form(s));
+        if (!open && !m.completed && m !== data.next) return; // a past match with no tally to show
+        if (!s.total && !open) return;
+        show(head(s), open || s.result ? null : el('p', { class: 'muted' }, p.closed), tally(s));
+      })
+      .catch(() => {});
+  }
 
   // "Kick-off in 2 d 4 h 13 min 05 s", ticking every second (only the text changes, and browsers pause timers
   // in background tabs) and hidden once the match has started. Not a live region, so screen readers do not

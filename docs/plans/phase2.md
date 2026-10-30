@@ -54,7 +54,7 @@
 
 ## 7. ニュースと試合の専用ページ
 
-- `/news/`: 3言語それぞれのニュース（KV の `news:{lang}`）の全件。ページは静的に作り、中身は今と同じく `/api/news` から `app.js` が埋める。中身が毎回変わり、HTML には見出しと説明しか入らないため、検索流入は狙わない。sitemap から外すだけでは、全ページのヘッダーからリンクされているため検索に載りうるので、HTML に `noindex, follow` を入れて sitemap にも載せない。ヘッダーからの導線用のページとする。`/matches/` も同じ扱い（結果と日程を HTML に入れられたら、`noindex` を外して sitemap に載せる）。
+- `/news/`: 3言語それぞれのニュース（KV の `news:{lang}`）の全件。ページは静的に作り、中身は今と同じく `/api/news` から `app.js` が埋める。中身が毎回変わり、HTML には見出しと説明しか入らないため、検索流入は狙わない。sitemap から外すだけでは、全ページのヘッダーからリンクされているため検索に載りうるので、HTML に `noindex, follow` を入れて sitemap にも載せない。ヘッダーからの導線用のページとする。`/matches/` は、Pages Function（`functions/matches/` と es/pt、`lib/matches-page.js`）が KV の結果と日程を HTML に入れて返すので、検索の対象にして sitemap に載せる。
 - `/matches/`: 今季の結果と日程。ESPN のデータで足りる範囲で、`/api/matches` を拡張する（Worker と KV の書き込み回数が無料枠に収まることを PR に書く）。
 - ヘッダーの News・Matches・Videos を、トップのアンカーからそれぞれのページへのリンクに置き換える（Videos はトップの動画欄のままでよい）。
 

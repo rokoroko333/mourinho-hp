@@ -172,7 +172,8 @@
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
         teamEl(m.away, strings.away)),
       el('p', { class: 'match-date' }, dateFmt.format(new Date(m.date)), m.competition ? el('br') : null, m.competition || null));
-  // One line per match on /matches/: date, home, score (or kick-off time), away, competition.
+  // One line per match on /matches/: date, home, score (or kick-off time), away, competition. The server draws
+  // the same rows in UTC first (matchRowsHtml in lib/matches-page.js): change both together.
   const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short' });
   const timeFmt = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit' });
   // Without a kick-off time only the day is known, so it is read in UTC rather than shifted by the

@@ -24,7 +24,7 @@
 | `remarks` | `/remarks/` ・ `/es/declaraciones/` ・ `/pt/declaracoes/` | `remarksPage` | 最近の発言 |
 | `onthisday` | `/on-this-day/` ・ `/es/efemerides/` ・ `/pt/neste-dia/` | `onThisDayPage`・`monthPage` | 日付ごとの出来事と、月ごとのページ（`may/`・`mayo/`・`maio/` など） |
 | `news` | `/news/` ・ `/es/noticias/` ・ `/pt/noticias/` | `newsPage` | ニュース一覧（`/api/news` から表示、`noindex` でサイトマップには載せない） |
-| `matches` | `/matches/` ・ `/es/partidos/` ・ `/pt/jogos/` | `matchesPage` | 結果と日程（`/api/matches` から表示、`noindex` でサイトマップには載せない） |
+| `matches` | `/matches/` ・ `/es/partidos/` ・ `/pt/jogos/` | `matchesPage` | 結果と日程（Pages Function が KV から HTML に入れ、`app.js` が閲覧者の時刻で描き直す。サイトマップに載せる） |
 
 存在しないパスはトップページが 200 で返るので、ページがあるかは canonical のパスで確かめます。
 

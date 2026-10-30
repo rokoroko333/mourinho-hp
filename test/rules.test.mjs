@@ -160,6 +160,21 @@ test('the feature map lists every page and every flow, and names only ids that e
   }
 });
 
+// Kick-off times are shown in the club's own time zone, labelled with its city. On a move, the comment above
+// TEAM_ID names the new club, and this fails until the zone beside it (and the constants) follow (#52).
+test('the match time zone and city are those of the current club, as the comment above TEAM_ID says', async () => {
+  const feeds = await readFile(join(ROOT, 'lib/feeds.js'), 'utf8');
+  const head = feeds.slice(0, feeds.indexOf('export const TEAM_ID'));
+  const comment = head.slice(head.lastIndexOf('\n\n')).split('\n').filter((l) => l.startsWith('//')).join(' ');
+  const [, club] = comment.match(/\(\d+ = ([^)]+)\)/) ?? [];
+  const [, zone] = comment.match(new RegExp(`\\(([\\w/]+) for ${club}\\)`)) ?? [];
+  assert.ok(zone, `the comment above TEAM_ID does not say "(<time zone> for ${club})"; write the new club's time zone there`);
+  const { MATCH_TIME_ZONE, MATCH_CITY } = await import('../lib/feeds.js');
+  assert.equal(MATCH_TIME_ZONE, zone, `MATCH_TIME_ZONE is not ${club}'s time zone (${zone})`);
+  assert.doesNotThrow(() => new Intl.DateTimeFormat('en', { timeZone: MATCH_TIME_ZONE }), 'MATCH_TIME_ZONE is a real time zone');
+  assert.equal(MATCH_CITY, zone.split('/').pop().replace(/_/g, ' '), `MATCH_CITY is not the city of ${zone}`);
+});
+
 // When Mourinho moves, the club name sits in several ui.json strings next to TEAM_ID, and a missed one
 // (or one language) keeps showing the old club (#2, #34). The list of places is the comment above TEAM_ID.
 test('every ui.json string naming the current club is listed beside TEAM_ID, and names it in every language', async () => {

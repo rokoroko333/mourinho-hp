@@ -25,15 +25,15 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 // warm white, champagne gold for the bar, the name and the byline only; no red, which the site keeps for
 // the moment of a match. Inline styles are fine here: these pages are only opened by the local Chrome,
 // never served under the site's Content-Security-Policy. The display face is the bundled Barlow Condensed.
-const FONT_FILES = ['barlow-condensed-600.woff2', 'barlow-condensed-800.woff2'];
-// Chrome falls back to another face without a word when a font file is missing, which would redraw every
-// image in it; stop instead (test/rules.test.mjs checks these names too).
-const missing = FONT_FILES.filter((f) => !existsSync(join(ROOT, 'src/assets/fonts', f)));
+// Weight -> file. The @font-face rules below are built from this list, so the files checked are the
+// files read. Chrome falls back to another face without a word when one is missing, which would redraw
+// every image in it; stop instead (test/rules.test.mjs checks these names too).
+const FONT_FILES = { 600: 'barlow-condensed-600.woff2', 800: 'barlow-condensed-800.woff2' };
+const missing = Object.values(FONT_FILES).filter((f) => !existsSync(join(ROOT, 'src/assets/fonts', f)));
 if (missing.length) throw new Error(`og: missing font files in src/assets/fonts: ${missing.join(', ')}`);
 const FONTS = pathToFileURL(join(ROOT, 'src/assets/fonts')).href;
 const page = (body) => `<!doctype html><html><head><meta charset="utf-8"><style>
-  @font-face { font-family: 'Barlow Condensed'; font-weight: 600; src: url('${FONTS}/barlow-condensed-600.woff2') format('woff2'); }
-  @font-face { font-family: 'Barlow Condensed'; font-weight: 800; src: url('${FONTS}/barlow-condensed-800.woff2') format('woff2'); }
+  ${Object.entries(FONT_FILES).map(([weight, file]) => `@font-face { font-family: 'Barlow Condensed'; font-weight: ${weight}; src: url('${FONTS}/${file}') format('woff2'); }`).join('\n  ')}
   html, body { margin: 0; width: ${OG_SIZE.width}px; height: ${OG_SIZE.height}px; overflow: hidden; }
   /* A flat background keeps each PNG small (a gradient made them ~200 KB). */
   body { background: #0b0d10; color: #f2efea; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;

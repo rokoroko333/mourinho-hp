@@ -1,0 +1,14 @@
+{
+  "description": "On a 375px phone nothing is wider than the screen on the pages with the widest blocks: home (match cards and countdown), matches, stats and a rival page",
+  "viewport": { "width": 375, "height": 800 },
+  "steps": [
+    { "goto": "/" },
+    { "eval": "(async () => { await new Promise((r) => setTimeout(r, 2000)); const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1; }); })()" },
+    { "goto": "/matches/" },
+    { "eval": "(async () => { await new Promise((r) => setTimeout(r, 2000)); const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()" },
+    { "goto": "/stats/" },
+    { "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()" },
+    { "goto": "/rivals/guardiola/" },
+    { "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1; }); })()" }
+  ]
+}

@@ -34,6 +34,7 @@
 | 機能 | ページ | 要素 | 検証フロー |
 |---|---|---|---|
 | 言語メニュー | 全ページ | `.lang-switch`（`<details>`）。地球のアイコンと今の言語、開くと各言語の名前でこのページの各言語版へ。外側のクリックと Esc で閉じる | `test/flows/lang-menu.json` |
+| スマホの幅 | `home`・`matches`・`stats`・`rivals` | 375px の画面で、どの要素も画面の右端からはみ出さない（表は `.table-wrap` の中で横に送る） | `test/flows/no-overflow.json` |
 | スマホのメニュー | 全ページ | `.menu-btn` で `#site-nav` を開閉 | `test/flows/menu.json` |
 | 言語の提案バナー | 全ページ | ブラウザの言語と違うページで `.lang-banner` を出す（自動リダイレクトはしない） | `test/flows/language-banner.json` |
 | 名言のシャッフル | `home` | `#shuffle` で `#daily-quote` と `#daily-episode-title` を入れ替える。データは `#daily-data` | `test/flows/shuffle.json` |

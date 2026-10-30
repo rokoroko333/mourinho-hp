@@ -286,10 +286,10 @@
   // "Kick-off in 2 d 4 h 13 min 05 s", ticking every second (only the text changes, and browsers pause timers
   // in background tabs) and hidden once the match has started. Not a live region, so screen readers do not
   // announce every tick. When to count and the wording are in src/assets/kickoff.js.
-  function startCountdown(kickoff) {
+  function startCountdown(at) {
     const box = $('#countdown');
     const tick = () => {
-      const secs = Math.floor((kickoff - Date.now()) / 1000);
+      const secs = Math.floor((at - Date.now()) / 1000);
       if (!(secs >= 0)) {
         box.hidden = true;
         return;

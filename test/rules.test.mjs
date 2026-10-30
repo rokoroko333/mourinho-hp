@@ -266,5 +266,7 @@ test('every content text and every ui.json key exists in every language', async 
 // in English on /ja/ only (#58).
 test('every rival has its name in each language that writes names differently', async () => {
   const rivals = JSON.parse(await readFile(join(ROOT, 'src/content/rivals.json'), 'utf8'));
-  for (const r of rivals) assert.ok(r.localName?.ja, `rivals.json ${r.id}: no localName.ja`);
+  // Japanese at least; any other language given for one rival must be given for all of them.
+  const langs = new Set(['ja', ...rivals.flatMap((r) => Object.keys(r.localName ?? {}))]);
+  for (const r of rivals) for (const l of langs) assert.ok(r.localName?.[l], `rivals.json ${r.id}: no localName.${l}`);
 });

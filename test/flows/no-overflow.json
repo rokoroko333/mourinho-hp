@@ -1,5 +1,5 @@
 {
-  "description": "On a 375px phone nothing is wider than the screen (tables scroll inside .table-wrap): home with its match cards drawn, matches with its rows, stats and a rival page, in English, Spanish and Portuguese",
+  "description": "On a 375px phone nothing is wider than the screen and the page never scrolls sideways (tables scroll inside .table-wrap): home with its match cards drawn, matches with its rows, stats and a rival page, in every language",
   "viewport": {
     "width": 375,
     "height": 800
@@ -12,25 +12,7 @@
       "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
     },
     {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
-    },
-    {
-      "goto": "/es/"
-    },
-    {
-      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
-    },
-    {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
-    },
-    {
-      "goto": "/pt/"
-    },
-    {
-      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
-    },
-    {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
     },
     {
       "goto": "/matches/"
@@ -39,7 +21,28 @@
       "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
     },
     {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/stats/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/rivals/guardiola/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/es/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
     },
     {
       "goto": "/es/partidos/"
@@ -48,7 +51,28 @@
       "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
     },
     {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/es/estadisticas/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/es/rivales/guardiola/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/pt/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
     },
     {
       "goto": "/pt/jogos/"
@@ -57,19 +81,49 @@
       "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
     },
     {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
     },
     {
-      "goto": "/stats/"
+      "goto": "/pt/estatisticas/"
     },
     {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
     },
     {
-      "goto": "/rivals/guardiola/"
+      "goto": "/pt/rivais/guardiola/"
     },
     {
-      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/ja/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/ja/matches/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/ja/stats/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/ja/rivals/guardiola/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; if (document.documentElement.scrollWidth > W || document.body.scrollWidth > W) return false; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
     }
   ]
 }

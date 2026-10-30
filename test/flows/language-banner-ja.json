@@ -1,0 +1,43 @@
+{
+  "description": "A Japanese-speaking visitor on the English home page is offered the Japanese page, in Japanese down to the close button's name, and closing the offer removes it",
+  "languages": [
+    "ja-JP",
+    "ja"
+  ],
+  "steps": [
+    {
+      "goto": "/"
+    },
+    {
+      "eval": "(() => { localStorage.removeItem('lang-dismissed'); return true; })()"
+    },
+    {
+      "goto": "/"
+    },
+    {
+      "visible": ".lang-banner"
+    },
+    {
+      "text": {
+        "selector": ".lang-banner a",
+        "includes": "日本語"
+      }
+    },
+    {
+      "eval": "new URL(document.querySelector('.lang-banner a').href).pathname === '/ja/'"
+    },
+    {
+      "attr": {
+        "selector": ".lang-banner button",
+        "name": "aria-label",
+        "equals": "閉じる"
+      }
+    },
+    {
+      "click": ".lang-banner button"
+    },
+    {
+      "absent": ".lang-banner"
+    }
+  ]
+}

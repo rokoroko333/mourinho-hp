@@ -214,6 +214,9 @@ ${header(lang, pathsOf('home'), 'home')}
 <div class="wrap sections">
 <section id="matches" class="section">
   <div class="section-head"><div><h2>${esc(h.matchesHeading)}</h2><p class="sub">${esc(h.matchesSub)}</p></div></div>
+  <!-- app.js moves this into the next match's card. It stays in the HTML for an app.js cached from before
+       that change (up to an hour), which expects to find it. -->
+  <p class="countdown" id="countdown" hidden></p>
   <div class="grid grid-2" id="match-list"><p class="loading">${esc(h.loading)}</p></div>
   <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">
     <div><h3>${esc(h.highlights)}</h3><p class="muted">${esc(h.highlightsSub)}</p></div>

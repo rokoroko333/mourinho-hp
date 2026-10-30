@@ -249,11 +249,12 @@
       t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
       t.name,
       el('small', {}, side));
-  // The next match comes first and carries the countdown (#countdown on the home page lives in its card).
+  // The next match comes first and carries the countdown: on the home page the #countdown from the HTML is
+  // moved into its card (/matches/ has no cards and keeps it where it is).
   const matchCard = (m, isNext) =>
     el('article', { class: `card match${isNext ? ' next' : ''}` },
       el('span', { class: 'match-tag' }, isNext ? strings.next : strings.latest),
-      isNext && !$('#countdown') ? el('p', { class: 'countdown', id: 'countdown', hidden: '' }) : null,
+      isNext ? $('#countdown') : null,
       el('div', { class: 'teams' },
         teamEl(m.home, strings.home),
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
@@ -307,6 +308,7 @@
   // announce every tick. When to count and the wording are in src/assets/kickoff.js.
   function startCountdown(at) {
     const box = $('#countdown');
+    if (!box) return;
     const tick = () => {
       const secs = Math.floor((at - Date.now()) / 1000);
       if (!(secs >= 0)) {

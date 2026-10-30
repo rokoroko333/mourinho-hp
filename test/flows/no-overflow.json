@@ -1,14 +1,75 @@
 {
-  "description": "On a 375px phone nothing is wider than the screen on the pages with the widest blocks: home (match cards and countdown), matches, stats and a rival page",
-  "viewport": { "width": 375, "height": 800 },
+  "description": "On a 375px phone nothing is wider than the screen (tables scroll inside .table-wrap): home with its match cards drawn, matches with its rows, stats and a rival page, in English, Spanish and Portuguese",
+  "viewport": {
+    "width": 375,
+    "height": 800
+  },
   "steps": [
-    { "goto": "/" },
-    { "eval": "(async () => { await new Promise((r) => setTimeout(r, 2000)); const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1; }); })()" },
-    { "goto": "/matches/" },
-    { "eval": "(async () => { await new Promise((r) => setTimeout(r, 2000)); const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()" },
-    { "goto": "/stats/" },
-    { "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()" },
-    { "goto": "/rivals/guardiola/" },
-    { "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1; }); })()" }
+    {
+      "goto": "/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/es/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/pt/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/matches/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/es/partidos/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/pt/jogos/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#fixture-list .match-row, #result-list .match-row'); i++) await new Promise((r) => setTimeout(r, 100)); return !!document.querySelector('.match-row'); })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/stats/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/rivals/guardiola/"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    }
   ]
 }

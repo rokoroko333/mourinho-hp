@@ -1,0 +1,27 @@
+{
+  "description": "On the narrowest phone (320px) the home match cards, with the longest labels (Spanish and Portuguese), still fit the screen",
+  "viewport": {
+    "width": 320,
+    "height": 800
+  },
+  "steps": [
+    {
+      "goto": "/es/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    },
+    {
+      "goto": "/pt/"
+    },
+    {
+      "eval": "(async () => { for (let i = 0; i < 40 && !document.querySelector('#match-list .match'); i++) await new Promise((r) => setTimeout(r, 100)); return document.querySelectorAll('#match-list .match').length > 0; })()"
+    },
+    {
+      "eval": "(() => { const W = document.documentElement.clientWidth; return ![...document.querySelectorAll('body *')].some((e) => { const r = e.getBoundingClientRect(); return r.width && r.right > W + 1 && !e.closest('.table-wrap'); }); })()"
+    }
+  ]
+}

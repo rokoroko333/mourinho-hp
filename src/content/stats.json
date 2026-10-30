@@ -288,6 +288,21 @@
       ]
     }
   ],
+  "current": {
+    "era": "real-madrid-2",
+    "matches": 11,
+    "wins": 9,
+    "draws": 0,
+    "losses": 2,
+    "asOf": "2026-10-21",
+    "sources": [
+      {
+        "url": "https://defensacentral.com/actualidad/analisis-100-primeros-dias-mourinho-en-madrid-81-victorias-tercero-en-liga-liderando-champions-sensacion-juego-debe-mejorar_345297_102.html",
+        "publisher": "Defensa Central",
+        "date": "2026-10-21"
+      }
+    ]
+  },
   "records": [
     {
       "id": "chelsea-home-run",

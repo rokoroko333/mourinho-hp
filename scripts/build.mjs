@@ -591,14 +591,18 @@ const winRate = (r, lang) =>
 const num = (n, lang) => (n == null ? '—' : n.toLocaleString(lang));
 
 // The era's record in all competitions, with its sources (stats.json). Nothing for eras without one.
+// The current spell (stats.current) is not in the clubs table: it holds only for its `asOf` date, so it
+// always shows with that note.
 function eraRecord(eraId, lang) {
-  const r = stats.clubs.find((c) => c.era === eraId);
+  const current = stats.current?.era === eraId;
+  const r = current ? stats.current : stats.clubs.find((c) => c.era === eraId);
   if (!r) return '';
   const p = ui[lang].stats;
   return `<div class="era-record">
       <p><span class="card-label">${esc(p.record)}</span> ${esc(fill(p.recordLine, { matches: num(r.matches, lang), wins: num(r.wins, lang), rate: winRate(r, lang) }))}${
         r.draws == null ? '' : ` · ${esc(fill(p.drawsLosses, { draws: num(r.draws, lang), losses: num(r.losses, lang) }))}`
       }</p>
+      ${current ? `<p class="muted">${esc(fill(p.currentNote, { date: longDate(r.asOf, lang) }))}</p>` : ''}
       ${sourceList(r.sources, lang)}
     </div>`;
 }
@@ -657,8 +661,18 @@ ${header(lang, pathsOf('stats'), 'history')}
       </table>
     </div>
     <p class="muted stats-note">${esc(p.dashNote)}</p>
-    <p class="muted stats-note">${esc(p.currentNote)}</p>
   </section>
+  ${
+    stats.current
+      ? `<section class="section" id="current">
+    <div class="section-head"><h2>${esc(p.currentHeading)}</h2></div>
+    <article class="card stat-current">
+      <h3><a href="${eraPaths(stats.current.era)[lang]}">${esc(eraOf(stats.current.era).club[lang])}</a> <span class="muted">${esc(eraOf(stats.current.era).years)}</span></h3>
+      ${eraRecord(stats.current.era, lang)}
+    </article>
+  </section>`
+      : ''
+  }
 </main>
 ${footer(lang)}`;
 }

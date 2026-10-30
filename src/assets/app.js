@@ -29,6 +29,18 @@
     nav.addEventListener('click', (e) => e.target.closest('a') && set(false));
   }
 
+  // Language menu (<details>): also closes on a click outside it or on Escape.
+  const langMenu = $('.lang-switch');
+  if (langMenu) {
+    document.addEventListener('click', (e) => { if (langMenu.open && !langMenu.contains(e.target)) langMenu.open = false; });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && langMenu.open) {
+        langMenu.open = false;
+        langMenu.querySelector('summary').focus();
+      }
+    });
+  }
+
   // Share buttons on quote and story pages. The network links work without JS; this adds the phone's
   // own share sheet (placed first, touch screens only) and copying the link.
   for (const box of document.querySelectorAll('.share')) {
@@ -237,9 +249,11 @@
       t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
       t.name,
       el('small', {}, side));
+  // The next match comes first and carries the countdown (#countdown on the home page lives in its card).
   const matchCard = (m, isNext) =>
     el('article', { class: `card match${isNext ? ' next' : ''}` },
       el('span', { class: 'match-tag' }, isNext ? strings.next : strings.latest),
+      isNext && !$('#countdown') ? el('p', { class: 'countdown', id: 'countdown', hidden: '' }) : null,
       el('div', { class: 'teams' },
         teamEl(m.home, strings.home),
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
@@ -276,7 +290,7 @@
       if (redraw(resultList)) fillRows(resultList, data.results);
       if (redraw(fixtureList)) fillRows(fixtureList, data.fixtures);
       if (matchList) {
-        const cards = [data.latest && matchCard(data.latest, false), data.next && matchCard(data.next, true)].filter(Boolean);
+        const cards = [data.next && matchCard(data.next, true), data.latest && matchCard(data.latest, false)].filter(Boolean);
         if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
         matchList.replaceChildren(...cards);
       }

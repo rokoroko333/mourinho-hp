@@ -1,0 +1,13 @@
+{
+  "description": "The language menu opens from the header, lists every language under its own name with the current one marked, links to this page in the others, and closes on Escape",
+  "steps": [
+    { "goto": "/stats/" },
+    { "hidden": ".lang-switch ul" },
+    { "click": ".lang-switch summary" },
+    { "visible": ".lang-switch ul" },
+    { "attr": { "selector": ".lang-switch a[aria-current]", "name": "hreflang", "equals": "en" } },
+    { "attr": { "selector": ".lang-switch a[hreflang=\"es\"]", "name": "href", "equals": "/es/estadisticas/" } },
+    { "text": { "selector": ".lang-switch a[hreflang=\"pt\"]", "includes": "Português" } },
+    { "eval": "(() => { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })); return !document.querySelector('.lang-switch').open; })()" }
+  ]
+}

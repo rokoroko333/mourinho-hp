@@ -270,8 +270,11 @@
   const fixtureList = $('#fixture-list');
   if (matchList || resultList) getJson('/api/matches')
     .then((data) => {
-      if (resultList) fillRows(resultList, data.results);
-      if (fixtureList) fillRows(fixtureList, data.fixtures);
+      // The cached /matches/ HTML of the previous deploy (up to five minutes) has no strings.timeZone: its rows
+      // were drawn on the server and say "UTC", so they are kept rather than redrawn in the visitor's zone.
+      const redraw = (list) => list && (strings.timeZone || !list.querySelector('.match-row'));
+      if (redraw(resultList)) fillRows(resultList, data.results);
+      if (redraw(fixtureList)) fillRows(fixtureList, data.fixtures);
       if (matchList) {
         const cards = [data.latest && matchCard(data.latest, false), data.next && matchCard(data.next, true)].filter(Boolean);
         if (!cards.length) return showMessage(matchList, strings.matchesEmpty);

@@ -133,6 +133,7 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 /* News */
 .news-meta { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); }
 .news-meta time { color: var(--gold-light); font-weight: 600; }
+.news-lang { margin-left: 8px; padding: 1px 6px; border: 1px solid var(--border); border-radius: var(--radius); font: 600 11px var(--display); letter-spacing: 0.12em; color: var(--muted); }
 .news-card h3 { font: 600 16px/1.45 var(--sans); letter-spacing: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .read { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border); color: var(--gold); font: 600 14px var(--display); letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
 

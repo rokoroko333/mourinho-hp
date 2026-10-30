@@ -222,3 +222,12 @@ test('styles keep colours in :root and every font file they or the pages name ex
   assert.ok(fonts.length >= 6, 'expected the @font-face sources, the preloads and the share image fonts');
   for (const f of fonts) await readFile(join(ROOT, 'src/assets', f));
 });
+
+// News is one list for every language under KV `news:local` (#57); a leftover per-language key in the docs
+// would seed or read a key the site no longer uses.
+test('docs name only the news key the site reads', async () => {
+  for (const f of ['README.md', ...(await readdir(join(ROOT, 'docs'))).map((d) => `docs/${d}`)]) {
+    if (!f.endsWith('.md') || f === 'docs/review-lessons.md') continue;
+    assert.doesNotMatch(await readFile(join(ROOT, f), 'utf8'), /news:(en|es|pt|ja)\b/, `${f}: use news:local`);
+  }
+});

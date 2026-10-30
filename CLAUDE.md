@@ -13,19 +13,19 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 
 ## 構成
 
-- `scripts/build.mjs` 依存ゼロの静的生成。`src/content/*.json` を `dist/` に出力する。
-  英語は `/`、スペイン語は `/es/`、ポルトガル語は `/pt/`（`/history/`、`/es/historia/`、`/pt/frases/` など）。
-- `src/content/` 全テキスト（`ui.json`・`quotes.json`・`episodes.json`・`history.json`・`videos.json`）。
-  表示する文字列は必ず `en`・`es`・`pt` をそろえる。
-- `src/assets/` `styles.css` と `app.js`（素の JS。フレームワーク・Tailwind・CDN は使わない）。
-  `src/public/` は `dist/` 直下にコピーする（`_headers`・`_redirects`・favicon）。
-- `lib/feeds.js` Google News RSS（言語ごとに2エディション）と、現所属クラブの ESPN 日程をサーバー側で取得・解析。
-  `TEAM_ID`（86 = Real Madrid）は移籍したら変える。
+コードを見れば分かることは書きません。ここにあるのは、見ても分からない約束と落とし穴です。
+
+- `scripts/build.mjs` 依存ゼロの静的生成で、`src/content/*.json` を `dist/` に出力する。
+  英語は `/`、スペイン語は `/es/`、ポルトガル語は `/pt/` で、スラッグも言語ごとに違う（`ui.json` の `slugs`）。
+- `src/content/` 全テキスト。表示する文字列は必ず `en`・`es`・`pt` をそろえる。
+- `src/assets/` は素の JS と CSS（フレームワーク・Tailwind・CDN は使わない）。`src/public/` は `dist/` 直下にコピーする（`_headers`・`_redirects`）。
+- `lib/feeds.js` ニュースと試合日程をサーバー側で取得する。現所属クラブの `TEAM_ID`（86 = Real Madrid）は移籍したら変える。
+  一緒に直す場所は同じファイルのコメントにあり、`test/rules.test.mjs` が言語ごとの直し忘れを落とす。
 - `workers/feeds/` Cron Trigger（20分ごと）で `FEEDS` KV に JSON を書く Worker。空の結果では上書きしない。
-- `functions/api/news.js`・`functions/api/matches.js` KV をエッジキャッシュ経由で返す Pages Functions（`lib/serve.js`）。
-  ブラウザが呼ぶのは自サイトの `/api/*` だけ。
-- `docs/dev-flow.md` 開発フローの詳細。`docs/review-lessons.md` 過去の指摘メモ。
-  `docs/feature-map.md` どのページに何があり、何で検証するかの地図。`docs/skill-evals.md` レビュー用スキルの評価ケース。
+  `functions/api/*` がそれを返し、ブラウザが呼ぶのは自サイトの `/api/*` だけ。
+- `docs/dev-flow.md` 開発フローの詳細と、決まりごとにどのファイルが正本か。`docs/review-lessons.md` 過去の指摘メモ。
+  `docs/feature-map.md` どのページに何があり、何で検証するかの地図。
+  `docs/skill-evals.md`・`docs/context-evals.md` レビュー用スキルと CLAUDE.md を変えるときの評価。
 - `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/skills/verify-flow/` 実画面での検証（`test/flows/`）。`.claude/hooks/verify.sh` 作業終了時の自動検証。
 
 デプロイ手順（Pages プロジェクト `infinito-mourinho`、Worker `infinito-mourinho-feeds`、共有の KV `FEEDS`）は `README.md` を読む。

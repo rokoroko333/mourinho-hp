@@ -8,15 +8,17 @@ globalThis.mourinhoKickoff = {
     const kickoff = new Date(next.date);
     return kickoff > now ? kickoff : null;
   },
-  // "2 d 4 h 05 min 09 s": days and hours only when there are some, seconds always two digits.
+  // "2 d 4 h 05 min 09 s": days and hours only when there are some, seconds always two digits. Japanese
+  // writes number and unit together ("1日22時間05分09秒"), which `units.sep` ('') says.
   countdownText(secs, units) {
+    const sp = units.sep ?? ' ';
     const pad = (n) => String(n).padStart(2, '0');
     const d = Math.floor(secs / 86400);
     const h = Math.floor((secs % 86400) / 3600);
     const m = Math.floor((secs % 3600) / 60);
-    return [d && `${d} ${units.d}`, (d || h) && `${h} ${units.h}`, `${d || h ? pad(m) : m} ${units.m}`, `${pad(secs % 60)} ${units.s}`]
+    return [d && `${d}${sp}${units.d}`, (d || h) && `${h}${sp}${units.h}`, `${d || h ? pad(m) : m}${sp}${units.m}`, `${pad(secs % 60)}${sp}${units.s}`]
       .filter(Boolean)
-      .join(' ');
+      .join(sp);
   },
   // The date line on a match card: "Sun, Nov 1, 16:15 (Madrid time)" in the club's time zone. With the
   // kick-off time still to be confirmed only the day is known (read in UTC, as the placeholder time could

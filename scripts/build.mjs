@@ -142,7 +142,7 @@ function footer(lang) {
   return `<footer class="site-footer">
   <div class="wrap">
     <p class="footer-name">Infinito Mourinho</p>
-    <p class="footer-tag">"${esc(u.tagline)}"</p>
+    <p class="footer-tag">${esc(fill(u.quoteMarks, { text: u.tagline }))}</p>
     <nav class="footer-nav">
       ${PAGES.map((p) => `<a href="${pathOf(lang, p)}">${esc(p === 'home' ? u.nav.home : u.nav[p])}</a>`).join(' · ')}
     </nav>
@@ -180,7 +180,7 @@ function liveStrings(lang) {
     matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
     kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL, tbd: ui[lang].matches.tbd,
     // Kick-off times in the club's own time zone, whatever the visitor's (lib/feeds.js).
-    timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY }),
+    timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY[lang] }),
   };
 }
 const stringsScript = (lang) =>
@@ -207,7 +207,7 @@ ${header(lang, pathsOf('home'), 'home')}
 <section class="hero">
   <div class="wrap hero-inner">
     <h1>Infinito <span class="gold">Mourinho</span></h1>
-    <p class="hero-tag">“${esc(u.tagline)}”</p>
+    <p class="hero-tag">${esc(fill(u.quoteMarks, { text: u.tagline }))}</p>
   </div>
 </section>
 
@@ -1079,7 +1079,7 @@ ${header(lang, pathsOf('matches'), 'matches')}
   </div>
   <p class="countdown" id="countdown" hidden></p>
   <section class="section">
-    <div class="section-head"><div><h2>${esc(p.fixtures)}</h2><p class="sub">${esc(fill(p.timeNote, { city: MATCH_CITY }))}</p></div></div>
+    <div class="section-head"><div><h2>${esc(p.fixtures)}</h2><p class="sub">${esc(fill(p.timeNote, { city: MATCH_CITY[lang] }))}</p></div></div>
     <ol class="match-rows" id="fixture-list"><li class="loading">${esc(u.home.loading)}</li></ol>
   </section>
   <section class="section">

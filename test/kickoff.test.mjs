@@ -23,6 +23,7 @@ test('the countdown reads in days, hours, minutes and two-digit seconds', () => 
   assert.equal(text(3600 + 61, units), '1 h 01 min 01 s');
   assert.equal(text(125, units), '2 min 05 s');
   assert.equal(text(0, units), '0 min 00 s');
+  assert.equal(text(86400 + 7, { d: '日', h: '時間', m: '分', s: '秒', sep: '' }), '1日0時間00分07秒');
 });
 
 test('the match card shows the kick-off in Madrid time, and only the day when the time is to be confirmed', () => {

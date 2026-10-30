@@ -384,7 +384,7 @@ test('fillMatchesPage puts escaped fixtures and results into each built matches 
     assert.ok(list('fixture-list').includes('>16:15<') && !out.includes('UTC'), `${path}: kick-off time in Madrid time`);
     assert.equal(strings.timeZone, 'Europe/Madrid', `${path}: the club's time zone`);
     const before = out.slice(out.indexOf('<section'), out.indexOf('id="fixture-list"'));
-    assert.match(before, /<p class="sub">[^<]*Madrid[^<]*<\/p>/, `${path}: says the times are Madrid time`);
+    assert.match(before, /<p class="sub">[^<]*(Madrid|マドリード)[^<]*<\/p>/, `${path}: says the times are Madrid time`);
     assert.ok(list('fixture-list').includes(`>${strings.tbd}<`), `${path}: time to be confirmed`);
     assert.ok(!out.includes('class="loading"'), `${path}: no loading placeholder left`);
     assert.ok(fillMatchesPage(html, { results: data.results }).includes(`>${strings.matchesEmpty}<`), `${path}: an empty list says so`);

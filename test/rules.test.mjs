@@ -172,7 +172,9 @@ test('the match time zone and city are those of the current club, as the comment
   const { MATCH_TIME_ZONE, MATCH_CITY } = await import('../lib/feeds.js');
   assert.equal(MATCH_TIME_ZONE, zone, `MATCH_TIME_ZONE is not ${club}'s time zone (${zone})`);
   assert.doesNotThrow(() => new Intl.DateTimeFormat('en', { timeZone: MATCH_TIME_ZONE }), 'MATCH_TIME_ZONE is a real time zone');
-  assert.equal(MATCH_CITY, zone.split('/').pop().replace(/_/g, ' '), `MATCH_CITY is not the city of ${zone}`);
+  assert.equal(MATCH_CITY.en, zone.split('/').pop().replace(/_/g, ' '), `MATCH_CITY.en is not the city of ${zone}`);
+  const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
+  for (const lang of Object.keys(ui)) assert.ok(MATCH_CITY[lang], `MATCH_CITY has no ${lang} name`);
 });
 
 // When Mourinho moves, the club name sits in several ui.json strings next to TEAM_ID, and a missed one

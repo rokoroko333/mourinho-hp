@@ -211,7 +211,7 @@ test('styles keep colours in :root and every font file they or the pages name ex
   const css = await readFile(join(ROOT, 'src/assets/styles.css'), 'utf8');
   const root = css.slice(css.indexOf(':root {'), css.indexOf('}', css.indexOf(':root {')));
   const outside = css.replace(root, '').replace(/\/\*[\s\S]*?\*\//g, '');
-  assert.deepEqual(outside.match(/#[0-9a-f]{3,8}\b/gi) ?? [], [], 'colours outside :root; add a token in :root (docs/design.md)');
+  assert.deepEqual(outside.match(/#[0-9a-f]{3,8}\b|\b(?:rgb|hsl)a?\(/gi) ?? [], [], 'colours outside :root; add a token in :root (docs/design.md)');
   const build = await readFile(join(ROOT, 'scripts/build.mjs'), 'utf8');
   const fonts = [...css.matchAll(/url\('\/assets\/(fonts\/[^']+)'\)/g), ...build.matchAll(/href="\/assets\/(fonts\/[^"]+)"/g)].map((m) => m[1]);
   assert.ok(fonts.length >= 4, 'expected the @font-face sources and the preloads');

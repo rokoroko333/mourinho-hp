@@ -9,6 +9,12 @@
       "goto": "/"
     },
     {
+      "eval": "(() => { localStorage.removeItem('lang-dismissed'); return true; })()"
+    },
+    {
+      "goto": "/"
+    },
+    {
       "visible": ".lang-banner"
     },
     {

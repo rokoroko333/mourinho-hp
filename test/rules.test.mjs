@@ -266,5 +266,19 @@ test('every content text and every ui.json key exists in every language', async 
 // in English on /ja/ only (#58).
 test('every rival has its name in each language that writes names differently', async () => {
   const rivals = JSON.parse(await readFile(join(ROOT, 'src/content/rivals.json'), 'utf8'));
-  for (const r of rivals) assert.ok(r.localName?.ja, `rivals.json ${r.id}: no localName.ja`);
+  // Japanese at least; any other language given for one rival must be given for all of them.
+  const langs = new Set(['ja', ...rivals.flatMap((r) => Object.keys(r.localName ?? {}))]);
+  for (const r of rivals) for (const l of langs) assert.ok(r.localName?.[l], `rivals.json ${r.id}: no localName.${l}`);
+});
+
+// The overflow flows repeat one long check (flow JSON cannot share a function); a fix to one copy must reach
+// every copy, so the copies must stay identical (#60).
+test('every overflow check in the overflow flows is the same check', async () => {
+  const checks = [];
+  for (const f of ['no-overflow.json', 'no-overflow-320.json']) {
+    const flow = JSON.parse(await readFile(join(ROOT, 'test/flows', f), 'utf8'));
+    checks.push(...flow.steps.map((s) => s.eval).filter((e) => e?.includes('scrollWidth')));
+  }
+  assert.ok(checks.length >= 10, `expected the overflow checks, found ${checks.length}`);
+  assert.equal(new Set(checks).size, 1, 'the overflow checks differ; change every copy together');
 });

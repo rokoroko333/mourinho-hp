@@ -407,6 +407,20 @@ test('quote texts are marked as English on every page', async () => {
   }
 });
 
+// The language banner (app.js) reads its text and its close button's name from JSON in every page.
+test('every page carries the banner text and close-button name for every language', async () => {
+  await build();
+  const ui = await load('ui.json');
+  for (const path of ['', 'es', 'ja/stats', 'pt/frases']) {
+    const html = await page(path);
+    for (const id of ['lang-suggest', 'lang-close']) {
+      const json = JSON.parse(html.match(new RegExp(`id="${id}">([^<]*)<`))?.[1] ?? 'null');
+      assert.ok(json, `${path || 'en'}: #${id}`);
+      for (const l of Object.keys(ui)) assert.equal(json[l], id === 'lang-close' ? ui[l].closeLabel : ui[l].suggest, `${path || 'en'}: #${id} ${l}`);
+    }
+  }
+});
+
 // The quiz adds no facts of its own: every answer is a trophy's era, and the wrong options are other
 // clubs he managed as head coach, never a club he was only an assistant at.
 test('every quiz question answers from the trophy list with four different managed clubs', async () => {

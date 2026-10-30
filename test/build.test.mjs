@@ -415,7 +415,10 @@ test('the stats page and era pages show each number with its sources in all thre
     for (const s of c.sources) assert.ok(card.includes(`href="${s.url}"`), `${lang}: current source`);
     const era = await page(`${history}/${c.era}`);
     const record = era.slice(era.indexOf('class="era-record"'), era.indexOf('</div>', era.indexOf('class="era-record"')));
-    assert.ok(record.includes(c.asOf.slice(0, 4)) && record.includes('class="muted"'), `${lang}: ${c.era} era page shows the record with its date`);
+    // The note's date, written as the build writes it (longDate in scripts/build.mjs).
+    const asOf = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(c.asOf));
+    assert.ok(card.includes(asOf), `${lang}: current spell shows its as-of date`);
+    assert.ok(record.includes(asOf), `${lang}: ${c.era} era page shows the record with its as-of date`);
   }
 });
 

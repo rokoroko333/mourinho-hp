@@ -159,3 +159,33 @@ test('the feature map lists every page and every flow, and names only ids that e
     assert.ok(sources.includes(`id="${id}"`) || sources.includes(`'${id}'`), `docs/feature-map.md names #${id}, which neither scripts/build.mjs nor app.js has`);
   }
 });
+
+// When Mourinho moves, the club name sits in several ui.json strings next to TEAM_ID, and a missed one
+// (or one language) keeps showing the old club (#2, #34). The list of places is the comment above TEAM_ID.
+test('every ui.json string naming the current club is listed beside TEAM_ID, and names it in every language', async () => {
+  const feeds = await readFile(join(ROOT, 'lib/feeds.js'), 'utf8');
+  const head = feeds.slice(0, feeds.indexOf('export const TEAM_ID'));
+  const comment = head.slice(head.lastIndexOf('\n\n')).split('\n').filter((l) => l.startsWith('//')).join(' ');
+  const [, id, club] = comment.match(/\((\d+) = ([^)]+)\)/) ?? [];
+  assert.ok(club, 'the comment above TEAM_ID no longer says "(<id> = <club>)"; update this test');
+  assert.equal(Number(id), (await import('../lib/feeds.js')).TEAM_ID, `the comment above TEAM_ID names team ${id}; change it with TEAM_ID`);
+  // Any `section.key` span is a ui.json key; paths like `src/content/ui.json` have slashes and do not match.
+  const listed = [...comment.matchAll(/`(\w+\.\w+)`/g)].map((m) => m[1]);
+  assert.ok(listed.length >= 3, `expected the ui.json keys in the comment above TEAM_ID, found ${listed.length}; update this test`);
+
+  // Career text that stays true after a move; add a key here only when it names the club as history.
+  const history = new Set(['history.description']);
+  const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
+  const strings = (o, path = '') => Object.entries(o).flatMap(([k, v]) =>
+    typeof v === 'string' ? [[`${path}${k}`, v]] : v && typeof v === 'object' ? strings(v, `${path}${k}.`) : []);
+  for (const lang of ['en', 'es', 'pt']) {
+    const all = new Map(strings(ui[lang]));
+    for (const key of listed) {
+      assert.ok(all.get(key)?.includes(club), `ui.json ${lang}.${key} does not name ${club}; it is listed beside TEAM_ID as a place to change on a move`);
+    }
+    for (const [key, text] of all) {
+      if (!text.includes(club) || history.has(key)) continue;
+      assert.ok(listed.includes(key), `ui.json ${lang}.${key} names ${club} but is not in the list above TEAM_ID in lib/feeds.js; add it there`);
+    }
+  }
+});

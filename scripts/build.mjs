@@ -4,7 +4,7 @@ import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL } from '../lib/feeds.js';
-import { withYears, pickOnThisDay, quizQuestions } from './content.mjs';
+import { withYears, pickOnThisDay, quizQuestions, dealQuiz } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'dist');
@@ -710,7 +710,7 @@ ${footer(lang)}`;
 }
 
 // Quiz (docs/plans/phase3.md): one question per sourced trophy, nothing new to source. The HTML holds ten
-// questions picked by the build's day, each with its answer and sources in a <details>, so it works without
+// questions dealt by the build's day, each with its answer and sources in a <details>, so it works without
 // JS; app.js marks answers, keeps the score and deals ten more from the embedded list.
 const QUIZ_SIZE = 10;
 const quiz = quizQuestions(trophies, history, [...stats.clubs.map((c) => c.era), stats.current.era]);
@@ -729,7 +729,7 @@ function quizItems(lang) {
 
 function quizQuestion(q, lang) {
   const p = ui[lang].quiz;
-  return `<li class="card quiz-q" data-answer="${q.answer}">
+  return `<li class="card quiz-q" data-id="${q.id}" data-answer="${q.answer}">
         <p class="card-label">${esc(q.label)}</p>
         <h3>${esc(p.prompt)}</h3>
         <div class="quiz-options">${q.options.map((o) => `<button type="button" class="btn btn-sm btn-dark" data-era="${o.era}">${esc(o.club)}</button>`).join('')}</div>
@@ -741,8 +741,7 @@ function quizQuestion(q, lang) {
 function quizPage(lang) {
   const p = ui[lang].quiz;
   const items = quizItems(lang);
-  const start = Math.floor(Date.now() / 86400000) % items.length;
-  const shown = Array.from({ length: Math.min(QUIZ_SIZE, items.length) }, (_, i) => items[(start + i) % items.length]);
+  const shown = dealQuiz(items, Math.floor(Date.now() / 86400000), QUIZ_SIZE);
   const data = { size: QUIZ_SIZE, strings: { show: p.show, answer: p.answer, correct: p.correct, wrong: p.wrong, score: p.score, prompt: p.prompt, sources: ui[lang].detail.sources }, items };
   return `${head(lang, pathsOf('quiz'), p)}
 <body data-lang="${lang}">

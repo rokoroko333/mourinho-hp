@@ -103,7 +103,7 @@
       }
     });
     const question = (q) =>
-      el('li', { class: 'card quiz-q', 'data-answer': q.answer },
+      el('li', { class: 'card quiz-q', 'data-id': q.id, 'data-answer': q.answer },
         el('p', { class: 'card-label' }, q.label),
         el('h3', {}, s.prompt),
         el('div', { class: 'quiz-options' },
@@ -121,11 +121,16 @@
     const again = $('#quiz-again');
     again.hidden = false;
     again.addEventListener('click', () => {
-      const deck = [...quiz.items];
-      for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
-      }
+      // Questions not on screen first, so the next ten do not repeat the last ones.
+      const shown = new Set([...quizList.children].map((q) => q.dataset.id));
+      const shuffle = (list) => {
+        for (let i = list.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [list[i], list[j]] = [list[j], list[i]];
+        }
+        return list;
+      };
+      const deck = [...shuffle(quiz.items.filter((q) => !shown.has(q.id))), ...shuffle(quiz.items.filter((q) => shown.has(q.id)))];
       quizList.replaceChildren(...deck.slice(0, quiz.size).map(question));
       answered = 0;
       right = 0;

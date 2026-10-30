@@ -1,15 +1,47 @@
 {
-  "description": "On the quiz, picking the right club marks it and opens the answer, answering all ten shows the score, and New questions deals ten fresh ones",
+  "description": "On the quiz, picking the right club marks it and opens the answer, answering all ten shows the score, and New questions deals ten others, none of them repeated",
   "steps": [
-    { "goto": "/quiz/" },
-    { "hidden": "#quiz-score" },
-    { "visible": "#quiz-again" },
-    { "eval": "(() => { const q = document.querySelector('.quiz-q'); q.querySelector(`button[data-era=\"${q.dataset.answer}\"]`).click(); return q.querySelector('details').open && q.querySelector('.is-right') && !q.querySelector('.is-wrong'); })()" },
-    { "text": { "selector": ".quiz-q .quiz-result", "includes": "Correct" } },
-    { "eval": "(() => { for (const q of [...document.querySelectorAll('.quiz-q')].slice(1)) q.querySelector(`button[data-era]:not([data-era=\"${q.dataset.answer}\"])`).click(); return document.querySelectorAll('.quiz-q .is-wrong').length === 9; })()" },
-    { "text": { "selector": "#quiz-score", "includes": "1 of 10 correct" } },
-    { "click": "#quiz-again" },
-    { "hidden": "#quiz-score" },
-    { "eval": "document.querySelectorAll('.quiz-q').length === 10 && !document.querySelector('.quiz-q [disabled]') && [...document.querySelectorAll('.quiz-q details > p:first-of-type a')].every((a) => a.getAttribute('href').startsWith('/history/'))" }
+    {
+      "goto": "/quiz/"
+    },
+    {
+      "hidden": "#quiz-score"
+    },
+    {
+      "visible": "#quiz-again"
+    },
+    {
+      "eval": "(() => { const q = document.querySelector('.quiz-q'); q.querySelector(`button[data-era=\"${q.dataset.answer}\"]`).click(); return q.querySelector('details').open && q.querySelector('.is-right') && !q.querySelector('.is-wrong'); })()"
+    },
+    {
+      "text": {
+        "selector": ".quiz-q .quiz-result",
+        "includes": "Correct"
+      }
+    },
+    {
+      "eval": "(() => { for (const q of [...document.querySelectorAll('.quiz-q')].slice(1)) q.querySelector(`button[data-era]:not([data-era=\"${q.dataset.answer}\"])`).click(); return document.querySelectorAll('.quiz-q .is-wrong').length === 9; })()"
+    },
+    {
+      "text": {
+        "selector": "#quiz-score",
+        "includes": "1 of 10 correct"
+      }
+    },
+    {
+      "eval": "(() => { window.quizBefore = [...document.querySelectorAll('.quiz-q')].map((q) => q.dataset.id); return window.quizBefore.length === 10; })()"
+    },
+    {
+      "click": "#quiz-again"
+    },
+    {
+      "hidden": "#quiz-score"
+    },
+    {
+      "eval": "document.querySelectorAll('.quiz-q').length === 10 && !document.querySelector('.quiz-q [disabled]') && [...document.querySelectorAll('.quiz-q details > p:first-of-type a')].every((a) => a.getAttribute('href').startsWith('/history/'))"
+    },
+    {
+      "eval": "[...document.querySelectorAll('.quiz-q')].every((q) => !window.quizBefore.includes(q.dataset.id))"
+    }
   ]
 }

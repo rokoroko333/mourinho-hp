@@ -5,7 +5,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { pickOnThisDay, quizQuestions } from '../scripts/content.mjs';
+import { pickOnThisDay, quizQuestions, dealQuiz } from '../scripts/content.mjs';
 import { fillMatchesPage } from '../lib/matches-page.js';
 import { existsSync } from 'node:fs';
 
@@ -408,6 +408,14 @@ test('every quiz question answers from the trophy list with four different manag
     for (const o of q.options) assert.ok(managed.includes(o), `${q.id}: ${o} is a club he managed`);
   }
   assert.deepEqual(quizQuestions(trophies, history, managed), questions, 'the same quiz on every build');
+  // The page's ten are dealt by day from the whole list, not ten trophies in a row of one era or two.
+  for (const day of [20000, 20001, 20391]) {
+    const dealt = dealQuiz(questions, day, 10);
+    assert.equal(new Set(dealt.map((q) => q.id)).size, 10, `day ${day}: ten different questions`);
+    assert.ok(new Set(dealt.map((q) => club(q.answer))).size >= 4, `day ${day}: answers from several clubs`);
+    assert.deepEqual(dealQuiz(questions, day, 10), dealt, `day ${day}: the same ten on every build that day`);
+  }
+  assert.notDeepEqual(dealQuiz(questions, 20000, 10), dealQuiz(questions, 20001, 10), 'another day, other questions');
   // Too few clubs for three wrong options stops the build rather than looping for ever.
   assert.throws(() => quizQuestions(trophies, history, ['porto', 'chelsea-1', 'chelsea-2', 'inter']), /three other managed clubs/);
 });
@@ -417,7 +425,7 @@ test('the quiz page shows ten questions with their answers and sources in three 
   const trophies = await load('trophies.json');
   for (const path of ['quiz', 'es/trivia', 'pt/quiz']) {
     const html = await page(path);
-    const items = [...html.matchAll(/<li class="card quiz-q" data-answer="([a-z0-9-]+)">([\s\S]*?)<\/li>/g)];
+    const items = [...html.matchAll(/<li class="card quiz-q" data-id="[a-z0-9-]+" data-answer="([a-z0-9-]+)">([\s\S]*?)<\/li>/g)];
     assert.equal(items.length, 10, `${path}: ten questions`);
     for (const [, answer, body] of items) {
       assert.equal((body.match(/data-era="/g) || []).length, 4, `${path}: four options`);

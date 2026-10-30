@@ -95,8 +95,10 @@ ${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternat
 <meta property="og:image:height" content="${OG_IMAGE.height}">
 <meta property="og:image:alt" content="${esc(imageAlt)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#121212">
+<meta name="theme-color" content="#0b0d10">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/barlow-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/styles.css">
 <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
 </head>`;

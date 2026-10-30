@@ -383,8 +383,12 @@ test('fillMatchesPage puts escaped fixtures and results into each built matches 
     assert.ok(list('fixture-list').includes('15:15') && list('fixture-list').includes('UTC'), `${path}: kick-off time in UTC`);
     assert.ok(list('fixture-list').includes(`>${strings.tbd}<`), `${path}: time to be confirmed`);
     assert.ok(!out.includes('class="loading"'), `${path}: no loading placeholder left`);
-    assert.ok(fillMatchesPage(html, {}).includes(`>${strings.matchesEmpty}<`), `${path}: empty lists say so`);
+    assert.ok(fillMatchesPage(html, { results: data.results }).includes(`>${strings.matchesEmpty}<`), `${path}: an empty list says so`);
   }
+  // Markup it does not know is reported, not passed through as if it had been filled.
+  const html = await page('matches');
+  assert.equal(fillMatchesPage(html.replace('id="result-list"', 'id="results"'), data), null);
+  assert.equal(fillMatchesPage(html.replace('id="strings"', 'id="text"'), data), null);
 });
 
 // Numbers follow the facts rules: every one has a source, records add up, and eras exist.

@@ -130,7 +130,7 @@ test('the sitemap lists every built page exactly once, with all three languages'
     .map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'))
     .filter((p) => !LIVE_PAGES.includes(p));
   assert.deepEqual([...locs].sort(), [...pages].sort());
-  for (const p of pages) assert.ok(!(await page(p.slice(1))).includes('name="robots"'), `${p}: indexable`);
+  for (const p of pages) assert.doesNotMatch(await page(p.slice(1)), /<meta name="robots" content="[^"]*noindex/, `${p}: indexable`);
   assert.equal(new Set(locs).size, locs.length);
   for (const block of xml.split('<url>').slice(1)) assert.equal((block.match(/hreflang=/g) || []).length, 4);
 });

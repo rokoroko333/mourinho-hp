@@ -225,8 +225,9 @@
           el('a', { class: `card card-link news-card${i === 0 ? ' news-lead' : ''}`, href: item.link, target: '_blank', rel: 'noopener' },
             el('div', { class: 'news-meta' },
               item.publishedAt ? el('time', { datetime: item.publishedAt }, relative(item.publishedAt)) : el('span'),
-              el('span', {}, item.source || '')),
-            el('h3', {}, item.title),
+              // The press it comes from: the headline is in Spanish or Portuguese whatever the page language.
+              el('span', {}, item.source || '', item.lang ? el('small', { class: 'news-lang' }, item.lang.toUpperCase()) : null)),
+            el('h3', item.lang ? { lang: item.lang } : {}, item.title),
             el('span', { class: 'read' }, strings.readArticle, ' →')),
         ),
       );

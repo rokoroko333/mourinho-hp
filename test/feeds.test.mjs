@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNewsWithReport, langForRun, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, outletItems, fetchNewsWithReport, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -64,41 +64,46 @@ test('outletItems keeps recent items about Mourinho and labels them with the out
 
 // Answers Google News with one general item, and each outlet feed with one item naming Mourinho,
 // except the outlets in `quiet`, whose only item is about something else.
-const fakeFeeds = (lang, { quiet = [], onFetch = () => {} } = {}) => async (url) => {
+const fakeFeeds = ({ quiet = [], onFetch = () => {} } = {}) => async (url) => {
   await onFetch(url);
   const hl = new URL(url).searchParams.get('hl') || '';
-  const outlet = OUTLETS[lang].find((o) => o.feed === url);
+  const outlet = OUTLETS.find((o) => o.feed === url);
   const title = !outlet ? `Mourinho general ${hl} - Wire` : quiet.includes(outlet) ? 'Other news' : `Mourinho in ${outlet.name}`;
   return new Response(`<rss><item><title>${title}</title><link>${outlet ? outlet.feed : 'https://news.google.com/'}/${hl}</link>
 <pubDate>Tue, 27 Oct 2026 10:00:00 GMT</pubDate>${outlet ? '' : '<source url="https://x">Wire</source>'}
 <description>&lt;p&gt;Summary&lt;/p&gt;</description></item></rss>`);
 };
 
-test('fetchNews reads every outlet feed and mixes its items in, without summaries', async () => {
+test('fetchNews reads the Spanish, Portuguese and English feeds and labels every item with its press language', async () => {
   const now = new Date('2026-10-28T00:00:00Z');
   const urls = [];
   const realFetch = globalThis.fetch;
-  const quiet = [OUTLETS.es.at(-1)];
-  globalThis.fetch = fakeFeeds('es', { quiet, onFetch: (u) => urls.push(u) });
+  const quiet = [OUTLETS.at(-1)];
+  globalThis.fetch = fakeFeeds({ quiet, onFetch: (u) => urls.push(u) });
   let r;
   try {
-    r = await fetchNewsWithReport('es', now);
+    r = await fetchNewsWithReport(now);
   } finally {
     globalThis.fetch = realFetch;
   }
-  assert.equal(urls.filter((u) => u.startsWith('https://news.google.com/')).length, 2);
-  assert.deepEqual(urls.filter((u) => !u.startsWith('https://news.google.com/')).sort(), OUTLETS.es.map((o) => o.feed).sort());
-  const expected = OUTLETS.es.slice(0, -1).map((o) => o.name);
+  // Google News for Spain and Portugal only (no US, Latin American or UK edition); England comes from its outlets.
+  const google = urls.filter((u) => u.startsWith('https://news.google.com/')).map((u) => new URL(u).searchParams.get('gl'));
+  assert.deepEqual(google, ['ES', 'PT']);
+  assert.ok(OUTLETS.some((o) => o.lang === 'en'));
+  assert.deepEqual(urls.filter((u) => !u.startsWith('https://news.google.com/')).sort(), OUTLETS.map((o) => o.feed).sort());
+  assert.ok(OUTLETS.every((o) => ['es', 'pt', 'en'].includes(o.lang)));
+  const expected = OUTLETS.slice(0, -1).map((o) => o.name);
   assert.deepEqual([...new Set(r.items.map((i) => i.source))].sort(), ['Wire', ...expected].sort());
-  assert.deepEqual(r.emptyOutlets, [OUTLETS.es.at(-1).name]);
-  assert.ok(r.items.every((i) => !('summary' in i)));
+  assert.deepEqual(r.emptyOutlets, [OUTLETS.at(-1).name]);
+  assert.ok(r.items.every((i) => !('summary' in i) && ['es', 'pt', 'en'].includes(i.lang)));
+  for (const o of expected) assert.equal(r.items.find((i) => i.source === o).lang, OUTLETS.find((x) => x.name === o).lang);
 });
 
 test('fetchNewsWithReport fetches Google News one feed at a time and retries once on 503', async () => {
   const seen = new Map();
   let open = 0;
   let maxOpen = 0;
-  const google = fakeFeeds('pt');
+  const google = fakeFeeds();
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
     if (!url.startsWith('https://news.google.com/')) return google(url);
@@ -108,27 +113,21 @@ test('fetchNewsWithReport fetches Google News one feed at a time and retries onc
     open--;
     const n = (seen.get(url) || 0) + 1;
     seen.set(url, n);
-    // Only the first general feed is rate-limited, and only on the first attempt.
+    // Only the Portuguese feed is rate-limited, and only on the first attempt.
     if (n === 1 && url.includes('gl=PT')) return new Response('busy', { status: 503 });
     return google(url);
   };
   let r;
   try {
-    r = await fetchNewsWithReport('pt', new Date('2026-10-28T00:00:00Z'));
+    r = await fetchNewsWithReport(new Date('2026-10-28T00:00:00Z'));
   } finally {
     globalThis.fetch = realFetch;
   }
   assert.equal(maxOpen, 1);
   assert.deepEqual([...seen.values()].sort(), [1, 2]);
-  // Both general feeds made it in, including the one that needed the retry, plus every outlet.
-  assert.equal(r.items.length, 2 + OUTLETS.pt.length);
+  // Every general feed made it in, including the one that needed the retry, plus every outlet.
+  assert.equal(r.items.length, 2 + OUTLETS.length);
   assert.equal(r.failedFeeds, 0);
-});
-
-test('langForRun cycles through every language on consecutive 20-minute cron runs', () => {
-  const runs = [0, 20, 40, 60].map((m) => langForRun(new Date(Date.UTC(2026, 9, 28, 16, m))));
-  assert.deepEqual([...new Set(runs.slice(0, 3))].sort(), ['en', 'es', 'pt']);
-  assert.equal(runs[3], runs[0]);
 });
 
 const ev = (id, date, completed, hs = '1', as = '0') => ({
@@ -179,19 +178,19 @@ test('seasonStart switches on 1 July', () => {
 });
 
 test('refreshAll keeps the last good copy when upstream fails', async () => {
-  const store = new Map([[KV_KEYS.news('en'), 'old']]);
+  const store = new Map([[KV_KEYS.news, 'old']]);
   const kv = { put: async (k, v) => store.set(k, v) };
   let report;
   const realFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response('boom', { status: 500 });
   try {
-    report = await refreshAll(kv, new Date(), ['en']);
+    report = await refreshAll(kv, new Date());
   } finally {
     globalThis.fetch = realFetch;
   }
-  assert.equal(store.get(KV_KEYS.news('en')), 'old');
+  assert.equal(store.get(KV_KEYS.news), 'old');
   assert.equal(store.has(KV_KEYS.matches), false);
-  assert.equal(report['feeds:en:failed'], 2 + OUTLETS.en.length);
+  assert.equal(report['feeds:failed'], 2 + OUTLETS.length);
 });
 
 test('scheduleUrls covers the current season in both halves of the year, plus upcoming fixtures', () => {

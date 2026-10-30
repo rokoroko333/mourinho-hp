@@ -1,7 +1,15 @@
 {
-  "description": "On the matches page the kick-off countdown ticks every second, and stays hidden when there is no next match or its kick-off time is to be confirmed",
+  "description": "The kick-off countdown ticks every second inside the next match's card on the home page (next match first, then the latest result) and above the fixtures on /matches/, and stays hidden when there is no next match or its kick-off time is to be confirmed",
   "steps": [
-    { "goto": "/matches/" },
+    {
+      "goto": "/"
+    },
+    {
+      "eval": "(async () => { const { next, latest } = await (await fetch('/api/matches')).json(); await new Promise((r) => setTimeout(r, 1500)); const cards = [...document.querySelectorAll('#match-list .match')]; if (next && latest && !(cards[0].classList.contains('next') && !cards[1].classList.contains('next'))) return false; const boxes = document.querySelectorAll('#countdown'); if (boxes.length !== 1) return false; if (!next || next.timeTbd || new Date(next.date) < Date.now()) return boxes[0].hidden; const box = boxes[0]; const first = box.textContent; await new Promise((r) => setTimeout(r, 1200)); return !!box.closest('#match-list .match.next') && !box.hidden && /\\d{2} s$/.test(box.textContent.trim()) && box.textContent !== first; })()"
+    },
+    {
+      "goto": "/matches/"
+    },
     {
       "eval": "(async () => { const { next } = await (await fetch('/api/matches')).json(); const box = document.querySelector('#countdown'); await new Promise((r) => setTimeout(r, 1500)); if (!next || next.timeTbd || new Date(next.date) < Date.now()) return box.hidden; const first = box.textContent; await new Promise((r) => setTimeout(r, 1200)); return !box.hidden && /\\d{2} s$/.test(box.textContent.trim()) && box.textContent !== first && !box.closest('[aria-live]'); })()"
     }

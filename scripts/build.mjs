@@ -54,6 +54,8 @@ const icon = {
   trophy:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v4a5 5 0 0 1-10 0V4zm0 2H4a3 3 0 0 0 3 4m10-4h3a3 3 0 0 1-3 4M12 13v4m-4 3h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  globe: '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></g></svg>',
+  chevron: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 };
 
 // Share images are made by `npm run og` (scripts/og.mjs) and committed under src/public/og/.
@@ -114,9 +116,10 @@ function header(lang, paths, active) {
     [pathOf(lang, 'matches'), u.nav.matches],
     [`${home}#videos`, u.nav.videos],
   ];
+  // A small menu (works without JS): the current language's code, then each language under its own name.
   const langLinks = LANGS.map(
     (l) =>
-      `<a href="${paths[l]}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${l.toUpperCase()}</a>`,
+      `<li><a href="${paths[l]}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="true"' : ''}><span>${esc(ui[l].langName)}</span><small>${l.toUpperCase()}</small></a></li>`,
   ).join('');
   return `<header class="site-header">
   <div class="wrap header-row">
@@ -125,7 +128,10 @@ function header(lang, paths, active) {
     <nav id="site-nav" class="site-nav">
       ${links.map(([href, label]) => `<a href="${href}">${esc(label)}</a>`).join('\n      ')}
       <a class="nav-history${active === 'history' ? ' active' : ''}" href="${pathOf(lang, 'history')}">${esc(u.nav.history)}</a>
-      <div class="lang-switch" aria-label="Language">${langLinks}</div>
+      <details class="lang-switch">
+        <summary aria-label="${esc(u.langName)} – Language">${icon.globe}<span>${lang.toUpperCase()}</span>${icon.chevron}</summary>
+        <ul>${langLinks}</ul>
+      </details>
     </nav>
   </div>
 </header>`;
@@ -208,6 +214,8 @@ ${header(lang, pathsOf('home'), 'home')}
 <div class="wrap sections">
 <section id="matches" class="section">
   <div class="section-head"><div><h2>${esc(h.matchesHeading)}</h2><p class="sub">${esc(h.matchesSub)}</p></div></div>
+  <!-- app.js moves this into the next match's card. It stays in the HTML for an app.js cached from before
+       that change (up to an hour), which expects to find it. -->
   <p class="countdown" id="countdown" hidden></p>
   <div class="grid grid-2" id="match-list"><p class="loading">${esc(h.loading)}</p></div>
   <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">

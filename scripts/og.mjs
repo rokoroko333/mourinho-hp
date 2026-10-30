@@ -4,7 +4,7 @@
 //
 // Rendered with the local Chrome (scripts/chrome.mjs) and committed, so `npm run build`, CI and
 // Cloudflare never need a browser. test/build.test.mjs fails if a quote has no image.
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -25,6 +25,11 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 // warm white, champagne gold for the bar, the name and the byline only; no red, which the site keeps for
 // the moment of a match. Inline styles are fine here: these pages are only opened by the local Chrome,
 // never served under the site's Content-Security-Policy. The display face is the bundled Barlow Condensed.
+const FONT_FILES = ['barlow-condensed-600.woff2', 'barlow-condensed-800.woff2'];
+// Chrome falls back to another face without a word when a font file is missing, which would redraw every
+// image in it; stop instead (test/rules.test.mjs checks these names too).
+const missing = FONT_FILES.filter((f) => !existsSync(join(ROOT, 'src/assets/fonts', f)));
+if (missing.length) throw new Error(`og: missing font files in src/assets/fonts: ${missing.join(', ')}`);
 const FONTS = pathToFileURL(join(ROOT, 'src/assets/fonts')).href;
 const page = (body) => `<!doctype html><html><head><meta charset="utf-8"><style>
   @font-face { font-family: 'Barlow Condensed'; font-weight: 600; src: url('${FONTS}/barlow-condensed-600.woff2') format('woff2'); }

@@ -213,7 +213,12 @@ test('styles keep colours in :root and every font file they or the pages name ex
   const outside = css.replace(root, '').replace(/\/\*[\s\S]*?\*\//g, '');
   assert.deepEqual(outside.match(/#[0-9a-f]{3,8}\b|\b(?:rgb|hsl)a?\(/gi) ?? [], [], 'colours outside :root; add a token in :root (docs/design.md)');
   const build = await readFile(join(ROOT, 'scripts/build.mjs'), 'utf8');
-  const fonts = [...css.matchAll(/url\('\/assets\/(fonts\/[^']+)'\)/g), ...build.matchAll(/href="\/assets\/(fonts\/[^"]+)"/g)].map((m) => m[1]);
-  assert.ok(fonts.length >= 4, 'expected the @font-face sources and the preloads');
+  const og = await readFile(join(ROOT, 'scripts/og.mjs'), 'utf8');
+  const fonts = [
+    ...css.matchAll(/url\('\/assets\/(fonts\/[^']+)'\)/g),
+    ...build.matchAll(/href="\/assets\/(fonts\/[^"]+)"/g),
+    ...og.matchAll(/'(barlow-condensed-\d+\.woff2)'/g).map((m) => [m[0], `fonts/${m[1]}`]),
+  ].map((m) => m[1]);
+  assert.ok(fonts.length >= 6, 'expected the @font-face sources, the preloads and the share image fonts');
   for (const f of fonts) await readFile(join(ROOT, 'src/assets', f));
 });

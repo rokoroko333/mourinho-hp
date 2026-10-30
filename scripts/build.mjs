@@ -973,9 +973,9 @@ ${header(lang, paths, 'history')}
 ${footer(lang)}`;
 }
 
-// /news/ and /matches/ are shells that app.js fills from /api/*. Their content changes all the time and
-// only the heading is in the HTML, so they are noindex and left out of the sitemap: leaving them out alone
-// would not keep them out of search, since every page links to them (docs/plans/phase2.md, item 7).
+// /news/ is a shell that app.js fills from /api/news. Its content changes all the time and only the heading
+// is in the HTML, so it is noindex and left out of the sitemap: leaving it out alone would not keep it out
+// of search, since every page links to it (docs/plans/phase2.md, item 7).
 function newsPage(lang) {
   const u = ui[lang];
   const p = u.news;
@@ -994,10 +994,13 @@ ${header(lang, pathsOf('news'), 'news')}
 ${footer(lang)}`;
 }
 
+// /matches/ is served through functions/matches/ (and its es/pt twins), which fill the two lists from KV
+// before the page leaves the edge (lib/matches-page.js), so it is indexed and in the sitemap. The lists
+// here are what visitors get only when KV is empty; app.js then fills them as on /news/.
 function matchesPage(lang) {
   const u = ui[lang];
   const p = u.matches;
-  return `${head(lang, pathsOf('matches'), p, { noindex: true })}
+  return `${head(lang, pathsOf('matches'), p)}
 <body data-lang="${lang}">
 ${header(lang, pathsOf('matches'), 'matches')}
 <main class="wrap page">
@@ -1056,10 +1059,10 @@ const render = { home: homePage, quotes: quotesPage, history: historyPage, troph
 // Built like every page, but noindex and never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },
-  { paths: pathsOf('matches'), render: matchesPage },
 ];
 const routes = [
   ...PAGES.map((page) => ({ paths: pathsOf(page), changefreq: page === 'home' ? 'hourly' : 'monthly', render: render[page] })),
+  { paths: pathsOf('matches'), changefreq: 'daily', render: matchesPage },
   ...history.map((h, i) => ({ paths: eraPaths(h.id), changefreq: 'monthly', render: (lang) => eraPage(lang, i) })),
   ...TAGS.map((tag) => ({ paths: tagPaths(tag), changefreq: 'monthly', render: (lang) => tagPage(lang, tag) })),
   ...rivals.map((r) => ({ paths: rivalPaths(r.id), changefreq: 'monthly', render: (lang) => rivalPage(lang, r) })),

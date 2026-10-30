@@ -6,6 +6,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { pickOnThisDay } from '../scripts/content.mjs';
+import { fillMatchesPage } from '../lib/matches-page.js';
+import { existsSync } from 'node:fs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
@@ -118,9 +120,11 @@ test('related links on detail pages point to other existing pages', async () => 
   for (const link of links) await page(link);
 });
 
-// The live news and matches pages are filled by app.js, so they are noindex and kept out of the sitemap.
+// The live news pages are filled by app.js, so they are noindex and kept out of the sitemap.
 // Every other page is indexable: a noindex page in the sitemap would contradict itself.
-const LIVE_PAGES = ['/news/', '/es/noticias/', '/pt/noticias/', '/matches/', '/es/partidos/', '/pt/jogos/'];
+const LIVE_PAGES = ['/news/', '/es/noticias/', '/pt/noticias/'];
+// The matches pages are filled on the server by a Pages Function each (lib/matches-page.js) and indexed.
+const MATCH_PAGES = ['/matches/', '/es/partidos/', '/pt/jogos/'];
 
 test('the sitemap lists every built page exactly once, with all three languages', async () => {
   await build();
@@ -340,15 +344,46 @@ test('the news and matches pages exist in three languages and the header links t
   for (const path of LIVE_PAGES) {
     const html = await page(path.slice(1));
     assert.ok(html.includes('id="strings"'), `${path}: strings for app.js`);
-    assert.ok(/id="(news-list|result-list)"/.test(html), `${path}: list to fill`);
+    assert.ok(html.includes('id="news-list"'), `${path}: list to fill`);
     assert.ok(!xml.includes(`${path}</loc>`), `${path}: not in the sitemap`);
     assert.ok(html.includes('<meta name="robots" content="noindex, follow">'), `${path}: noindex in the HTML`);
+  }
+  for (const path of MATCH_PAGES) {
+    const html = await page(path.slice(1));
+    assert.ok(html.includes('id="strings"') && html.includes('id="result-list"'), `${path}: strings and lists`);
+    assert.ok(xml.includes(`${path}</loc>`), `${path}: in the sitemap`);
+    // Without its Function the page would be indexed with empty lists.
+    assert.ok(existsSync(join(ROOT, 'functions', path, 'index.js')), `${path}: served by a Pages Function`);
   }
   for (const [home, news, matches] of [['', '/news/', '/matches/'], ['es', '/es/noticias/', '/es/partidos/'], ['pt', '/pt/noticias/', '/pt/jogos/']]) {
     const html = await page(home);
     const nav = html.slice(html.indexOf('<nav id="site-nav"'), html.indexOf('</nav>'));
     assert.ok(nav.includes(`href="${news}"`) && nav.includes(`href="${matches}"`), `${home || 'en'}: header links`);
     assert.ok(html.includes('id="news-list" data-limit="6"'), `${home || 'en'}: home shows the newest few`);
+  }
+});
+
+// What the matches Functions do to each built page: rows in the HTML, escaped, in the page's language.
+test('fillMatchesPage puts escaped fixtures and results into each built matches page', async () => {
+  await build();
+  const team = (name, score) => ({ name, score });
+  const data = {
+    results: [{ date: '2026-10-25T20:00Z', completed: true, competition: 'LaLiga', home: team('Barcelona', '1'), away: team('Real <Madrid>', '2') }],
+    fixtures: [
+      { date: '2026-11-01T15:15Z', completed: false, competition: 'LaLiga', home: team('Racing', null), away: team('Real Madrid', null) },
+      { date: '2026-11-08T05:00Z', completed: false, timeTbd: true, competition: 'LaLiga', home: team('Real Madrid', null), away: team('Getafe', null) },
+    ],
+  };
+  for (const path of MATCH_PAGES) {
+    const html = await page(path.slice(1));
+    const strings = JSON.parse(html.match(/id="strings">([\s\S]*?)<\/script>/)[1]);
+    const out = fillMatchesPage(html, data);
+    const list = (id) => out.slice(out.indexOf(`id="${id}"`), out.indexOf('</ol>', out.indexOf(`id="${id}"`)));
+    assert.match(list('result-list'), /Barcelona<\/span><strong class="row-score">1 - 2<\/strong><span class="row-team">Real &lt;Madrid&gt;/, `${path}: result row, escaped`);
+    assert.ok(list('fixture-list').includes('15:15') && list('fixture-list').includes('UTC'), `${path}: kick-off time in UTC`);
+    assert.ok(list('fixture-list').includes(`>${strings.tbd}<`), `${path}: time to be confirmed`);
+    assert.ok(!out.includes('class="loading"'), `${path}: no loading placeholder left`);
+    assert.ok(fillMatchesPage(html, {}).includes(`>${strings.matchesEmpty}<`), `${path}: empty lists say so`);
   }
 });
 

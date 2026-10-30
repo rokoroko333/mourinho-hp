@@ -122,6 +122,9 @@ test('an IPv6 connection is its /64, so changing the rest of the address does no
   assert.equal(connectionOf('2001:0db8:0001:0002:bbbb:cccc:dddd:eeee'), '2001:db8:1:2::/64');
   assert.equal(connectionOf('2001:db8::1'), '2001:db8:0:0::/64');
   assert.equal(connectionOf('203.0.113.7'), '203.0.113.7');
+  // IPv4 written as IPv6 stays the IPv4 address, not one shared 0:0:0:0 network.
+  assert.equal(connectionOf('::ffff:1.2.3.4'), '1.2.3.4');
+  assert.notEqual(connectionOf('::ffff:1.2.3.4'), connectionOf('::ffff:5.6.7.8'));
   const db = await fakeD1();
   assert.equal((await vote(db, '2001:db8:1:2::10', 1, 2)).recorded, true);
   assert.equal((await vote(db, '2001:db8:1:2:ffff::99', 0, 0)).reason, 'duplicate');

@@ -95,7 +95,9 @@ test('fetchNews reads the Spanish, Portuguese and English feeds and labels every
   const expected = OUTLETS.slice(0, -1).map((o) => o.name);
   assert.deepEqual([...new Set(r.items.map((i) => i.source))].sort(), ['Wire', ...expected].sort());
   assert.deepEqual(r.emptyOutlets, [OUTLETS.at(-1).name]);
-  assert.ok(r.items.every((i) => !('summary' in i) && ['es', 'pt', 'en'].includes(i.lang)));
+  assert.ok(r.items.every((i) => !('summary' in i) && ['es', 'pt', 'en'].includes(i.press)));
+  // Google News items carry their edition's press but no language: an edition mixes languages.
+  assert.ok(r.items.filter((i) => i.source === 'Wire').every((i) => !i.lang));
   for (const o of expected) assert.equal(r.items.find((i) => i.source === o).lang, OUTLETS.find((x) => x.name === o).lang);
 });
 

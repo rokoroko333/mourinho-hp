@@ -332,7 +332,7 @@
       if (localStorage.getItem('lang-dismissed')) return;
     } catch {}
     const preferred = (navigator.languages || [navigator.language]).map((l) => l.slice(0, 2).toLowerCase());
-    const target = preferred.find((l) => ['en', 'es', 'pt'].includes(l));
+    const target = preferred.find((l) => ['en', 'es', 'pt', 'ja'].includes(l));
     if (!target || target === lang) return;
     const link = document.querySelector(`.lang-switch a[hreflang="${target}"]`);
     const text = readJson('lang-suggest')?.[target];

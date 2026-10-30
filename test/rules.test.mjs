@@ -182,6 +182,8 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
   const head = feeds.slice(0, feeds.indexOf('export const TEAM_ID'));
   const comment = head.slice(head.lastIndexOf('\n\n')).split('\n').filter((l) => l.startsWith('//')).join(' ');
   const [, id, club] = comment.match(/\((\d+) = ([^)]+)\)/) ?? [];
+  // Languages that write the club in another script name it in the comment too, as "(ja: …)".
+  const clubIn = (lang) => comment.match(new RegExp(`\\(${lang}: ([^)]+)\\)`))?.[1] ?? club;
   assert.ok(club, 'the comment above TEAM_ID no longer says "(<id> = <club>)"; update this test');
   assert.equal(Number(id), (await import('../lib/feeds.js')).TEAM_ID, `the comment above TEAM_ID names team ${id}; change it with TEAM_ID`);
   // Any `section.key` span is a ui.json key; paths like `src/content/ui.json` have slashes and do not match.
@@ -193,7 +195,8 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
   const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
   const strings = (o, path = '') => Object.entries(o).flatMap(([k, v]) =>
     typeof v === 'string' ? [[`${path}${k}`, v]] : v && typeof v === 'object' ? strings(v, `${path}${k}.`) : []);
-  for (const lang of ['en', 'es', 'pt']) {
+  for (const lang of Object.keys(ui)) {
+    const club = clubIn(lang);
     const all = new Map(strings(ui[lang]));
     for (const key of listed) {
       assert.ok(all.get(key)?.includes(club), `ui.json ${lang}.${key} does not name ${club}; it is listed beside TEAM_ID as a place to change on a move`);

@@ -11,7 +11,7 @@ const OUT = join(ROOT, 'dist');
 // Production origin, used for canonical/hreflang/sitemap. Set SITE_URL in the Pages build settings
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
-const LANGS = ['en', 'es', 'pt'];
+const LANGS = ['en', 'es', 'pt', 'ja'];
 const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks', 'onthisday', 'quiz'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
@@ -781,7 +781,8 @@ ${footer(lang)}`;
 // name in each language, without accents ("março" -> "marco").
 const monthName = (m, lang) =>
   new Intl.DateTimeFormat(lang, { month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(2000, m - 1, 1)));
-const monthSlug = (m, lang) => monthName(m, lang).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+// Japanese month names ("5月") would put non-ASCII in the URL, so the Japanese pages use the number.
+const monthSlug = (m, lang) => (lang === 'ja' ? String(m) : monthName(m, lang).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
 const monthPaths = (m) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'onthisday')}${monthSlug(m, l)}/`]));
 const otdMonths = [...new Set(onThisDay.map((e) => Number(e.date.slice(5, 7))))];
 const dayMonth = (mmdd, lang) =>

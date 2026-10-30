@@ -1,0 +1,17 @@
+{
+  "description": "Kick-off times show in Madrid time, labelled as such, whatever the visitor's own time zone: the home match card and the /matches/ fixtures",
+  "steps": [
+    {
+      "goto": "/"
+    },
+    {
+      "eval": "(async () => { const { latest, next } = await (await fetch('/api/matches')).json(); const m = next || latest; if (!m) return true; await new Promise((r) => setTimeout(r, 1500)); const day = { weekday: 'short', day: 'numeric', month: 'short' }; const want = m.timeTbd ? `${new Intl.DateTimeFormat('en', { ...day, timeZone: 'UTC' }).format(new Date(m.date))} · TBC` : `${new Intl.DateTimeFormat('en', { ...day, hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid', hourCycle: 'h23' }).format(new Date(m.date))} (Madrid time)`; return [...document.querySelectorAll('#match-list .match-date')].some((p) => p.textContent.startsWith(want)); })()"
+    },
+    {
+      "goto": "/matches/"
+    },
+    {
+      "eval": "(async () => { const { fixtures } = await (await fetch('/api/matches')).json(); const m = (fixtures || []).find((f) => !f.timeTbd); if (!m) return true; await new Promise((r) => setTimeout(r, 1500)); const time = new Intl.DateTimeFormat('en', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid', hourCycle: 'h23' }).format(new Date(m.date)); const row = [...document.querySelectorAll('#fixture-list .match-row')].find((r) => r.querySelector('time').getAttribute('datetime') === m.date); return row?.querySelector('.row-score').textContent === time && /Madrid/.test(document.querySelector('#fixture-list').closest('section').querySelector('.sub').textContent); })()"
+    }
+  ]
+}

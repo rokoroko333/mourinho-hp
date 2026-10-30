@@ -224,7 +224,14 @@
 
   // Matches
   const matchList = $('#match-list');
-  const dateFmt = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  // Kick-off times in the club's time zone (strings.timeZone, e.g. Europe/Madrid), labelled "Madrid time",
+  // so a visitor in Tokyo or Lima sees the time the match is listed with, not a converted one.
+  // The card's date line and the countdown rules are in src/assets/kickoff.js. Up to five minutes after a
+  // deploy, /matches/ can still be the cached HTML without that script, so it is used with `?.`.
+  const kickoff = globalThis.mourinhoKickoff;
+  const zone = { timeZone: strings.timeZone, hourCycle: 'h23' };
+  // Only for that cached HTML: the day, with no time and so no claim about Madrid time.
+  const plainDay = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   const teamEl = (t, side) =>
     el('div', { class: 'team' },
       t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
@@ -237,11 +244,11 @@
         teamEl(m.home, strings.home),
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
         teamEl(m.away, strings.away)),
-      el('p', { class: 'match-date' }, dateFmt.format(new Date(m.date)), m.competition ? el('br') : null, m.competition || null));
+      el('p', { class: 'match-date' }, kickoff ? kickoff.cardDate(m, lang, strings) : plainDay.format(new Date(m.date)), m.competition ? el('br') : null, m.competition || null));
   // One line per match on /matches/: date, home, score (or kick-off time), away, competition. The server draws
-  // the same rows in UTC first (matchRowsHtml in lib/matches-page.js): change both together.
-  const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short' });
-  const timeFmt = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit' });
+  // the same rows first, also in the club's time zone (matchRowsHtml in lib/matches-page.js): change both together.
+  const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', ...zone });
+  const timeFmt = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit', ...zone });
   // Without a kick-off time only the day is known, so it is read in UTC rather than shifted by the
   // placeholder time into the next or previous day.
   const tbdDayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' });
@@ -263,15 +270,18 @@
   const fixtureList = $('#fixture-list');
   if (matchList || resultList) getJson('/api/matches')
     .then((data) => {
-      if (resultList) fillRows(resultList, data.results);
-      if (fixtureList) fillRows(fixtureList, data.fixtures);
+      // The cached /matches/ HTML of the previous deploy (up to five minutes) has no strings.timeZone: its rows
+      // were drawn on the server and say "UTC", so they are kept rather than redrawn in the visitor's zone.
+      const redraw = (list) => list && (strings.timeZone || !list.querySelector('.match-row'));
+      if (redraw(resultList)) fillRows(resultList, data.results);
+      if (redraw(fixtureList)) fillRows(fixtureList, data.fixtures);
       if (matchList) {
         const cards = [data.latest && matchCard(data.latest, false), data.next && matchCard(data.next, true)].filter(Boolean);
         if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
         matchList.replaceChildren(...cards);
       }
-      const kickoff = globalThis.mourinhoCountdown?.kickoffOf(data.next);
-      if (kickoff) startCountdown(kickoff);
+      const next = kickoff?.kickoffOf(data.next);
+      if (next) startCountdown(next);
     })
     .catch(() => {
       if (matchList) showMessage(matchList, strings.matchesEmpty);
@@ -280,16 +290,16 @@
 
   // "Kick-off in 2 d 4 h 13 min 05 s", ticking every second (only the text changes, and browsers pause timers
   // in background tabs) and hidden once the match has started. Not a live region, so screen readers do not
-  // announce every tick. When to count and the wording are in src/assets/countdown.js.
-  function startCountdown(kickoff) {
+  // announce every tick. When to count and the wording are in src/assets/kickoff.js.
+  function startCountdown(at) {
     const box = $('#countdown');
     const tick = () => {
-      const secs = Math.floor((kickoff - Date.now()) / 1000);
+      const secs = Math.floor((at - Date.now()) / 1000);
       if (!(secs >= 0)) {
         box.hidden = true;
         return;
       }
-      const text = globalThis.mourinhoCountdown.text(secs, strings.units);
+      const text = kickoff.countdownText(secs, strings.units);
       box.replaceChildren(el('span', { class: 'card-label' }, strings.kickoffIn), ' ', el('strong', {}, text));
       box.hidden = false;
       // Wait for the next whole second, so the seconds turn over evenly instead of drifting.

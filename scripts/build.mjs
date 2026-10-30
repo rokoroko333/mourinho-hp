@@ -3,7 +3,7 @@
 import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { HIGHLIGHTS_URL } from '../lib/feeds.js';
+import { HIGHLIGHTS_URL, MATCH_TIME_ZONE, MATCH_CITY } from '../lib/feeds.js';
 import { withYears, pickOnThisDay, quizQuestions, dealQuiz } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -142,7 +142,7 @@ function footer(lang) {
   </div>
 </footer>
 <script type="application/json" id="lang-suggest">${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, ui[l].suggest]))).replace(/</g, '\\u003c')}</script>
-<script src="/assets/countdown.js" defer></script>
+<script src="/assets/kickoff.js" defer></script>
 <script src="/assets/app.js" defer></script>
 </body>
 </html>`;
@@ -171,6 +171,8 @@ function liveStrings(lang) {
     newsEmpty: h.newsEmpty, newsUpdated: h.newsUpdated, readArticle: h.readArticle,
     matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
     kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL, tbd: ui[lang].matches.tbd,
+    // Kick-off times in the club's own time zone, whatever the visitor's (lib/feeds.js).
+    timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY }),
   };
 }
 const stringsScript = (lang) =>
@@ -1066,7 +1068,7 @@ ${header(lang, pathsOf('matches'), 'matches')}
   </div>
   <p class="countdown" id="countdown" hidden></p>
   <section class="section">
-    <div class="section-head"><h2>${esc(p.fixtures)}</h2></div>
+    <div class="section-head"><div><h2>${esc(p.fixtures)}</h2><p class="sub">${esc(fill(p.timeNote, { city: MATCH_CITY }))}</p></div></div>
     <ol class="match-rows" id="fixture-list"><li class="loading">${esc(u.home.loading)}</li></ol>
   </section>
   <section class="section">

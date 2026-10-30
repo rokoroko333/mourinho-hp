@@ -169,7 +169,8 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
   const [, id, club] = comment.match(/\((\d+) = ([^)]+)\)/) ?? [];
   assert.ok(club, 'the comment above TEAM_ID no longer says "(<id> = <club>)"; update this test');
   assert.equal(Number(id), (await import('../lib/feeds.js')).TEAM_ID, `the comment above TEAM_ID names team ${id}; change it with TEAM_ID`);
-  const listed = [...comment.matchAll(/`((?:home|matches)\.\w+)`/g)].map((m) => m[1]);
+  // Any `section.key` span is a ui.json key; paths like `src/content/ui.json` have slashes and do not match.
+  const listed = [...comment.matchAll(/`(\w+\.\w+)`/g)].map((m) => m[1]);
   assert.ok(listed.length >= 3, `expected the ui.json keys in the comment above TEAM_ID, found ${listed.length}; update this test`);
 
   // Career text that stays true after a move; add a key here only when it names the club as history.

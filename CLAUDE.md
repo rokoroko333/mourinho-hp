@@ -34,7 +34,7 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 
 - 依存の導入: `npm ci`（wrangler のみ、開発用）
 - ビルド: `npm run build`。`SITE_URL` に本番のオリジンを設定する（未設定なら pages.dev の URL）
-- テスト: `npm test`（フィード解析とフォールバックの単体テスト、`node --test`）
+- テスト: `npm test`（`node --test`。フィード解析、ビルド結果、`test/rules.test.mjs` の決まりのチェック）
 - ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み）
 - 実画面の検証: `npm run dev` のあと `npm run verify`（`test/flows/*.json`、PASS・FAIL・BLOCKED を返す）
 - Worker のローカル実行: `npm run feeds:dev` のあと `curl "http://localhost:8787/__scheduled"`

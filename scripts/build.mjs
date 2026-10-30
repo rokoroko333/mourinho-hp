@@ -11,7 +11,7 @@ const OUT = join(ROOT, 'dist');
 // Production origin, used for canonical/hreflang/sitemap. Set SITE_URL in the Pages build settings
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
-const LANGS = ['en', 'es', 'pt'];
+const LANGS = ['en', 'es', 'pt', 'ja'];
 const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks', 'onthisday', 'quiz'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
@@ -124,12 +124,12 @@ function header(lang, paths, active) {
   return `<header class="site-header">
   <div class="wrap header-row">
     <a class="brand" href="${home}">${icon.infinity}<span>Infinito Mourinho</span></a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">${icon.menu}</button>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="${esc(u.menuLabel)}">${icon.menu}</button>
     <nav id="site-nav" class="site-nav">
       ${links.map(([href, label]) => `<a href="${href}">${esc(label)}</a>`).join('\n      ')}
       <a class="nav-history${active === 'history' ? ' active' : ''}" href="${pathOf(lang, 'history')}">${esc(u.nav.history)}</a>
       <details class="lang-switch">
-        <summary aria-label="${esc(u.langName)} – Language">${icon.globe}<span>${lang.toUpperCase()}</span>${icon.chevron}</summary>
+        <summary aria-label="${esc(u.langMenuLabel)}">${icon.globe}<span>${lang.toUpperCase()}</span>${icon.chevron}</summary>
         <ul>${langLinks}</ul>
       </details>
     </nav>
@@ -142,7 +142,7 @@ function footer(lang) {
   return `<footer class="site-footer">
   <div class="wrap">
     <p class="footer-name">Infinito Mourinho</p>
-    <p class="footer-tag">"${esc(u.tagline)}"</p>
+    <p class="footer-tag">${esc(fill(u.quoteMarks, { text: u.tagline }))}</p>
     <nav class="footer-nav">
       ${PAGES.map((p) => `<a href="${pathOf(lang, p)}">${esc(p === 'home' ? u.nav.home : u.nav[p])}</a>`).join(' · ')}
     </nav>
@@ -150,6 +150,7 @@ function footer(lang) {
   </div>
 </footer>
 <script type="application/json" id="lang-suggest">${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, ui[l].suggest]))).replace(/</g, '\\u003c')}</script>
+<script type="application/json" id="lang-close">${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, ui[l].closeLabel]))).replace(/</g, '\\u003c')}</script>
 <script src="/assets/kickoff.js" defer></script>
 <script src="/assets/app.js" defer></script>
 </body>
@@ -157,7 +158,7 @@ function footer(lang) {
 }
 
 function quoteBody(q, lang) {
-  return `<blockquote class="quote-text">“${esc(q.text)}”</blockquote>
+  return `<blockquote class="quote-text" lang="en">“${esc(q.text)}”</blockquote>
 <p class="quote-context">— ${esc(q.context[lang])}${q.year ? `, ${q.year}` : ''}</p>`;
 }
 
@@ -180,7 +181,7 @@ function liveStrings(lang) {
     matchesEmpty: h.matchesEmpty, latest: h.latest, next: h.next, home: h.home_, away: h.away,
     kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL, tbd: ui[lang].matches.tbd,
     // Kick-off times in the club's own time zone, whatever the visitor's (lib/feeds.js).
-    timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY }),
+    timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY[lang] }),
   };
 }
 const stringsScript = (lang) =>
@@ -207,7 +208,7 @@ ${header(lang, pathsOf('home'), 'home')}
 <section class="hero">
   <div class="wrap hero-inner">
     <h1>Infinito <span class="gold">Mourinho</span></h1>
-    <p class="hero-tag">“${esc(u.tagline)}”</p>
+    <p class="hero-tag">${esc(fill(u.quoteMarks, { text: u.tagline }))}</p>
   </div>
 </section>
 
@@ -480,7 +481,7 @@ function detailPage(lang, kind, id) {
     image = `/og/quotes/${q.id}.png`;
     const era = history.find((h) => h.id === q.era);
     body = `<p class="card-label">${esc(d.quoteLabel)}</p>
-    <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
+    <h1 class="quote-text detail-quote" lang="en">“${esc(q.text)}”</h1>
     ${q.original ? `<p class="quote-original" lang="${esc(q.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(q.original.text)}”</p>` : ''}
     <p class="quote-context">— ${esc(q.context[lang])}${year}</p>
     ${eraAndTags(era, q.tags, lang)}
@@ -698,7 +699,7 @@ function remarkCard(r, lang) {
   return `<article class="card card-quote remark" id="${esc(r.id)}">
       <p class="card-label"><time datetime="${esc(r.date)}">${esc(fill(ui[lang].remarks.reported, { date: longDate(r.date, lang) }))}</time></p>
       <p class="muted remark-occasion">${esc(r.occasion[lang])}</p>
-      <blockquote class="quote-text">“${esc(r.text)}”</blockquote>
+      <blockquote class="quote-text" lang="en">“${esc(r.text)}”</blockquote>
       ${r.original ? `<p class="quote-original" lang="${esc(r.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(r.original.text)}”</p>` : ''}
       ${sourceList(r.sources, lang)}
     </article>`;
@@ -781,7 +782,8 @@ ${footer(lang)}`;
 // name in each language, without accents ("março" -> "marco").
 const monthName = (m, lang) =>
   new Intl.DateTimeFormat(lang, { month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(2000, m - 1, 1)));
-const monthSlug = (m, lang) => monthName(m, lang).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+// Japanese month names ("5月") would put non-ASCII in the URL, so the Japanese pages use the number.
+const monthSlug = (m, lang) => (lang === 'ja' ? String(m) : monthName(m, lang).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
 const monthPaths = (m) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, 'onthisday')}${monthSlug(m, l)}/`]));
 const otdMonths = [...new Set(onThisDay.map((e) => Number(e.date.slice(5, 7))))];
 const dayMonth = (mmdd, lang) =>
@@ -879,6 +881,9 @@ function fuzzyDate(date, lang) {
 }
 
 // Head-to-head from Mourinho's side, exactly as one source counted it on its date (docs/plans/phase2.md, item 4).
+// A rival's name as each language writes it: the name itself, or its local form (`localName`, e.g. katakana).
+const rivalName = (r, lang) => r.localName?.[lang] ?? r.name;
+
 function h2hLine(r, lang) {
   const p = ui[lang].rivals;
   const h = r.h2h;
@@ -900,7 +905,7 @@ ${header(lang, pathsOf('rivals'), 'history')}
     ${rivals
       .map(
         (r) => `<a class="card card-link rival-card" href="${rivalPaths(r.id)[lang]}">
-      <h2>${esc(r.name)}</h2>
+      <h2>${esc(rivalName(r, lang))}</h2>
       <p>${esc(h2hLine(r, lang))}</p>
       <p class="card-label">${esc(fill(p.asOf, { date: longDate(r.h2h.asOf, lang) }))}</p>
     </a>`,
@@ -918,12 +923,12 @@ function rivalPage(lang, r) {
   const h = r.h2h;
   const paths = rivalPaths(r.id);
   const t = {
-    title: fill(p.detailTitle, { name: r.name }),
-    description: clip(fill(p.detailDescription, { name: r.name, record: h2hLine(r, lang), date: longDate(h.asOf, lang) }), 160),
+    title: fill(p.detailTitle, { name: rivalName(r, lang) }),
+    description: clip(fill(p.detailDescription, { name: rivalName(r, lang), record: h2hLine(r, lang), date: longDate(h.asOf, lang) }), 160),
   };
   const quoteCard = (q) => `<article class="card card-quote">
-        <p class="card-label">${esc(fill(q.by === 'mourinho' ? p.byMourinho : p.byRival, { name: r.name }))}${q.said ? ` · ${esc(q.said)}` : ''}</p>
-        <blockquote class="quote-text">“${esc(q.text)}”</blockquote>
+        <p class="card-label">${esc(fill(q.by === 'mourinho' ? p.byMourinho : p.byRival, { name: rivalName(r, lang) }))}${q.said ? ` · ${esc(q.said)}` : ''}</p>
+        <blockquote class="quote-text" lang="en">“${esc(q.text)}”</blockquote>
         ${sourceList(q.sources, lang)}
       </article>`;
   return `${head(lang, paths, t)}
@@ -933,7 +938,7 @@ ${header(lang, paths, 'history')}
   <p class="more back"><a href="${pathOf(lang, 'rivals')}">${icon.arrow}${esc(p.back)}</a></p>
   <article class="card detail">
     <p class="pill">${esc(p.vs)}</p>
-    <h1 class="detail-title">José Mourinho – ${esc(r.name)}</h1>
+    <h1 class="detail-title">${esc(fill(ui[lang].rivals.versus, { name: rivalName(r, lang) }))}</h1>
     <div class="h2h">
       ${[['matches', h.matches], ['wins', h.wins], ['draws', h.draws], ['losses', h.losses]]
         .map(([k, v]) => `<p><span class="stat-value">${num(v, lang)}</span><span class="card-label">${esc(p[k])}</span></p>`)
@@ -1078,7 +1083,7 @@ ${header(lang, pathsOf('matches'), 'matches')}
   </div>
   <p class="countdown" id="countdown" hidden></p>
   <section class="section">
-    <div class="section-head"><div><h2>${esc(p.fixtures)}</h2><p class="sub">${esc(fill(p.timeNote, { city: MATCH_CITY }))}</p></div></div>
+    <div class="section-head"><div><h2>${esc(p.fixtures)}</h2><p class="sub">${esc(fill(p.timeNote, { city: MATCH_CITY[lang] }))}</p></div></div>
     <ol class="match-rows" id="fixture-list"><li class="loading">${esc(u.home.loading)}</li></ol>
   </section>
   <section class="section">

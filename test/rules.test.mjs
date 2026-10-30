@@ -141,7 +141,11 @@ test('the feature map lists every page and every flow, and names only ids that e
       const path = slug ? `\`/${slug}/` : '`/`';
       assert.ok(row.includes(path), `docs/feature-map.md: the \`${page}\` row does not have the ${lang} path ${path}\``);
     }
+    // Japanese is not listed per row; the map states the rule instead: /ja/ plus the English slug.
+    const en = ui.en.slugs[page];
+    assert.equal(ui.ja.slugs[page], en ? `ja/${en}` : 'ja', `ui.json ja.slugs.${page} breaks the rule in docs/feature-map.md (/ja/ + the English slug)`);
   }
+  assert.ok(map.includes('`/ja/` に英語のスラッグ'), 'docs/feature-map.md no longer states the Japanese path rule');
 
   const flows = (await readdir(join(ROOT, 'test/flows'))).filter((f) => f.endsWith('.json'));
   assert.ok(flows.length, 'no flows found in test/flows/');
@@ -172,7 +176,9 @@ test('the match time zone and city are those of the current club, as the comment
   const { MATCH_TIME_ZONE, MATCH_CITY } = await import('../lib/feeds.js');
   assert.equal(MATCH_TIME_ZONE, zone, `MATCH_TIME_ZONE is not ${club}'s time zone (${zone})`);
   assert.doesNotThrow(() => new Intl.DateTimeFormat('en', { timeZone: MATCH_TIME_ZONE }), 'MATCH_TIME_ZONE is a real time zone');
-  assert.equal(MATCH_CITY, zone.split('/').pop().replace(/_/g, ' '), `MATCH_CITY is not the city of ${zone}`);
+  assert.equal(MATCH_CITY.en, zone.split('/').pop().replace(/_/g, ' '), `MATCH_CITY.en is not the city of ${zone}`);
+  const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
+  for (const lang of Object.keys(ui)) assert.ok(MATCH_CITY[lang], `MATCH_CITY has no ${lang} name`);
 });
 
 // When Mourinho moves, the club name sits in several ui.json strings next to TEAM_ID, and a missed one
@@ -182,6 +188,8 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
   const head = feeds.slice(0, feeds.indexOf('export const TEAM_ID'));
   const comment = head.slice(head.lastIndexOf('\n\n')).split('\n').filter((l) => l.startsWith('//')).join(' ');
   const [, id, club] = comment.match(/\((\d+) = ([^)]+)\)/) ?? [];
+  // Languages that write the club in another script name it in the comment too, as "(ja: …)".
+  const clubIn = (lang) => comment.match(new RegExp(`\\(${lang}: ([^)]+)\\)`))?.[1] ?? club;
   assert.ok(club, 'the comment above TEAM_ID no longer says "(<id> = <club>)"; update this test');
   assert.equal(Number(id), (await import('../lib/feeds.js')).TEAM_ID, `the comment above TEAM_ID names team ${id}; change it with TEAM_ID`);
   // Any `section.key` span is a ui.json key; paths like `src/content/ui.json` have slashes and do not match.
@@ -193,7 +201,8 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
   const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
   const strings = (o, path = '') => Object.entries(o).flatMap(([k, v]) =>
     typeof v === 'string' ? [[`${path}${k}`, v]] : v && typeof v === 'object' ? strings(v, `${path}${k}.`) : []);
-  for (const lang of ['en', 'es', 'pt']) {
+  for (const lang of Object.keys(ui)) {
+    const club = clubIn(lang);
     const all = new Map(strings(ui[lang]));
     for (const key of listed) {
       assert.ok(all.get(key)?.includes(club), `ui.json ${lang}.${key} does not name ${club}; it is listed beside TEAM_ID as a place to change on a move`);
@@ -230,4 +239,32 @@ test('docs name only the news key the site reads', async () => {
     if (!f.endsWith('.md') || f === 'docs/review-lessons.md') continue;
     assert.doesNotMatch(await readFile(join(ROOT, f), 'utf8'), /news:(en|es|pt|ja)\b/, `${f}: use news:local`);
   }
+});
+
+// Every language the site builds is complete: any text in src/content/ with English, Spanish and Portuguese
+// also has Japanese, and ui.json has the same keys in every language (#56, #58).
+test('every content text and every ui.json key exists in every language', async () => {
+  const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
+  const langs = Object.keys(ui);
+  const keys = (o, p = '') => Object.entries(o).flatMap(([k, v]) => (v && typeof v === 'object' && !Array.isArray(v) ? keys(v, `${p}${k}.`) : [`${p}${k}`]));
+  const en = keys(ui.en).sort();
+  // countdownUnits.sep is the only optional key: Japanese sets it to '' to write 1日22時間 without spaces.
+  const optional = (k) => k === 'home.countdownUnits.sep';
+  for (const l of langs) assert.deepEqual(keys(ui[l]).filter((k) => !optional(k)).sort(), en.filter((k) => !optional(k)), `ui.json ${l}: same keys as en`);
+  assert.equal(ui.ja.home.countdownUnits.sep, '', 'ui.json ja: the countdown writes number and unit together');
+  for (const f of (await readdir(join(ROOT, 'src/content'))).filter((f) => f.endsWith('.json') && f !== 'ui.json')) {
+    JSON.stringify(JSON.parse(await readFile(join(ROOT, 'src/content', f), 'utf8')), (k, v) => {
+      if (v && typeof v === 'object' && !Array.isArray(v) && 'en' in v && 'pt' in v) {
+        for (const l of langs) assert.ok(v[l] && (Array.isArray(v.en) ? v[l].length === v.en.length : true), `${f}: "${String(v.en).slice(0, 40)}" has no ${l}`);
+      }
+      return v;
+    });
+  }
+});
+
+// Data names shown on Japanese pages: every rival has a Japanese name, so a new rival cannot show its name
+// in English on /ja/ only (#58).
+test('every rival has its name in each language that writes names differently', async () => {
+  const rivals = JSON.parse(await readFile(join(ROOT, 'src/content/rivals.json'), 'utf8'));
+  for (const r of rivals) assert.ok(r.localName?.ja, `rivals.json ${r.id}: no localName.ja`);
 });

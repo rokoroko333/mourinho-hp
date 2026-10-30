@@ -45,15 +45,15 @@ test('_headers sets a Content-Security-Policy for every path', async () => {
   assert.match(block, /frame-ancestors 'none'/);
 });
 
-const DETAIL = { quotes: { en: 'quotes', es: 'es/frases', pt: 'pt/frases' }, stories: { en: 'stories', es: 'es/anecdotas', pt: 'pt/historias' } };
+const DETAIL = { quotes: { en: 'quotes', es: 'es/frases', pt: 'pt/frases', ja: 'ja/quotes' }, stories: { en: 'stories', es: 'es/anecdotas', pt: 'pt/historias', ja: 'ja/stories' } };
 
-test('every quote and story has its own page in all three languages, linked from the list page', async () => {
+test('every quote and story has its own page in all four languages, linked from the list page', async () => {
   await build();
   const items = [
     ...(await load('quotes.json')).map((q) => ['quotes', q.id]),
     ...(await load('episodes.json')).map((e) => ['stories', e.id]),
   ];
-  const lists = { en: await page('quotes'), es: await page('es/frases'), pt: await page('pt/frases') };
+  const lists = { en: await page('quotes'), es: await page('es/frases'), pt: await page('pt/frases'), ja: await page('ja/quotes') };
   for (const [kind, id] of items) {
     const paths = Object.fromEntries(Object.entries(DETAIL[kind]).map(([l, base]) => [l, `/${base}/${id}/`]));
     for (const [lang, path] of Object.entries(paths)) {
@@ -68,10 +68,10 @@ test('every quote and story has its own page in all three languages, linked from
   }
 });
 
-test('every career era has its own page in all three languages, linked from the timeline and in order', async () => {
+test('every career era has its own page in all four languages, linked from the timeline and in order', async () => {
   await build();
   const history = await load('history.json');
-  const base = { en: 'history', es: 'es/historia', pt: 'pt/historia' };
+  const base = { en: 'history', es: 'es/historia', pt: 'pt/historia', ja: 'ja/history' };
   const timelines = Object.fromEntries(await Promise.all(Object.entries(base).map(async ([l, b]) => [l, await page(b)])));
   history.forEach((h, i) => {
     const paths = Object.fromEntries(Object.entries(base).map(([l, b]) => [l, `/${b}/${h.id}/`]));
@@ -122,11 +122,11 @@ test('related links on detail pages point to other existing pages', async () => 
 
 // The live news pages are filled by app.js, so they are noindex and kept out of the sitemap.
 // Every other page is indexable: a noindex page in the sitemap would contradict itself.
-const LIVE_PAGES = ['/news/', '/es/noticias/', '/pt/noticias/'];
+const LIVE_PAGES = ['/news/', '/es/noticias/', '/pt/noticias/', '/ja/news/'];
 // The matches pages are filled on the server by a Pages Function each (lib/matches-page.js) and indexed.
-const MATCH_PAGES = ['/matches/', '/es/partidos/', '/pt/jogos/'];
+const MATCH_PAGES = ['/matches/', '/es/partidos/', '/pt/jogos/', '/ja/matches/'];
 
-test('the sitemap lists every built page exactly once, with all three languages', async () => {
+test('the sitemap lists every built page exactly once, with all four languages', async () => {
   await build();
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
   const locs = [...xml.matchAll(/<loc>https:\/\/infinito-mourinho\.pages\.dev([^<]*)<\/loc>/g)].map((m) => m[1]);
@@ -136,7 +136,7 @@ test('the sitemap lists every built page exactly once, with all three languages'
   assert.deepEqual([...locs].sort(), [...pages].sort());
   for (const p of pages) assert.doesNotMatch(await page(p.slice(1)), /<meta name="robots" content="[^"]*noindex/, `${p}: indexable`);
   assert.equal(new Set(locs).size, locs.length);
-  for (const block of xml.split('<url>').slice(1)) assert.equal((block.match(/hreflang=/g) || []).length, 4);
+  for (const block of xml.split('<url>').slice(1)) assert.equal((block.match(/hreflang=/g) || []).length, 5);
 });
 
 // Width and height from a PNG's IHDR chunk.
@@ -192,7 +192,7 @@ test('videos show real thumbnails and play only from hosts the Content-Security-
 
 test('home page: matches first, then news, the daily quote, career chapters and videos', async () => {
   await build();
-  for (const [lang, path, quotesPath] of [['en', '', '/quotes/'], ['es', 'es', '/es/frases/'], ['pt', 'pt', '/pt/frases/']]) {
+  for (const [lang, path, quotesPath] of [['en', '', '/quotes/'], ['es', 'es', '/es/frases/'], ['pt', 'pt', '/pt/frases/'], ['ja', 'ja', '/ja/quotes/']]) {
     const html = await page(path);
     const order = ['matches', 'news', 'daily', 'eras', 'videos'].map((id) => html.indexOf(`<section id="${id}"`));
     assert.ok(order.every((i, n) => i > 0 && (n === 0 || i > order[n - 1])), `${lang}: section order ${order}`);
@@ -238,19 +238,19 @@ test('every quote has a dated source, a known era and known tags', async () => {
     if (q.era) assert.ok(eras.has(q.era), `${q.id}: era ${q.era} exists in history.json`);
     for (const t of q.tags ?? []) {
       assert.ok(QUOTE_TAGS.includes(t), `${q.id}: tag ${t}`);
-      for (const l of ['en', 'es', 'pt']) assert.ok(ui[l].quotes.tagNames[t], `${q.id}: tag ${t} has a ${l} name in ui.json`);
+      for (const l of ['en', 'es', 'pt', 'ja']) assert.ok(ui[l].quotes.tagNames[t], `${q.id}: tag ${t} has a ${l} name in ui.json`);
     }
     if (q.original) assert.ok(q.original.lang && q.original.text, `${q.id}: original needs lang and text`);
     assert.ok(!('year' in q), `${q.id}: the year comes from date, not a separate field`);
   }
 });
 
-test('each tag has a page in all three languages listing exactly its quotes, linked from the list and the quotes', async () => {
+test('each tag has a page in all four languages listing exactly its quotes, linked from the list and the quotes', async () => {
   await build();
   const quotes = await load('quotes.json');
-  const base = { en: 'quotes/tag', es: 'es/frases/tema', pt: 'pt/frases/tema' };
-  const detail = { en: 'quotes', es: 'es/frases', pt: 'pt/frases' };
-  const lists = { en: await page('quotes'), es: await page('es/frases'), pt: await page('pt/frases') };
+  const base = { en: 'quotes/tag', es: 'es/frases/tema', pt: 'pt/frases/tema', ja: 'ja/quotes/tag' };
+  const detail = { en: 'quotes', es: 'es/frases', pt: 'pt/frases', ja: 'ja/quotes' };
+  const lists = { en: await page('quotes'), es: await page('es/frases'), pt: await page('pt/frases'), ja: await page('ja/quotes') };
   for (const tag of new Set(quotes.flatMap((q) => q.tags))) {
     for (const [lang, b] of Object.entries(base)) {
       const path = `/${b}/${tag}/`;
@@ -293,7 +293,7 @@ test('every trophy has a source, a known era and a season within that era', asyn
     ids.add(t.id);
     assert.ok(t.sources?.length > 0, `${t.id}: at least one source`);
     for (const s of t.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${t.id}: source url`);
-    for (const l of ['en', 'es', 'pt']) assert.ok(t.competition?.[l], `${t.id}: competition name in ${l}`);
+    for (const l of ['en', 'es', 'pt', 'ja']) assert.ok(t.competition?.[l], `${t.id}: competition name in ${l}`);
     const m = t.season.match(/^(\d{4})-(\d{2})$/);
     assert.ok(m && (Number(m[1]) + 1) % 100 === Number(m[2]), `${t.id}: season like 2003-04`);
     assert.ok(eras[t.era], `${t.id}: era ${t.era} exists`);
@@ -303,10 +303,10 @@ test('every trophy has a source, a known era and a season within that era', asyn
   }
 });
 
-test('the trophies page lists every trophy with its source in all three languages', async () => {
+test('the trophies page lists every trophy with its source in all four languages', async () => {
   await build();
   const trophies = await load('trophies.json');
-  for (const [lang, path] of [['en', 'trophies'], ['es', 'es/titulos'], ['pt', 'pt/titulos']]) {
+  for (const [lang, path] of [['en', 'trophies'], ['es', 'es/titulos'], ['pt', 'pt/titulos'], ['ja', 'ja/trophies']]) {
     const html = await page(path);
     for (const t of trophies) {
       const item = html.slice(html.indexOf(`id="${t.id}"`), html.indexOf('</li>', html.indexOf(`id="${t.id}"`)));
@@ -322,7 +322,7 @@ test('each era page lists its own trophies with sources and none from other eras
   await build();
   const trophies = await load('trophies.json');
   for (const h of await load('history.json')) {
-    for (const [lang, path] of [['en', `history/${h.id}`], ['es', `es/historia/${h.id}`], ['pt', `pt/historia/${h.id}`]]) {
+    for (const [lang, path] of [['en', `history/${h.id}`], ['es', `es/historia/${h.id}`], ['pt', `pt/historia/${h.id}`], ['ja', `ja/history/${h.id}`]]) {
       const html = await page(path);
       for (const t of trophies) {
         const at = html.indexOf(`id="${t.id}"`);
@@ -338,7 +338,7 @@ test('each era page lists its own trophies with sources and none from other eras
   }
 });
 
-test('the news and matches pages exist in three languages and the header links to them', async () => {
+test('the news and matches pages exist in four languages and the header links to them', async () => {
   await build();
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
   for (const path of LIVE_PAGES) {
@@ -355,7 +355,7 @@ test('the news and matches pages exist in three languages and the header links t
     // Without its Function the page would be indexed with empty lists.
     assert.ok(existsSync(join(ROOT, 'functions', path, 'index.js')), `${path}: served by a Pages Function`);
   }
-  for (const [home, news, matches] of [['', '/news/', '/matches/'], ['es', '/es/noticias/', '/es/partidos/'], ['pt', '/pt/noticias/', '/pt/jogos/']]) {
+  for (const [home, news, matches] of [['', '/news/', '/matches/'], ['es', '/es/noticias/', '/es/partidos/'], ['pt', '/pt/noticias/', '/pt/jogos/'], ['ja', '/ja/news/', '/ja/matches/']]) {
     const html = await page(home);
     const nav = html.slice(html.indexOf('<nav id="site-nav"'), html.indexOf('</nav>'));
     assert.ok(nav.includes(`href="${news}"`) && nav.includes(`href="${matches}"`), `${home || 'en'}: header links`);
@@ -384,7 +384,7 @@ test('fillMatchesPage puts escaped fixtures and results into each built matches 
     assert.ok(list('fixture-list').includes('>16:15<') && !out.includes('UTC'), `${path}: kick-off time in Madrid time`);
     assert.equal(strings.timeZone, 'Europe/Madrid', `${path}: the club's time zone`);
     const before = out.slice(out.indexOf('<section'), out.indexOf('id="fixture-list"'));
-    assert.match(before, /<p class="sub">[^<]*Madrid[^<]*<\/p>/, `${path}: says the times are Madrid time`);
+    assert.match(before, /<p class="sub">[^<]*(Madrid|マドリード)[^<]*<\/p>/, `${path}: says the times are Madrid time`);
     assert.ok(list('fixture-list').includes(`>${strings.tbd}<`), `${path}: time to be confirmed`);
     assert.ok(!out.includes('class="loading"'), `${path}: no loading placeholder left`);
     assert.ok(fillMatchesPage(html, { results: data.results }).includes(`>${strings.matchesEmpty}<`), `${path}: an empty list says so`);
@@ -393,6 +393,18 @@ test('fillMatchesPage puts escaped fixtures and results into each built matches 
   const html = await page('matches');
   assert.equal(fillMatchesPage(html.replace('id="result-list"', 'id="results"'), data), null);
   assert.equal(fillMatchesPage(html.replace('id="strings"', 'id="text"'), data), null);
+});
+
+// Quotes are printed in English on every language's pages; marking them lets screen readers and the
+// browser's translator treat them as English on /es/, /pt/ and /ja/ pages.
+test('quote texts are marked as English on every page', async () => {
+  await build();
+  for (const path of ['ja/quotes', 'es/frases', 'ja/quotes/special-one', 'ja/remarks', 'ja']) {
+    const html = await page(path);
+    const tags = [...html.matchAll(/<(blockquote|h1) class="quote-text[^"]*"[^>]*>/g)].map((m) => m[0]);
+    assert.ok(tags.length > 0, `${path}: has quotes`);
+    for (const t of tags) assert.ok(t.includes('lang="en"'), `${path}: ${t}`);
+  }
 });
 
 // The quiz adds no facts of its own: every answer is a trophy's era, and the wrong options are other
@@ -424,10 +436,10 @@ test('every quiz question answers from the trophy list with four different manag
   assert.throws(() => quizQuestions(trophies, history, ['porto', 'chelsea-1', 'chelsea-2', 'inter']), /three other managed clubs/);
 });
 
-test('the quiz page shows ten questions with their answers and sources in three languages', async () => {
+test('the quiz page shows ten questions with their answers and sources in four languages', async () => {
   await build();
   const trophies = await load('trophies.json');
-  for (const path of ['quiz', 'es/trivia', 'pt/quiz']) {
+  for (const path of ['quiz', 'es/trivia', 'pt/quiz', 'ja/quiz']) {
     const html = await page(path);
     const items = [...html.matchAll(/<li class="card quiz-q" data-id="[a-z0-9-]+" data-answer="([a-z0-9-]+)">([\s\S]*?)<\/li>/g)];
     assert.equal(items.length, 10, `${path}: ten questions`);
@@ -476,14 +488,14 @@ test('every stat has a source, a consistent record and a known era', async () =>
   for (const r of stats.records) {
     sourced(r, r.id);
     assert.ok(eras.has(r.era), `${r.id}: era ${r.era} exists`);
-    for (const l of ['en', 'es', 'pt']) assert.ok(r.text?.[l], `${r.id}: text in ${l}`);
+    for (const l of ['en', 'es', 'pt', 'ja']) assert.ok(r.text?.[l], `${r.id}: text in ${l}`);
   }
 });
 
-test('the stats page and era pages show each number with its sources in all three languages', async () => {
+test('the stats page and era pages show each number with its sources in all four languages', async () => {
   await build();
   const stats = await load('stats.json');
-  for (const [lang, path, history] of [['en', 'stats', 'history'], ['es', 'es/estadisticas', 'es/historia'], ['pt', 'pt/estatisticas', 'pt/historia']]) {
+  for (const [lang, path, history] of [['en', 'stats', 'history'], ['es', 'es/estadisticas', 'es/historia'], ['pt', 'pt/estatisticas', 'pt/historia'], ['ja', 'ja/stats', 'ja/history']]) {
     const html = await page(path);
     for (const s of stats.milestone.sources) assert.ok(html.includes(`href="${s.url}"`), `${lang}: milestone source`);
     for (const r of stats.records) {
@@ -514,7 +526,7 @@ test('the stats page and era pages show each number with its sources in all thre
   }
 });
 
-// Remarks are added by hand, each with its occasion in three languages and the article it was printed in.
+// Remarks are added by hand, each with its occasion in four languages and the article it was printed in.
 test('every remark has a date, an occasion, its text and a source', async () => {
   const remarks = await load('remarks.json');
   const ids = new Set();
@@ -523,7 +535,7 @@ test('every remark has a date, an occasion, its text and a source', async () => 
     ids.add(r.id);
     assert.match(r.date, /^\d{4}-\d{2}-\d{2}$/, `${r.id}: date`);
     assert.ok(r.text, `${r.id}: text`);
-    for (const l of ['en', 'es', 'pt']) assert.ok(r.occasion?.[l], `${r.id}: occasion in ${l}`);
+    for (const l of ['en', 'es', 'pt', 'ja']) assert.ok(r.occasion?.[l], `${r.id}: occasion in ${l}`);
     if (r.original) assert.ok(['es', 'pt', 'it'].includes(r.original.lang) && r.original.text, `${r.id}: original`);
     assert.ok(r.sources?.length > 0, `${r.id}: at least one source`);
     for (const s of r.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${r.id}: source url`);
@@ -533,7 +545,7 @@ test('every remark has a date, an occasion, its text and a source', async () => 
 test('the remarks page lists every remark with its sources, and the home page the newest three', async () => {
   await build();
   const remarks = (await load('remarks.json')).sort((a, b) => b.date.localeCompare(a.date));
-  for (const [path, home] of [['remarks', ''], ['es/declaraciones', 'es'], ['pt/declaracoes', 'pt']]) {
+  for (const [path, home] of [['remarks', ''], ['es/declaraciones', 'es'], ['pt/declaracoes', 'pt'], ['ja/remarks', 'ja']]) {
     const html = await page(path);
     for (const r of remarks) {
       const at = html.indexOf(`id="${r.id}"`);
@@ -564,7 +576,7 @@ test('every rival has a dated, sourced head-to-head that adds up, and sourced ma
     sourced(h, `${r.id} h2h`);
     for (const g of r.games) {
       assert.match(g.date, /^\d{4}(-\d{2}(-\d{2})?)?$/, `${r.id}: match date`);
-      for (const l of ['en', 'es', 'pt']) assert.ok(g.competition[l], `${r.id}: competition in ${l}`);
+      for (const l of ['en', 'es', 'pt', 'ja']) assert.ok(g.competition[l], `${r.id}: competition in ${l}`);
       sourced(g, `${r.id} ${g.date}`);
     }
     for (const q of r.quotes) {
@@ -574,11 +586,11 @@ test('every rival has a dated, sourced head-to-head that adds up, and sourced ma
   }
 });
 
-test('rival pages exist in three languages, are in the sitemap and show every source', async () => {
+test('rival pages exist in four languages, are in the sitemap and show every source', async () => {
   await build();
   const rivals = await load('rivals.json');
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
-  for (const base of ['rivals', 'es/rivales', 'pt/rivais']) {
+  for (const base of ['rivals', 'es/rivales', 'pt/rivais', 'ja/rivals']) {
     const index = await page(base);
     for (const r of rivals) {
       assert.ok(index.includes(`href="/${base}/${r.id}/"`), `${base}: links to ${r.id}`);
@@ -590,8 +602,8 @@ test('rival pages exist in three languages, are in the sitemap and show every so
   }
 });
 
-// On this day: only exact calendar days from the sources, each event under its month in all three languages.
-test('every on-this-day event has an exact date, a known era, text in three languages and a source', async () => {
+// On this day: only exact calendar days from the sources, each event under its month in all four languages.
+test('every on-this-day event has an exact date, a known era, text in four languages and a source', async () => {
   const events = await load('onthisday.json');
   const eras = new Set((await load('history.json')).map((h) => h.id));
   const dates = new Set();
@@ -602,7 +614,7 @@ test('every on-this-day event has an exact date, a known era, text in three lang
     assert.ok(!dates.has(e.date), `${e.date}: one event per date`);
     dates.add(e.date);
     assert.ok(e.era === null || eras.has(e.era), `${e.date}: era ${e.era}`);
-    for (const l of ['en', 'es', 'pt']) assert.ok(e.text?.[l], `${e.date}: text in ${l}`);
+    for (const l of ['en', 'es', 'pt', 'ja']) assert.ok(e.text?.[l], `${e.date}: text in ${l}`);
     assert.ok(e.sources?.length > 0, `${e.date}: at least one source`);
     for (const s of e.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${e.date}: source url`);
   }
@@ -628,8 +640,10 @@ test('month pages list their events with sources, and the home page shows one ev
     en: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
     es: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
     pt: ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+    // Numbers rather than "5月" (scripts/build.mjs, monthSlug).
+    ja: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   };
-  for (const [lang, base, home] of [['en', 'on-this-day', ''], ['es', 'es/efemerides', 'es'], ['pt', 'pt/neste-dia', 'pt']]) {
+  for (const [lang, base, home] of [['en', 'on-this-day', ''], ['es', 'es/efemerides', 'es'], ['pt', 'pt/neste-dia', 'pt'], ['ja', 'ja/on-this-day', 'ja']]) {
     for (const e of events) {
       const path = `${base}/${months[lang][Number(e.date.slice(5, 7)) - 1]}`;
       assert.ok(xml.includes(`/${path}/</loc>`), `${path}: in the sitemap`);

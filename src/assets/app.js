@@ -178,7 +178,7 @@
     const e = pick(daily.episodes);
     const box = $('#daily-quote');
     box.replaceChildren(
-      el('blockquote', { class: 'quote-text' }, `“${q.text}”`),
+      el('blockquote', { class: 'quote-text', lang: 'en' }, `“${q.text}”`),
       el('p', { class: 'quote-context' }, `— ${q.context}${q.year ? `, ${q.year}` : ''}`),
     );
     $('#daily-quote-link').setAttribute('href', q.path);
@@ -332,12 +332,13 @@
       if (localStorage.getItem('lang-dismissed')) return;
     } catch {}
     const preferred = (navigator.languages || [navigator.language]).map((l) => l.slice(0, 2).toLowerCase());
-    const target = preferred.find((l) => ['en', 'es', 'pt'].includes(l));
+    const target = preferred.find((l) => ['en', 'es', 'pt', 'ja'].includes(l));
     if (!target || target === lang) return;
     const link = document.querySelector(`.lang-switch a[hreflang="${target}"]`);
     const text = readJson('lang-suggest')?.[target];
     if (!link || !text) return;
-    const close = el('button', { type: 'button', 'aria-label': 'Close' }, '×');
+    // The banner speaks the suggested language, so its close button is named in that language too.
+    const close = el('button', { type: 'button', 'aria-label': readJson('lang-close')?.[target] || 'Close' }, '×');
     const banner = el('div', { class: 'lang-banner', lang: target }, el('a', { href: link.href }, text), close);
     close.addEventListener('click', () => {
       banner.remove();

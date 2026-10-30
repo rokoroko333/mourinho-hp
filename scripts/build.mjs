@@ -4,7 +4,7 @@ import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL } from '../lib/feeds.js';
-import { withYears, pickOnThisDay } from './content.mjs';
+import { withYears, pickOnThisDay, quizQuestions, dealQuiz } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'dist');
@@ -12,7 +12,7 @@ const OUT = join(ROOT, 'dist');
 // once the custom domain is decided.
 const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt'];
-const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks', 'onthisday'];
+const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks', 'onthisday', 'quiz'];
 
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
 const [ui, quotes, episodes, history, videos, trophies, stats, remarks, rivals, onThisDay] = await Promise.all(
@@ -709,6 +709,61 @@ ${header(lang, pathsOf('remarks'), 'remarks')}
 ${footer(lang)}`;
 }
 
+// Quiz (docs/plans/phase3.md): one question per sourced trophy, nothing new to source. The HTML holds ten
+// questions dealt by the build's day, each with its answer and sources in a <details>, so it works without
+// JS; app.js marks answers, keeps the score and deals ten more from the embedded list.
+const QUIZ_SIZE = 10;
+const quiz = quizQuestions(trophies, history, [...stats.clubs.map((c) => c.era), stats.current.era]);
+function quizItems(lang) {
+  const club = (era) => history.find((h) => h.id === era).club[lang];
+  return quiz.map((q) => ({
+    id: q.id,
+    label: fill(ui[lang].quiz.question, { competition: q.trophy.competition[lang], season: q.trophy.season }),
+    answer: q.answer,
+    answerClub: club(q.answer),
+    answerPath: eraPaths(q.answer)[lang],
+    options: q.options.map((era) => ({ era, club: club(era) })),
+    sources: q.trophy.sources,
+  }));
+}
+
+function quizQuestion(q, lang) {
+  const p = ui[lang].quiz;
+  return `<li class="card quiz-q" data-id="${q.id}" data-answer="${q.answer}">
+        <p class="card-label">${esc(q.label)}</p>
+        <h3>${esc(p.prompt)}</h3>
+        <div class="quiz-options">${q.options.map((o) => `<button type="button" class="btn btn-sm btn-dark" data-era="${o.era}">${esc(o.club)}</button>`).join('')}</div>
+        <p class="quiz-result" aria-live="polite"></p>
+        <details><summary>${esc(p.show)}</summary><p><a href="${q.answerPath}">${esc(fill(p.answer, { club: q.answerClub }))}</a></p>${sourceList(q.sources, lang)}</details>
+      </li>`;
+}
+
+function quizPage(lang) {
+  const p = ui[lang].quiz;
+  const items = quizItems(lang);
+  const shown = dealQuiz(items, Math.floor(Date.now() / 86400000), QUIZ_SIZE);
+  const data = { size: QUIZ_SIZE, strings: { show: p.show, answer: p.answer, correct: p.correct, wrong: p.wrong, score: p.score, prompt: p.prompt, sources: ui[lang].detail.sources }, items };
+  return `${head(lang, pathsOf('quiz'), p)}
+<body data-lang="${lang}">
+${header(lang, pathsOf('quiz'), 'quiz')}
+<main class="wrap page">
+  <div class="page-head">
+    <h1>${esc(p.heading)}</h1>
+    <p class="hero-tag">${esc(p.sub)}</p>
+  </div>
+  <section class="section">
+    <ol class="quiz-list" id="quiz-list">
+      ${shown.map((q) => quizQuestion(q, lang)).join('\n      ')}
+    </ol>
+    <p class="quiz-score" id="quiz-score" aria-live="polite" hidden></p>
+    <p><button type="button" class="btn btn-gold" id="quiz-again" hidden>${esc(p.again)}</button></p>
+    <p class="muted">${esc(p.note)} <a href="${pathOf(lang, 'trophies')}">${esc(p.trophiesLink)}</a></p>
+  </section>
+  <script type="application/json" id="quiz-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</main>
+${footer(lang)}`;
+}
+
 // On this day: /on-this-day/may/, /es/efemerides/mayo/, /pt/neste-dia/maio/. Month slugs are the month's
 // name in each language, without accents ("março" -> "marco").
 const monthName = (m, lang) =>
@@ -1055,7 +1110,7 @@ await rm(OUT, { recursive: true, force: true });
 await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
-const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, rivals: rivalsPage, remarks: remarksPage, onthisday: onThisDayPage };
+const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, rivals: rivalsPage, remarks: remarksPage, onthisday: onThisDayPage, quiz: quizPage };
 // Built like every page, but noindex and never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },

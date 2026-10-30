@@ -5,7 +5,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { pickOnThisDay } from '../scripts/content.mjs';
+import { pickOnThisDay, quizQuestions, dealQuiz } from '../scripts/content.mjs';
 import { fillMatchesPage } from '../lib/matches-page.js';
 import { existsSync } from 'node:fs';
 
@@ -389,6 +389,52 @@ test('fillMatchesPage puts escaped fixtures and results into each built matches 
   const html = await page('matches');
   assert.equal(fillMatchesPage(html.replace('id="result-list"', 'id="results"'), data), null);
   assert.equal(fillMatchesPage(html.replace('id="strings"', 'id="text"'), data), null);
+});
+
+// The quiz adds no facts of its own: every answer is a trophy's era, and the wrong options are other
+// clubs he managed as head coach, never a club he was only an assistant at.
+test('every quiz question answers from the trophy list with four different managed clubs', async () => {
+  const [trophies, history, stats] = await Promise.all(['trophies.json', 'history.json', 'stats.json'].map(load));
+  const managed = [...stats.clubs.map((c) => c.era), stats.current.era];
+  const club = (era) => history.find((h) => h.id === era).club.en;
+  const questions = quizQuestions(trophies, history, managed);
+  assert.equal(questions.length, trophies.length);
+  for (const q of questions) {
+    const t = trophies.find((x) => x.id === q.id);
+    assert.equal(q.answer, t.era, `${q.id}: answer is the trophy's era`);
+    assert.equal(q.options.length, 4, `${q.id}: four options`);
+    assert.ok(q.options.includes(q.answer), `${q.id}: answer among the options`);
+    assert.equal(new Set(q.options.map(club)).size, 4, `${q.id}: four different clubs`);
+    for (const o of q.options) assert.ok(managed.includes(o), `${q.id}: ${o} is a club he managed`);
+  }
+  assert.deepEqual(quizQuestions(trophies, history, managed), questions, 'the same quiz on every build');
+  // The page's ten are dealt by day from the whole list, not ten trophies in a row of one era or two.
+  for (const day of [20000, 20001, 20391]) {
+    const dealt = dealQuiz(questions, day, 10);
+    assert.equal(new Set(dealt.map((q) => q.id)).size, 10, `day ${day}: ten different questions`);
+    assert.ok(new Set(dealt.map((q) => club(q.answer))).size >= 4, `day ${day}: answers from several clubs`);
+    assert.deepEqual(dealQuiz(questions, day, 10), dealt, `day ${day}: the same ten on every build that day`);
+  }
+  assert.notDeepEqual(dealQuiz(questions, 20000, 10), dealQuiz(questions, 20001, 10), 'another day, other questions');
+  // Too few clubs for three wrong options stops the build rather than looping for ever.
+  assert.throws(() => quizQuestions(trophies, history, ['porto', 'chelsea-1', 'chelsea-2', 'inter']), /three other managed clubs/);
+});
+
+test('the quiz page shows ten questions with their answers and sources in three languages', async () => {
+  await build();
+  const trophies = await load('trophies.json');
+  for (const path of ['quiz', 'es/trivia', 'pt/quiz']) {
+    const html = await page(path);
+    const items = [...html.matchAll(/<li class="card quiz-q" data-id="[a-z0-9-]+" data-answer="([a-z0-9-]+)">([\s\S]*?)<\/li>/g)];
+    assert.equal(items.length, 10, `${path}: ten questions`);
+    for (const [, answer, body] of items) {
+      assert.equal((body.match(/data-era="/g) || []).length, 4, `${path}: four options`);
+      assert.ok(body.includes(`data-era="${answer}"`), `${path}: the answer is an option`);
+      assert.ok(body.includes('<details>'), `${path}: answer readable without JS`);
+      assert.ok(trophies.some((t) => t.era === answer && t.sources.every((s) => body.includes(`href="${s.url}"`))), `${path}: sources of a trophy won with ${answer}`);
+    }
+    assert.ok(html.includes('id="quiz-data"'), `${path}: data for more questions`);
+  }
 });
 
 // Numbers follow the facts rules: every one has a source, records add up, and eras exist.

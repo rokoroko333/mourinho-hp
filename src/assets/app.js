@@ -224,7 +224,10 @@
 
   // Matches
   const matchList = $('#match-list');
-  const dateFmt = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  // Kick-off times in the club's time zone (strings.timeZone, e.g. Europe/Madrid), labelled "Madrid time",
+  // so a visitor in Tokyo or Lima sees the time the match is listed with, not a converted one.
+  const zone = { timeZone: strings.timeZone, hourCycle: 'h23' };
+  const dateFmt = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', ...zone });
   const teamEl = (t, side) =>
     el('div', { class: 'team' },
       t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
@@ -237,11 +240,11 @@
         teamEl(m.home, strings.home),
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
         teamEl(m.away, strings.away)),
-      el('p', { class: 'match-date' }, dateFmt.format(new Date(m.date)), m.competition ? el('br') : null, m.competition || null));
+      el('p', { class: 'match-date' }, `${dateFmt.format(new Date(m.date))} (${strings.localTime})`, m.competition ? el('br') : null, m.competition || null));
   // One line per match on /matches/: date, home, score (or kick-off time), away, competition. The server draws
   // the same rows in UTC first (matchRowsHtml in lib/matches-page.js): change both together.
-  const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short' });
-  const timeFmt = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit' });
+  const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', ...zone });
+  const timeFmt = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit', ...zone });
   // Without a kick-off time only the day is known, so it is read in UTC rather than shifted by the
   // placeholder time into the next or previous day.
   const tbdDayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' });

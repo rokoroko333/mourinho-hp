@@ -5,12 +5,14 @@
     "title": {
       "en": "The laundry basket escape",
       "es": "La fuga en el cesto de la ropa",
-      "pt": "A fuga no cesto da roupa"
+      "pt": "A fuga no cesto da roupa",
+      "ja": "洗濯かごでの脱出"
     },
     "text": {
       "en": "Banned from the touchline for a Champions League tie with Bayern Munich, he was widely reported to have slipped into the Chelsea dressing room hidden in a kit man's laundry basket.",
       "es": "Sancionado sin banquillo para una eliminatoria de Champions ante el Bayern, se dijo que se coló en el vestuario del Chelsea escondido en el cesto de la ropa del utillero.",
-      "pt": "Castigado sem banco para uma eliminatória da Champions com o Bayern, terá entrado no balneário do Chelsea escondido no cesto da roupa do roupeiro."
+      "pt": "Castigado sem banco para uma eliminatória da Champions com o Bayern, terá entrado no balneário do Chelsea escondido no cesto da roupa do roupeiro.",
+      "ja": "チャンピオンズリーグのバイエルン・ミュンヘン戦でベンチ入りを禁じられていたが、用具係の洗濯かごに隠れてチェルシーのロッカールームに入り込んだと広く報じられた。"
     }
   },
   {
@@ -19,12 +21,14 @@
     "title": {
       "en": "Birth of the Special One",
       "es": "Nace el Special One",
-      "pt": "Nasce o Special One"
+      "pt": "Nasce o Special One",
+      "ja": "スペシャル・ワン誕生"
     },
     "text": {
       "en": "At his first Chelsea press conference he told the English media 'I think I'm a special one' – and owned the headlines for the next two decades.",
       "es": "En su primera rueda de prensa en el Chelsea soltó 'creo que soy especial' y se adueñó de los titulares durante dos décadas.",
-      "pt": "Na primeira conferência de imprensa no Chelsea disse 'acho que sou especial' e dominou as manchetes durante duas décadas."
+      "pt": "Na primeira conferência de imprensa no Chelsea disse 'acho que sou especial' e dominou as manchetes durante duas décadas.",
+      "ja": "チェルシーでの最初の記者会見で、イングランドのメディアに「自分はスペシャル・ワンだと思う」と語った。その後20年にわたり、見出しを独占した。"
     }
   },
   {
@@ -33,12 +37,14 @@
     "title": {
       "en": "The Old Trafford sprint",
       "es": "La carrera de Old Trafford",
-      "pt": "A corrida de Old Trafford"
+      "pt": "A corrida de Old Trafford",
+      "ja": "オールド・トラッフォードの疾走"
     },
     "text": {
       "en": "When Costinha's late goal knocked Manchester United out of the Champions League, the Porto coach sprinted down the touchline in his overcoat – the image that introduced him to the world.",
       "es": "Cuando el gol de Costinha eliminó al Manchester United de la Champions, el técnico del Oporto corrió por la banda con su abrigo: la imagen que lo presentó al mundo.",
-      "pt": "Quando o golo de Costinha eliminou o Manchester United da Champions, o treinador do FC Porto correu pela linha lateral de sobretudo: a imagem que o apresentou ao mundo."
+      "pt": "Quando o golo de Costinha eliminou o Manchester United da Champions, o treinador do FC Porto correu pela linha lateral de sobretudo: a imagem que o apresentou ao mundo.",
+      "ja": "コスチーニャの終盤のゴールでマンチェスター・ユナイテッドがチャンピオンズリーグから敗退すると、ポルトの監督はオーバーコート姿でタッチライン沿いを駆け抜けた。この姿が彼を世界に知らしめた。"
     }
   },
   {
@@ -47,12 +53,14 @@
     "title": {
       "en": "Dancing in the sprinklers",
       "es": "Bailando bajo los aspersores",
-      "pt": "A dançar debaixo dos aspersores"
+      "pt": "A dançar debaixo dos aspersores",
+      "ja": "スプリンクラーの中で踊る"
     },
     "text": {
       "en": "After Inter knocked out Barcelona at Camp Nou, the home side switched on the sprinklers. Mourinho ran across the soaking pitch with his finger in the air.",
       "es": "Tras eliminar el Inter al Barça en el Camp Nou, encendieron los aspersores. Mourinho cruzó el césped empapado con el dedo al cielo.",
-      "pt": "Depois de o Inter eliminar o Barcelona em Camp Nou, ligaram os aspersores. Mourinho atravessou o relvado encharcado de dedo no ar."
+      "pt": "Depois de o Inter eliminar o Barcelona em Camp Nou, ligaram os aspersores. Mourinho atravessou o relvado encharcado de dedo no ar.",
+      "ja": "インテルがカンプ・ノウでバルセロナを敗退させると、ホーム側はスプリンクラーを作動させた。モウリーニョは指を突き上げ、水浸しのピッチを駆け抜けた。"
     }
   },
   {
@@ -61,12 +69,14 @@
     "title": {
       "en": "The Materazzi embrace",
       "es": "El abrazo con Materazzi",
-      "pt": "O abraço com Materazzi"
+      "pt": "O abraço com Materazzi",
+      "ja": "マテラッツィとの抱擁"
     },
     "text": {
       "en": "Moments after winning the treble in Madrid, Mourinho stopped his car outside the Bernabéu to hug a tearful Marco Materazzi. Both men cried; he never returned to Inter's bench.",
       "es": "Minutos después de ganar el triplete en Madrid, Mourinho paró el coche junto al Bernabéu para abrazar a un Materazzi entre lágrimas. Lloraron los dos; nunca volvió al banquillo del Inter.",
-      "pt": "Minutos depois de ganhar o triplete em Madrid, Mourinho parou o carro junto ao Bernabéu para abraçar um Materazzi em lágrimas. Choraram os dois; nunca mais voltou ao banco do Inter."
+      "pt": "Minutos depois de ganhar o triplete em Madrid, Mourinho parou o carro junto ao Bernabéu para abraçar um Materazzi em lágrimas. Choraram os dois; nunca mais voltou ao banco do Inter.",
+      "ja": "マドリードで3冠を達成した直後、モウリーニョはベルナベウの外で車を止め、涙を流すマルコ・マテラッツィを抱きしめた。2人とも泣いた。彼がインテルのベンチに戻ることはなかった。"
     }
   },
   {
@@ -75,12 +85,14 @@
     "title": {
       "en": "The handcuffs gesture",
       "es": "El gesto de las esposas",
-      "pt": "O gesto das algemas"
+      "pt": "O gesto das algemas",
+      "ja": "手錠のジェスチャー"
     },
     "text": {
       "en": "Furious at the referee in a match against Sampdoria, he crossed his wrists towards the cameras as if handcuffed – and earned a touchline ban.",
       "es": "Furioso con el árbitro en un partido ante la Sampdoria, cruzó las muñecas ante las cámaras como si estuviera esposado y se ganó una sanción.",
-      "pt": "Furioso com o árbitro num jogo com a Sampdoria, cruzou os pulsos para as câmaras como se estivesse algemado e levou um castigo."
+      "pt": "Furioso com o árbitro num jogo com a Sampdoria, cruzou os pulsos para as câmaras como se estivesse algemado e levou um castigo.",
+      "ja": "サンプドリア戦で審判に激怒し、手錠をかけられたように両手首を交差させてカメラに向けた。これでベンチ入り禁止処分を受けた。"
     }
   },
   {
@@ -89,12 +101,14 @@
     "title": {
       "en": "Medals into the crowd",
       "es": "Medallas a la grada",
-      "pt": "Medalhas para a bancada"
+      "pt": "Medalhas para a bancada",
+      "ja": "メダルを観客席へ"
     },
     "text": {
       "en": "Celebrating Chelsea's second straight Premier League title, he threw his winner's medal into the stands – and then the replacement too.",
       "es": "Celebrando la segunda Premier seguida del Chelsea, lanzó su medalla de campeón a la grada... y luego también la de repuesto.",
-      "pt": "A festejar a segunda Premier League seguida do Chelsea, atirou a medalha de campeão para a bancada... e depois também a de substituição."
+      "pt": "A festejar a segunda Premier League seguida do Chelsea, atirou a medalha de campeão para a bancada... e depois também a de substituição.",
+      "ja": "チェルシーのプレミアリーグ連覇を祝う場で、優勝メダルをスタンドに投げ込んだ。さらに代わりのメダルも投げ入れた。"
     }
   },
   {
@@ -103,12 +117,14 @@
     "title": {
       "en": "The Clásico eye-poke",
       "es": "El dedo en el ojo",
-      "pt": "O dedo no olho"
+      "pt": "O dedo no olho",
+      "ja": "クラシコの目突き"
     },
     "text": {
       "en": "During a touchline brawl in the Supercopa, he poked Barcelona assistant Tito Vilanova in the eye – the most infamous image of the Mourinho–Guardiola Clásico war.",
       "es": "En una tangana de la Supercopa le metió el dedo en el ojo a Tito Vilanova, segundo del Barça: la imagen más polémica de la guerra de Clásicos con Guardiola.",
-      "pt": "Numa confusão na Supertaça espanhola, meteu o dedo no olho de Tito Vilanova, adjunto do Barcelona: a imagem mais polémica da guerra de Clássicos com Guardiola."
+      "pt": "Numa confusão na Supertaça espanhola, meteu o dedo no olho de Tito Vilanova, adjunto do Barcelona: a imagem mais polémica da guerra de Clássicos com Guardiola.",
+      "ja": "スーペルコパ・デ・エスパーニャでのタッチライン際の乱闘中、バルセロナのアシスタントコーチ、ティト・ビラノバの目を突いた。モウリーニョとグアルディオラのクラシコ抗争で最も悪名高い場面である。"
     }
   },
   {
@@ -117,12 +133,14 @@
     "title": {
       "en": "'We are a little horse'",
       "es": "'Somos un caballito'",
-      "pt": "'Somos um cavalinho'"
+      "pt": "'Somos um cavalinho'",
+      "ja": "「我々は小さな馬だ」"
     },
     "text": {
       "en": "Top of the table with Chelsea, he insisted his team was only a 'little horse that needs milk' – a classic way to take pressure off his players.",
       "es": "Líder con el Chelsea, insistía en que su equipo era solo 'un caballito que necesita leche': su clásica forma de quitar presión a los jugadores.",
-      "pt": "Líder com o Chelsea, insistia que a equipa era apenas 'um cavalinho que precisa de leite': a forma clássica de tirar pressão aos jogadores."
+      "pt": "Líder com o Chelsea, insistia que a equipa era apenas 'um cavalinho que precisa de leite': a forma clássica de tirar pressão aos jogadores.",
+      "ja": "チェルシーで首位に立ちながら、自分のチームは「ミルクが必要な小さな馬」にすぎないと言い張った。選手から重圧を取り除く、彼の典型的なやり方である。"
     }
   },
   {
@@ -131,12 +149,14 @@
     "title": {
       "en": "'Specialist in failure'",
       "es": "'Especialista en el fracaso'",
-      "pt": "'Especialista em fracassos'"
+      "pt": "'Especialista em fracassos'",
+      "ja": "「失敗のスペシャリスト」"
     },
     "text": {
       "en": "Years of feuding with Arsène Wenger peaked when he called the Arsenal manager 'a specialist in failure'.",
       "es": "Años de pique con Arsène Wenger culminaron cuando llamó al técnico del Arsenal 'especialista en el fracaso'.",
-      "pt": "Anos de rivalidade com Arsène Wenger culminaram quando chamou ao treinador do Arsenal 'especialista em fracassos'."
+      "pt": "Anos de rivalidade com Arsène Wenger culminaram quando chamou ao treinador do Arsenal 'especialista em fracassos'.",
+      "ja": "アーセン・ヴェンゲルとの長年の確執は、彼がアーセナルの監督を「失敗のスペシャリスト」と呼んだときに頂点に達した。"
     }
   },
   {
@@ -145,12 +165,14 @@
     "title": {
       "en": "Cupping his ear in Turin",
       "es": "La mano en la oreja en Turín",
-      "pt": "A mão na orelha em Turim"
+      "pt": "A mão na orelha em Turim",
+      "ja": "トリノで耳に手を当てる"
     },
     "text": {
       "en": "After Manchester United's late comeback win at Juventus, he walked onto the pitch and cupped his ear to the home fans who had been abusing him all night.",
       "es": "Tras la remontada del Manchester United en el campo de la Juventus, saltó al césped y se llevó la mano a la oreja ante la afición local que lo había insultado toda la noche.",
-      "pt": "Depois da reviravolta do Manchester United no estádio da Juventus, entrou no relvado e levou a mão à orelha para os adeptos da casa que o insultaram a noite toda."
+      "pt": "Depois da reviravolta do Manchester United no estádio da Juventus, entrou no relvado e levou a mão à orelha para os adeptos da casa que o insultaram a noite toda.",
+      "ja": "マンチェスター・ユナイテッドがアウェーのユヴェントス戦で終盤に逆転勝ちすると、ピッチに歩み出て、一晩中彼を罵っていたホームのファンに向けて耳に手を当てた。"
     }
   },
   {
@@ -159,12 +181,14 @@
     "title": {
       "en": "The 'football heritage' monologue",
       "es": "El monólogo de la 'herencia futbolística'",
-      "pt": "O monólogo da 'herança futebolística'"
+      "pt": "O monólogo da 'herança futebolística'",
+      "ja": "「フットボールの遺産」の独演"
     },
     "text": {
       "en": "Under fire at Manchester United, he delivered a long press-conference lecture on his 'football heritage' and the respect it deserved.",
       "es": "Cuestionado en el Manchester United, dio una larga lección en rueda de prensa sobre su 'herencia futbolística' y el respeto que merecía.",
-      "pt": "Contestado no Manchester United, deu uma longa lição em conferência de imprensa sobre a sua 'herança futebolística' e o respeito que merecia."
+      "pt": "Contestado no Manchester United, deu uma longa lição em conferência de imprensa sobre a sua 'herança futebolística' e o respeito que merecia.",
+      "ja": "マンチェスター・ユナイテッドで批判を浴びるなか、記者会見で自身の「フットボールの遺産」と、それに払われるべき敬意について長い講義をした。"
     }
   },
   {
@@ -173,12 +197,14 @@
     "title": {
       "en": "Confronting the referee in the car park",
       "es": "Al árbitro en el aparcamiento",
-      "pt": "O árbitro no parque de estacionamento"
+      "pt": "O árbitro no parque de estacionamento",
+      "ja": "駐車場で審判に詰め寄る"
     },
     "text": {
       "en": "After Roma lost the Europa League final to Sevilla on penalties, he confronted referee Anthony Taylor in the stadium car park – and was banned by UEFA.",
       "es": "Tras perder la Roma la final de la Europa League ante el Sevilla en los penaltis, increpó al árbitro Anthony Taylor en el aparcamiento del estadio y la UEFA lo sancionó.",
-      "pt": "Depois de a Roma perder a final da Liga Europa com o Sevilha nos penáltis, confrontou o árbitro Anthony Taylor no parque do estádio e foi castigado pela UEFA."
+      "pt": "Depois de a Roma perder a final da Liga Europa com o Sevilha nos penáltis, confrontou o árbitro Anthony Taylor no parque do estádio e foi castigado pela UEFA.",
+      "ja": "ローマがヨーロッパリーグ決勝でセビージャにPK戦で敗れた後、スタジアムの駐車場でアンソニー・テイラー主審に詰め寄り、UEFAから出場停止処分を受けた。"
     }
   },
   {
@@ -187,12 +213,14 @@
     "title": {
       "en": "Tears in Tirana",
       "es": "Lágrimas en Tirana",
-      "pt": "Lágrimas em Tirana"
+      "pt": "Lágrimas em Tirana",
+      "ja": "ティラナの涙"
     },
     "text": {
       "en": "Winning the first Europa Conference League with Roma, he became the first coach to win the Champions League, the UEFA Cup/Europa League and the Conference League – and cried on the bench.",
       "es": "Al ganar la primera Conference League con la Roma se convirtió en el primer técnico en ganar Champions, UEFA/Europa League y Conference, y lloró en el banquillo.",
-      "pt": "Ao ganhar a primeira Liga Conferência com a Roma tornou-se o primeiro treinador a vencer Champions, Taça UEFA/Liga Europa e Conferência, e chorou no banco."
+      "pt": "Ao ganhar a primeira Liga Conferência com a Roma tornou-se o primeiro treinador a vencer Champions, Taça UEFA/Liga Europa e Conferência, e chorou no banco.",
+      "ja": "ローマで第1回のヨーロッパ・カンファレンスリーグを制し、チャンピオンズリーグ、UEFAカップ/ヨーロッパリーグ、カンファレンスリーグのすべてを制した初の監督となった。そしてベンチで涙を流した。"
     }
   }
 ]

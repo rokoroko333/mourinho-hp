@@ -41,7 +41,7 @@
 | 動画の再生 | `home` | `.video[data-video-id]` をクリックすると、その場で `iframe.video-frame`（youtube-nocookie）に差し替える | `test/flows/video.json` |
 | 今日の出来事 | `home` | `#on-this-day`。ビルドした日と表示する日が違えば `#otd-data` から選び直す | なし |
 | ニュース | `home`・`news` | `/api/news?lang=` から `#news-list` と `#news-updated` を描く | なし（KV の中身しだい） |
-| 試合とカウントダウン | `home`・`matches` | `/api/matches` から `#match-list`・`#result-list`・`#fixture-list` と `#countdown` を描く | なし（KV の中身しだい） |
+| 試合とカウントダウン | `home`・`matches` | `/api/matches` から `#match-list`・`#result-list`・`#fixture-list` と `#countdown` を描く。`#countdown` は毎秒更新し、キックオフ時刻が未定（`timeTbd`）なら出さない | `test/flows/countdown.json`（次の試合がなければ非表示を確かめる） |
 | 共有ボタン | 名言・エピソードの個別ページ | `.share` の中の `.share-native`（端末の共有）と `.share-copy`（リンクのコピー） | なし |
 
 「検証フロー」が「なし」の機能を変えるときは、同じ PR でフローを足します（`.claude/skills/verify-flow/`）。

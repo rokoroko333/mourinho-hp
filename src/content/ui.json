@@ -36,7 +36,7 @@
       "videosSub": "Iconic press conferences and moments, from official YouTube channels.",
       "loading": "Loading…",
       "kickoffIn": "Kick-off in",
-      "countdownUnits": { "d": "d", "h": "h", "m": "m" }
+      "countdownUnits": { "d": "d", "h": "h", "m": "m", "s": "s" }
     },
     "trophies": { "title": "José Mourinho's trophies as a head coach | Infinito Mourinho", "description": "Every trophy José Mourinho has won as a head coach, club by club and season by season, each with a link to where it was reported.", "heading": "Trophies", "sub": "Every title as a head coach, with its source", "count": "{count} trophies listed" },
     "remarks": { "title": "What José Mourinho said this week – press conference remarks | Infinito Mourinho", "description": "José Mourinho's recent remarks from press conferences and interviews, each with the date, the occasion and a link to where it was reported.", "heading": "What Mourinho said", "sub": "Recent remarks as printed in English by the press, each with its source", "reported": "Reported {date}", "all": "All remarks", "empty": "No remarks yet." },
@@ -107,7 +107,7 @@
       "videosSub": "Ruedas de prensa y momentos míticos, de canales oficiales de YouTube.",
       "loading": "Cargando…",
       "kickoffIn": "Faltan",
-      "countdownUnits": { "d": "d", "h": "h", "m": "min" }
+      "countdownUnits": { "d": "d", "h": "h", "m": "min", "s": "s" }
     },
     "trophies": { "title": "Los títulos de José Mourinho como entrenador | Infinito Mourinho", "description": "Todos los títulos que José Mourinho ha ganado como entrenador, club a club y temporada a temporada, con un enlace a dónde se publicó cada uno.", "heading": "Títulos", "sub": "Cada título como entrenador, con su fuente", "count": "{count} títulos en la lista" },
     "remarks": { "title": "Lo que dijo José Mourinho esta semana – declaraciones en rueda de prensa | Infinito Mourinho", "description": "Las declaraciones recientes de José Mourinho en ruedas de prensa y entrevistas, cada una con su fecha, la ocasión y un enlace a dónde se publicó.", "heading": "Lo que dijo Mourinho", "sub": "Declaraciones recientes tal como las publicó en inglés la prensa, cada una con su fuente", "reported": "Publicada el {date}", "all": "Todas las declaraciones", "empty": "Aún no hay declaraciones." },
@@ -178,7 +178,7 @@
       "videosSub": "Conferências de imprensa e momentos icónicos, de canais oficiais do YouTube.",
       "loading": "A carregar…",
       "kickoffIn": "Faltam",
-      "countdownUnits": { "d": "d", "h": "h", "m": "min" }
+      "countdownUnits": { "d": "d", "h": "h", "m": "min", "s": "s" }
     },
     "trophies": { "title": "Os títulos de José Mourinho como treinador | Infinito Mourinho", "description": "Todos os títulos que José Mourinho ganhou como treinador, clube a clube e época a época, cada um com uma ligação para onde foi publicado.", "heading": "Títulos", "sub": "Cada título como treinador, com a sua fonte", "count": "{count} títulos na lista" },
     "remarks": { "title": "O que José Mourinho disse esta semana – declarações em conferência de imprensa | Infinito Mourinho", "description": "As declarações recentes de José Mourinho em conferências de imprensa e entrevistas, cada uma com a data, a ocasião e uma ligação para onde foi publicada.", "heading": "O que Mourinho disse", "sub": "Declarações recentes tal como a imprensa as publicou em inglês, cada uma com a fonte", "reported": "Publicada em {date}", "all": "Todas as declarações", "empty": "Ainda não há declarações." },

@@ -73,6 +73,67 @@
     });
   }
 
+  // Quiz: the HTML has ten questions with their answers in <details>; this marks a pick right or wrong,
+  // keeps the score and deals ten more from the embedded list (quizPage in scripts/build.mjs).
+  const quiz = readJson('quiz-data');
+  const quizList = $('#quiz-list');
+  if (quiz && quizList) {
+    const s = quiz.strings;
+    const scoreBox = $('#quiz-score');
+    let answered = 0;
+    let right = 0;
+    quizList.addEventListener('click', (e) => {
+      const pick = e.target.closest('button[data-era]');
+      const q = pick?.closest('.quiz-q');
+      if (!q || q.dataset.done) return;
+      q.dataset.done = '1';
+      const ok = pick.dataset.era === q.dataset.answer;
+      for (const b of q.querySelectorAll('button[data-era]')) {
+        b.disabled = true;
+        if (b.dataset.era === q.dataset.answer) b.classList.add('is-right');
+      }
+      if (!ok) pick.classList.add('is-wrong');
+      q.querySelector('.quiz-result').textContent = ok ? s.correct : s.wrong;
+      q.querySelector('details').open = true;
+      answered += 1;
+      right += ok ? 1 : 0;
+      if (answered === quizList.children.length) {
+        scoreBox.textContent = s.score.replace('{n}', right).replace('{total}', answered);
+        scoreBox.hidden = false;
+      }
+    });
+    const question = (q) =>
+      el('li', { class: 'card quiz-q', 'data-answer': q.answer },
+        el('p', { class: 'card-label' }, q.label),
+        el('h3', {}, s.prompt),
+        el('div', { class: 'quiz-options' },
+          ...q.options.map((o) => el('button', { type: 'button', class: 'btn btn-sm btn-dark', 'data-era': o.era }, o.club))),
+        el('p', { class: 'quiz-result', 'aria-live': 'polite' }),
+        el('details', {},
+          el('summary', {}, s.show),
+          el('p', {}, el('a', { href: q.answerPath }, s.answer.replace('{club}', q.answerClub))),
+          el('p', { class: 'sources' },
+            el('span', { class: 'card-label' }, s.sources), ' ',
+            ...q.sources.flatMap((src, i) => [
+              i ? ' · ' : null,
+              el('a', { href: src.url, target: '_blank', rel: 'noopener' }, `${src.publisher}${src.date ? ` (${src.date})` : ''}`),
+            ]))));
+    const again = $('#quiz-again');
+    again.hidden = false;
+    again.addEventListener('click', () => {
+      const deck = [...quiz.items];
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+      quizList.replaceChildren(...deck.slice(0, quiz.size).map(question));
+      answered = 0;
+      right = 0;
+      scoreBox.hidden = true;
+      quizList.scrollIntoView({ block: 'start' });
+    });
+  }
+
   const strings = readJson('strings');
   suggestLanguage();
   if (!strings) return; // Only the home, news and matches pages have the dynamic sections below.

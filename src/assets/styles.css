@@ -246,3 +246,13 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .otd { margin-top: 24px; }
 .otd p { margin: 0; }
 .otd-year { font-size: 40px; font-weight: 900; line-height: 1; color: var(--gold); }
+
+/* Quiz */
+.quiz-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.quiz-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.quiz-options .btn:disabled { cursor: default; opacity: 0.55; }
+.quiz-options .btn.is-right { background: var(--gold); color: var(--bg); border-color: var(--gold); opacity: 1; }
+.quiz-options .btn.is-wrong { background: var(--red); color: #fff; border-color: var(--red); opacity: 1; }
+.quiz-result:empty { display: none; }
+.quiz-q summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+.quiz-score { font: 700 20px var(--sans); color: var(--gold); margin-top: 20px; }

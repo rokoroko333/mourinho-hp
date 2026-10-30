@@ -91,8 +91,9 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 .hero-tag { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: clamp(17px, 2.4vw, 22px); margin: 0; }
 /* The site's own line under the name (home): read at once, not a footnote. */
 .hero .hero-tag { color: var(--text-2); font-size: clamp(20px, 3.2vw, 30px); }
-/* Japanese has no true italic; the browser would slant the glyphs, so keep it upright. */
-:lang(ja) .hero-tag, :lang(ja) .footer-tag, :lang(ja) .quote-context, :lang(ja) .sub { font-style: normal; }
+/* Japanese has no true italic; the browser would slant the glyphs. Any Japanese text stays upright, whatever
+   class asks for italic; English quotes inside Japanese pages carry lang="en" and keep theirs. */
+:lang(ja) { font-style: normal !important; }
 
 /* Buttons: sharp, uppercase; gold for the way on, red only where it is the moment. */
 .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; border-radius: var(--radius); padding: 12px 22px; font: 600 16px/1 var(--display); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: transform 0.15s var(--ease), background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease); }

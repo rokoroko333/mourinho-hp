@@ -141,7 +141,11 @@ test('the feature map lists every page and every flow, and names only ids that e
       const path = slug ? `\`/${slug}/` : '`/`';
       assert.ok(row.includes(path), `docs/feature-map.md: the \`${page}\` row does not have the ${lang} path ${path}\``);
     }
+    // Japanese is not listed per row; the map states the rule instead: /ja/ plus the English slug.
+    const en = ui.en.slugs[page];
+    assert.equal(ui.ja.slugs[page], en ? `ja/${en}` : 'ja', `ui.json ja.slugs.${page} breaks the rule in docs/feature-map.md (/ja/ + the English slug)`);
   }
+  assert.ok(map.includes('`/ja/` に英語のスラッグ'), 'docs/feature-map.md no longer states the Japanese path rule');
 
   const flows = (await readdir(join(ROOT, 'test/flows'))).filter((f) => f.endsWith('.json'));
   assert.ok(flows.length, 'no flows found in test/flows/');
@@ -244,7 +248,10 @@ test('every content text and every ui.json key exists in every language', async 
   const langs = Object.keys(ui);
   const keys = (o, p = '') => Object.entries(o).flatMap(([k, v]) => (v && typeof v === 'object' && !Array.isArray(v) ? keys(v, `${p}${k}.`) : [`${p}${k}`]));
   const en = keys(ui.en).sort();
-  for (const l of langs) assert.deepEqual(keys(ui[l]).filter((k) => !k.endsWith('.sep')).sort(), en.filter((k) => !k.endsWith('.sep')), `ui.json ${l}: same keys as en`);
+  // countdownUnits.sep is the only optional key: Japanese sets it to '' to write 1日22時間 without spaces.
+  const optional = (k) => k === 'home.countdownUnits.sep';
+  for (const l of langs) assert.deepEqual(keys(ui[l]).filter((k) => !optional(k)).sort(), en.filter((k) => !optional(k)), `ui.json ${l}: same keys as en`);
+  assert.equal(ui.ja.home.countdownUnits.sep, '', 'ui.json ja: the countdown writes number and unit together');
   for (const f of (await readdir(join(ROOT, 'src/content'))).filter((f) => f.endsWith('.json') && f !== 'ui.json')) {
     JSON.stringify(JSON.parse(await readFile(join(ROOT, 'src/content', f), 'utf8')), (k, v) => {
       if (v && typeof v === 'object' && !Array.isArray(v) && 'en' in v && 'pt' in v) {

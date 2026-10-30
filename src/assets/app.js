@@ -334,9 +334,10 @@
     const box = $('#predict');
     const p = strings.predict;
     if (!box || !p) return;
+    // The next match without a kick-off time cannot take votes yet: say so, under the last match's tally if any.
+    const tbd = data.next?.timeTbd ? el('p', { class: 'muted predict-note' }, p.tbd) : null;
     const m = data.next && !data.next.timeTbd ? data.next : data.latest;
-    if (!m) return;
-    const key = `predict:${m.id}`;
+    const key = `predict:${m?.id}`;
     const mine = () => { try { return localStorage.getItem(key); } catch { return null; } };
     const fmtPct = new Intl.NumberFormat(lang, { style: 'percent', maximumFractionDigits: 0 });
     const club = (s) => (s.clubIsHome ? m.home.name : m.away.name);
@@ -371,7 +372,8 @@
         el('li', {}, el('strong', {}, scoreText(t.home, t.away)), el('small', {}, fmtPct.format(t.votes / s.total))))));
       return parts;
     };
-    const show = (...children) => { box.replaceChildren(...children.flat().filter(Boolean)); box.hidden = false; };
+    const show = (...children) => { box.replaceChildren(...children.flat().filter(Boolean), ...(tbd ? [tbd] : [])); box.hidden = false; };
+    if (!m) return tbd ? show(head(null)) : undefined;
     const form = (s) => {
       const goals = { home: 1, away: 1 };
       const row = (side) => {
@@ -404,11 +406,10 @@
       .then((s) => {
         const open = m === data.next && new Date(m.date) > Date.now();
         if (open && !mine()) return show(form(s));
-        if (!open && !m.completed && m !== data.next) return; // a past match with no tally to show
-        if (!s.total && !open) return;
+        if ((!open && !m.completed && m !== data.next) || (!s.total && !open)) return tbd ? show(head(null)) : undefined; // no tally to show
         show(head(s), open || s.result ? null : el('p', { class: 'muted' }, p.closed), tally(s));
       })
-      .catch(() => {});
+      .catch(() => { if (tbd) show(head(null)); });
   }
 
   // "Kick-off in 2 d 4 h 13 min 05 s", ticking every second (only the text changes, and browsers pause timers

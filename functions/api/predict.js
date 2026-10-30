@@ -35,7 +35,11 @@ export async function onRequestPost({ request, env }) {
   const matches = await readMatches(env);
   const open = openMatch(matches, body?.match);
   if (open.error) return json({ error: open.error }, open.status);
-  const address = request.headers.get('CF-Connecting-IP') || 'unknown';
+  // Cloudflare always sends the visitor's address. Without it every visitor would share one "connection",
+  // so the vote is refused rather than counted; only the local dev server (no Cloudflare in front) stands in.
+  const local = new URL(request.url).hostname === 'localhost';
+  const address = request.headers.get('CF-Connecting-IP') || (local ? '127.0.0.1' : null);
+  if (!address) return json({ error: 'unavailable' }, 503);
   const r = await recordVote(env.VOTES, { secret: env.VOTE_SALT, address, match: open.match, ...score });
   if (!r.recorded && r.reason === 'burst') return json({ error: 'too many' }, 429);
   return json({ recorded: r.recorded, duplicate: r.reason === 'duplicate', ...(await summary(env.VOTES, matches, open.match.id)) });

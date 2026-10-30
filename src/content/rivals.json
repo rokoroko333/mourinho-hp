@@ -2,6 +2,9 @@
   {
     "id": "guardiola",
     "name": "Pep Guardiola",
+    "localName": {
+      "ja": "ペップ・グアルディオラ"
+    },
     "h2h": {
       "matches": 18,
       "wins": 4,
@@ -103,6 +106,9 @@
   {
     "id": "wenger",
     "name": "Arsène Wenger",
+    "localName": {
+      "ja": "アーセン・ヴェンゲル"
+    },
     "h2h": {
       "matches": 16,
       "wins": 8,
@@ -186,6 +192,9 @@
   {
     "id": "klopp",
     "name": "Jürgen Klopp",
+    "localName": {
+      "ja": "ユルゲン・クロップ"
+    },
     "h2h": {
       "matches": 9,
       "wins": 2,
@@ -289,6 +298,9 @@
   {
     "id": "benitez",
     "name": "Rafael Benítez",
+    "localName": {
+      "ja": "ラファエル・ベニテス"
+    },
     "h2h": {
       "matches": 16,
       "wins": 7,
@@ -378,6 +390,9 @@
   {
     "id": "conte",
     "name": "Antonio Conte",
+    "localName": {
+      "ja": "アントニオ・コンテ"
+    },
     "h2h": {
       "matches": 5,
       "wins": 1,
@@ -450,6 +465,9 @@
   {
     "id": "ancelotti",
     "name": "Carlo Ancelotti",
+    "localName": {
+      "ja": "カルロ・アンチェロッティ"
+    },
     "h2h": {
       "matches": 5,
       "wins": 3,
@@ -519,6 +537,9 @@
   {
     "id": "van-gaal",
     "name": "Louis van Gaal",
+    "localName": {
+      "ja": "ルイ・ファン・ハール"
+    },
     "h2h": {
       "matches": 3,
       "wins": 2,
@@ -582,6 +603,9 @@
   {
     "id": "pochettino",
     "name": "Mauricio Pochettino",
+    "localName": {
+      "ja": "マウリシオ・ポチェッティーノ"
+    },
     "h2h": {
       "matches": 11,
       "wins": 9,

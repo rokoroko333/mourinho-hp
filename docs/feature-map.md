@@ -23,8 +23,8 @@
 | `rivals` | `/rivals/` ・ `/es/rivales/` ・ `/pt/rivais/` | `rivalsPage`・`rivalPage` | 因縁の相手の一覧と個別ページ（`<id>/`） |
 | `remarks` | `/remarks/` ・ `/es/declaraciones/` ・ `/pt/declaracoes/` | `remarksPage` | 最近の発言 |
 | `onthisday` | `/on-this-day/` ・ `/es/efemerides/` ・ `/pt/neste-dia/` | `onThisDayPage`・`monthPage` | 日付ごとの出来事と、月ごとのページ（`may/`・`mayo/`・`maio/` など） |
-| `news` | `/news/` ・ `/es/noticias/` ・ `/pt/noticias/` | `newsPage` | ニュース一覧（`/api/news` から表示、サイトマップには載せない） |
-| `matches` | `/matches/` ・ `/es/partidos/` ・ `/pt/jogos/` | `matchesPage` | 結果と日程（`/api/matches` から表示、サイトマップには載せない） |
+| `news` | `/news/` ・ `/es/noticias/` ・ `/pt/noticias/` | `newsPage` | ニュース一覧（`/api/news` から表示、`noindex` でサイトマップには載せない） |
+| `matches` | `/matches/` ・ `/es/partidos/` ・ `/pt/jogos/` | `matchesPage` | 結果と日程（`/api/matches` から表示、`noindex` でサイトマップには載せない） |
 
 存在しないパスはトップページが 200 で返るので、ページがあるかは canonical のパスで確かめます。
 

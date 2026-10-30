@@ -59,7 +59,7 @@ const icon = {
 // Share images are made by `npm run og` (scripts/og.mjs) and committed under src/public/og/.
 const OG_IMAGE = { path: '/og/default.png', width: 1200, height: 630 };
 
-function head(lang, paths, t, { type = 'WebPage', mainEntity, image = OG_IMAGE.path, imageAlt = ui[lang].siteName } = {}) {
+function head(lang, paths, t, { type = 'WebPage', mainEntity, image = OG_IMAGE.path, imageAlt = ui[lang].siteName, noindex = false } = {}) {
   const urls = Object.fromEntries(LANGS.map((l) => [l, SITE_URL + paths[l]]));
   const alternates = LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${urls[l]}">`).join('\n');
   const jsonLd = {
@@ -80,7 +80,7 @@ function head(lang, paths, t, { type = 'WebPage', mainEntity, image = OG_IMAGE.p
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(t.title)}</title>
 <meta name="description" content="${esc(t.description)}">
-<link rel="canonical" href="${urls[lang]}">
+${noindex ? '<meta name="robots" content="noindex, follow">\n' : ''}<link rel="canonical" href="${urls[lang]}">
 ${alternates}
 <link rel="alternate" hreflang="x-default" href="${urls.en}">
 <meta property="og:type" content="${type === 'WebSite' ? 'website' : 'article'}">
@@ -974,11 +974,12 @@ ${footer(lang)}`;
 }
 
 // /news/ and /matches/ are shells that app.js fills from /api/*. Their content changes all the time and
-// only the heading is in the HTML, so they are left out of the sitemap (docs/plans/phase2.md, item 7).
+// only the heading is in the HTML, so they are noindex and left out of the sitemap: leaving them out alone
+// would not keep them out of search, since every page links to them (docs/plans/phase2.md, item 7).
 function newsPage(lang) {
   const u = ui[lang];
   const p = u.news;
-  return `${head(lang, pathsOf('news'), p)}
+  return `${head(lang, pathsOf('news'), p, { noindex: true })}
 <body data-lang="${lang}">
 ${header(lang, pathsOf('news'), 'news')}
 <main class="wrap page">
@@ -996,7 +997,7 @@ ${footer(lang)}`;
 function matchesPage(lang) {
   const u = ui[lang];
   const p = u.matches;
-  return `${head(lang, pathsOf('matches'), p)}
+  return `${head(lang, pathsOf('matches'), p, { noindex: true })}
 <body data-lang="${lang}">
 ${header(lang, pathsOf('matches'), 'matches')}
 <main class="wrap page">
@@ -1052,7 +1053,7 @@ await cp(join(ROOT, 'src/public'), OUT, { recursive: true });
 await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
 
 const render = { home: homePage, quotes: quotesPage, history: historyPage, trophies: trophiesPage, stats: statsPage, rivals: rivalsPage, remarks: remarksPage, onthisday: onThisDayPage };
-// Built like every page, but never listed in the sitemap.
+// Built like every page, but noindex and never listed in the sitemap.
 const liveRoutes = [
   { paths: pathsOf('news'), render: newsPage },
   { paths: pathsOf('matches'), render: matchesPage },

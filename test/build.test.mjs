@@ -118,7 +118,8 @@ test('related links on detail pages point to other existing pages', async () => 
   for (const link of links) await page(link);
 });
 
-// The live news and matches pages are filled by app.js and kept out of the sitemap on purpose.
+// The live news and matches pages are filled by app.js, so they are noindex and kept out of the sitemap.
+// Every other page is indexable: a noindex page in the sitemap would contradict itself.
 const LIVE_PAGES = ['/news/', '/es/noticias/', '/pt/noticias/', '/matches/', '/es/partidos/', '/pt/jogos/'];
 
 test('the sitemap lists every built page exactly once, with all three languages', async () => {
@@ -129,6 +130,7 @@ test('the sitemap lists every built page exactly once, with all three languages'
     .map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'))
     .filter((p) => !LIVE_PAGES.includes(p));
   assert.deepEqual([...locs].sort(), [...pages].sort());
+  for (const p of pages) assert.doesNotMatch(await page(p.slice(1)), /<meta name="robots" content="[^"]*noindex/, `${p}: indexable`);
   assert.equal(new Set(locs).size, locs.length);
   for (const block of xml.split('<url>').slice(1)) assert.equal((block.match(/hreflang=/g) || []).length, 4);
 });
@@ -340,6 +342,7 @@ test('the news and matches pages exist in three languages and the header links t
     assert.ok(html.includes('id="strings"'), `${path}: strings for app.js`);
     assert.ok(/id="(news-list|result-list)"/.test(html), `${path}: list to fill`);
     assert.ok(!xml.includes(`${path}</loc>`), `${path}: not in the sitemap`);
+    assert.ok(html.includes('<meta name="robots" content="noindex, follow">'), `${path}: noindex in the HTML`);
   }
   for (const [home, news, matches] of [['', '/news/', '/matches/'], ['es', '/es/noticias/', '/es/partidos/'], ['pt', '/pt/noticias/', '/pt/jogos/']]) {
     const html = await page(home);

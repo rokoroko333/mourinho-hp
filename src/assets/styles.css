@@ -94,6 +94,9 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 /* Japanese has no true italic; the browser would slant the glyphs. Any Japanese text stays upright, whatever
    class asks for italic; English quotes inside Japanese pages carry lang="en" and keep theirs. */
 :lang(ja) { font-style: normal !important; }
+/* Japanese headings break at spaces and punctuation ("モウリーニョ / クイズ"), not inside a word; a run
+   with no break point still wraps rather than overflowing. */
+:lang(ja) :is(h1, h2, h3) { word-break: keep-all; overflow-wrap: anywhere; }
 
 /* Buttons: sharp, uppercase; gold for the way on, red only where it is the moment. */
 .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; border-radius: var(--radius); padding: 12px 22px; font: 600 16px/1 var(--display); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: transform 0.15s var(--ease), background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease); }
@@ -317,3 +320,4 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 .quiz-result { font: 600 15px var(--display); letter-spacing: 0.12em; text-transform: uppercase; }
 .quiz-q summary { cursor: pointer; color: var(--muted); font-size: 14px; }
 .quiz-score { font: 800 36px var(--display); color: var(--gold); margin-top: 24px; letter-spacing: 0.02em; }
+.quiz-share .share { margin-top: 0; padding-top: 12px; }

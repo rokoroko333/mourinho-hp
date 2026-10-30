@@ -41,14 +41,18 @@
     });
   }
 
-  // Share buttons on quote and story pages. The network links work without JS; this adds the phone's
-  // own share sheet (placed first, touch screens only) and copying the link.
+  // Share buttons on quote and story pages and under the quiz score. The network links work without JS;
+  // this adds the phone's own share sheet (placed first, touch screens only) and copying the link. The text
+  // is read when the button is pressed, since the quiz writes the score into it after the page loads.
   for (const box of document.querySelectorAll('.share')) {
-    const { shareTitle: title, shareText: text, shareUrl: url } = box.dataset;
+    const { shareUrl: url } = box.dataset;
     const native = box.querySelector('.share-native');
     if (native && navigator.share && matchMedia('(pointer: coarse)').matches) {
       native.hidden = false;
-      native.addEventListener('click', () => navigator.share({ title, text, url }).catch(() => {}));
+      native.addEventListener('click', () => {
+        const { shareTitle: title, shareText: text } = box.dataset;
+        navigator.share({ title, text, url }).catch(() => {});
+      });
     }
     const copy = box.querySelector('.share-copy');
     if (copy && navigator.clipboard) {
@@ -112,6 +116,7 @@
       if (answered === quizList.children.length) {
         scoreBox.textContent = s.score.replace('{n}', right).replace('{total}', answered);
         scoreBox.hidden = false;
+        shareScore(s.shareScore.replace('{n}', right).replace('{total}', answered));
       }
     });
     const question = (q) =>
@@ -130,6 +135,20 @@
               i ? ' · ' : null,
               el('a', { href: src.url, target: '_blank', rel: 'noopener' }, `${src.publisher}${src.date ? ` (${src.date})` : ''}`),
             ]))));
+    // The share links carry the score: the same networks and URL shapes as shareButtons in scripts/build.mjs.
+    const shareBox = $('#quiz-share');
+    const shareScore = (text) => {
+      const box = shareBox?.querySelector('.share');
+      if (!box) return;
+      const url = box.dataset.shareUrl;
+      const e = encodeURIComponent;
+      box.dataset.shareText = text;
+      for (const a of box.querySelectorAll('a[href]')) {
+        if (a.href.startsWith('https://wa.me/')) a.href = `https://wa.me/?text=${e(`${text} ${url}`)}`;
+        else if (a.href.startsWith('https://twitter.com/')) a.href = `https://twitter.com/intent/tweet?text=${e(text)}&url=${e(url)}`;
+      }
+      shareBox.hidden = false;
+    };
     const again = $('#quiz-again');
     again.hidden = false;
     again.addEventListener('click', () => {
@@ -147,6 +166,7 @@
       answered = 0;
       right = 0;
       scoreBox.hidden = true;
+      if (shareBox) shareBox.hidden = true;
       quizList.scrollIntoView({ block: 'start' });
     });
   }

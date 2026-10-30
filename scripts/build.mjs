@@ -756,7 +756,7 @@ function quizPage(lang) {
   const p = ui[lang].quiz;
   const items = quizItems(lang);
   const shown = dealQuiz(items, Math.floor(Date.now() / 86400000), QUIZ_SIZE);
-  const data = { size: QUIZ_SIZE, strings: { show: p.show, answer: p.answer, correct: p.correct, wrong: p.wrong, score: p.score, prompt: p.prompt, sources: ui[lang].detail.sources }, items };
+  const data = { size: QUIZ_SIZE, strings: { show: p.show, answer: p.answer, correct: p.correct, wrong: p.wrong, score: p.score, shareScore: p.shareScore, prompt: p.prompt, sources: ui[lang].detail.sources }, items };
   return `${head(lang, pathsOf('quiz'), p)}
 <body data-lang="${lang}">
 ${header(lang, pathsOf('quiz'), 'quiz')}
@@ -770,6 +770,10 @@ ${header(lang, pathsOf('quiz'), 'quiz')}
       ${shown.map((q) => quizQuestion(q, lang)).join('\n      ')}
     </ol>
     <p class="quiz-score" id="quiz-score" aria-live="polite" hidden></p>
+    <!-- Shown with the score; app.js puts the score into the shared text (quiz.shareScore). -->
+    <div class="quiz-share" id="quiz-share" hidden>
+    ${shareButtons(lang, SITE_URL + pathOf(lang, 'quiz'), p.title, p.sub)}
+    </div>
     <p><button type="button" class="btn btn-gold" id="quiz-again" hidden>${esc(p.again)}</button></p>
     <p class="muted">${esc(p.note)} <a href="${pathOf(lang, 'trophies')}">${esc(p.trophiesLink)}</a></p>
   </section>

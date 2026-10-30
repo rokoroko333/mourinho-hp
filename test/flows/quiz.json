@@ -1,5 +1,5 @@
 {
-  "description": "On the quiz, picking the right club marks it and opens the answer, answering all ten shows the score, and New questions deals ten others, none of them repeated",
+  "description": "On the quiz, picking the right club marks it and opens the answer, answering all ten shows the score with share links that carry it, and New questions deals ten others, none of them repeated",
   "steps": [
     {
       "goto": "/quiz/"
@@ -29,6 +29,12 @@
       }
     },
     {
+      "visible": "#quiz-share"
+    },
+    {
+      "eval": "(() => { const x = [...document.querySelectorAll('#quiz-share a')].find((a) => a.href.startsWith('https://twitter.com/')); const w = [...document.querySelectorAll('#quiz-share a')].find((a) => a.href.startsWith('https://wa.me/')); const t = new URL(x.href).searchParams.get('text'); return t.includes('1 of 10') && new URL(x.href).searchParams.get('url').endsWith('/quiz/') && new URL(w.href).searchParams.get('text').includes('1 of 10') && document.querySelector('#quiz-share .share').dataset.shareText.includes('1 of 10'); })()"
+    },
+    {
       "eval": "(() => { window.quizBefore = [...document.querySelectorAll('.quiz-q')].map((q) => q.dataset.id); return window.quizBefore.length === 10; })()"
     },
     {
@@ -36,6 +42,9 @@
     },
     {
       "hidden": "#quiz-score"
+    },
+    {
+      "hidden": "#quiz-share"
     },
     {
       "eval": "document.querySelectorAll('.quiz-q').length === 10 && !document.querySelector('.quiz-q [disabled]') && [...document.querySelectorAll('.quiz-q details > p:first-of-type a')].every((a) => a.getAttribute('href').startsWith('/history/'))"

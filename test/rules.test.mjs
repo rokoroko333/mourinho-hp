@@ -261,3 +261,10 @@ test('every content text and every ui.json key exists in every language', async 
     });
   }
 });
+
+// Data names shown on Japanese pages: every rival has a Japanese name, so a new rival cannot show its name
+// in English on /ja/ only (#58).
+test('every rival has its name in each language that writes names differently', async () => {
+  const rivals = JSON.parse(await readFile(join(ROOT, 'src/content/rivals.json'), 'utf8'));
+  for (const r of rivals) assert.ok(r.localName?.ja, `rivals.json ${r.id}: no localName.ja`);
+});

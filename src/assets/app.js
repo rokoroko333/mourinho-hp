@@ -337,7 +337,8 @@
     const link = document.querySelector(`.lang-switch a[hreflang="${target}"]`);
     const text = readJson('lang-suggest')?.[target];
     if (!link || !text) return;
-    const close = el('button', { type: 'button', 'aria-label': 'Close' }, '×');
+    // The banner speaks the suggested language, so its close button is named in that language too.
+    const close = el('button', { type: 'button', 'aria-label': readJson('lang-close')?.[target] || 'Close' }, '×');
     const banner = el('div', { class: 'lang-banner', lang: target }, el('a', { href: link.href }, text), close);
     close.addEventListener('click', () => {
       banner.remove();

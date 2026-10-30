@@ -2,7 +2,7 @@
   "en": {
     "locale": "en",
     "ogLocale": "en_GB",
-    "langName": "English", "menuLabel": "Menu", "langMenuLabel": "Language: English",
+    "langName": "English", "menuLabel": "Menu", "langMenuLabel": "Language: English", "closeLabel": "Close",
     "siteName": "Infinito Mourinho",
     "tagline": "Of Mourinho, by Mourinho, for Mourinho", "quoteMarks": "“{text}”",
     "slugs": { "home": "", "history": "history", "quotes": "quotes", "stories": "stories", "tags": "quotes/tag", "trophies": "trophies", "remarks": "remarks", "rivals": "rivals", "onthisday": "on-this-day", "stats": "stats", "news": "news", "matches": "matches", "quiz": "quiz" },
@@ -73,7 +73,7 @@
   "es": {
     "locale": "es",
     "ogLocale": "es_ES",
-    "langName": "Español", "menuLabel": "Menú", "langMenuLabel": "Idioma: español",
+    "langName": "Español", "menuLabel": "Menú", "langMenuLabel": "Idioma: español", "closeLabel": "Cerrar",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho", "quoteMarks": "«{text}»",
     "slugs": { "home": "es", "history": "es/historia", "quotes": "es/frases", "stories": "es/anecdotas", "tags": "es/frases/tema", "trophies": "es/titulos", "remarks": "es/declaraciones", "rivals": "es/rivales", "onthisday": "es/efemerides", "stats": "es/estadisticas", "news": "es/noticias", "matches": "es/partidos", "quiz": "es/trivia" },
@@ -144,7 +144,7 @@
   "pt": {
     "locale": "pt",
     "ogLocale": "pt_PT",
-    "langName": "Português", "menuLabel": "Menu", "langMenuLabel": "Idioma: português",
+    "langName": "Português", "menuLabel": "Menu", "langMenuLabel": "Idioma: português", "closeLabel": "Fechar",
     "siteName": "Infinito Mourinho",
     "tagline": "De Mourinho, por Mourinho, para Mourinho", "quoteMarks": "«{text}»",
     "slugs": { "home": "pt", "history": "pt/historia", "quotes": "pt/frases", "stories": "pt/historias", "tags": "pt/frases/tema", "trophies": "pt/titulos", "remarks": "pt/declaracoes", "rivals": "pt/rivais", "onthisday": "pt/neste-dia", "stats": "pt/estatisticas", "news": "pt/noticias", "matches": "pt/jogos", "quiz": "pt/quiz" },
@@ -215,7 +215,7 @@
   "ja": {
     "locale": "ja-JP",
     "ogLocale": "ja_JP",
-    "langName": "日本語", "menuLabel": "メニュー", "langMenuLabel": "言語：日本語",
+    "langName": "日本語", "menuLabel": "メニュー", "langMenuLabel": "言語：日本語", "closeLabel": "閉じる",
     "siteName": "Infinito Mourinho",
     "tagline": "モウリーニョの、モウリーニョによる、モウリーニョのためのサイト", "quoteMarks": "「{text}」",
     "slugs": { "home": "ja", "history": "ja/history", "quotes": "ja/quotes", "stories": "ja/stories", "tags": "ja/quotes/tag", "trophies": "ja/trophies", "remarks": "ja/remarks", "rivals": "ja/rivals", "onthisday": "ja/on-this-day", "stats": "ja/stats", "news": "ja/news", "matches": "ja/matches", "quiz": "ja/quiz" },

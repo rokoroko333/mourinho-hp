@@ -1,11 +1,34 @@
 {
-  "description": "A Spanish-speaking visitor on the English home page is offered the Spanish page, and closing the offer removes it",
-  "languages": ["es-ES", "es"],
+  "description": "A Spanish-speaking visitor on the English home page is offered the Spanish page, in Spanish down to the close button's name, and closing the offer removes it",
+  "languages": [
+    "es-ES",
+    "es"
+  ],
   "steps": [
-    { "goto": "/" },
-    { "visible": ".lang-banner" },
-    { "attr": { "selector": ".lang-banner a", "name": "href" } },
-    { "click": ".lang-banner button" },
-    { "absent": ".lang-banner" }
+    {
+      "goto": "/"
+    },
+    {
+      "visible": ".lang-banner"
+    },
+    {
+      "attr": {
+        "selector": ".lang-banner a",
+        "name": "href"
+      }
+    },
+    {
+      "attr": {
+        "selector": ".lang-banner button",
+        "name": "aria-label",
+        "equals": "Cerrar"
+      }
+    },
+    {
+      "click": ".lang-banner button"
+    },
+    {
+      "absent": ".lang-banner"
+    }
   ]
 }

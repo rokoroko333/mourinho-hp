@@ -375,6 +375,12 @@ test('every stat has a source, a consistent record and a known era', async () =>
     if (c.draws != null) assert.equal(c.wins + c.draws + c.losses, c.matches, `${c.era}: adds up`);
     else assert.ok(c.wins <= c.matches, `${c.era}: wins within matches`);
   }
+  // The current spell holds for its as-of date only, and is never also a finished spell in the table.
+  const c = stats.current;
+  sourced(c, 'current');
+  assert.ok(eras.has(c.era) && !seen.has(c.era), `current: ${c.era} is a known era not in the table`);
+  assert.match(c.asOf, /^\d{4}-\d{2}-\d{2}$/, 'current: as-of date');
+  assert.equal(c.wins + c.draws + c.losses, c.matches, 'current adds up');
   for (const r of stats.records) {
     sourced(r, r.id);
     assert.ok(eras.has(r.era), `${r.id}: era ${r.era} exists`);
@@ -402,6 +408,17 @@ test('the stats page and era pages show each number with its sources in all thre
       const era = await page(`${history}/${c.era}`);
       assert.ok(era.includes('class="era-record"'), `${lang}: ${c.era} era page shows its record`);
     }
+    const c = stats.current;
+    const at = html.indexOf('id="current"');
+    assert.ok(at > 0, `${lang}: current spell shown`);
+    const card = html.slice(at, html.indexOf('</section>', at));
+    for (const s of c.sources) assert.ok(card.includes(`href="${s.url}"`), `${lang}: current source`);
+    const era = await page(`${history}/${c.era}`);
+    const record = era.slice(era.indexOf('class="era-record"'), era.indexOf('</div>', era.indexOf('class="era-record"')));
+    // The note's date, written as the build writes it (longDate in scripts/build.mjs).
+    const asOf = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(c.asOf));
+    assert.ok(card.includes(asOf), `${lang}: current spell shows its as-of date`);
+    assert.ok(record.includes(asOf), `${lang}: ${c.era} era page shows the record with its as-of date`);
   }
 });
 

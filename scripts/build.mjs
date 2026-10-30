@@ -4,7 +4,7 @@ import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL } from '../lib/feeds.js';
-import { withYears } from './content.mjs';
+import { withYears, pickOnThisDay } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'dist');
@@ -704,15 +704,6 @@ const monthPaths = (m) => Object.fromEntries(LANGS.map((l) => [l, `${pathOf(l, '
 const otdMonths = [...new Set(onThisDay.map((e) => Number(e.date.slice(5, 7))))];
 const dayMonth = (mmdd, lang) =>
   new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`2000-${mmdd}T00:00:00Z`));
-
-// Today's event (UTC), or the next one in the calendar when today has none. The build picks with its own
-// date; app.js picks again from the embedded list when the visitor's UTC day differs (builds are not daily).
-// Keep the two in step: app.js repeats this rule (search for "On this day" there).
-function pickOnThisDay(events, now = new Date()) {
-  const today = now.toISOString().slice(5, 10);
-  const same = events.find((e) => e.date.slice(5) === today);
-  return same ? { event: same, today: true } : { event: events.find((e) => e.date.slice(5) > today) || events[0], today: false };
-}
 
 function otdCard(lang) {
   if (!onThisDay.length) return '';

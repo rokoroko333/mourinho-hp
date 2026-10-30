@@ -5,6 +5,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { pickOnThisDay } from '../scripts/content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
@@ -496,6 +497,18 @@ test('every on-this-day event has an exact date, a known era, text in three lang
     assert.ok(e.sources?.length > 0, `${e.date}: at least one source`);
     for (const s of e.sources) assert.match(s.url, /^https?:\/\/\S+$/, `${e.date}: source url`);
   }
+});
+
+// The home card's pick: today's event, else the next one, wrapping to January after the last date.
+test('pickOnThisDay picks today, then the next date, then wraps to the first', () => {
+  const events = [{ date: '2004-01-23' }, { date: '2010-05-22' }, { date: '2000-12-03' }];
+  const at = (d) => pickOnThisDay(events, new Date(`2026-${d}T12:00:00Z`));
+  assert.deepEqual(at('05-22'), { event: events[1], today: true });
+  assert.deepEqual(at('01-01'), { event: events[0], today: false });
+  assert.deepEqual(at('05-23'), { event: events[2], today: false });
+  assert.deepEqual(at('12-31'), { event: events[0], today: false });
+  // The day is the UTC one: 00:30 on 22 May in Lisbon (UTC+1) is still 21 May in UTC.
+  assert.deepEqual(pickOnThisDay(events, new Date('2026-05-22T00:30:00+01:00')), { event: events[1], today: false });
 });
 
 test('month pages list their events with sources, and the home page shows one event', async () => {

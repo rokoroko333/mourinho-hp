@@ -5,7 +5,7 @@
 
 - ページを足す・消す、操作できる要素を足す、`test/flows/` にフローを足すときは、同じ PR でここも直します。
 - `test/rules.test.mjs` が、ページの種類・フロー・要素の id がここと実物で食い違っていないかを CI で確かめます。
-- パスは英語・スペイン語・ポルトガル語の順です（`src/content/ui.json` の `slugs`）。
+- パスは英語・スペイン語・ポルトガル語の順です（`src/content/ui.json` の `slugs`）。日本語は `/ja/` に英語のスラッグを付けたパスです（`/ja/history/`、On this day の月は `/ja/on-this-day/5/` のように数字）。
 
 ## ページ
 

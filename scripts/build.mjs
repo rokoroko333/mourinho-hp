@@ -157,7 +157,7 @@ function footer(lang) {
 }
 
 function quoteBody(q, lang) {
-  return `<blockquote class="quote-text">“${esc(q.text)}”</blockquote>
+  return `<blockquote class="quote-text" lang="en">“${esc(q.text)}”</blockquote>
 <p class="quote-context">— ${esc(q.context[lang])}${q.year ? `, ${q.year}` : ''}</p>`;
 }
 
@@ -480,7 +480,7 @@ function detailPage(lang, kind, id) {
     image = `/og/quotes/${q.id}.png`;
     const era = history.find((h) => h.id === q.era);
     body = `<p class="card-label">${esc(d.quoteLabel)}</p>
-    <h1 class="quote-text detail-quote">“${esc(q.text)}”</h1>
+    <h1 class="quote-text detail-quote" lang="en">“${esc(q.text)}”</h1>
     ${q.original ? `<p class="quote-original" lang="${esc(q.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(q.original.text)}”</p>` : ''}
     <p class="quote-context">— ${esc(q.context[lang])}${year}</p>
     ${eraAndTags(era, q.tags, lang)}
@@ -698,7 +698,7 @@ function remarkCard(r, lang) {
   return `<article class="card card-quote remark" id="${esc(r.id)}">
       <p class="card-label"><time datetime="${esc(r.date)}">${esc(fill(ui[lang].remarks.reported, { date: longDate(r.date, lang) }))}</time></p>
       <p class="muted remark-occasion">${esc(r.occasion[lang])}</p>
-      <blockquote class="quote-text">“${esc(r.text)}”</blockquote>
+      <blockquote class="quote-text" lang="en">“${esc(r.text)}”</blockquote>
       ${r.original ? `<p class="quote-original" lang="${esc(r.original.lang)}"><span class="card-label">${esc(d.original)}</span> “${esc(r.original.text)}”</p>` : ''}
       ${sourceList(r.sources, lang)}
     </article>`;
@@ -924,7 +924,7 @@ function rivalPage(lang, r) {
   };
   const quoteCard = (q) => `<article class="card card-quote">
         <p class="card-label">${esc(fill(q.by === 'mourinho' ? p.byMourinho : p.byRival, { name: r.name }))}${q.said ? ` · ${esc(q.said)}` : ''}</p>
-        <blockquote class="quote-text">“${esc(q.text)}”</blockquote>
+        <blockquote class="quote-text" lang="en">“${esc(q.text)}”</blockquote>
         ${sourceList(q.sources, lang)}
       </article>`;
   return `${head(lang, paths, t)}

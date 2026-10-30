@@ -395,6 +395,18 @@ test('fillMatchesPage puts escaped fixtures and results into each built matches 
   assert.equal(fillMatchesPage(html.replace('id="strings"', 'id="text"'), data), null);
 });
 
+// Quotes are printed in English on every language's pages; marking them lets screen readers and the
+// browser's translator treat them as English on /es/, /pt/ and /ja/ pages.
+test('quote texts are marked as English on every page', async () => {
+  await build();
+  for (const path of ['ja/quotes', 'es/frases', 'ja/quotes/special-one', 'ja/remarks', 'ja']) {
+    const html = await page(path);
+    const tags = [...html.matchAll(/<(blockquote|h1) class="quote-text[^"]*"[^>]*>/g)].map((m) => m[0]);
+    assert.ok(tags.length > 0, `${path}: has quotes`);
+    for (const t of tags) assert.ok(t.includes('lang="en"'), `${path}: ${t}`);
+  }
+});
+
 // The quiz adds no facts of its own: every answer is a trophy's era, and the wrong options are other
 // clubs he managed as head coach, never a club he was only an assistant at.
 test('every quiz question answers from the trophy list with four different managed clubs', async () => {

@@ -236,3 +236,21 @@ test('docs name only the news key the site reads', async () => {
     assert.doesNotMatch(await readFile(join(ROOT, f), 'utf8'), /news:(en|es|pt|ja)\b/, `${f}: use news:local`);
   }
 });
+
+// Every language the site builds is complete: any text in src/content/ with English, Spanish and Portuguese
+// also has Japanese, and ui.json has the same keys in every language (#56, #58).
+test('every content text and every ui.json key exists in every language', async () => {
+  const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
+  const langs = Object.keys(ui);
+  const keys = (o, p = '') => Object.entries(o).flatMap(([k, v]) => (v && typeof v === 'object' && !Array.isArray(v) ? keys(v, `${p}${k}.`) : [`${p}${k}`]));
+  const en = keys(ui.en).sort();
+  for (const l of langs) assert.deepEqual(keys(ui[l]).filter((k) => !k.endsWith('.sep')).sort(), en.filter((k) => !k.endsWith('.sep')), `ui.json ${l}: same keys as en`);
+  for (const f of (await readdir(join(ROOT, 'src/content'))).filter((f) => f.endsWith('.json') && f !== 'ui.json')) {
+    JSON.stringify(JSON.parse(await readFile(join(ROOT, 'src/content', f), 'utf8')), (k, v) => {
+      if (v && typeof v === 'object' && !Array.isArray(v) && 'en' in v && 'pt' in v) {
+        for (const l of langs) assert.ok(v[l] && (Array.isArray(v.en) ? v[l].length === v.en.length : true), `${f}: "${String(v.en).slice(0, 40)}" has no ${l}`);
+      }
+      return v;
+    });
+  }
+});

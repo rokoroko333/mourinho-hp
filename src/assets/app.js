@@ -178,7 +178,7 @@
     const e = pick(daily.episodes);
     const box = $('#daily-quote');
     box.replaceChildren(
-      el('blockquote', { class: 'quote-text' }, `“${q.text}”`),
+      el('blockquote', { class: 'quote-text', lang: 'en' }, `“${q.text}”`),
       el('p', { class: 'quote-context' }, `— ${q.context}${q.year ? `, ${q.year}` : ''}`),
     );
     $('#daily-quote-link').setAttribute('href', q.path);

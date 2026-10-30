@@ -6,8 +6,8 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 
 ## 目的と読者
 
-- 読者は世界中の英語・スペイン語・ポルトガル語話者（日本語ではない）。オーナーは日本語で依頼する。
-- 人気の海外ファンサイト並みの流入が目標。全ページを en/es/pt で用意し、hreflang・canonical・
+- 読者は世界中の英語・スペイン語・ポルトガル語話者と、日本のファン。オーナーは日本語で依頼する。
+- 人気の海外ファンサイト並みの流入が目標。全ページを en/es/pt/ja で用意し、hreflang・canonical・
   sitemap の alternates・言語ごとのスラッグを付ける。
 - Cloudflare 無料プランで 1日15,000訪問以上に耐える設計にする。
 
@@ -16,8 +16,8 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 コードを見れば分かることは書きません。ここにあるのは、見ても分からない約束と落とし穴です。
 
 - `scripts/build.mjs` 依存ゼロの静的生成で、`src/content/*.json` を `dist/` に出力する。
-  英語は `/`、スペイン語は `/es/`、ポルトガル語は `/pt/` で、スラッグも言語ごとに違う（`ui.json` の `slugs`）。
-- `src/content/` 全テキスト。表示する文字列は必ず `en`・`es`・`pt` をそろえる。
+  英語は `/`、スペイン語は `/es/`、ポルトガル語は `/pt/`、日本語は `/ja/` で、スラッグも言語ごとに違う（`ui.json` の `slugs`。日本語は英語のスラッグ）。
+- `src/content/` 全テキスト。表示する文字列は必ず `en`・`es`・`pt`・`ja` をそろえる（日本語の表記は `docs/ja-glossary.md`）。
 - `src/assets/` は素の JS と CSS（フレームワーク・Tailwind・CDN は使わない）。`src/public/` は `dist/` 直下にコピーする（`_headers`・`_redirects`）。
 - `lib/feeds.js` ニュースと試合日程をサーバー側で取得する。現所属クラブの `TEAM_ID`（86 = Real Madrid）は移籍したら変える。
   一緒に直す場所は同じファイルのコメントにあり、`test/rules.test.mjs` が言語ごとの直し忘れを落とす。

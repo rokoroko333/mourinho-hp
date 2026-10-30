@@ -115,6 +115,9 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 .loading { color: var(--muted); grid-column: 1 / -1; text-align: center; padding: 40px 0; }
 
 .grid { display: grid; gap: 16px; }
+/* Grid items may shrink below their content's width, so a long name or number wraps instead of
+   widening the page on a phone. */
+.grid > * { min-width: 0; }
 @media (min-width: 720px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1000px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
 
@@ -142,11 +145,11 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 .match.next { border-color: var(--hairline); border-bottom: 2px solid var(--red); }
 .match-tag { position: absolute; top: 0; right: 0; padding: 5px 12px; font: 600 13px/1 var(--display); letter-spacing: 0.14em; text-transform: uppercase; border-radius: 0 var(--radius) 0 var(--radius); background: var(--surface-2); color: var(--muted); }
 .match.next .match-tag { background: var(--red); color: var(--on-red); }
-.teams { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 12px; }
-.team { width: 120px; font: 600 17px/1.2 var(--display); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); }
+.teams { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 12px; width: 100%; }
+.team { flex: 1 1 0; min-width: 0; max-width: 140px; font: 600 17px/1.2 var(--display); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); overflow-wrap: break-word; }
 .team img { width: 52px; height: 52px; object-fit: contain; background: var(--crest-bg); border-radius: 50%; padding: 4px; display: block; margin: 0 auto 8px; }
 .team small { display: block; font: 400 11px var(--sans); letter-spacing: 0.08em; color: var(--muted); }
-.score { font: 800 44px/1 var(--display); color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.score { flex: none; font: 800 clamp(32px, 9vw, 44px)/1 var(--display); color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .match-date { font-size: 13px; color: var(--muted); }
 .highlights { margin-top: 20px; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; }
 
@@ -189,7 +192,8 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 /* The countdown is the moment: red label with a slow pulse, white figures. */
 .countdown { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin: 0 0 24px; color: var(--text); }
 /* Inside the next match's card on the home page: centred, above the teams. */
-.match .countdown { justify-content: center; margin: 8px 0 0; padding-bottom: 14px; border-bottom: 1px solid var(--border); width: 100%; }
+.match .countdown { justify-content: center; margin: 8px 0 0; padding-bottom: 14px; border-bottom: 1px solid var(--border); width: 100%; row-gap: 6px; }
+.match .countdown strong { font-size: clamp(26px, 7.5vw, 52px); }
 .countdown .card-label { color: var(--red-text); display: inline-flex; align-items: center; gap: 8px; }
 .countdown .card-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 2s ease-in-out infinite; }
 .countdown strong { font: 800 clamp(32px, 6vw, 52px)/1 var(--display); letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }

@@ -182,6 +182,7 @@ function liveStrings(lang) {
     kickoffIn: h.kickoffIn, units: h.countdownUnits, siteUrl: SITE_URL, tbd: ui[lang].matches.tbd,
     // Kick-off times in the club's own time zone, whatever the visitor's (lib/feeds.js).
     timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY[lang] }),
+    predict: ui[lang].predict,
   };
 }
 const stringsScript = (lang) =>
@@ -219,6 +220,8 @@ ${header(lang, pathsOf('home'), 'home')}
        that change (up to an hour), which expects to find it. -->
   <p class="countdown" id="countdown" hidden></p>
   <div class="grid grid-2" id="match-list"><p class="loading">${esc(h.loading)}</p></div>
+  <!-- Fan prediction for the next match, drawn by app.js from /api/predict (lib/predict.js). -->
+  <section class="card predict" id="predict" aria-live="polite" hidden></section>
   <a class="card card-link highlights" href="${HIGHLIGHTS_URL}" target="_blank" rel="noopener">
     <div><h3>${esc(h.highlights)}</h3><p class="muted">${esc(h.highlightsSub)}</p></div>
     <span class="btn btn-red">${icon.play}${esc(h.watch)}</span>
@@ -1086,6 +1089,7 @@ ${header(lang, pathsOf('matches'), 'matches')}
     <p class="hero-tag">${esc(p.sub)}</p>
   </div>
   <p class="countdown" id="countdown" hidden></p>
+  <section class="card predict" id="predict" aria-live="polite" hidden></section>
   <section class="section">
     <div class="section-head"><div><h2>${esc(p.fixtures)}</h2><p class="sub">${esc(fill(p.timeNote, { city: MATCH_CITY[lang] }))}</p></div></div>
     <ol class="match-rows" id="fixture-list"><li class="loading">${esc(u.home.loading)}</li></ol>

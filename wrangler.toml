@@ -6,3 +6,11 @@ compatibility_date = "2026-10-01"
 [[kv_namespaces]]
 binding = "FEEDS"
 id = "4414d70f96524e7eb554c3f09423f8f6"
+
+# Fan predictions (lib/predict.js, schema in migrations/). Also bound in workers/feeds/wrangler.toml (purge).
+# Locally: npx wrangler d1 migrations apply infinito-mourinho-votes --local
+[[d1_databases]]
+binding = "VOTES"
+database_name = "infinito-mourinho-votes"
+database_id = "93c5c895-c410-4d2b-a257-9e6e85018e59"
+migrations_dir = "migrations"

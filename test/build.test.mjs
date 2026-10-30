@@ -408,6 +408,8 @@ test('every quiz question answers from the trophy list with four different manag
     for (const o of q.options) assert.ok(managed.includes(o), `${q.id}: ${o} is a club he managed`);
   }
   assert.deepEqual(quizQuestions(trophies, history, managed), questions, 'the same quiz on every build');
+  // Too few clubs for three wrong options stops the build rather than looping for ever.
+  assert.throws(() => quizQuestions(trophies, history, ['porto', 'chelsea-1', 'chelsea-2', 'inter']), /three other managed clubs/);
 });
 
 test('the quiz page shows ten questions with their answers and sources in three languages', async () => {

@@ -33,6 +33,7 @@ export function quizQuestions(trophies, history, managed) {
       return (((x ^ (x >>> 14)) >>> 0) / 4294967296) * n | 0;
     };
     const pool = clubs.filter((era) => clubOf(era) !== clubOf(t.era));
+    if (pool.length < 3) throw new Error(`quiz ${t.id}: needs three other managed clubs, has ${pool.length}`);
     const wrong = [];
     while (wrong.length < 3) wrong.push(...pool.splice(next(pool.length), 1));
     const options = [t.era, ...wrong];

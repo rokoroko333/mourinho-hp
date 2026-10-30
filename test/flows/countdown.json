@@ -1,0 +1,9 @@
+{
+  "description": "On the matches page the kick-off countdown ticks every second, and stays hidden when there is no next match or its kick-off time is to be confirmed",
+  "steps": [
+    { "goto": "/matches/" },
+    {
+      "eval": "(async () => { const { next } = await (await fetch('/api/matches')).json(); const box = document.querySelector('#countdown'); await new Promise((r) => setTimeout(r, 1500)); if (!next || next.timeTbd || new Date(next.date) < Date.now()) return box.hidden; const first = box.textContent; await new Promise((r) => setTimeout(r, 1200)); return !box.hidden && /\\d{2} s$/.test(box.textContent.trim()) && box.textContent !== first && !box.closest('[aria-live]'); })()"
+    }
+  ]
+}

@@ -270,31 +270,31 @@
         if (!cards.length) return showMessage(matchList, strings.matchesEmpty);
         matchList.replaceChildren(...cards);
       }
-      if (data.next) startCountdown(new Date(data.next.date));
+      const kickoff = globalThis.mourinhoCountdown?.kickoffOf(data.next);
+      if (kickoff) startCountdown(kickoff);
     })
     .catch(() => {
       if (matchList) showMessage(matchList, strings.matchesEmpty);
       for (const list of [resultList, fixtureList]) if (list) fillRows(list, []);
     });
 
-  // "Kick-off in 2 d 4 h 13 m", hidden once the match has started. Checked every 15 s rather than every
-  // minute, so the minute shown turns over at most 15 s late instead of up to a minute.
+  // "Kick-off in 2 d 4 h 13 min 05 s", ticking every second (only the text changes, and browsers pause timers
+  // in background tabs) and hidden once the match has started. Not a live region, so screen readers do not
+  // announce every tick. When to count and the wording are in src/assets/countdown.js.
   function startCountdown(kickoff) {
     const box = $('#countdown');
-    const u = strings.units;
     const tick = () => {
-      const mins = Math.floor((kickoff - Date.now()) / 60000);
-      if (!(mins >= 0)) {
+      const secs = Math.floor((kickoff - Date.now()) / 1000);
+      if (!(secs >= 0)) {
         box.hidden = true;
-        return clearInterval(timer);
+        return;
       }
-      const d = Math.floor(mins / 1440);
-      const h = Math.floor((mins % 1440) / 60);
-      const parts = [d && `${d} ${u.d}`, (d || h) && `${h} ${u.h}`, `${mins % 60} ${u.m}`].filter(Boolean);
-      box.replaceChildren(el('span', { class: 'card-label' }, strings.kickoffIn), ' ', el('strong', {}, parts.join(' ')));
+      const text = globalThis.mourinhoCountdown.text(secs, strings.units);
+      box.replaceChildren(el('span', { class: 'card-label' }, strings.kickoffIn), ' ', el('strong', {}, text));
       box.hidden = false;
+      // Wait for the next whole second, so the seconds turn over evenly instead of drifting.
+      setTimeout(tick, 1000 - (Date.now() % 1000) + 20);
     };
-    const timer = setInterval(tick, 15000);
     tick();
   }
 

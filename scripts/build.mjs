@@ -142,6 +142,7 @@ function footer(lang) {
   </div>
 </footer>
 <script type="application/json" id="lang-suggest">${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, ui[l].suggest]))).replace(/</g, '\\u003c')}</script>
+<script src="/assets/countdown.js" defer></script>
 <script src="/assets/app.js" defer></script>
 </body>
 </html>`;

@@ -148,7 +148,7 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .share { justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 .share-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
 .countdown { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 0 0 20px; font-size: clamp(22px, 4vw, 32px); color: #fff; }
-.countdown strong { font-weight: 900; letter-spacing: 0.02em; }
+.countdown strong { font-weight: 900; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
 .news-lead { grid-column: 1 / -1; }
 /* The rest read as a list: compact, and the whole card is already the link. */
 .news-card:not(.news-lead) { padding: 16px 20px; gap: 8px; }

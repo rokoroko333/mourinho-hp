@@ -1,8 +1,8 @@
 [
-  { "id": "hkZFko2Vsa8", "channel": "Sky Sports Retro", "title": { "en": "'I think I'm a special one' (2004)", "es": "'Creo que soy especial' (2004)", "pt": "'Acho que sou especial' (2004)" } },
-  { "id": "trscMrAJ5gA", "channel": "Sky Sports Retro", "title": { "en": "'I prefer not to speak'", "es": "'Prefiero no hablar'", "pt": "'Prefiro não falar'" } },
-  { "id": "ALzaktL8c28", "channel": "UEFA", "embed": false, "title": { "en": "The Old Trafford touchline sprint", "es": "La carrera por la banda en Old Trafford", "pt": "A corrida em Old Trafford" } },
-  { "id": "ylTVLMja0DE", "channel": "TNT Sports Football", "title": { "en": "Inter v Barcelona 2010: both legs", "es": "Inter-Barcelona 2010: ida y vuelta", "pt": "Inter-Barcelona 2010: as duas mãos" } },
-  { "id": "CUOGUCxwTOE", "channel": "Sky Sports Premier League", "title": { "en": "'Respect, respect, respect'", "es": "'Respeto, respeto, respeto'", "pt": "'Respeito, respeito, respeito'" } },
-  { "id": "m9YCQZlXEA8", "channel": "Sky Sports Premier League", "title": { "en": "His best ever moments", "es": "Sus mejores momentos", "pt": "Os seus melhores momentos" } }
+  { "id": "hkZFko2Vsa8", "channel": "Sky Sports Retro", "title": { "en": "'I think I'm a special one' (2004)", "es": "'Creo que soy especial' (2004)", "pt": "'Acho que sou especial' (2004)", "ja": "「私はスペシャル・ワンだと思う」（2004年）" } },
+  { "id": "trscMrAJ5gA", "channel": "Sky Sports Retro", "title": { "en": "'I prefer not to speak'", "es": "'Prefiero no hablar'", "pt": "'Prefiro não falar'", "ja": "「話さないほうがいい」" } },
+  { "id": "ALzaktL8c28", "channel": "UEFA", "embed": false, "title": { "en": "The Old Trafford touchline sprint", "es": "La carrera por la banda en Old Trafford", "pt": "A corrida em Old Trafford", "ja": "オールド・トラッフォードのタッチライン疾走" } },
+  { "id": "ylTVLMja0DE", "channel": "TNT Sports Football", "title": { "en": "Inter v Barcelona 2010: both legs", "es": "Inter-Barcelona 2010: ida y vuelta", "pt": "Inter-Barcelona 2010: as duas mãos", "ja": "インテル対バルセロナ（2010年）：第1戦・第2戦" } },
+  { "id": "CUOGUCxwTOE", "channel": "Sky Sports Premier League", "title": { "en": "'Respect, respect, respect'", "es": "'Respeto, respeto, respeto'", "pt": "'Respeito, respeito, respeito'", "ja": "「リスペクト、リスペクト、リスペクト」" } },
+  { "id": "m9YCQZlXEA8", "channel": "Sky Sports Premier League", "title": { "en": "His best ever moments", "es": "Sus mejores momentos", "pt": "Os seus melhores momentos", "ja": "最高の名場面集" } }
 ]

@@ -5,17 +5,20 @@
     "club": {
       "en": "Sporting CP, FC Porto & Barcelona",
       "es": "Sporting, Oporto y Barcelona",
-      "pt": "Sporting, FC Porto e Barcelona"
+      "pt": "Sporting, FC Porto e Barcelona",
+      "ja": "スポルティングCP・FCポルト・バルセロナ"
     },
     "era": {
       "en": "Robson's right-hand man",
       "es": "La mano derecha de Robson",
-      "pt": "O braço direito de Robson"
+      "pt": "O braço direito de Robson",
+      "ja": "ロブソンの右腕"
     },
     "trophies": {
       "en": "2× Primeira Liga, Cup Winners' Cup, Copa del Rey (as assistant)",
       "es": "2 ligas portuguesas, Recopa, Copa del Rey (como ayudante)",
-      "pt": "2 campeonatos, Taça das Taças, Taça do Rei (como adjunto)"
+      "pt": "2 campeonatos, Taça das Taças, Taça do Rei (como adjunto)",
+      "ja": "プリメイラ・リーガ2回、カップウィナーズカップ、コパ・デル・レイ（アシスタントコーチとして）"
     },
     "points": {
       "en": [
@@ -35,6 +38,12 @@
         "Acompanhou Robson para o FC Porto, onde foram bicampeões nacionais.",
         "Em 1996 seguiu Robson para o Barcelona e ganhou a Taça das Taças e a Taça do Rei.",
         "Alguns chamavam-lhe 'o tradutor'; ele viveu-o como a sua escola de treinador."
+      ],
+      "ja": [
+        "通訳としてスポルティングCPのボビー・ロブソンのもとに加わり、すぐに信頼されるスカウト兼分析担当になった。",
+        "ロブソンに続いてFCポルトへ移り、ポルトガルリーグを連覇した。",
+        "1996年にロブソンとともにバルセロナへ移り、カップウィナーズカップとコパ・デル・レイを制した。",
+        "一部からは「通訳」と軽く見られたが、本人はそれを指導者としての修業と捉えた。"
       ]
     }
   },
@@ -44,17 +53,20 @@
     "club": {
       "en": "Barcelona",
       "es": "Barcelona",
-      "pt": "Barcelona"
+      "pt": "Barcelona",
+      "ja": "バルセロナ"
     },
     "era": {
       "en": "Learning from Van Gaal",
       "es": "Aprendiendo de Van Gaal",
-      "pt": "A aprender com Van Gaal"
+      "pt": "A aprender com Van Gaal",
+      "ja": "ファン・ハールに学ぶ"
     },
     "trophies": {
       "en": "2× La Liga (as assistant)",
       "es": "2 Ligas (como ayudante)",
-      "pt": "2 Ligas espanholas (como adjunto)"
+      "pt": "2 Ligas espanholas (como adjunto)",
+      "ja": "ラ・リーガ2回（アシスタントコーチとして）"
     },
     "points": {
       "en": [
@@ -71,6 +83,11 @@
         "Louis van Gaal manteve-o como adjunto depois da saída de Robson.",
         "Van Gaal deixou-o orientar a equipa em alguns particulares e jogos de taça: a primeira experiência no comando.",
         "Absorveu o jogo posicional holandês enquanto afinava a obsessão pelas transições e pela análise do adversário."
+      ],
+      "ja": [
+        "ロブソンが去った後も、ルイ・ファン・ハールは彼をアシスタントコーチとして残した。",
+        "ファン・ハールは一部の親善試合やカップ戦で彼にチームの指揮を任せた。これが初めての指揮経験である。",
+        "オランダ流のポジショナルプレーを吸収しつつ、自身がこだわる攻守の切り替えと相手分析を磨いた。"
       ]
     }
   },
@@ -80,17 +97,20 @@
     "club": {
       "en": "Benfica",
       "es": "Benfica",
-      "pt": "Benfica"
+      "pt": "Benfica",
+      "ja": "ベンフィカ"
     },
     "era": {
       "en": "First job as head coach",
       "es": "Primer banquillo",
-      "pt": "Primeiro cargo de treinador principal"
+      "pt": "Primeiro cargo de treinador principal",
+      "ja": "初めての監督職"
     },
     "trophies": {
       "en": "—",
       "es": "—",
-      "pt": "—"
+      "pt": "—",
+      "ja": "—"
     },
     "points": {
       "en": [
@@ -107,6 +127,11 @@
         "Assumiu o Benfica em setembro de 2000 e venceu o dérbi com o Sporting por 3-0.",
         "Quando o novo presidente recusou prolongar o contrato, saiu ao fim de apenas nove jornadas.",
         "Essa curta passagem mostrou o carácter intransigente que marcaria a sua carreira."
+      ],
+      "ja": [
+        "2000年9月にベンフィカの監督に就任し、スポルティングCPとのダービーに3-0で勝った。",
+        "新会長が契約延長に応じなかったため、リーグ戦わずか9試合で自ら去った。",
+        "短い在任期間は、その後のキャリアを特徴づける妥協しない性格を示した。"
       ]
     }
   },
@@ -116,17 +141,20 @@
     "club": {
       "en": "União de Leiria",
       "es": "União de Leiria",
-      "pt": "União de Leiria"
+      "pt": "União de Leiria",
+      "ja": "ウニオン・レイリア"
     },
     "era": {
       "en": "The breakthrough",
       "es": "El despegue",
-      "pt": "A afirmação"
+      "pt": "A afirmação",
+      "ja": "飛躍"
     },
     "trophies": {
       "en": "—",
       "es": "—",
-      "pt": "—"
+      "pt": "—",
+      "ja": "—"
     },
     "points": {
       "en": [
@@ -140,6 +168,10 @@
       "pt": [
         "Transformou um clube modesto num candidato aos lugares cimeiros, com defesa organizada e contra-ataques letais.",
         "O sucesso tornou-o o jovem treinador mais cobiçado de Portugal; o FC Porto contratou-o em janeiro de 2002."
+      ],
+      "ja": [
+        "組織的な守備と鋭いカウンターで、小さなクラブを上位を争うチームに変えた。",
+        "この成功でポルトガルで最も求められる若手監督となり、2002年1月にFCポルトが彼を招いた。"
       ]
     }
   },
@@ -149,17 +181,20 @@
     "club": {
       "en": "FC Porto",
       "es": "Oporto",
-      "pt": "FC Porto"
+      "pt": "FC Porto",
+      "ja": "FCポルト"
     },
     "era": {
       "en": "Conquering Europe",
       "es": "A la conquista de Europa",
-      "pt": "A conquista da Europa"
+      "pt": "A conquista da Europa",
+      "ja": "欧州制覇"
     },
     "trophies": {
       "en": "Champions League, UEFA Cup, 2× Primeira Liga, Taça de Portugal",
       "es": "Champions, Copa de la UEFA, 2 ligas portuguesas, Copa de Portugal",
-      "pt": "Liga dos Campeões, Taça UEFA, 2 campeonatos, Taça de Portugal"
+      "pt": "Liga dos Campeões, Taça UEFA, 2 campeonatos, Taça de Portugal",
+      "ja": "UEFAチャンピオンズリーグ、UEFAカップ、プリメイラ・リーガ2回、タッサ・デ・ポルトガル"
     },
     "points": {
       "en": [
@@ -179,6 +214,12 @@
         "Construiu a equipa em torno de Deco, Ricardo Carvalho e de um bloco implacavelmente organizado.",
         "Eliminou o Manchester United em Old Trafford com a famosa corrida pela linha lateral.",
         "Venceu o Mónaco por 3-0 na final da Liga dos Campeões de 2004 e dias depois partiu para o Chelsea."
+      ],
+      "ja": [
+        "シーズン途中に就任して翌年の優勝を約束し、2003年にリーグ・カップ・UEFAカップの3冠を果たした。",
+        "デコ、リカルド・カルヴァーリョ、そして徹底して組織されたブロックを軸にチームを作った。",
+        "オールド・トラッフォードでマンチェスター・ユナイテッドを敗退させ、あの有名なタッチライン沿いの疾走を見せた。",
+        "2004年のチャンピオンズリーグ決勝でモナコに3-0で勝ち、数日後にチェルシーへ移った。"
       ]
     }
   },
@@ -188,17 +229,20 @@
     "club": {
       "en": "Chelsea",
       "es": "Chelsea",
-      "pt": "Chelsea"
+      "pt": "Chelsea",
+      "ja": "チェルシー"
     },
     "era": {
       "en": "The Special One",
       "es": "The Special One",
-      "pt": "The Special One"
+      "pt": "The Special One",
+      "ja": "スペシャル・ワン"
     },
     "trophies": {
       "en": "2× Premier League, FA Cup, 2× League Cup",
       "es": "2 Premier League, FA Cup, 2 Copas de la Liga",
-      "pt": "2 Premier League, Taça de Inglaterra, 2 Taças da Liga"
+      "pt": "2 Premier League, Taça de Inglaterra, 2 Taças da Liga",
+      "ja": "プレミアリーグ2回、FAカップ、リーグカップ2回"
     },
     "points": {
       "en": [
@@ -218,6 +262,12 @@
         "A equipa de 2004-05 sofreu apenas 15 golos no campeonato, recorde da Premier League.",
         "Terry, Lampard, Drogba e Čech foram a espinha de uma equipa que revalidou o título em 2006.",
         "Saiu por mútuo acordo em setembro de 2007 após desentendimentos com o dono, Roman Abramovich."
+      ],
+      "ja": [
+        "自らを「スペシャル・ワン」と称し、1年目でチェルシーに50年ぶりのリーグ優勝をもたらした。",
+        "2004-05シーズンのチームはリーグ戦でわずか15失点。プレミアリーグ記録である。",
+        "テリー・ランパード・ドログバ・チェフが、2006年に連覇したチームの軸となった。",
+        "オーナーのロマン・アブラモビッチとの対立を経て、2007年9月に双方合意のうえで退任した。"
       ]
     }
   },
@@ -227,17 +277,20 @@
     "club": {
       "en": "Inter Milan",
       "es": "Inter de Milán",
-      "pt": "Inter de Milão"
+      "pt": "Inter de Milão",
+      "ja": "インテル"
     },
     "era": {
       "en": "The Italian treble",
       "es": "El triplete italiano",
-      "pt": "O triplete italiano"
+      "pt": "O triplete italiano",
+      "ja": "イタリアでの3冠"
     },
     "trophies": {
       "en": "Champions League, 2× Serie A, Coppa Italia, Supercoppa",
       "es": "Champions, 2 Serie A, Copa de Italia, Supercopa",
-      "pt": "Liga dos Campeões, 2 Serie A, Taça de Itália, Supertaça"
+      "pt": "Liga dos Campeões, 2 Serie A, Taça de Itália, Supertaça",
+      "ja": "UEFAチャンピオンズリーグ、セリエA2回、コッパ・イタリア、スーペルコッパ・イタリアーナ"
     },
     "points": {
       "en": [
@@ -257,6 +310,12 @@
         "Contratou Eto'o, Sneijder, Milito e Lúcio para criar uma equipa de grandes noites.",
         "Resistiu com dez em Camp Nou para chegar à final de 2010: 'a derrota mais bonita da minha vida'.",
         "Venceu o Bayern por 2-0 em Madrid, conquistou o primeiro triplete de um clube italiano e partiu para o Real Madrid."
+      ],
+      "ja": [
+        "1年目でセリエAを制し、初日から流暢なイタリア語を話してイタリアを感心させた。",
+        "エトー・スナイデル・ミリート・ルシオを獲得し、大一番のためのチームを作った。",
+        "カンプ・ノウで10人になりながら必死に守り、2010年の決勝に進んだ。「人生で最も美しい敗戦」である。",
+        "マドリードでバイエルンに2-0で勝ってイタリア初の3冠を達成し、その後レアル・マドリードへ移った。"
       ]
     }
   },
@@ -266,17 +325,20 @@
     "club": {
       "en": "Real Madrid",
       "es": "Real Madrid",
-      "pt": "Real Madrid"
+      "pt": "Real Madrid",
+      "ja": "レアル・マドリード"
     },
     "era": {
       "en": "War with Guardiola's Barça",
       "es": "La guerra con el Barça de Guardiola",
-      "pt": "A guerra com o Barça de Guardiola"
+      "pt": "A guerra com o Barça de Guardiola",
+      "ja": "グアルディオラのバルサとの抗争"
     },
     "trophies": {
       "en": "La Liga, Copa del Rey, Supercopa de España",
       "es": "Liga, Copa del Rey, Supercopa de España",
-      "pt": "Liga espanhola, Taça do Rei, Supertaça de Espanha"
+      "pt": "Liga espanhola, Taça do Rei, Supertaça de Espanha",
+      "ja": "ラ・リーガ、コパ・デル・レイ、スーペルコパ・デ・エスパーニャ"
     },
     "points": {
       "en": [
@@ -296,6 +358,12 @@
         "Venceu o Barcelona na final da Taça do Rei de 2011 com um cabeceamento de Cristiano Ronaldo no prolongamento.",
         "Ganhou a Liga 2011-12 com recorde de 100 pontos e 121 golos.",
         "Chegou a três meias-finais seguidas da Champions, mas saiu em 2013 após uma época de conflitos no balneário."
+      ],
+      "ja": [
+        "ペップ・グアルディオラの支配を終わらせるために招かれた。1年目のクラシコでの0-5の敗戦は、その決意をかえって固めた。",
+        "2011年のコパ・デル・レイ決勝で、延長戦のクリスティアーノ・ロナウドのヘディングでバルセロナを破った。",
+        "2011-12シーズンのラ・リーガを、記録となる勝ち点100・121得点で制した。",
+        "チャンピオンズリーグで3季連続の準決勝進出を果たしたが、ロッカールームでの対立が続いたシーズンを経て2013年に退任した。"
       ]
     }
   },
@@ -305,17 +373,20 @@
     "club": {
       "en": "Chelsea",
       "es": "Chelsea",
-      "pt": "Chelsea"
+      "pt": "Chelsea",
+      "ja": "チェルシー"
     },
     "era": {
       "en": "The Happy One returns",
       "es": "Vuelve el Happy One",
-      "pt": "O regresso do Happy One"
+      "pt": "O regresso do Happy One",
+      "ja": "ハッピー・ワンの帰還"
     },
     "trophies": {
       "en": "Premier League, League Cup",
       "es": "Premier League, Copa de la Liga",
-      "pt": "Premier League, Taça da Liga"
+      "pt": "Premier League, Taça da Liga",
+      "ja": "プレミアリーグ、リーグカップ"
     },
     "points": {
       "en": [
@@ -335,6 +406,12 @@
         "Venceu em Anfield em 2014 e travou a corrida do Liverpool ao título.",
         "Juntou Fàbregas e Diego Costa e ganhou a dobradinha Premier League e Taça da Liga em 2014-15.",
         "Foi despedido em dezembro de 2015 após um colapso na defesa do título."
+      ],
+      "ja": [
+        "自らを「ハッピー・ワン」と呼んで復帰し、エデン・アザールを中心に新しいチームを作った。",
+        "2014年にアンフィールドで勝ち、リヴァプールの優勝争いを狂わせた。",
+        "ファブレガスとジエゴ・コスタを加え、2014-15シーズンにリーグとリーグカップの2冠を達成した。",
+        "連覇を目指すシーズンで調子が崩れ、2015年12月に解任された。"
       ]
     }
   },
@@ -344,17 +421,20 @@
     "club": {
       "en": "Manchester United",
       "es": "Manchester United",
-      "pt": "Manchester United"
+      "pt": "Manchester United",
+      "ja": "マンチェスター・ユナイテッド"
     },
     "era": {
       "en": "Rebuilding Old Trafford",
       "es": "Reconstruir Old Trafford",
-      "pt": "Reconstruir Old Trafford"
+      "pt": "Reconstruir Old Trafford",
+      "ja": "オールド・トラッフォードの再建"
     },
     "trophies": {
       "en": "Europa League, League Cup, Community Shield",
       "es": "Europa League, Copa de la Liga, Community Shield",
-      "pt": "Liga Europa, Taça da Liga, Supertaça inglesa"
+      "pt": "Liga Europa, Taça da Liga, Supertaça inglesa",
+      "ja": "UEFAヨーロッパリーグ、リーグカップ、FAコミュニティ・シールド"
     },
     "points": {
       "en": [
@@ -374,6 +454,12 @@
         "A Liga Europa de 2017 devolveu o United à Liga dos Campeões.",
         "Foi segundo em 2017-18 e mais tarde chamou-lhe uma das maiores conquistas da carreira.",
         "Despedido em dezembro de 2018 entre tensões com jogadores e maus resultados."
+      ],
+      "ja": [
+        "ズラタン・イブラヒモヴィッチとポール・ポグバを獲得し、1年目に3つのタイトルを獲った。",
+        "2017年のヨーロッパリーグ優勝で、ユナイテッドはチャンピオンズリーグに復帰した。",
+        "2017-18シーズンは2位。後に、キャリアで最高の成果の一つだと語った。",
+        "選手との緊張関係と成績不振のなか、2018年12月に解任された。"
       ]
     }
   },
@@ -383,17 +469,20 @@
     "club": {
       "en": "Tottenham Hotspur",
       "es": "Tottenham Hotspur",
-      "pt": "Tottenham Hotspur"
+      "pt": "Tottenham Hotspur",
+      "ja": "トッテナム・ホットスパー"
     },
     "era": {
       "en": "All or Nothing",
       "es": "All or Nothing",
-      "pt": "All or Nothing"
+      "pt": "All or Nothing",
+      "ja": "オール・オア・ナッシング"
     },
     "trophies": {
       "en": "—",
       "es": "—",
-      "pt": "—"
+      "pt": "—",
+      "ja": "—"
     },
     "points": {
       "en": [
@@ -410,6 +499,11 @@
         "Substituiu Mauricio Pochettino em novembro de 2019; o seu trabalho foi filmado para 'All or Nothing' da Amazon.",
         "Harry Kane e Son Heung-min tornaram-se uma das duplas mais letais da Europa.",
         "Levou a equipa à final da Taça da Liga de 2021, mas foi despedido seis dias antes do jogo."
+      ],
+      "ja": [
+        "2019年11月にマウリシオ・ポチェッティーノの後任となった。その仕事ぶりはAmazonの「オール・オア・ナッシング」で撮影された。",
+        "ハリー・ケインとソン・フンミンは、欧州で最も危険なコンビの一つとして輝いた。",
+        "2021年のリーグカップ決勝に進んだが、決勝の6日前に解任された。"
       ]
     }
   },
@@ -419,17 +513,20 @@
     "club": {
       "en": "AS Roma",
       "es": "AS Roma",
-      "pt": "AS Roma"
+      "pt": "AS Roma",
+      "ja": "ASローマ"
     },
     "era": {
       "en": "The emperor of Rome",
       "es": "El emperador de Roma",
-      "pt": "O imperador de Roma"
+      "pt": "O imperador de Roma",
+      "ja": "ローマの皇帝"
     },
     "trophies": {
       "en": "Europa Conference League",
       "es": "Conference League",
-      "pt": "Liga Conferência"
+      "pt": "Liga Conferência",
+      "ja": "UEFAヨーロッパ・カンファレンスリーグ"
     },
     "points": {
       "en": [
@@ -449,6 +546,12 @@
         "Tornou-se o primeiro treinador a vencer Champions, Taça UEFA/Liga Europa e Liga Conferência.",
         "Perdeu a final da Liga Europa de 2023 com o Sevilha nos penáltis, a primeira derrota numa final europeia.",
         "Despedido em janeiro de 2024, saiu entre murais e mensagens de agradecimento por toda a cidade."
+      ],
+      "ja": [
+        "2022年に第1回のヨーロッパ・カンファレンスリーグを制した。ローマにとって60年以上ぶりの欧州タイトルである。",
+        "チャンピオンズリーグ、UEFAカップ/ヨーロッパリーグ、カンファレンスリーグのすべてを制した初の監督となった。",
+        "2023年のヨーロッパリーグ決勝でセビージャにPK戦で敗れた。欧州の大会の決勝で初めての敗戦である。",
+        "2024年1月に解任された。街のあちこちに壁画と感謝のメッセージが並ぶなかでの退任だった。"
       ]
     }
   },
@@ -458,17 +561,20 @@
     "club": {
       "en": "Fenerbahçe",
       "es": "Fenerbahçe",
-      "pt": "Fenerbahçe"
+      "pt": "Fenerbahçe",
+      "ja": "フェネルバフチェ"
     },
     "era": {
       "en": "Istanbul fever",
       "es": "Fiebre en Estambul",
-      "pt": "Febre em Istambul"
+      "pt": "Febre em Istambul",
+      "ja": "イスタンブールの熱狂"
     },
     "trophies": {
       "en": "—",
       "es": "—",
-      "pt": "—"
+      "pt": "—",
+      "ja": "—"
     },
     "points": {
       "en": [
@@ -485,6 +591,11 @@
         "Dezenas de milhares de adeptos receberam-no em Istambul com tochas e cânticos.",
         "Travou uma dura luta pelo título e uma guerra de palavras com o Galatasaray, terminando em segundo na Süper Lig.",
         "Saiu em agosto de 2025 depois de perder o play-off da Champions com o Benfica."
+      ],
+      "ja": [
+        "イスタンブールでは、発煙筒とチャントで迎える数万人のファンに歓迎された。",
+        "ガラタサライと激しい優勝争いと舌戦を繰り広げ、スュペル・リグで2位に終わった。",
+        "チャンピオンズリーグのプレーオフでベンフィカに敗れ、2025年8月に退任した。"
       ]
     }
   },
@@ -494,17 +605,20 @@
     "club": {
       "en": "Benfica",
       "es": "Benfica",
-      "pt": "Benfica"
+      "pt": "Benfica",
+      "ja": "ベンフィカ"
     },
     "era": {
       "en": "Back where it began",
       "es": "Vuelta a los orígenes",
-      "pt": "De volta às origens"
+      "pt": "De volta às origens",
+      "ja": "始まりの地へ"
     },
     "trophies": {
       "en": "—",
       "es": "—",
-      "pt": "—"
+      "pt": "—",
+      "ja": "—"
     },
     "points": {
       "en": [
@@ -518,6 +632,10 @@
       "pt": [
         "Regressou ao Benfica em setembro de 2025, um quarto de século depois do primeiro cargo no clube e semanas depois de este eliminar o seu Fenerbahçe.",
         "Fez todo o campeonato de 2025-26 sem perder, mas mesmo assim o título escapou-lhe."
+      ],
+      "ja": [
+        "2025年9月、最初の就任から四半世紀を経てベンフィカに戻った。ベンフィカが彼のフェネルバフチェを敗退させた数週間後のことである。",
+        "2025-26シーズンのリーグ戦を無敗で終えたが、優勝は逃した。"
       ]
     }
   },
@@ -527,17 +645,20 @@
     "club": {
       "en": "Real Madrid",
       "es": "Real Madrid",
-      "pt": "Real Madrid"
+      "pt": "Real Madrid",
+      "ja": "レアル・マドリード"
     },
     "era": {
       "en": "The return to the Bernabéu",
       "es": "El regreso al Bernabéu",
-      "pt": "O regresso ao Bernabéu"
+      "pt": "O regresso ao Bernabéu",
+      "ja": "ベルナベウへの帰還"
     },
     "trophies": {
       "en": "In progress",
       "es": "En curso",
-      "pt": "Em curso"
+      "pt": "Em curso",
+      "ja": "進行中"
     },
     "points": {
       "en": [
@@ -554,6 +675,11 @@
         "Regressou ao Real Madrid em julho de 2026, treze anos depois do fim da primeira passagem.",
         "Assumiu um plantel repleto de estrelas, com a Liga dos Campeões como objetivo evidente.",
         "O segundo capítulo em Madrid está a ser escrito agora mesmo: acompanhe-o nas notícias e jogos deste site."
+      ],
+      "ja": [
+        "第1期の終了から13年後の2026年7月、レアル・マドリードに戻った。",
+        "スーパースターぞろいのチームを任された。目標は当然チャンピオンズリーグである。",
+        "マドリードでの第2章は今まさに書かれている。このサイトのニュースと試合で追ってほしい。"
       ]
     }
   }

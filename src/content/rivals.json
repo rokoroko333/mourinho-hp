@@ -25,7 +25,8 @@
         "competition": {
           "en": "Copa del Rey final",
           "es": "final de la Copa del Rey",
-          "pt": "final da Taça do Rei"
+          "pt": "final da Taça do Rei",
+          "ja": "コパ・デル・レイ決勝"
         },
         "sources": [
           {
@@ -43,7 +44,8 @@
         "competition": {
           "en": "Champions League semi-final",
           "es": "semifinal de la Liga de Campeones",
-          "pt": "meia-final da Liga dos Campeões"
+          "pt": "meia-final da Liga dos Campeões",
+          "ja": "チャンピオンズリーグ準決勝"
         },
         "sources": [
           {
@@ -61,7 +63,8 @@
         "competition": {
           "en": "Champions League semi-final",
           "es": "semifinal de la Liga de Campeones",
-          "pt": "meia-final da Liga dos Campeões"
+          "pt": "meia-final da Liga dos Campeões",
+          "ja": "チャンピオンズリーグ準決勝"
         },
         "sources": [
           {
@@ -123,7 +126,8 @@
         "competition": {
           "en": "League Cup final",
           "es": "final de la Copa de la Liga inglesa",
-          "pt": "final da Taça da Liga inglesa"
+          "pt": "final da Taça da Liga inglesa",
+          "ja": "リーグカップ決勝"
         },
         "sources": [
           {
@@ -141,7 +145,8 @@
         "competition": {
           "en": "Premier League",
           "es": "Premier League",
-          "pt": "Premier League"
+          "pt": "Premier League",
+          "ja": "プレミアリーグ"
         },
         "sources": [
           {
@@ -204,7 +209,8 @@
         "competition": {
           "en": "Champions League semi-final",
           "es": "semifinal de la Liga de Campeones",
-          "pt": "meia-final da Liga dos Campeões"
+          "pt": "meia-final da Liga dos Campeões",
+          "ja": "チャンピオンズリーグ準決勝"
         },
         "sources": [
           {
@@ -222,7 +228,8 @@
         "competition": {
           "en": "Champions League semi-final",
           "es": "semifinal de la Liga de Campeones",
-          "pt": "meia-final da Liga dos Campeões"
+          "pt": "meia-final da Liga dos Campeões",
+          "ja": "チャンピオンズリーグ準決勝"
         },
         "sources": [
           {
@@ -240,7 +247,8 @@
         "competition": {
           "en": "Premier League",
           "es": "Premier League",
-          "pt": "Premier League"
+          "pt": "Premier League",
+          "ja": "プレミアリーグ"
         },
         "sources": [
           {
@@ -304,12 +312,14 @@
         "competition": {
           "en": "League Cup final",
           "es": "final de la Copa de la Liga inglesa",
-          "pt": "final da Taça da Liga inglesa"
+          "pt": "final da Taça da Liga inglesa",
+          "ja": "リーグカップ決勝"
         },
         "note": {
           "en": "after extra time",
           "es": "en la prórroga",
-          "pt": "após prolongamento"
+          "pt": "após prolongamento",
+          "ja": "延長戦の末"
         },
         "sources": [
           {
@@ -327,7 +337,8 @@
         "competition": {
           "en": "FA Cup semi-final",
           "es": "semifinal de la FA Cup",
-          "pt": "meia-final da Taça de Inglaterra"
+          "pt": "meia-final da Taça de Inglaterra",
+          "ja": "FAカップ準決勝"
         },
         "sources": [
           {
@@ -390,7 +401,8 @@
         "competition": {
           "en": "Premier League",
           "es": "Premier League",
-          "pt": "Premier League"
+          "pt": "Premier League",
+          "ja": "プレミアリーグ"
         },
         "sources": [
           {
@@ -408,7 +420,8 @@
         "competition": {
           "en": "Premier League",
           "es": "Premier League",
-          "pt": "Premier League"
+          "pt": "Premier League",
+          "ja": "プレミアリーグ"
         },
         "sources": [
           {
@@ -460,12 +473,14 @@
         "competition": {
           "en": "FA Cup fifth round",
           "es": "octavos de final de la FA Cup",
-          "pt": "oitavos de final da Taça de Inglaterra"
+          "pt": "oitavos de final da Taça de Inglaterra",
+          "ja": "FAカップ5回戦"
         },
         "note": {
           "en": "after extra time",
           "es": "en la prórroga",
-          "pt": "após prolongamento"
+          "pt": "após prolongamento",
+          "ja": "延長戦の末"
         },
         "sources": [
           {
@@ -527,7 +542,8 @@
         "competition": {
           "en": "Champions League final",
           "es": "final de la Liga de Campeones",
-          "pt": "final da Liga dos Campeões"
+          "pt": "final da Liga dos Campeões",
+          "ja": "チャンピオンズリーグ決勝"
         },
         "sources": [
           {
@@ -589,7 +605,8 @@
         "competition": {
           "en": "FA Cup semi-final",
           "es": "semifinal de la FA Cup",
-          "pt": "meia-final da Taça de Inglaterra"
+          "pt": "meia-final da Taça de Inglaterra",
+          "ja": "FAカップ準決勝"
         },
         "sources": [
           {

@@ -6,7 +6,8 @@
     "competition": {
       "en": "Primeira Liga",
       "es": "Primeira Liga",
-      "pt": "Primeira Liga"
+      "pt": "Primeira Liga",
+      "ja": "プリメイラ・リーガ"
     },
     "sources": [
       {
@@ -28,7 +29,8 @@
     "competition": {
       "en": "Taça de Portugal",
       "es": "Copa de Portugal",
-      "pt": "Taça de Portugal"
+      "pt": "Taça de Portugal",
+      "ja": "タッサ・デ・ポルトガル"
     },
     "sources": [
       {
@@ -50,7 +52,8 @@
     "competition": {
       "en": "UEFA Cup",
       "es": "Copa de la UEFA",
-      "pt": "Taça UEFA"
+      "pt": "Taça UEFA",
+      "ja": "UEFAカップ"
     },
     "sources": [
       {
@@ -72,7 +75,8 @@
     "competition": {
       "en": "Portuguese Super Cup",
       "es": "Supercopa de Portugal",
-      "pt": "Supertaça Cândido de Oliveira"
+      "pt": "Supertaça Cândido de Oliveira",
+      "ja": "スーペルタッサ（ポルトガル・スーパーカップ）"
     },
     "sources": [
       {
@@ -89,7 +93,8 @@
     "competition": {
       "en": "Primeira Liga",
       "es": "Primeira Liga",
-      "pt": "Primeira Liga"
+      "pt": "Primeira Liga",
+      "ja": "プリメイラ・リーガ"
     },
     "sources": [
       {
@@ -111,7 +116,8 @@
     "competition": {
       "en": "UEFA Champions League",
       "es": "Liga de Campeones",
-      "pt": "Liga dos Campeões"
+      "pt": "Liga dos Campeões",
+      "ja": "UEFAチャンピオンズリーグ"
     },
     "sources": [
       {
@@ -133,7 +139,8 @@
     "competition": {
       "en": "League Cup",
       "es": "Copa de la Liga inglesa",
-      "pt": "Taça da Liga inglesa"
+      "pt": "Taça da Liga inglesa",
+      "ja": "リーグカップ"
     },
     "sources": [
       {
@@ -155,7 +162,8 @@
     "competition": {
       "en": "Premier League",
       "es": "Premier League",
-      "pt": "Premier League"
+      "pt": "Premier League",
+      "ja": "プレミアリーグ"
     },
     "sources": [
       {
@@ -177,7 +185,8 @@
     "competition": {
       "en": "FA Community Shield",
       "es": "Community Shield",
-      "pt": "Community Shield"
+      "pt": "Community Shield",
+      "ja": "FAコミュニティ・シールド"
     },
     "sources": [
       {
@@ -194,7 +203,8 @@
     "competition": {
       "en": "Premier League",
       "es": "Premier League",
-      "pt": "Premier League"
+      "pt": "Premier League",
+      "ja": "プレミアリーグ"
     },
     "sources": [
       {
@@ -216,7 +226,8 @@
     "competition": {
       "en": "League Cup",
       "es": "Copa de la Liga inglesa",
-      "pt": "Taça da Liga inglesa"
+      "pt": "Taça da Liga inglesa",
+      "ja": "リーグカップ"
     },
     "sources": [
       {
@@ -238,7 +249,8 @@
     "competition": {
       "en": "FA Cup",
       "es": "FA Cup",
-      "pt": "Taça de Inglaterra"
+      "pt": "Taça de Inglaterra",
+      "ja": "FAカップ"
     },
     "sources": [
       {
@@ -260,7 +272,8 @@
     "competition": {
       "en": "Italian Super Cup",
       "es": "Supercopa de Italia",
-      "pt": "Supertaça de Itália"
+      "pt": "Supertaça de Itália",
+      "ja": "スーペルコッパ・イタリアーナ"
     },
     "sources": [
       {
@@ -282,7 +295,8 @@
     "competition": {
       "en": "Serie A",
       "es": "Serie A",
-      "pt": "Serie A"
+      "pt": "Serie A",
+      "ja": "セリエA"
     },
     "sources": [
       {
@@ -304,7 +318,8 @@
     "competition": {
       "en": "Serie A",
       "es": "Serie A",
-      "pt": "Serie A"
+      "pt": "Serie A",
+      "ja": "セリエA"
     },
     "sources": [
       {
@@ -326,7 +341,8 @@
     "competition": {
       "en": "Coppa Italia",
       "es": "Copa de Italia",
-      "pt": "Taça de Itália"
+      "pt": "Taça de Itália",
+      "ja": "コッパ・イタリア"
     },
     "sources": [
       {
@@ -348,7 +364,8 @@
     "competition": {
       "en": "UEFA Champions League",
       "es": "Liga de Campeones",
-      "pt": "Liga dos Campeões"
+      "pt": "Liga dos Campeões",
+      "ja": "UEFAチャンピオンズリーグ"
     },
     "sources": [
       {
@@ -370,7 +387,8 @@
     "competition": {
       "en": "Copa del Rey",
       "es": "Copa del Rey",
-      "pt": "Taça do Rei"
+      "pt": "Taça do Rei",
+      "ja": "コパ・デル・レイ"
     },
     "sources": [
       {
@@ -392,7 +410,8 @@
     "competition": {
       "en": "La Liga",
       "es": "LaLiga",
-      "pt": "La Liga"
+      "pt": "La Liga",
+      "ja": "ラ・リーガ"
     },
     "sources": [
       {
@@ -414,7 +433,8 @@
     "competition": {
       "en": "Spanish Super Cup",
       "es": "Supercopa de España",
-      "pt": "Supertaça de Espanha"
+      "pt": "Supertaça de Espanha",
+      "ja": "スーペルコパ・デ・エスパーニャ"
     },
     "sources": [
       {
@@ -436,7 +456,8 @@
     "competition": {
       "en": "League Cup",
       "es": "Copa de la Liga inglesa",
-      "pt": "Taça da Liga inglesa"
+      "pt": "Taça da Liga inglesa",
+      "ja": "リーグカップ"
     },
     "sources": [
       {
@@ -458,7 +479,8 @@
     "competition": {
       "en": "Premier League",
       "es": "Premier League",
-      "pt": "Premier League"
+      "pt": "Premier League",
+      "ja": "プレミアリーグ"
     },
     "sources": [
       {
@@ -480,7 +502,8 @@
     "competition": {
       "en": "FA Community Shield",
       "es": "Community Shield",
-      "pt": "Community Shield"
+      "pt": "Community Shield",
+      "ja": "FAコミュニティ・シールド"
     },
     "sources": [
       {
@@ -502,7 +525,8 @@
     "competition": {
       "en": "League Cup",
       "es": "Copa de la Liga inglesa",
-      "pt": "Taça da Liga inglesa"
+      "pt": "Taça da Liga inglesa",
+      "ja": "リーグカップ"
     },
     "sources": [
       {
@@ -524,7 +548,8 @@
     "competition": {
       "en": "UEFA Europa League",
       "es": "Europa League",
-      "pt": "Liga Europa"
+      "pt": "Liga Europa",
+      "ja": "UEFAヨーロッパリーグ"
     },
     "sources": [
       {
@@ -546,7 +571,8 @@
     "competition": {
       "en": "UEFA Europa Conference League",
       "es": "Conference League",
-      "pt": "Liga Conferência"
+      "pt": "Liga Conferência",
+      "ja": "UEFAヨーロッパ・カンファレンスリーグ"
     },
     "sources": [
       {

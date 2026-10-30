@@ -230,6 +230,8 @@
   // deploy, /matches/ can still be the cached HTML without that script, so it is used with `?.`.
   const kickoff = globalThis.mourinhoKickoff;
   const zone = { timeZone: strings.timeZone, hourCycle: 'h23' };
+  // Only for that cached HTML: the day, with no time and so no claim about Madrid time.
+  const plainDay = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   const teamEl = (t, side) =>
     el('div', { class: 'team' },
       t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
@@ -242,7 +244,7 @@
         teamEl(m.home, strings.home),
         el('div', { class: 'score' }, isNext ? 'VS' : `${m.home.score ?? 0} - ${m.away.score ?? 0}`),
         teamEl(m.away, strings.away)),
-      el('p', { class: 'match-date' }, kickoff?.cardDate(m, lang, strings) ?? '', m.competition ? el('br') : null, m.competition || null));
+      el('p', { class: 'match-date' }, kickoff ? kickoff.cardDate(m, lang, strings) : plainDay.format(new Date(m.date)), m.competition ? el('br') : null, m.competition || null));
   // One line per match on /matches/: date, home, score (or kick-off time), away, competition. The server draws
   // the same rows first, also in the club's time zone (matchRowsHtml in lib/matches-page.js): change both together.
   const dayFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', ...zone });

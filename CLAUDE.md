@@ -25,8 +25,8 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
   `functions/api/*` がそれを返し、ブラウザが呼ぶのは自サイトの `/api/*` だけ。
 - `docs/dev-flow.md` 開発フローの詳細と、決まりごとにどのファイルが正本か。`docs/review-lessons.md` 過去の指摘メモ。
   `docs/feature-map.md` どのページに何があり、何で検証するかの地図。
-  `docs/skill-evals.md`・`docs/context-evals.md` レビュー用スキルと CLAUDE.md を変えるときの評価。
-- `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/skills/verify-flow/` 実画面での検証（`test/flows/`）。`.claude/hooks/verify.sh` 作業終了時の自動検証。
+  `docs/skill-evals.md`・`docs/context-evals.md`・`docs/design-evals.md` レビュー用スキル、CLAUDE.md、設計判断用スキルを変えるときの評価。
+- `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/skills/verify-flow/` 実画面での検証（`test/flows/`）。`.claude/skills/design-debate/` 着手前の設計判断。`.claude/hooks/verify.sh` 作業終了時の自動検証。
 
 デプロイ手順（Pages プロジェクト `infinito-mourinho`、Worker `infinito-mourinho-feeds`、共有の KV `FEEDS`）は `README.md` を読む。
 
@@ -48,6 +48,7 @@ lint と型チェックのスクリプトはまだない。`package.json` に存
 2. `docs/review-lessons.md` から、今回の作業に関係する行だけを検索して読む（全文を読まない）。
 3. `docs/feature-map.md` で、変えるページ・要素と既存の検証フローを探す。
    大きめの作業だけ、計画をチェックリストで示してから実装する。
+   着手前にオーナーと決めることがある機能は、`design-debate` スキルで論点を割り、推奨案つきで聞いてから実装する。
 4. ブランチを切って作業する。広い調査はサブエージェントに任せ、要約だけ受け取る。
 5. lint・型チェック・テストが通るまで完了としない（Hooks が自動で確認する）。
    Hooks は1回だけ完了を止め、2回目は無限ループを避けて通す。通ったあとも失敗が残っていれば、

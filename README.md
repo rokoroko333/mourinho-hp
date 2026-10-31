@@ -48,13 +48,24 @@ Log in once with `npx wrangler login`.
 
 ## Deploying
 
-Deploy only what changed, in this order:
+`npm run release` (`npm run release -- --dry-run` prints the steps). It runs only on a clean `main` equal to
+`origin/main`, then:
 
-1. **D1 schema** (a new file in `migrations/`): `npx wrangler d1 migrations apply infinito-mourinho-votes --remote`
-2. **Secrets** (only when a new one is added), e.g. `openssl rand -hex 24 | npx wrangler pages secret put VOTE_SALT --project-name infinito-mourinho`
-3. **Worker** (`lib/feeds.js`, `lib/predict.js` or `workers/feeds/` changed): `npm run feeds:deploy`
-4. **Pages**: `npm run build` then `npm run deploy -- --branch main`. Set `SITE_URL=https://<domain>` for the build
-   once a custom domain is used (without it, URLs point to the pages.dev address).
+1. installs the locked dependencies (`npm ci`) and runs the tests;
+2. applies pending D1 migrations (`migrations/`, remote; the dry run lists them);
+3. deploys the Worker;
+4. deploys Pages;
+5. tags the commit `deploy-<UTC date-time when the release started>` and pushes the tag;
+6. runs `npm run health`, which only reports.
+
+It stops at the first failure, and nothing after a failed step runs. Details are in `scripts/release.mjs`. Set `SITE_URL=https://<domain>` in the environment
+once a custom domain is used (without it, URLs point to the pages.dev address).
+
+Secrets are set by hand, only when a new one is added, before the release, e.g.
+`openssl rand -hex 24 | npx wrangler pages secret put VOTE_SALT --project-name infinito-mourinho`.
+
+Migrations only ever add (a column, a table, an index). Old code must keep working with the new schema, because
+rolling back code does not roll back D1.
 
 When the shape of the JSON in KV changes, deploy both the Worker and Pages, and keep the pages working with the old
 shape until the next cron run (at most 20 minutes).
@@ -79,6 +90,21 @@ The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_
 with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
 
 Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
+
+## Rolling back
+
+What is live: `git tag -l 'deploy-*'` (newest last) and `npx wrangler pages deployment list --project-name infinito-mourinho`.
+
+- **Pages**: Cloudflare dashboard → Workers & Pages → `infinito-mourinho` → Deployments → the previous production
+  deployment → "Rollback to this deployment". Or from the terminal: `git checkout deploy-<previous>` then
+  `npm run deploy -- --branch main`, and `git checkout main`.
+- **Worker**: `npx wrangler rollback --config workers/feeds/wrangler.toml` (the previous version), or pick one from
+  `npx wrangler deployments list --config workers/feeds/wrangler.toml`.
+- **D1** (only if data went wrong, not for a code rollback):
+  `npx wrangler d1 time-travel restore infinito-mourinho-votes --timestamp=<RFC3339, within 30 days>`.
+  It overwrites the current data with that moment's; votes cast since then are lost.
+
+Then fix forward on a branch, and release again.
 
 ## Free plan budget at 15,000 visitors/day
 

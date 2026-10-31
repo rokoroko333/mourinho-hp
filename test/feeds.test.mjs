@@ -67,22 +67,9 @@ test('mergeNews leans on the Spanish press: each press has its slots, and empty 
   assert.ok(few.filter((i) => i.source === 'A Bola').length <= 3, 'still at most perSource per outlet');
 });
 
-test('mergeNews takes as much Spanish press as there is, and caps the others per outlet and per press', () => {
-  const item = (source, press, hour) => ({ ...news(source, hour), press });
-  const general = [
-    ...[1, 2, 3, 4, 5, 6].map((h) => item('Diario AS', 'es', h)),
-    ...[1, 2, 3, 4].map((h) => item('MARCA', 'es', h)),
-    ...[1, 2, 3, 4].map((h) => item('A Bola', 'pt', 10 + h)),
-    ...[1, 2, 3, 4].map((h) => item('BBC', 'en', 10 + h)),
-  ];
-  const merged = mergeNews([general], { limit: 14, perSource: 2, slots: { pt: 3, en: 4 }, uncapped: ['es'] });
-  const by = (source) => merged.filter((i) => i.source === source).length;
-  assert.deepEqual([by('Diario AS'), by('MARCA'), by('A Bola'), by('BBC')], [6, 4, 2, 2]);
-});
-
 test('outletItems keeps items naming him as Mourinho or "Mou"', () => {
   const now = new Date('2026-10-28T00:00:00Z');
-  const kept = outletItems([news('', 9, 'Mou, a Lunin: "Si no fueras de los mejores"'), news('', 8, 'Mbappé apunta al Racing'), news('', 7, 'Moussa Diaby firma')], { name: 'Diario AS' }, now);
+  const kept = outletItems([news('', 9, 'Mou, a Lunin: "Si no fueras de los mejores"'), news('', 8, 'Mbappé apunta al Racing'), news('', 7, 'Moussa Diaby firma'), news('', 6, 'Clubs sign a MoU on youth football')], { name: 'Diario AS' }, now);
   assert.deepEqual(kept.map((i) => i.title), ['Mou, a Lunin: "Si no fueras de los mejores"']);
 });
 

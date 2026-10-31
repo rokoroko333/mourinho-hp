@@ -76,7 +76,23 @@ test('no built page prints a missing value or repeats an element id', async () =
 test('_headers sets a Content-Security-Policy for every path', async () => {
   const headers = await readFile(join(ROOT, 'src/public/_headers'), 'utf8');
   const block = headers.split(/\n(?=\S)/).find((b) => b.startsWith('/*'));
-  assert.match(block, /Content-Security-Policy: default-src 'self'; script-src 'self';/);
+  // Scripts and requests: our own, plus only Cloudflare Web Analytics, which Cloudflare inserts on the custom domain
+  // (cookieless page views; the owner chose to allow it, 2026-11-01). Nothing else from outside.
+  const csp = Object.fromEntries(block.match(/Content-Security-Policy: (.*)/)[1].split(/;\s*/).filter(Boolean).map((d) => [d.split(' ')[0], d.split(' ').slice(1).join(' ')]));
+  // The whole policy, every directive: a source added anywhere fails here.
+  assert.deepEqual(csp, {
+    'default-src': "'self'",
+    'script-src': "'self' https://static.cloudflareinsights.com",
+    'style-src': "'self'",
+    'img-src': "'self'",
+    'frame-src': 'https://www.youtube-nocookie.com',
+    'connect-src': "'self' https://cloudflareinsights.com",
+    'object-src': "'none'",
+    'base-uri': "'self'",
+    'form-action': "'none'",
+    'frame-ancestors': "'none'",
+  });
+  assert.ok(!/unsafe-inline|unsafe-eval/.test(block), 'no unsafe-inline or unsafe-eval');
   assert.match(block, /frame-ancestors 'none'/);
   // On the custom domain, browsers must keep to HTTPS (pages.dev was on the HSTS preload list; our domain is not).
   // One year (Mozilla's A+ needs six months or more); not includeSubDomains, so a later subdomain is not locked to

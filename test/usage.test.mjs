@@ -1,0 +1,48 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { totalsOf, checkUsage, yesterday, LIMITS, WARN_AT, ACCOUNT_ID } from '../scripts/usage.mjs';
+
+// The shape Cloudflare's GraphQL API answers (checked against the real account, 2026-11-01).
+const answer = (over = {}) => ({
+  data: { viewer: { accounts: [{
+    workersInvocationsAdaptive: [{ sum: { requests: 72 } }],
+    pagesFunctionsInvocationsAdaptiveGroups: [{ sum: { requests: 155 } }],
+    kvOperationsAdaptiveGroups: [
+      { sum: { requests: 60 }, dimensions: { actionType: 'read' } },
+      { sum: { requests: 147 }, dimensions: { actionType: 'write' } },
+      { sum: { requests: 1 }, dimensions: { actionType: 'list' } },
+    ],
+    d1AnalyticsAdaptiveGroups: [{ sum: { rowsRead: 83, rowsWritten: 18 } }],
+    ...over,
+  }] } },
+});
+
+test('usage adds Workers and Pages Functions requests, and splits KV reads from writes', () => {
+  assert.deepEqual(totalsOf(answer()), { requests: 227, kvRead: 60, kvWrite: 147, d1RowsRead: 83, d1RowsWritten: 18 });
+  // A day with no D1 or no Functions at all is zero, not an error.
+  assert.equal(totalsOf(answer({ d1AnalyticsAdaptiveGroups: [], pagesFunctionsInvocationsAdaptiveGroups: [] })).requests, 72);
+});
+
+test('usage refuses an error or empty answer instead of reading it as nothing used', () => {
+  assert.throws(() => totalsOf({ errors: [{ message: 'not authorized' }] }), /not authorized/);
+  assert.throws(() => totalsOf({ data: { viewer: { accounts: [] } } }), /no account/);
+  assert.throws(() => totalsOf(null), /no account/);
+});
+
+test('usage fails at 70% of any daily free limit', () => {
+  assert.equal(WARN_AT, 0.7);
+  const fine = checkUsage(totalsOf(answer()));
+  assert.equal(fine.rows.length, Object.keys(LIMITS).length);
+  assert.deepEqual(fine.over, []);
+  const busy = checkUsage({ requests: 70_000, kvRead: 69_999, kvWrite: 700, d1RowsRead: 4_000_000, d1RowsWritten: 0 });
+  assert.deepEqual(busy.over.map((r) => r.key), ['requests', 'kvWrite', 'd1RowsRead']);
+});
+
+test('usage checks the last whole UTC day, and the workflow passes the token from the repository secret', async () => {
+  assert.equal(yesterday(new Date('2026-11-01T00:30:00Z')), '2026-10-31');
+  assert.match(ACCOUNT_ID, /^[0-9a-f]{32}$/);
+  const workflow = await readFile(new URL('../.github/workflows/usage.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /CLOUDFLARE_API_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN \}\}/);
+  assert.match(workflow, /node scripts\/usage\.mjs/);
+});

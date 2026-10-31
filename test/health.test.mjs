@@ -46,3 +46,12 @@ test('readFeed marks a copy fetched on the spot as live, and returns the cron co
   const fromKv = await readFeed({ env: { FEEDS: { get: async () => cron } }, waitUntil: () => {} }, { key: 'matches', live: async () => ({}) });
   assert.equal(JSON.parse(fromKv).live, undefined);
 });
+
+test('readFeed does not seed KV after a failed read, so a live copy never replaces the cron copy', async () => {
+  const { readFeed } = await import('../lib/serve.js');
+  const puts = [];
+  const down = { env: { FEEDS: { get: async () => { throw new Error('limit'); }, put: async (k, v) => puts.push(v) } }, waitUntil: (p) => p };
+  const body = JSON.parse(await readFeed(down, { key: 'matches', live: async () => ({ next: { id: '1' } }) }));
+  assert.equal(body.live, true);
+  assert.equal(puts.length, 0);
+});

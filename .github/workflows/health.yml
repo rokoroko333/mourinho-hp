@@ -12,6 +12,11 @@ on:
 permissions:
   contents: read
 
+# A late run never overlaps the next one, so one outage does not send two emails at once.
+concurrency:
+  group: health
+  cancel-in-progress: false
+
 jobs:
   health:
     runs-on: ubuntu-latest

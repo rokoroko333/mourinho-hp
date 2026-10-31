@@ -79,7 +79,9 @@ test('_headers sets a Content-Security-Policy for every path', async () => {
   assert.match(block, /Content-Security-Policy: default-src 'self'; script-src 'self';/);
   assert.match(block, /frame-ancestors 'none'/);
   // On the custom domain, browsers must keep to HTTPS (pages.dev was on the HSTS preload list; our domain is not).
-  assert.match(block, /Strict-Transport-Security: max-age=31536000; includeSubDomains/);
+  // One year (Mozilla's A+ needs six months or more); not includeSubDomains, so a later subdomain is not locked to
+  // HTTPS for a year before it has a certificate.
+  assert.match(block, /Strict-Transport-Security: max-age=31536000\n/);
 });
 
 const DETAIL = { quotes: { en: 'quotes', es: 'es/frases', pt: 'pt/frases', ja: 'ja/quotes' }, stories: { en: 'stories', es: 'es/anecdotas', pt: 'pt/historias', ja: 'ja/stories' } };

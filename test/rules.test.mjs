@@ -359,8 +359,11 @@ test('the site address is written only in lib/site.js, and it is the custom doma
   assert.doesNotMatch(SITE_ORIGIN, /pages\.dev/);
   const host = new URL(SITE_ORIGIN).host;
   const files = [];
-  for (const dir of ['lib', 'scripts', 'functions', 'src', 'test', 'workers', '.github']) {
-    for (const f of await readdir(join(ROOT, dir), { recursive: true })) if (/\.(m?js|json|html|css|ya?ml|toml)$|_headers$|_redirects$/.test(f)) files.push(join(dir, f));
+  // Every file but the docs (Markdown may name the address) and generated or third-party folders.
+  const code = /\.(m?js|json|html|css|ya?ml|toml|txt|xml|svg|webmanifest|sql|sh)$|(^|\/)_(headers|redirects)$/;
+  for (const f of await readdir(ROOT, { recursive: true })) {
+    if (/^(node_modules|dist|\.git|screenshots|\.wrangler)(\/|$)/.test(f) || f === 'package-lock.json') continue;
+    if (code.test(f)) files.push(f);
   }
   assert.ok(files.length > 30, `only ${files.length} files`);
   for (const f of files) {

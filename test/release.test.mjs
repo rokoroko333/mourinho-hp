@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { repoProblems, releaseSteps, runSteps, tagName, D1_NAME } from '../scripts/release.mjs';
+import { SITE_ORIGIN } from '../lib/site.js';
 
 const sha = 'a'.repeat(40);
 const clean = { branch: 'main', dirty: false, head: sha, remote: sha };
@@ -12,6 +13,9 @@ test('release runs only from a clean main that matches origin/main, with a new t
   assert.equal(repoProblems({ ...clean, dirty: true }).length, 1);
   assert.match(repoProblems({ ...clean, head: 'b'.repeat(40) })[0], /not origin\/main/);
   assert.match(repoProblems({ ...clean, tag: 'deploy-x', tagExists: true })[0], /already exists/);
+  // A SITE_URL left in the shell would put canonical links on another address.
+  assert.match(repoProblems({ ...clean, siteUrl: 'https://example.pages.dev' })[0], /SITE_URL is set/);
+  assert.deepEqual(repoProblems({ ...clean, siteUrl: `${SITE_ORIGIN}/` }), []);
 });
 
 test('release installs and tests first, then D1, Worker, Pages, and tags what went out', async () => {

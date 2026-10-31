@@ -78,7 +78,7 @@ test('outcomes read from the club side, home or away', () => {
   assert.equal(outcomeOf(home, 2, 1), 'win');
 });
 
-test('one vote per connection per match, a burst limit, and a summary from the tallies', async () => {
+test('one vote per connection per match, a burst limit, and a summary from the counts', async () => {
   const db = await fakeD1();
   assert.deepEqual(await vote(db, '1.1.1.1', 1, 2), { recorded: true });
   assert.deepEqual(await vote(db, '1.1.1.1', 0, 3), { recorded: false, reason: 'duplicate' });
@@ -112,14 +112,15 @@ test('the summary adds the result and the exact hits once the match is played', 
   assert.equal(await summary(db, { next: null, results: [] }, '401'), null);
 });
 
-test('purge drops votes 30 days after kick-off and keeps the tallies', async () => {
+test('purge drops votes 30 days after kick-off and keeps the counts', async () => {
   const db = await fakeD1();
   await vote(db, '1.1.1.1', 1, 2);
   const later = Date.parse('2026-12-02T00:00:00Z');
   const r = await purge(db, later);
   assert.equal(r.votesDeleted, 1);
   assert.equal(db.db.prepare('SELECT COUNT(*) AS n FROM votes').get().n, 0);
-  assert.equal(db.db.prepare('SELECT SUM(votes) AS n FROM tallies').get().n, 1);
+  assert.equal(db.db.prepare('SELECT SUM(votes) AS n FROM counts').get().n, 1);
+  assert.equal((await summary(db, matches, '401')).total, 1, 'the summary still has the vote');
   assert.equal(r.burstsDeleted, 1);
   // Not yet 30 days: kept.
   const fresh = await fakeD1();
@@ -147,18 +148,54 @@ test('a repeated vote is a duplicate and does not use up the burst limit', async
   assert.equal(db.db.prepare('SELECT SUM(n) AS n FROM bursts').get().n, 1);
 });
 
-test('the purge moves counts and deletes votes together, or not at all', async () => {
+// The summary's D1 reads stay a few rows per match however many votes there are (free plan: 5 million rows read a
+// day), because it reads `counts`, which a trigger keeps in step with every vote (migrations/0003_counts.sql).
+test('the summary reads the counts the trigger keeps, not the votes', async () => {
+  const db = await fakeD1();
+  for (let i = 0; i < 40; i++) await vote(db, `10.0.0.${i}`, i % 3, 1);
+  await vote(db, '10.0.0.1', 0, 0); // a duplicate: ignored, so not counted
+  assert.deepEqual(db.db.prepare('SELECT home, away, votes FROM counts ORDER BY home').all().map((r) => ({ ...r })), [
+    { home: 0, away: 1, votes: 14 }, { home: 1, away: 1, votes: 13 }, { home: 2, away: 1, votes: 13 },
+  ]);
+  const s = await summary(db, matches, '401');
+  assert.equal(s.total, 40);
+  // Not one row of `votes` is needed: the same summary with the votes gone.
+  db.db.exec('DELETE FROM votes');
+  assert.deepEqual(await summary(db, matches, '401'), s);
+});
+
+// The migration counts what was there before it: the purged tallies and the kept votes, once each.
+test('migration 0003 starts the counts from the old tallies and the kept votes', async () => {
+  const db = new DatabaseSync(':memory:');
+  const dir = new URL('../migrations/', import.meta.url);
+  const files = (await readdir(dir)).filter((f) => f.endsWith('.sql')).sort();
+  assert.equal(files[2], '0003_counts.sql');
+  for (const f of files.slice(0, 2)) db.exec(await readFile(new URL(f, dir), 'utf8'));
+  db.exec(`INSERT INTO tallies VALUES ('1', 1, 0, 5), ('1', 2, 2, 1);
+    INSERT INTO votes (match_id, voter, home, away, kickoff, created_at) VALUES ('1', 'a', 1, 0, 'k', 'c'), ('2', 'b', 0, 0, 'k', 'c');`);
+  db.exec(await readFile(new URL(files[2], dir), 'utf8'));
+  assert.deepEqual(db.prepare('SELECT match_id, home, away, votes FROM counts ORDER BY match_id, home').all().map((r) => ({ ...r })), [
+    { match_id: '1', home: 1, away: 0, votes: 6 }, { match_id: '1', home: 2, away: 2, votes: 1 }, { match_id: '2', home: 0, away: 0, votes: 1 },
+  ]);
+  // From then on, the trigger counts each new vote.
+  db.exec("INSERT INTO votes (match_id, voter, home, away, kickoff, created_at) VALUES ('2', 'c', 0, 0, 'k', 'c')");
+  assert.equal(db.prepare("SELECT votes FROM counts WHERE match_id = '2'").get().votes, 2);
+});
+
+// Code from before 0003 reads `tallies` plus `votes`: the purge keeps feeding `tallies`, all or nothing, so that
+// code (mid-release, or after a rollback) and the new `counts` agree.
+test('the purge also moves the votes into tallies, together with the delete or not at all', async () => {
   const db = await fakeD1();
   await vote(db, '1.1.1.1', 1, 2);
   await vote(db, '2.2.2.2', 1, 2);
+  const oldTotal = () => db.db.prepare("SELECT (SELECT COALESCE(SUM(votes), 0) FROM tallies) + (SELECT COUNT(*) FROM votes) AS n").get().n;
   db.fail = 1; // the DELETE fails after the INSERT
   await assert.rejects(purge(db, Date.parse('2026-12-02T00:00:00Z')));
-  assert.equal(db.db.prepare('SELECT COUNT(*) AS n FROM votes').get().n, 2);
-  assert.equal(db.db.prepare('SELECT COUNT(*) AS n FROM tallies').get().n, 0);
-  assert.equal((await summary(db, matches, '401')).total, 2, 'nothing counted twice or lost');
+  assert.equal(oldTotal(), 2, 'nothing counted twice or lost');
   db.fail = null;
   await purge(db, Date.parse('2026-12-02T00:00:00Z'));
-  assert.equal((await summary(db, matches, '401')).total, 2, 'the same total from the tallies alone');
+  assert.equal(oldTotal(), 2, 'older code sees the same total');
+  assert.equal((await summary(db, matches, '401')).total, 2, 'and so does the summary');
 });
 
 // The Pages Function itself: what it refuses, and that it records through lib/predict.js.

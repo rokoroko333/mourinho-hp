@@ -1,7 +1,8 @@
 // Everything a page's live sections need in one request: the shared news list, the matches, and the fan
 // prediction tallies for the next and the latest match. Each Function invocation counts toward the free
 // plan's 100,000 a day even when the edge cache answers, so the pages make one call instead of three.
-// The whole answer is cached per colo for SUMMARY_TTL (the tallies' freshness), keyed on the checked `lang` only.
+// The whole answer is cached per colo for SUMMARY_TTL (the tallies' freshness). It is the same in every language,
+// so `lang` is checked (the pages always send it) but left out of the cache key.
 // /api/news, /api/matches and GET /api/predict stay for app.js cached from the previous deploy.
 import { LANGS, KV_KEYS, fetchNews, fetchMatches } from '../../lib/feeds.js';
 import { SUMMARY_TTL, cachedSummary } from '../../lib/predict.js';
@@ -12,7 +13,7 @@ export async function onRequestGet(context) {
   const url = new URL(request.url);
   const lang = url.searchParams.get('lang');
   if (!LANGS.includes(lang)) return json({ error: 'bad lang' }, 400);
-  const cacheKey = new Request(`${url.origin}${url.pathname}?lang=${lang}`);
+  const cacheKey = new Request(`${url.origin}${url.pathname}`);
   const hit = await caches.default.match(cacheKey);
   if (hit) return hit;
 

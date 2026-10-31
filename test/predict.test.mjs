@@ -205,11 +205,39 @@ test('one IPv6 /48 may cast at most NETWORK_LIMIT votes per match; IPv4 has no s
   assert.equal(results.filter((r) => r === 'ok').length, NETWORK_LIMIT);
   assert.deepEqual(results.slice(-2), ['network', 'network']);
   assert.equal((await vote(db, '2001:db8:2:1::1', 1, 0)).recorded, true, 'another /48 still votes');
-  assert.equal(db.db.prepare('SELECT COUNT(*) AS n FROM networks').all()[0].n, 2);
-  assert.doesNotMatch(JSON.stringify(db.db.prepare('SELECT * FROM networks').all()), /2001:db8/, 'only keyed hashes are stored');
-  // The purge drops the per-network counts with the votes.
-  const r = await purge(db, Date.parse('2026-12-02T00:00:00Z'));
-  assert.equal(r.networksDeleted, 2);
+  assert.equal((await vote(db, '203.0.113.9', 1, 0)).recorded, true, 'IPv4 is not limited by network');
+  assert.equal(db.db.prepare('SELECT COUNT(DISTINCT network) AS n FROM votes WHERE network IS NOT NULL').get().n, 2);
+  assert.doesNotMatch(JSON.stringify(db.db.prepare('SELECT * FROM votes').all()), /2001:db8|203\.0/, 'only keyed hashes are stored');
+  // The count is the votes themselves, so it goes with them at the purge.
+  await purge(db, Date.parse('2026-12-02T00:00:00Z'));
+  assert.equal(db.db.prepare('SELECT COUNT(*) AS n FROM votes').get().n, 0);
+});
+
+test('the endpoint answers 429 past the /48 limit, 503 when D1 fails, and caches the tally it reads', async () => {
+  const realNow = Date.now;
+  Date.now = () => now;
+  const db = await fakeD1();
+  const env = { VOTES: db, VOTE_SALT: 's3cret', FEEDS: { get: async () => JSON.stringify(matches) } };
+  const post = (ip, e = env) => onRequestPost({ request: new Request('https://site.example/api/predict', { method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify({ match: '401', home: 1, away: 0 }) }), env: e });
+  const realCaches = globalThis.caches;
+  const store = new Map();
+  globalThis.caches = { default: { match: async (r) => store.get(r.url)?.clone(), put: async (r, res) => store.set(r.url, res) } };
+  try {
+    for (let i = 0; i < NETWORK_LIMIT; i++) assert.equal((await post(`2001:db8:5:${(i + 1).toString(16)}::1`)).status, 200);
+    assert.equal((await post('2001:db8:5:ffff::1')).status, 429);
+    // D1 throwing (down, or over its daily quota) is a 503, not an exception.
+    const broken = { ...env, VOTES: { prepare: () => { throw new Error('D1_ERROR: quota'); } } };
+    assert.equal((await post('7.7.7.7', broken)).status, 503);
+    const get = (e) => onRequestGet({ request: new Request('https://site.example/api/predict?match=401'), env: e, waitUntil: () => {} });
+    assert.equal((await get(broken)).status, 503);
+    // The tally is read once and then served from the cache: a new vote does not show until the TTL.
+    assert.equal((await (await get(env)).json()).total, NETWORK_LIMIT);
+    await post('8.8.8.8');
+    assert.equal((await (await get(env)).json()).total, NETWORK_LIMIT, 'cached');
+  } finally {
+    globalThis.caches = realCaches;
+    Date.now = realNow;
+  }
 });
 
 test('the kick-off is stored normalised, so the purge finds it whatever form the feed used', async () => {
@@ -239,9 +267,17 @@ test('/api/home answers the news, the matches and the tallies in one response, w
     assert.equal(body.predict['401'].total, 1);
     assert.equal((await homeGet(ctx('https://site.example/api/home?lang=xx'))).status, 400);
     await Promise.all(waits);
-    // A second request with a random query is the same cache entry; the D1 count does not run again.
+    // Another language or a random query is the same cache entry; the D1 count does not run again.
     await vote(db, '2.2.2.2', 0, 0);
-    assert.equal((await (await homeGet(ctx('https://site.example/api/home?lang=ja&x=1'))).json()).predict['401'].total, 1);
+    assert.equal((await (await homeGet(ctx('https://site.example/api/home?lang=es&x=1'))).json()).predict['401'].total, 1);
+    // With D1 failing, the news and the matches still go out, without tallies.
+    store.clear();
+    const broken = { ...env, VOTES: { prepare: () => { throw new Error('D1_ERROR'); } } };
+    const res2 = await homeGet({ request: new Request('https://site.example/api/home?lang=en'), env: broken, waitUntil: () => {} });
+    const body2 = await res2.json();
+    assert.equal(res2.status, 200);
+    assert.ok(body2.news && body2.matches);
+    assert.deepEqual(body2.predict, {});
   } finally {
     globalThis.caches = realCaches;
   }

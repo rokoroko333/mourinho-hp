@@ -1,9 +1,5 @@
--- Fan predictions: votes per IPv6 /48 per match (lib/predict.js, NETWORK_LIMIT). `network` is a keyed hash of the
--- /48, never the address. Rows go with the purge, 30 days after they were written.
-CREATE TABLE IF NOT EXISTS networks (
-  match_id TEXT NOT NULL,
-  network TEXT NOT NULL,
-  n INTEGER NOT NULL,
-  created_at TEXT NOT NULL,
-  PRIMARY KEY (match_id, network)
-);
+-- Fan predictions: each vote also keeps a keyed hash of its IPv6 /48 (null for IPv4), so the votes per /48 per
+-- match can be counted from the votes themselves (lib/predict.js, NETWORK_LIMIT). One write per vote, and the
+-- count goes with the votes 30 days after kick-off. Never the address.
+ALTER TABLE votes ADD COLUMN network TEXT;
+CREATE INDEX IF NOT EXISTS votes_by_network ON votes (match_id, network);

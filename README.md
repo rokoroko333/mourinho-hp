@@ -61,6 +61,9 @@ never post votes outside localhost) and the Worker's log with `npx wrangler tail
 (`outlets:empty`, `outlets:failed`, `feeds:failed`; without `--config`, Wrangler reads `wrangler.toml`, takes the
 project for Pages and fails).
 
+The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
+with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
+
 Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
 
 ## Free plan budget at 15,000 visitors/day

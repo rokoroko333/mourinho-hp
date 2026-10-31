@@ -452,9 +452,15 @@
       });
       return [head(s), f];
     };
-    // The tally came with the page's live data; a POST answers with a fresh one.
-    Promise.resolve(data.predict?.[m.id] ?? getJson(`/api/predict?match=${encodeURIComponent(m.id)}`))
+    // The tally came with the page's live data; a POST answers with a fresh one. Without it (D1 down or over
+    // its quota) nothing more is fetched: an open match still shows the form, anything else shows nothing.
+    Promise.resolve(data.predict?.[m.id] ?? null)
       .then((s) => {
+        if (!s) {
+          if (m === data.next && new Date(m.date) > Date.now() && !mine()) show(form(null));
+          else if (tbd) show(head(null));
+          return;
+        }
         const open = m === data.next && new Date(m.date) > Date.now();
         if (open && !mine()) return show(form(s));
         if ((!open && !m.completed && m !== data.next) || (!s.total && !open)) return tbd ? show(head(null)) : undefined; // no tally to show

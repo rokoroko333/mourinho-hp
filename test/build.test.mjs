@@ -53,7 +53,10 @@ test('no built page prints a missing value or repeats an element id', async () =
     const outside = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '');
     const bad = outside.match(/\bundefined\b|\bNaN\b|\[object Object\]|\bnull\b/);
     assert.equal(bad, null, `${file}: prints "${bad?.[0]}" near "${bad && outside.slice(Math.max(0, bad.index - 60), bad.index + 20)}"`);
-    for (const [, body] of text.matchAll(/<script type="application\/(?:ld\+)?json"[^>]*>([\s\S]*?)<\/script>/g)) {
+    const json = [...text.matchAll(/<script type="application\/(?:ld\+)?json"[^>]*>([\s\S]*?)<\/script>/g)];
+    // Every page carries structured data, so finding none means the scripts are written differently now.
+    if (file.endsWith('.html') && file !== '404.html') assert.ok(json.length > 0, `${file}: no JSON script found to check`);
+    for (const [, body] of json) {
       JSON.parse(body, (k, v) => {
         // A quote with no known year is sent to app.js as `year: null` on purpose (build.mjs, the daily quotes).
         assert.ok((v !== null || k === 'year') && !(typeof v === 'string' && /^(undefined|NaN|\[object Object\])$|\bundefined\b/.test(v)), `${file}: JSON "${k}" is ${JSON.stringify(v)}`);
@@ -527,7 +530,7 @@ test('every story has an id, a year, its text in every language and a source', a
       }
       assert.ok(s.publisher, `${e.id}: publisher`);
       // Shown on the story's own page, like a quote's (the page writes the URL HTML-escaped).
-      const href = s.url.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      const href = s.url.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
       assert.ok(html.includes(`href="${href}"`), `${e.id}: source ${s.url} on its page`);
     }
   }

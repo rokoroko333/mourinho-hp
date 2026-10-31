@@ -1,7 +1,7 @@
 # Every day after the free limits reset (00:00 UTC): fails when yesterday's use of any Cloudflare free-plan daily limit
 # reached 70% (scripts/usage.mjs), so GitHub emails the owner before a limit stops the site's live parts.
 # Needs the repository secret CLOUDFLARE_API_TOKEN: an API token with only "Account Analytics: Read" (README,
-# "Monitoring"). Read-only: one GraphQL query.
+# "Free-plan usage"). Read-only: one GraphQL query.
 name: Usage
 
 on:

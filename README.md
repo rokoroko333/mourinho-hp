@@ -98,6 +98,12 @@ set once:
 
 By hand: `CLOUDFLARE_API_TOKEN=<token> npm run usage` (or `-- 2026-11-01` for another UTC day).
 
+Both scheduled checks (Health and Usage) send their failure emails to the account that last changed the workflow's
+schedule, if its GitHub notification settings include Actions (Settings → Notifications → Actions: "Send
+notifications for failed workflows only"). GitHub turns a schedule off after 60 days without activity in a public
+repository, and then no email comes either: the weekly routines keep the repository active, and the Actions tab shows
+a disabled workflow with a button to turn it back on.
+
 The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
 with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
 
@@ -120,6 +126,7 @@ Then fix forward on a branch, and release again.
 
 ## Free plan budget at 15,000 visitors/day
 
+The daily limits the usage check compares against are written once, in `LIMITS` in `scripts/usage.mjs`.
 When the usage check fails: the first limit to come is the Functions requests (one per page view with live data).
 Move to Workers Paid ($5 a month for the account: 10 million requests, 10 million KV reads and 25 billion D1 rows read
 a month included; beyond, $0.30 per million requests and $0.50 per million KV reads). KV writes stay at about 145 a

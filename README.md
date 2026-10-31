@@ -51,13 +51,14 @@ Log in once with `npx wrangler login`.
 `npm run release` (`npm run release -- --dry-run` prints the steps). It runs only on a clean `main` equal to
 `origin/main`, then:
 
-1. runs the tests;
-2. applies pending D1 migrations (`migrations/`, remote);
+1. installs the locked dependencies (`npm ci`) and runs the tests;
+2. applies pending D1 migrations (`migrations/`, remote; the dry run lists them);
 3. deploys the Worker;
 4. deploys Pages;
-5. tags the commit `deploy-<UTC date-time>` and pushes the tag.
+5. tags the commit `deploy-<UTC date-time>` and pushes the tag;
+6. runs `npm run health`, which only reports.
 
-It stops at the first failure. Details are in `scripts/release.mjs`. Set `SITE_URL=https://<domain>` in the environment
+It stops at the first failure, and nothing after a failed step runs. Details are in `scripts/release.mjs`. Set `SITE_URL=https://<domain>` in the environment
 once a custom domain is used (without it, URLs point to the pages.dev address).
 
 Secrets are set by hand, only when a new one is added, before the release, e.g.

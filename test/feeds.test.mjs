@@ -69,7 +69,7 @@ test('mergeNews leans on the Spanish press: each press has its slots, and empty 
 
 test('outletItems keeps items naming him as Mourinho or "Mou"', () => {
   const now = new Date('2026-10-28T00:00:00Z');
-  const kept = outletItems([news('', 9, 'Mou, a Lunin: "Si no fueras de los mejores"'), news('', 8, 'Mbappé apunta al Racing'), news('', 7, 'Moussa Diaby firma'), news('', 6, 'Clubs sign a MoU on youth football')], { name: 'Diario AS' }, now);
+  const kept = outletItems([news('', 9, 'Mou, a Lunin: "Si no fueras de los mejores"'), news('', 8, 'Mbappé apunta al Racing'), news('', 7, 'Moussa Diaby firma'), news('', 6, 'Clubs sign a MoU on youth football'), news('', 5, 'Mouré renueva')], { name: 'Diario AS' }, now);
   assert.deepEqual(kept.map((i) => i.title), ['Mou, a Lunin: "Si no fueras de los mejores"']);
 });
 
@@ -275,4 +275,21 @@ test('the outlets cover MARCA, AS, Mundo Deportivo, El País and El Mundo, and d
   assert.match(by('EL PAÍS').feed, /\/tag\/real_madrid_a$/);
   // All three carry other news too (the AS tag has match reports and other players), so all filter by name.
   assert.ok(!by('Diario AS').all && !by('EL PAÍS').all && !by('El Mundo').all, 'keep the name filter on the Spanish feeds');
+});
+
+// The balance the owner asked for (#65): Spain leads, Portugal and England beside it, filling the list.
+test('the press slots are Spain 7, Portugal 4, England 4, add up to the list, and are the fill order', async () => {
+  const { NEWS_PRESS_SLOTS, NEWS_LIMIT, NEWS_FILL_ORDER, NEWS_PER_SOURCE } = await import('../lib/feeds.js');
+  assert.deepEqual(NEWS_PRESS_SLOTS, { es: 7, pt: 4, en: 4 });
+  assert.equal(Object.values(NEWS_PRESS_SLOTS).reduce((a, b) => a + b, 0), NEWS_LIMIT);
+  assert.deepEqual([...NEWS_FILL_ORDER].sort(), Object.keys(NEWS_PRESS_SLOTS).sort());
+  // With plenty from every press, the defaults give exactly that split, two per outlet at most.
+  const item = (source, press, hour) => ({ ...news(source, hour), press });
+  const general = ['MARCA', 'Diario AS', 'Mundo Deportivo', 'EL PAÍS', 'El Mundo'].flatMap((s) => [1, 2, 3].map((h) => item(s, 'es', h)))
+    .concat(['A Bola', 'Record', 'Notícias ao Minuto'].flatMap((s) => [1, 2, 3].map((h) => item(s, 'pt', 10 + h))))
+    .concat(['BBC', 'The Guardian', 'Sky Sports'].flatMap((s) => [1, 2, 3].map((h) => item(s, 'en', 20 + h))));
+  const merged = mergeNews([general]);
+  const count = (k, v) => merged.filter((i) => i[k] === v).length;
+  assert.deepEqual([count('press', 'es'), count('press', 'pt'), count('press', 'en')], [7, 4, 4]);
+  assert.ok([...new Set(merged.map((i) => i.source))].every((s) => count('source', s) <= NEWS_PER_SOURCE));
 });

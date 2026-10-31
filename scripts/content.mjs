@@ -6,14 +6,28 @@ export function withYears(quotes) {
   return quotes;
 }
 
-// Today's event (UTC), or the next one in the calendar when today has none. `events` must be sorted by
-// month and day (the build sorts onthisday.json). The build picks with its own date; app.js picks again
-// from the embedded list when the visitor's UTC day differs (builds are not daily). Keep the two in step:
-// app.js repeats this rule (search for "On this day" there).
-export function pickOnThisDay(events, now = new Date()) {
+// What the On this day card shows, as a timeline (oldest first): everything dated today (UTC) in any
+// year; when today has none, everything dated this month; when the month has none, the next dated day.
+// `items` mixes the On this day events and the dated quotes; each needs `date` (YYYY-MM-DD) and the
+// events `event: true`. Past `limit`, events are kept before quotes, then the newest of each go.
+// The build picks with its own date; app.js picks again from the embedded list when the visitor's UTC
+// day differs (builds are not daily). Keep the two in step: app.js repeats this rule (search for
+// "On this day" there).
+export const OTD_LIMIT = 8;
+export function pickOnThisDay(items, now = new Date(), limit = OTD_LIMIT) {
   const today = now.toISOString().slice(5, 10);
-  const same = events.find((e) => e.date.slice(5) === today);
-  return same ? { event: same, today: true } : { event: events.find((e) => e.date.slice(5) > today) || events[0], today: false };
+  const md = (x) => x.date.slice(5);
+  const timeline = (list) => {
+    const kept = [...list].sort((a, b) => Number(!!b.event) - Number(!!a.event) || b.date.localeCompare(a.date)).slice(0, limit);
+    return kept.sort((a, b) => a.date.localeCompare(b.date));
+  };
+  const same = items.filter((x) => md(x) === today);
+  if (same.length) return { kind: 'today', day: today, items: timeline(same) };
+  const month = items.filter((x) => md(x).slice(0, 2) === today.slice(0, 2));
+  if (month.length) return { kind: 'month', day: today, items: timeline(month) };
+  const days = [...new Set(items.map(md))].sort();
+  const day = days.find((d) => d > today) || days[0];
+  return { kind: 'next', day, items: timeline(items.filter((x) => md(x) === day)) };
 }
 
 // A seeded random integer in [0, n) (mulberry32), so the same seed always gives the same quiz.

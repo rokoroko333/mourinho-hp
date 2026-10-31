@@ -46,6 +46,27 @@ test('mergeNews never repeats an item, and loosens the cap only to fill a short 
   assert.deepEqual(mergeNews([[dup]], { ...opts, limit: 10 }).map((i) => i.title), ['AS 5', 'AS 4']);
 });
 
+test('mergeNews leans on the Spanish press: each press has its slots, and empty slots go to Spain first', () => {
+  const item = (source, press, hour) => ({ ...news(source, hour), press });
+  // A busy Portuguese outlet and fresher English news cannot crowd out the Spanish papers.
+  const general = [
+    ...[1, 2, 3, 4, 5].map((h) => item('A Bola', 'pt', 20 + h)),
+    ...[1, 2, 3, 4, 5].map((h) => item('Record', 'pt', 20 + h)),
+    ...[1, 2, 3].map((h) => item('BBC', 'en', 18 + h)),
+    ...[1, 2, 3].map((h) => item('MARCA', 'es', h)),
+    ...[1, 2, 3].map((h) => item('Diario AS', 'es', h)),
+  ];
+  const opts = { limit: 10, perSource: 3, slots: { es: 6, pt: 2, en: 2 } };
+  const merged = mergeNews([general], opts);
+  const by = (press) => merged.filter((i) => i.press === press).length;
+  assert.deepEqual([by('es'), by('pt'), by('en')], [6, 2, 2]);
+  // With little Spanish news, the free slots are filled from the Spanish press first, then the rest.
+  const few = mergeNews([general.filter((i) => i.source !== 'Diario AS')], opts);
+  assert.equal(few.length, 10);
+  assert.equal(few.filter((i) => i.press === 'es').length, 3);
+  assert.ok(few.filter((i) => i.source === 'A Bola').length <= 3, 'still at most perSource per outlet');
+});
+
 test('outletItems keeps recent items about Mourinho and labels them with the outlet', () => {
   const now = new Date('2026-10-28T00:00:00Z');
   const items = [

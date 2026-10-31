@@ -757,5 +757,286 @@
         "date": "2024-06-03"
       }
     ]
+  },
+  {
+    "date": "2012-10-07",
+    "era": "real-madrid-1",
+    "text": {
+      "en": "Lionel Messi and Cristiano Ronaldo each scored twice as Barcelona and Real Madrid drew 2-2 at Camp Nou.",
+      "es": "Lionel Messi y Cristiano Ronaldo marcaron dos goles cada uno en el 2-2 entre el Barcelona y el Real Madrid en el Camp Nou.",
+      "pt": "Lionel Messi e Cristiano Ronaldo marcaram dois golos cada um no empate 2-2 entre o Barcelona e o Real Madrid, em Camp Nou.",
+      "ja": "カンプ・ノウでのバルセロナ戦で、リオネル・メッシとクリスティアーノ・ロナウドがそれぞれ2得点し、レアル・マドリードは2-2で引き分けた。"
+    },
+    "sources": [
+      {
+        "url": "https://www.aljazeera.com/sports/2012/10/7/el-clasico-messi-2-ronaldo-2",
+        "publisher": "Al Jazeera",
+        "date": "2012-10-07"
+      },
+      {
+        "url": "https://www.skysports.com/football/barcelona-vs-real-madrid/report/268255",
+        "publisher": "Sky Sports",
+        "date": "2012-10-08"
+      }
+    ]
+  },
+  {
+    "date": "2016-10-23",
+    "era": "man-utd",
+    "text": {
+      "en": "Chelsea beat Manchester United 4-0 at Stamford Bridge on Mourinho's return there as United manager.",
+      "es": "El Chelsea goleó 4-0 al Manchester United en Stamford Bridge en la vuelta de Mourinho a ese estadio como entrenador del United.",
+      "pt": "O Chelsea venceu o Manchester United por 4-0 em Stamford Bridge, no regresso de Mourinho a esse estádio como treinador do United.",
+      "ja": "モウリーニョがマンチェスター・ユナイテッドの監督としてスタンフォード・ブリッジに戻った試合で、ユナイテッドはチェルシーに0-4で敗れた。"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11661/10629551/chelsea-4-0-manchester-united-visitors-thrashed-on-jose-mourinhos-return",
+        "publisher": "Sky Sports",
+        "date": "2016-10-24"
+      },
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/450920",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2018-10-20",
+    "era": "man-utd",
+    "text": {
+      "en": "Ross Barkley's equaliser in the sixth minute of stoppage time earned Chelsea a 2-2 draw with Manchester United at Stamford Bridge.",
+      "es": "Ross Barkley empató en el sexto minuto del descuento y el Chelsea arrancó un 2-2 al Manchester United en Stamford Bridge.",
+      "pt": "Ross Barkley empatou no sexto minuto de compensação e o Chelsea arrancou um 2-2 ao Manchester United em Stamford Bridge.",
+      "ja": "スタンフォード・ブリッジでのチェルシー戦で、ロス・バークリーにアディショナルタイム6分の同点ゴールを決められ、マンチェスター・ユナイテッドは2-2で引き分けた。"
+    },
+    "sources": [
+      {
+        "url": "https://premierleague.com/news/878549",
+        "publisher": "Premier League"
+      },
+      {
+        "url": "https://www.tntsports.co.uk/football/premier-league/2018-2019/football-news-agony-for-jose-mourinho-as-ross-barkley-denies-manchester-united-in-final-seconds_sto6977192/story.shtml",
+        "publisher": "Eurosport",
+        "date": "2018-10-20"
+      }
+    ]
+  },
+  {
+    "date": "2021-10-21",
+    "era": "roma",
+    "text": {
+      "en": "Roma lost 6-1 at Bodø/Glimt in the Europa Conference League, the first time a Mourinho side had conceded six goals in a match.",
+      "es": "La Roma perdió 6-1 en el campo del Bodø/Glimt en la Conference League; era la primera vez que un equipo de Mourinho encajaba seis goles en un partido.",
+      "pt": "A Roma perdeu por 6-1 no campo do Bodø/Glimt na Liga Conferência; foi a primeira vez que uma equipa de Mourinho sofreu seis golos num jogo.",
+      "ja": "UEFAヨーロッパ・カンファレンスリーグで、ローマはアウェーでボデ/グリムトに1-6で敗れた。モウリーニョのチームが1試合で6失点したのは初めてだった。"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaconferenceleague/news/026e-1388bbc3f78d-19b8f1321328-1000--matchday-3-bodo-glimt-stun-roma/",
+        "publisher": "UEFA",
+        "date": "2021-10-21"
+      },
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/618949",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2024-10-24",
+    "era": "fenerbahce",
+    "text": {
+      "en": "Fenerbahçe drew 1-1 with Manchester United in the Europa League in Istanbul, and Mourinho was sent off.",
+      "es": "El Fenerbahçe empató 1-1 con el Manchester United en la Europa League en Estambul, y Mourinho fue expulsado.",
+      "pt": "O Fenerbahçe empatou 1-1 com o Manchester United na Liga Europa, em Istambul, e Mourinho foi expulso.",
+      "ja": "UEFAヨーロッパリーグで、フェネルバフチェはイスタンブールでマンチェスター・ユナイテッドと1-1で引き分け、モウリーニョは退席処分を受けた。"
+    },
+    "sources": [
+      {
+        "url": "https://thestar.com.my/sport/football/2024/10/25/soccer-man-utd-draw-1-1-with-fenerbahce-as-mourinho-sees-red",
+        "publisher": "The Star (Reuters)",
+        "date": "2024-10-25"
+      },
+      {
+        "url": "https://www.thescore.com/news/3107597",
+        "publisher": "theScore (AFP)"
+      }
+    ]
+  },
+  {
+    "date": "2005-11-06",
+    "era": "chelsea-1",
+    "text": {
+      "en": "Darren Fletcher's header gave Manchester United a 1-0 win over Chelsea at Old Trafford and ended Chelsea's 40-match unbeaten run in the Premier League.",
+      "es": "Un cabezazo de Darren Fletcher dio al Manchester United un 1-0 ante el Chelsea en Old Trafford y acabó con la racha de 40 partidos sin perder del Chelsea en la Premier League.",
+      "pt": "Um cabeceamento de Darren Fletcher deu ao Manchester United a vitória por 1-0 sobre o Chelsea em Old Trafford e acabou com a série de 40 jogos sem perder do Chelsea na Premier League.",
+      "ja": "オールド・トラッフォードでのマンチェスター・ユナイテッド戦で、チェルシーはダレン・フレッチャーのヘディングで0-1で敗れ、プレミアリーグでの無敗記録が40試合で止まった。"
+    },
+    "sources": [
+      {
+        "url": "https://www.irishtimes.com/sport/fletcher-eases-united-s-blues-1.514981",
+        "publisher": "The Irish Times",
+        "date": "2005-11-07"
+      },
+      {
+        "url": "https://www.dawn.com/news/164459",
+        "publisher": "Dawn",
+        "date": "2005-11-07"
+      }
+    ]
+  },
+  {
+    "date": "2009-11-04",
+    "era": "inter",
+    "text": {
+      "en": "Late goals from Diego Milito and Wesley Sneijder turned a 1-0 deficit into a 2-1 Inter win at Dynamo Kyiv in the Champions League group stage.",
+      "es": "Goles en el tramo final de Diego Milito y Wesley Sneijder dieron la vuelta al 1-0 y el Inter ganó 2-1 en el campo del Dinamo de Kiev en la fase de grupos de la Champions League.",
+      "pt": "Golos no fim de Diego Milito e Wesley Sneijder deram a volta ao 1-0 e o Inter venceu por 2-1 no campo do Dínamo de Kiev, na fase de grupos da Liga dos Campeões.",
+      "ja": "チャンピオンズリーグのグループステージで、インテルはアウェーでディナモ・キエフに0-1とリードされたが、終盤のディエゴ・ミリートとヴェスレイ・スナイデルのゴールで2-1で逆転勝ちした。"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/01df-0e734078dbce-dd11ff4d1f5a-1000/",
+        "publisher": "UEFA",
+        "date": "2009-11-04"
+      },
+      {
+        "url": "https://www.skysports.com/football/news/5674701/inter-go-top-with-kiev-win",
+        "publisher": "Sky Sports",
+        "date": "2009-11-04"
+      }
+    ]
+  },
+  {
+    "date": "2010-11-29",
+    "era": "real-madrid-1",
+    "text": {
+      "en": "Barcelona beat Real Madrid 5-0 at Camp Nou in Mourinho's first Clásico as Real Madrid coach.",
+      "es": "El Barcelona goleó 5-0 al Real Madrid en el Camp Nou en el primer Clásico de Mourinho como entrenador madridista.",
+      "pt": "O Barcelona venceu o Real Madrid por 5-0 em Camp Nou, no primeiro Clásico de Mourinho como treinador do Real Madrid.",
+      "ja": "モウリーニョがレアル・マドリードの監督として臨んだ初めてのクラシコで、レアル・マドリードはカンプ・ノウでバルセロナに0-5で敗れた。"
+    },
+    "sources": [
+      {
+        "url": "https://www.aljazeera.com/amp/sports/2010/11/30/barcelona-rout-real-madrid-5-0",
+        "publisher": "Al Jazeera",
+        "date": "2010-11-30"
+      },
+      {
+        "url": "https://kvia.com/sports/2020/11/28/ten-years-on-from-humiliating-real-madrid-5-0-barcelona-is-a-club-in-turmoil/",
+        "publisher": "CNN (KVIA)",
+        "date": "2020-11-28"
+      }
+    ]
+  },
+  {
+    "date": "2019-11-23",
+    "era": "tottenham",
+    "text": {
+      "en": "Tottenham won 3-2 at West Ham in Mourinho's first match as their manager.",
+      "es": "El Tottenham ganó 3-2 en el campo del West Ham en el primer partido de Mourinho como su entrenador.",
+      "pt": "O Tottenham venceu por 3-2 no campo do West Ham, no primeiro jogo de Mourinho como seu treinador.",
+      "ja": "モウリーニョのトッテナム監督としての初戦で、トッテナムはアウェーでウェストハムに3-2で勝った。"
+    },
+    "sources": [
+      {
+        "url": "https://tottenhamhotspur.com/news/2019/november/winning-start-for-jose-at-west-ham",
+        "publisher": "Tottenham Hotspur",
+        "date": "2019-11-23"
+      },
+      {
+        "url": "https://www.tntsports.co.uk/football/premier-league/2019-2020/premier-league-live-updates-tottenham-triumph-over-west-ham-in-first-match-of-jose-mourinho-era_sto7547786/story.shtml",
+        "publisher": "Eurosport",
+        "date": "2019-11-23"
+      }
+    ]
+  },
+  {
+    "date": "2020-11-21",
+    "era": "tottenham",
+    "text": {
+      "en": "Goals from Son Heung-min and Giovani Lo Celso beat Manchester City 2-0 and sent Tottenham top of the Premier League.",
+      "es": "Los goles de Son Heung-min y Giovani Lo Celso dieron al Tottenham un 2-0 ante el Manchester City y el liderato de la Premier League.",
+      "pt": "Os golos de Son Heung-min e Giovani Lo Celso deram ao Tottenham a vitória por 2-0 sobre o Manchester City e a liderança da Premier League.",
+      "ja": "ソン・フンミンとジオバニ・ロ・セルソのゴールで、トッテナムはマンチェスター・シティに2-0で勝ち、プレミアリーグの首位に立った。"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11661/12138157/tottenham-2-0-man-city-spurs-top-of-premier-league-after-classic-jose-mourinho-victory",
+        "publisher": "Sky Sports",
+        "date": "2020-11-22"
+      },
+      {
+        "url": "https://www.espn.com/soccer/report/_/gameId/578577",
+        "publisher": "ESPN"
+      }
+    ]
+  },
+  {
+    "date": "2016-07-05",
+    "era": "man-utd",
+    "text": {
+      "en": "Mourinho gave his first news conference as Manchester United manager at Old Trafford.",
+      "es": "Mourinho dio en Old Trafford su primera rueda de prensa como entrenador del Manchester United.",
+      "pt": "Mourinho deu em Old Trafford a sua primeira conferência de imprensa como treinador do Manchester United.",
+      "ja": "モウリーニョがオールド・トラッフォードで、マンチェスター・ユナイテッド監督として初めての記者会見を開いた。"
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11667/10424219/jose-mourinhos-first-manchester-united-news-conference-the-full-transcript-from-old-trafford",
+        "publisher": "Sky Sports",
+        "date": "2016-07-05"
+      },
+      {
+        "url": "https://premierleague.com/news/63376",
+        "publisher": "Premier League",
+        "date": "2016-07-05"
+      }
+    ]
+  },
+  {
+    "date": "2021-07-08",
+    "era": "roma",
+    "text": {
+      "en": "Mourinho was presented as Roma coach at the Terrazza Caffarelli on the Campidoglio in Rome.",
+      "es": "Mourinho fue presentado como entrenador de la Roma en la Terrazza Caffarelli, en el Campidoglio de Roma.",
+      "pt": "Mourinho foi apresentado como treinador da Roma na Terrazza Caffarelli, no Campidoglio, em Roma.",
+      "ja": "モウリーニョがローマのカンピドリオにあるテラッツァ・カッファレッリで、ローマの監督として発表された。"
+    },
+    "sources": [
+      {
+        "url": "https://www.asroma.com/en/news/61445/jose-mourinho-the-first-press-conference-in-full",
+        "publisher": "AS Roma",
+        "date": "2021-07-08"
+      },
+      {
+        "url": "https://sport.sky.it/calcio/serie-a/2021/07/08/roma-mourinho-presentazione-news-video",
+        "publisher": "Sky Sport",
+        "date": "2021-07-08"
+      }
+    ]
+  },
+  {
+    "date": "2024-07-23",
+    "era": "fenerbahce",
+    "text": {
+      "en": "An Edin Džeko hat-trick helped Fenerbahçe beat Lugano 4-3 in Thun in a Champions League qualifier, Mourinho's first official match in charge.",
+      "es": "Un triplete de Edin Džeko ayudó al Fenerbahçe a ganar 4-3 al Lugano en Thun, en la previa de la Champions League; era el primer partido oficial de Mourinho en el banquillo.",
+      "pt": "Um hat-trick de Edin Džeko ajudou o Fenerbahçe a vencer o Lugano por 4-3 em Thun, na pré-eliminatória da Liga dos Campeões, no primeiro jogo oficial de Mourinho no comando.",
+      "ja": "チャンピオンズリーグ予選で、フェネルバフチェはエディン・ジェコのハットトリックもあり、トゥーンでルガーノに4-3で勝った。モウリーニョの監督として初めての公式戦だった。"
+    },
+    "sources": [
+      {
+        "url": "https://hurriyetdailynews.com/fenerbahce-wins-mourinhos-first-offical-game-198814",
+        "publisher": "Hürriyet Daily News",
+        "date": "2024-07-24"
+      },
+      {
+        "url": "https://www.dailysabah.com/sports/football/fenerbahce-win-champions-league-qualifier-goal-fest-over-lugano/amp",
+        "publisher": "Daily Sabah",
+        "date": "2024-07-24"
+      }
+    ]
   }
 ]

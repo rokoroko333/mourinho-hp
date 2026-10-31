@@ -16,6 +16,18 @@
     for (const c of children) if (c != null) node.append(c);
     return node;
   };
+  // Fisher–Yates, in place.
+  const shuffle = (list) => {
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
+  };
+
+  // Videos come in a new order on every visit; the page itself lists them all in the content order.
+  const videoGrid = $('#videos .grid');
+  if (videoGrid) videoGrid.replaceChildren(...shuffle([...videoGrid.children]));
 
   // Mobile menu
   const menuBtn = $('.menu-btn');
@@ -154,13 +166,6 @@
     again.addEventListener('click', () => {
       // Questions not on screen first, so the next ten do not repeat the last ones.
       const shown = new Set([...quizList.children].map((q) => q.dataset.id));
-      const shuffle = (list) => {
-        for (let i = list.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [list[i], list[j]] = [list[j], list[i]];
-        }
-        return list;
-      };
       const deck = [...shuffle(quiz.items.filter((q) => !shown.has(q.id))), ...shuffle(quiz.items.filter((q) => shown.has(q.id)))];
       quizList.replaceChildren(...deck.slice(0, quiz.size).map(question));
       answered = 0;
@@ -182,12 +187,25 @@
   const otdCard = $('#on-this-day');
   if (otd && otdCard && otdCard.dataset.built !== new Date().toISOString().slice(0, 10)) {
     const today = new Date().toISOString().slice(5, 10);
-    const same = otd.events.find((e) => e.date.slice(5) === today);
-    const e = same || otd.events.find((x) => x.date.slice(5) > today) || otd.events[0];
-    $('#otd-label').textContent = (same ? otd.labels.today : otd.labels.next).replace('{day}', e.day);
-    $('#otd-year').textContent = e.date.slice(0, 4);
-    $('#otd-text').textContent = e.text;
-    $('#otd-link').setAttribute('href', e.path);
+    const md = (x) => x.date.slice(5);
+    const timeline = (list) => [...list]
+      .sort((a, b) => Number(!!b.event) - Number(!!a.event) || b.date.localeCompare(a.date))
+      .slice(0, 8)
+      .sort((a, b) => a.date.localeCompare(b.date));
+    const same = otd.items.filter((x) => md(x) === today);
+    const month = otd.items.filter((x) => md(x).slice(0, 2) === today.slice(0, 2));
+    const days = [...new Set(otd.items.map(md))].sort();
+    const next = days.find((d) => d > today) || days[0];
+    const [kind, day, items] = same.length ? ['today', today, same] : month.length ? ['month', today, month] : ['next', next, otd.items.filter((x) => md(x) === next)];
+    const shown = timeline(items);
+    const monthName = new Intl.DateTimeFormat(lang, { month: 'long', timeZone: 'UTC' }).format(new Date(`2000-${day}T00:00:00Z`));
+    $('#otd-label').textContent = kind === 'month' ? otd.labels.month.replace('{month}', monthName) : otd.labels[kind].replace('{day}', shown[0].day);
+    $('#otd-list').replaceChildren(...shown.map((x) => el('li', {},
+      el('p', { class: 'otd-when' }, el('time', { datetime: x.date }, el('span', { class: 'otd-year' }, x.date.slice(0, 4)), ` ${x.day}`)),
+      ...(x.quote
+        ? [el('p', { class: 'otd-quote', lang: 'en' }, el('a', { href: x.path }, `“${x.quote}”`)), el('p', { class: 'muted' }, x.text)]
+        : [el('p', {}, x.text)]))));
+    $('#otd-link').setAttribute('href', otd.months[Number(day.slice(0, 2))]);
   }
 
   // Quote & story of the day

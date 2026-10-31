@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNewsWithReport, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, MAX_TITLE, MAX_SOURCE, outletItems, fetchNewsWithReport, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -253,6 +253,62 @@ test('fetchMatches merges completed and fixture lists without the bot User-Agent
   assert.equal(r.next.id, '3');
 });
 
+// The fixtures failing while the season lists work used to write "no next match" over the good copy (review).
+test('fetchMatches fails as a whole when one ESPN list fails or loses its events, and the cron keeps the last copy', async () => {
+  const now = new Date('2026-10-28T00:00:00Z');
+  const ok = {
+    '?season=2025': [ev('1', '2026-05-23T19:00Z', true)],
+    '?season=2026': [ev('2', '2026-10-25T20:00Z', true, '3', '1')],
+    '?fixture=true': [ev('3', '2026-11-01T15:15Z', false)],
+  };
+  const realFetch = globalThis.fetch;
+  const run = async (answer) => {
+    const calls = [];
+    globalThis.fetch = async (url) => {
+      const q = new URL(url).search;
+      calls.push(q);
+      return answer(q, calls.filter((c) => c === q).length);
+    };
+    try {
+      return { result: await fetchMatches(now).then((m) => m, (e) => e), calls };
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  };
+  // Fixtures down even on the retry: an error naming it, not a copy without the next match.
+  let { result, calls } = await run((q) => (q === '?fixture=true' ? new Response('down', { status: 503 }) : new Response(JSON.stringify({ events: ok[q] }))));
+  assert.ok(result instanceof Error && /503 .*fixture=true/.test(result.message), String(result?.message));
+  assert.equal(calls.filter((c) => c === '?fixture=true').length, 2, 'retried once');
+  // ESPN changes its shape: no `events` list.
+  ({ result } = await run((q) => new Response(JSON.stringify(q === '?fixture=true' ? { items: [] } : { events: ok[q] }))));
+  assert.ok(result instanceof Error && /no events list/.test(result.message), String(result?.message));
+  // A 404 is not retried; a season that has not started (an empty list) is fine.
+  ({ result, calls } = await run((q) => (q === '?season=2025' ? new Response('', { status: 404 }) : new Response(JSON.stringify({ events: ok[q] })))));
+  assert.ok(result instanceof Error);
+  assert.equal(calls.filter((c) => c === '?season=2025').length, 1, '404 not retried');
+  ({ result } = await run((q) => new Response(JSON.stringify({ events: q === '?season=2026' ? [] : ok[q] }))));
+  assert.equal(result.next?.id, '3');
+  // One bad moment: the retry brings the fixtures back.
+  ({ result } = await run((q, n) => (q === '?fixture=true' && n === 1 ? new Response('busy', { status: 503 }) : new Response(JSON.stringify({ events: ok[q] })))));
+  assert.equal(result.next?.id, '3');
+
+  // In the cron: the matches key keeps its last good copy and the report names the failure.
+  const store = new Map([[KV_KEYS.matches, 'old']]);
+  globalThis.fetch = async (url) => {
+    const u = new URL(url);
+    if (u.hostname === 'site.api.espn.com') return u.search === '?fixture=true' ? new Response('down', { status: 503 }) : new Response(JSON.stringify({ events: [ev('2', '2026-10-25T20:00Z', true)] }));
+    return new Response('nothing', { status: 404 });
+  };
+  let report;
+  try {
+    report = await refreshAll({ put: async (k, v) => store.set(k, v) }, now);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(store.get(KV_KEYS.matches), 'old');
+  assert.match(report.matches, /^error: ESPN: 503 .*fixture=true/);
+});
+
 test('normalizeEvent keeps only https logo URLs', () => {
   const e = ev('9', '2026-11-01T19:00Z', false);
   e.competitions[0].competitors[0].team.logo = 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png';
@@ -292,4 +348,62 @@ test('the press slots are Spain 7, Portugal 4, England 4, add up to the list, an
   const count = (k, v) => merged.filter((i) => i[k] === v).length;
   assert.deepEqual([count('press', 'es'), count('press', 'pt'), count('press', 'en')], [7, 4, 4]);
   assert.ok([...new Set(merged.map((i) => i.source))].every((s) => count('source', s) <= NEWS_PER_SOURCE));
+});
+
+// One failed fetch of an outlet (AS was missing from one run in production, #67) is retried once; an
+// outlet that fails twice is named in the report.
+test('an outlet feed that fails is fetched once more, and one that fails twice is named', async () => {
+  const [flaky, down] = [OUTLETS.find((o) => o.name === 'Diario AS'), OUTLETS.find((o) => o.name === 'MARCA')];
+  const tries = new Map();
+  const feeds = fakeFeeds();
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    const n = (tries.get(url) || 0) + 1;
+    tries.set(url, n);
+    if (url === down.feed || (url === flaky.feed && n === 1)) throw new TypeError('fetch failed');
+    return feeds(url);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport(new Date('2026-10-28T00:00:00Z'));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(tries.get(flaky.feed), 2);
+  assert.ok(r.items.some((i) => i.source === 'Diario AS'), 'AS is in after the retry');
+  assert.equal(tries.get(down.feed), 2);
+  assert.deepEqual(r.failedOutlets, ['MARCA']);
+  assert.ok(r.emptyOutlets.includes('MARCA'));
+});
+
+test('an outlet that answers 404 is not fetched again', async () => {
+  const moved = OUTLETS.find((o) => o.name === 'El Mundo');
+  const tries = new Map();
+  const feeds = fakeFeeds();
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    tries.set(url, (tries.get(url) || 0) + 1);
+    return url === moved.feed ? new Response('gone', { status: 404 }) : feeds(url);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport(new Date('2026-10-28T00:00:00Z'));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(tries.get(moved.feed), 1);
+  assert.deepEqual(r.failedOutlets, ['El Mundo']);
+});
+
+// Third-party text is bounded and links are https only (#70 security review).
+test('parseRss keeps only https links and cuts long titles and sources', () => {
+  const long = 'M'.repeat(1000);
+  const xml = `<rss><item><title>${long}</title><link>https://a.example/1</link><source url="https://a">${long}</source></item>
+<item><title>Plain http</title><link>http://a.example/2</link></item>
+<item><title>Script</title><link>javascript:alert(1)</link></item>
+<item><title>Spaces</title><link>https://a.example/x y</link></item></rss>`;
+  const items = parseRss(xml);
+  assert.equal(items.length, 1);
+  assert.ok(items[0].title.length <= MAX_TITLE && items[0].title.endsWith('…'));
+  assert.ok(items[0].source.length <= MAX_SOURCE);
 });

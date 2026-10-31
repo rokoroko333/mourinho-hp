@@ -93,6 +93,7 @@
         title: card.querySelector('h3').textContent,
         allow: 'autoplay; encrypted-media; picture-in-picture; fullscreen',
         allowfullscreen: '',
+        referrerpolicy: 'strict-origin',
       });
       // The label stays a link to YouTube, a way out if the video later stops allowing embeds.
       const [, title, label] = card.children;
@@ -251,9 +252,42 @@
   const showMessage = (container, text) =>
     container.replaceChildren(el('p', { class: 'loading muted' }, text));
 
+  // The live data comes from third parties through our API. One malformed item (a date that does not parse,
+  // a missing team) must not blank the whole list, so items are checked one by one and the bad ones dropped.
+  // Links are checked again here, not only in lib/feeds.js: only https URLs ever become an href.
+  const validDate = (v) => typeof v === 'string' && Number.isFinite(Date.parse(v));
+  const httpsUrl = (v) => typeof v === 'string' && /^https:\/\/[^\s"'<>]+$/.test(v);
+  const goodNews = (item) => item && typeof item.title === 'string' && item.title && httpsUrl(item.link)
+    && (item.publishedAt == null || validDate(item.publishedAt))
+    && (item.source == null || typeof item.source === 'string') && (item.press == null || typeof item.press === 'string');
+  const goodTeam = (t) => t && typeof t.name === 'string';
+  const logoIds = new Set(strings.logos || []);
+  const hasLogo = (t) => t.id != null && /^\d{1,8}$/.test(String(t.id)) && logoIds.has(String(t.id));
+  const goodMatch = (m) => m && validDate(m.date) && goodTeam(m.home) && goodTeam(m.away) && (m.id == null || /^\d{1,12}$/.test(String(m.id)));
+  const cleanMatches = (data) => data && {
+    ...data,
+    next: goodMatch(data.next) ? data.next : null,
+    latest: goodMatch(data.latest) ? data.latest : null,
+    results: Array.isArray(data.results) ? data.results.filter(goodMatch) : [],
+    fixtures: Array.isArray(data.fixtures) ? data.fixtures.filter(goodMatch) : [],
+  };
+
+  // Everything live on the page in one request (functions/api/home.js): each Function call counts toward the
+  // free plan's daily limit, so the news, the matches and the prediction tallies come together.
+  const needsLive = $('#news-list') || $('#match-list') || $('#result-list') || $('#predict');
+  const live = needsLive ? getJson(`/api/home?lang=${encodeURIComponent(lang)}`) : null;
+  const liveNews = () => live.then((d) => {
+    if (!d.news) throw new Error('no news');
+    return { ...d.news, items: Array.isArray(d.news.items) ? d.news.items.filter(goodNews) : [] };
+  });
+  const liveMatches = () => live.then((d) => {
+    if (!d.matches) throw new Error('no matches');
+    return { ...cleanMatches(d.matches), predict: d.predict || {} };
+  });
+
   // News: the home page shows the newest few (data-limit), /news/ all of them.
   const newsList = $('#news-list');
-  if (newsList) getJson(`/api/news?lang=${lang}`)
+  if (newsList) liveNews()
     .then((data) => {
       if (!data.items?.length) return showMessage(newsList, strings.newsEmpty);
       const limit = Number(newsList.dataset.limit) || data.items.length;
@@ -286,7 +320,8 @@
   const plainDay = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   const teamEl = (t, side) =>
     el('div', { class: 'team' },
-      t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
+      // Logos come from our own site (src/public/logos/), never from ESPN: a team without a file has none.
+      hasLogo(t) ? el('img', { src: `/logos/${t.id}.png`, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
       t.name,
       el('small', {}, side));
   // The next match comes first and carries the countdown: on the home page the #countdown from the HTML is
@@ -323,7 +358,7 @@
       : list.replaceChildren(el('li', { class: 'loading muted' }, strings.matchesEmpty));
   const resultList = $('#result-list');
   const fixtureList = $('#fixture-list');
-  if (matchList || resultList) getJson('/api/matches')
+  if (matchList || resultList || $('#predict')) liveMatches()
     .then((data) => {
       // The cached /matches/ HTML of the previous deploy (up to five minutes) has no strings.timeZone: its rows
       // were drawn on the server and say "UTC", so they are kept rather than redrawn in the visitor's zone.
@@ -420,8 +455,15 @@
       });
       return [head(s), f];
     };
-    getJson(`/api/predict?match=${encodeURIComponent(m.id)}`)
+    // The tally came with the page's live data; a POST answers with a fresh one. Without it (D1 down or over
+    // its quota) nothing more is fetched: an open match still shows the form, anything else shows nothing.
+    Promise.resolve(data.predict?.[m.id] ?? null)
       .then((s) => {
+        if (!s) {
+          if (m === data.next && new Date(m.date) > Date.now() && !mine()) show(form(null));
+          else if (tbd) show(head(null));
+          return;
+        }
         const open = m === data.next && new Date(m.date) > Date.now();
         if (open && !mine()) return show(form(s));
         if ((!open && !m.completed && m !== data.next) || (!s.total && !open)) return tbd ? show(head(null)) : undefined; // no tally to show

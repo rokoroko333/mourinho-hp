@@ -1,55 +1,95 @@
 # Infinito Mourinho
 
-Multilingual (EN / ES / PT) José Mourinho fan site for Cloudflare Pages. See `CLAUDE.md` for the architecture.
+Multilingual (EN / ES / PT / JA) José Mourinho fan site on Cloudflare Pages. `CLAUDE.md` has the architecture and the
+rules; `docs/dev-flow.md` has the development flow.
 
 ## Local development
 
+Wrangler 4 needs Node.js 22 or later (`.node-version` pins it for nodenv and similar tools).
+
 ```sh
-npm install
+npm ci
 npm test
-npm run dev        # http://localhost:8788
+npm run dev        # http://localhost:8788, with the Pages Functions
+npm run verify     # with the dev server running: the browser flows in test/flows/
 ```
 
-The news and match sections read from KV. Locally the KV is empty, so the Functions fetch live data once;
-if you are offline, seed it with `npx wrangler kv key put --local --binding FEEDS news:local --path sample.json`.
+- **Port 8788** is also used by another project on the same machine. Check that the server is this site with
+  `curl -s localhost:8788 | grep 'Infinito Mourinho'`, or run `npx wrangler pages dev dist --port 8790` and
+  `npm run verify -- --base http://localhost:8790`.
+- **Edge cache**: `/matches/` is cached for 5 minutes by its Function, locally too. After changing its HTML, stop the
+  server, delete `.wrangler/state/v3/cache` and start it again.
+- **News and matches** are read from KV. Locally the KV is empty: run the Worker once with `npm run feeds:dev` and
+  `curl "http://localhost:8787/__scheduled"` to fill the local KV.
+- **Fan predictions** need the local D1 schema and a salt: run
+  `npx wrangler d1 migrations apply infinito-mourinho-votes --local` once, and put `VOTE_SALT=<any random string>` in
+  `.dev.vars` (git-ignored; never commit it).
+- **Screenshots for a PR**: see `docs/dev-flow.md` (section 5).
+- **Video thumbnails and team logos** (`src/public/thumbs/`, `src/public/logos/`) are fetched by `npm run images` and
+  committed, so visitors' browsers never load images from YouTube or ESPN (the CSP allows images from the site
+  only). Run it after adding a video, or when a new opponent shows without a logo.
+- **Share images** (`src/public/og/`, 1200×630 PNG) are generated with the local Chrome and committed: after adding
+  or editing a quote, run `npm run og` and commit the result. The build never needs a browser, and `npm test` fails
+  if a quote has no image.
 
-To attach screenshots to a PR, run `npm run dev` and then `npm run screenshot -- --pr <number> / /es/ /pt/ /ja/`
-(uses the local Chrome in headless mode; see `docs/dev-flow.md`).
+## Cloudflare resources
 
-Share images (`src/public/og/`, 1200×630 PNG) are generated with the local Chrome and committed: after adding or
-editing a quote, run `npm run og` and commit the result. The build itself never needs a browser, and
-`npm test` fails if a quote has no image.
+These already exist; the ids are in `wrangler.toml` and `workers/feeds/wrangler.toml`.
 
-## First deployment
+| Resource | Name | Used by |
+|---|---|---|
+| Pages project (direct upload from the terminal, not Git-connected) | `infinito-mourinho` | the site and `functions/` |
+| Worker with a Cron Trigger every 20 minutes, no public URL (`workers_dev = false`) | `infinito-mourinho-feeds` | writes news and matches to KV, purges old votes |
+| KV namespace | `FEEDS` | shared by the Worker (writes) and `functions/api/home` (and the older `news`, `matches`), the `/matches/` pages (reads) |
+| D1 database | `infinito-mourinho-votes` (binding `VOTES`) | `functions/api/predict` (votes), `functions/api/home` (tallies) and the Worker (purge) |
+| Pages secret | `VOTE_SALT` | hashes the voter's connection; without it `/api/predict` answers 503 |
 
-Wrangler 4 needs Node.js 22 or later (`.node-version` pins it for nodenv and similar tools).
-The steps below were done on 2026-10-29: KV `FEEDS`, the Worker and the Pages project (direct upload, not Git-connected) exist.
+Log in once with `npx wrangler login`.
 
-1. Log in: `npx wrangler login`
-2. Create the KV namespace and paste its id into **both** `wrangler.toml` and `workers/feeds/wrangler.toml`:
-   ```sh
-   npx wrangler kv namespace create FEEDS
-   ```
-3. Deploy the cron Worker that fills KV every 20 minutes:
-   ```sh
-   npm run feeds:deploy
-   ```
-4. Create the Pages project in the Cloudflare dashboard (Workers & Pages → Create → Pages → connect
-   `rokoroko333/mourinho-hp`):
-   - Build command: `npm run build`
-   - Output directory: `dist`
-   - Environment variable: `SITE_URL=https://<your domain>` (once the domain is decided)
+## Deploying
 
-   The KV binding comes from `wrangler.toml`. Alternatively deploy from the terminal with `npm run deploy`.
-5. Optional: set a `REFRESH_TOKEN` secret on the Worker
-   (`npx wrangler secret put REFRESH_TOKEN --config workers/feeds/wrangler.toml`) to refresh KV on demand with
-   `curl -H "Authorization: Bearer <token>" https://infinito-mourinho-feeds.<account>.workers.dev/refresh`.
-6. Submit `https://<domain>/sitemap.xml` in Google Search Console.
+Deploy only what changed, in this order:
+
+1. **D1 schema** (a new file in `migrations/`): `npx wrangler d1 migrations apply infinito-mourinho-votes --remote`
+2. **Secrets** (only when a new one is added), e.g. `openssl rand -hex 24 | npx wrangler pages secret put VOTE_SALT --project-name infinito-mourinho`
+3. **Worker** (`lib/feeds.js`, `lib/predict.js` or `workers/feeds/` changed): `npm run feeds:deploy`
+4. **Pages**: `npm run build` then `npm run deploy -- --branch main`. Set `SITE_URL=https://<domain>` for the build
+   once a custom domain is used (without it, URLs point to the pages.dev address).
+
+When the shape of the JSON in KV changes, deploy both the Worker and Pages, and keep the pages working with the old
+shape until the next cron run (at most 20 minutes).
+
+After deploying, check production with `npm run verify -- --base https://infinito-mourinho.pages.dev` (the flows
+never post votes outside localhost) and the Worker's log with `npx wrangler tail --config workers/feeds/wrangler.toml`
+(`outlets:empty`, `outlets:failed`, `feeds:failed`; without `--config`, Wrangler reads `wrangler.toml`, takes the
+project for Pages and fails).
+
+**Monitoring**: `.github/workflows/health.yml` runs `npm run health` every hour. It fails, and GitHub emails the
+owner, when production's news or matches have not been refreshed for two hours (the cron stopped, or ESPN keeps
+failing; see the comment in `scripts/health.mjs`). The cause is in the Worker's log, kept for a few days in Workers
+Logs (Cloudflare dashboard → Workers → `infinito-mourinho-feeds` → Logs; `[observability]` in its `wrangler.toml`,
+which applies from the next `npm run feeds:deploy`). To check by hand: `npm run health`, or "Run workflow" on the
+Health workflow in GitHub's Actions tab (do this once after the workflow first reaches `main`: schedules only run
+from `main`). A copy the Functions fetched on the spot because KV was empty or unreachable is marked `live` and also
+fails the check, so a stopped cron cannot hide behind it (a KV outage therefore fails it too, while the pages still
+show fresh data). After a club move, all three ESPN schedule URLs for the new
+`TEAM_ID` must answer with an `events` list holding at least one match (comment above `TEAM_ID` in `lib/feeds.js`).
+
+The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
+with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
+
+Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
 
 ## Free plan budget at 15,000 visitors/day
 
-- Static pages: unlimited requests and bandwidth on Pages.
-- `/api/*` Functions: about 2 calls per home page view. Responses are edge-cached for 5 minutes, but every
-  Function invocation still counts toward the Workers free limit of 100,000 requests/day, which covers roughly
-  50,000 home page views/day. Beyond that, move to Workers Paid ($5/month).
-- KV: 144 writes/day from the cron (limit 1,000; matches every 20 minutes, each language's news hourly); reads are mostly absorbed by the edge cache.
+- **Static pages**: unlimited requests and bandwidth on Pages.
+- **Functions** (`/api/*` and `/matches/`): one call per page view with live data (`/api/home`), plus a POST per
+  prediction. Responses are edge-cached, but every
+  invocation counts toward the Workers free limit of 100,000 requests/day (roughly 50,000 home page views/day).
+  Beyond that, move to Workers Paid ($5/month).
+- **KV**: 2 writes per cron run (the news list and the matches), 144 writes/day (limit 1,000); reads are mostly
+  absorbed by the edge cache.
+- **Worker subrequests**: at most 34 per run (limit 50); the breakdown is in the comment above `refreshAll` in
+  `lib/feeds.js`.
+- **D1**: 2 writes per vote (the vote and the burst counter) and a purge per cron run; limits are 100,000 writes and
+  5 million rows read per day.

@@ -1,21 +1,25 @@
 // Fan predictions (lib/predict.js). GET ?match=<id> returns the tally; POST { match, home, away } records one
 // prediction per connection per match until kick-off. The match must be the next fixture in the matches KV.
 import { KV_KEYS } from '../../lib/feeds.js';
-import { openMatch, parseScore, recordVote, summary } from '../../lib/predict.js';
+import { SUMMARY_TTL, cachedSummary, openMatch, parseScore, recordVote, summary } from '../../lib/predict.js';
+import { json as apiJson } from '../../lib/serve.js';
 
-const json = (body, status = 200, maxAge = 0) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': maxAge ? `public, max-age=${maxAge}` : 'no-store' },
-  });
+const json = (body, status = 200, maxAge = 0) => apiJson(body, status, maxAge, maxAge);
 
 const readMatches = async (env) => JSON.parse((await env.FEEDS.get(KV_KEYS.matches)) || 'null');
 
-export async function onRequestGet({ request, env }) {
+// The tally is read from D1 at most once per SUMMARY_TTL per colo (cachedSummary), so reloading the page
+// cannot run the D1 count over and over and use up the daily read quota. Old app.js only (one deploy):
+// the pages now read the tally from /api/home.
+export async function onRequestGet({ request, env, waitUntil }) {
   const id = new URL(request.url).searchParams.get('match');
   if (!id || !/^\d{1,12}$/.test(id) || !env.VOTES) return json({ error: 'bad request' }, 400);
-  const out = await summary(env.VOTES, await readMatches(env), id);
-  return out ? json(out, 200, 15) : json({ error: 'unknown match' }, 404);
+  try {
+    const out = await cachedSummary({ request, env, waitUntil }, await readMatches(env), id);
+    return out ? json(out, 200, SUMMARY_TTL) : json({ error: 'unknown match' }, 404);
+  } catch {
+    return json({ error: 'unavailable' }, 503);
+  }
 }
 
 export async function onRequestPost({ request, env }) {
@@ -40,7 +44,12 @@ export async function onRequestPost({ request, env }) {
   const local = new URL(request.url).hostname === 'localhost';
   const address = request.headers.get('CF-Connecting-IP') || (local ? '127.0.0.1' : null);
   if (!address) return json({ error: 'unavailable' }, 503);
-  const r = await recordVote(env.VOTES, { secret: env.VOTE_SALT, address, match: open.match, ...score });
-  if (!r.recorded && r.reason === 'burst') return json({ error: 'too many' }, 429);
-  return json({ recorded: r.recorded, duplicate: r.reason === 'duplicate', ...(await summary(env.VOTES, matches, open.match.id)) });
+  try {
+    const r = await recordVote(env.VOTES, { secret: env.VOTE_SALT, address, match: open.match, ...score });
+    if (!r.recorded && (r.reason === 'burst' || r.reason === 'network')) return json({ error: 'too many' }, 429);
+    return json({ recorded: r.recorded, duplicate: r.reason === 'duplicate', ...(await summary(env.VOTES, matches, open.match.id)) });
+  } catch {
+    // D1 unavailable or over its daily quota: nothing was recorded that the visitor can see; they can try later.
+    return json({ error: 'unavailable' }, 503);
+  }
 }

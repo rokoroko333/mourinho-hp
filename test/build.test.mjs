@@ -16,6 +16,8 @@ const DIST = join(ROOT, 'dist');
 let built;
 const build = () => (built ??= promisify(execFile)(process.execPath, [join(ROOT, 'scripts/build.mjs')]));
 const htmlFiles = async () => (await readdir(DIST, { recursive: true })).filter((f) => f.endsWith('.html'));
+// The site's pages: every HTML file but 404.html, which is no page of its own (no sitemap, no share image).
+const pageFiles = async () => (await htmlFiles()).filter((f) => f !== '404.html');
 const page = (path) => readFile(join(DIST, path, 'index.html'), 'utf8');
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
 
@@ -34,6 +36,37 @@ test('built pages keep to the Content-Security-Policy', async () => {
     // JSON inside <script> must not be able to close the tag.
     for (const [, body] of html.matchAll(/<script type="application\/(?:ld\+)?json"[^>]*>([\s\S]*?)<\/script>/g)) {
       assert.ok(!body.includes('<'), `${file}: unescaped < in inline JSON`);
+    }
+  }
+});
+
+// A missing field or translation is printed as "undefined" (esc(undefined), `${e.year}`) rather than failing the
+// build, and a duplicate id makes an in-page link land on the wrong card (maintenance review).
+test('no built page prints a missing value or repeats an element id', async () => {
+  await build();
+  const files = [...(await htmlFiles()), 'sitemap.xml'];
+  assert.ok(files.length > 100, `only ${files.length} files`);
+  for (const file of files) {
+    const text = await readFile(join(DIST, file), 'utf8');
+    // The page's text outside scripts, and separately the values inside its JSON scripts (structured data,
+    // the live strings), where a missing field shows up as null.
+    const outside = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '');
+    const bad = outside.match(/\bundefined\b|\bNaN\b|\[object Object\]|\bnull\b/);
+    assert.equal(bad, null, `${file}: prints "${bad?.[0]}" near "${bad && outside.slice(Math.max(0, bad.index - 60), bad.index + 20)}"`);
+    const json = [...text.matchAll(/<script type="application\/(?:ld\+)?json"[^>]*>([\s\S]*?)<\/script>/g)];
+    // Every page carries structured data, so finding none means the scripts are written differently now.
+    if (file.endsWith('.html') && file !== '404.html') assert.ok(json.length > 0, `${file}: no JSON script found to check`);
+    for (const [, body] of json) {
+      JSON.parse(body, (k, v) => {
+        // A quote with no known year is sent to app.js as `year: null` on purpose (build.mjs, the daily quotes).
+        assert.ok((v !== null || k === 'year') && !(typeof v === 'string' && /^(undefined|NaN|\[object Object\])$|\bundefined\b/.test(v)), `${file}: JSON "${k}" is ${JSON.stringify(v)}`);
+        return v;
+      });
+    }
+    const seen = new Set();
+    for (const [, id] of text.matchAll(/\sid="([^"]*)"/g)) {
+      assert.ok(!seen.has(id), `${file}: id "${id}" used twice`);
+      seen.add(id);
     }
   }
 });
@@ -130,7 +163,7 @@ test('the sitemap lists every built page exactly once, with all four languages',
   await build();
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
   const locs = [...xml.matchAll(/<loc>https:\/\/infinito-mourinho\.pages\.dev([^<]*)<\/loc>/g)].map((m) => m[1]);
-  const pages = (await htmlFiles())
+  const pages = (await pageFiles())
     .map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'))
     .filter((p) => !LIVE_PAGES.includes(p));
   assert.deepEqual([...locs].sort(), [...pages].sort());
@@ -145,7 +178,7 @@ const pngSize = (buf) => ({ width: buf.readUInt32BE(16), height: buf.readUInt32B
 test('every page has a 1200×630 share image that exists, and quotes get their own', async () => {
   await build();
   const quotes = await load('quotes.json');
-  for (const file of await htmlFiles()) {
+  for (const file of await pageFiles()) {
     const html = await readFile(join(DIST, file), 'utf8');
     const image = html.match(/<meta property="og:image" content="https:\/\/infinito-mourinho\.pages\.dev([^"]+)">/)?.[1];
     assert.ok(image, `${file}: og:image`);
@@ -172,19 +205,23 @@ test('share buttons link to each network with the page URL, without loading thir
   for (const [tag] of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.match(tag, /src="\//, 'scripts are same-origin');
 });
 
-test('videos show real thumbnails and play only from hosts the Content-Security-Policy allows', async () => {
+test('videos show thumbnails from our own site and play only from hosts the Content-Security-Policy allows', async () => {
   await build();
   const videos = await load('videos.json');
   const csp = (await readFile(join(ROOT, 'src/public/_headers'), 'utf8')).match(/Content-Security-Policy: (.*)/)[1];
   const directive = (name) => csp.match(new RegExp(`${name} ([^;]*)`))[1].split(' ');
-  assert.ok(directive('img-src').includes('https://i.ytimg.com'), 'thumbnails');
+  // Images only from our own site: thumbnails and logos are fetched by `npm run images` and committed, so a
+  // visitor's browser contacts neither YouTube nor ESPN before clicking (security review, #70).
+  assert.deepEqual(directive('img-src'), ["'self'"], 'images from our site only');
   assert.ok(directive('frame-src').includes('https://www.youtube-nocookie.com'), 'player');
   const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
   assert.ok(app.includes('https://www.youtube-nocookie.com/embed/'), 'app.js embeds from the allowed host');
   const home = await page('es');
   for (const v of videos) {
     assert.match(v.id, /^[\w-]{11}$/, `${v.id}: YouTube video id`);
-    assert.ok(home.includes(`src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg"`), `${v.id}: thumbnail`);
+    assert.ok(home.includes(`src="/thumbs/${v.id}.jpg"`), `${v.id}: thumbnail`);
+    const jpg = await readFile(join(DIST, 'thumbs', `${v.id}.jpg`)).catch(() => null);
+    assert.ok(jpg && jpg[0] === 0xff && jpg[1] === 0xd8, `${v.id}: dist/thumbs/${v.id}.jpg is a JPEG (run npm run images)`);
     assert.ok(home.includes(`href="https://www.youtube.com/watch?v=${v.id}"`), `${v.id}: link to YouTube`);
     assert.equal(home.includes(`data-video-id="${v.id}"`), v.embed !== false, `${v.id}: plays in place unless embedding is off`);
   }
@@ -467,6 +504,38 @@ test('the quiz page shows ten questions with their answers and sources in four l
   }
 });
 
+// Stories follow the facts rules like the quotes: a year, every language and a source (CLAUDE.md).
+test('every story has an id, a year, its text in every language and a source', async () => {
+  await build();
+  const episodes = await load('episodes.json');
+  assert.ok(episodes.length > 0);
+  const ids = new Set();
+  for (const e of episodes) {
+    assert.match(e.id, /^[a-z0-9]+(-[a-z0-9]+)*$/, `${e.id}: id`);
+    assert.ok(!ids.has(e.id), `${e.id}: unique`);
+    ids.add(e.id);
+    assert.ok(Number.isInteger(e.year) && e.year >= 1990 && e.year <= new Date().getFullYear(), `${e.id}: year ${e.year}`);
+    for (const l of ['en', 'es', 'pt', 'ja']) {
+      assert.ok(typeof e.title?.[l] === 'string' && e.title[l].trim(), `${e.id}: title in ${l}`);
+      assert.ok(typeof e.text?.[l] === 'string' && e.text[l].trim(), `${e.id}: text in ${l}`);
+    }
+    assert.ok(e.sources?.length > 0, `${e.id}: at least one source`);
+    const html = await page(`stories/${e.id}`);
+    for (const s of e.sources) {
+      assert.match(s.url, /^https:\/\/\S+$/, `${e.id}: source url`);
+      // The date the article itself states, when it states one: never a later republish date (review-lessons #29 #36).
+      if (s.date !== undefined) {
+        assert.match(s.date, /^\d{4}(-\d{2}-\d{2})?$/, `${e.id}: source date`);
+        assert.ok(s.date <= new Date().toISOString().slice(0, 10), `${e.id}: source date ${s.date} is in the future`);
+      }
+      assert.ok(s.publisher, `${e.id}: publisher`);
+      // Shown on the story's own page, like a quote's (the page writes the URL HTML-escaped).
+      const href = s.url.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+      assert.ok(html.includes(`href="${href}"`), `${e.id}: source ${s.url} on its page`);
+    }
+  }
+});
+
 // Numbers follow the facts rules: every one has a source, records add up, and eras exist.
 test('every stat has a source, a consistent record and a known era', async () => {
   const stats = await load('stats.json');
@@ -497,6 +566,8 @@ test('every stat has a source, a consistent record and a known era', async () =>
   const c = stats.current;
   sourced(c, 'current');
   assert.ok(eras.has(c.era) && !seen.has(c.era), `current: ${c.era} is a known era not in the table`);
+  // On a move the new club's era is added last in history.json; the current record must follow it.
+  assert.equal(c.era, (await load('history.json')).at(-1).id, 'current: the era of the current club (the last in history.json)');
   assert.match(c.asOf, /^\d{4}-\d{2}-\d{2}$/, 'current: as-of date');
   assert.equal(c.wins + c.draws + c.losses, c.matches, 'current adds up');
   for (const r of stats.records) {
@@ -688,4 +759,42 @@ test('month pages list their events with sources and their quotes, and the home 
       assert.ok(html.includes(`/${q.id}/"`), `${lang}: ${q.id} on its month page`);
     }
   }
+});
+
+// Without 404.html, Pages answers any unknown path with the home page and status 200 (security review).
+test('404.html exists, is noindex, out of the sitemap, and links to the home page in every language', async () => {
+  await build();
+  const html = await readFile(join(DIST, '404.html'), 'utf8');
+  assert.match(html, /<meta name="robots" content="noindex">/);
+  const ui = await load('ui.json');
+  for (const [lang, home] of [['en', '/'], ['es', '/es/'], ['pt', '/pt/'], ['ja', '/ja/']]) {
+    const section = html.slice(html.indexOf(`lang="${lang}"`, html.indexOf('<main')));
+    assert.ok(section.includes(`href="${home}"`) && section.includes(ui[lang].notFound.title), `${lang}: title and home link`);
+  }
+  assert.doesNotMatch(await readFile(join(DIST, 'sitemap.xml'), 'utf8'), /404/);
+});
+
+// Logos come from our site too: app.js builds /logos/<id>.png only for ids the build lists, and nothing in
+// the pages or the scripts points a browser at ESPN or YouTube images.
+test('team logos are local PNGs listed for app.js, and no page or script loads third-party images', async () => {
+  await build();
+  const files = (await readdir(join(ROOT, 'src/public/logos'))).filter((f) => f.endsWith('.png'));
+  assert.ok(files.length >= 20, `expected the league logos, found ${files.length}; run npm run images`);
+  // The current club (TEAM_ID, changed on a move) must have one: run npm run images after a move.
+  const { TEAM_ID } = await import('../lib/feeds.js');
+  assert.ok(files.includes(`${TEAM_ID}.png`), `the current club (${TEAM_ID}) has a logo`);
+  for (const f of files) {
+    assert.match(f, /^\d{1,8}\.png$/);
+    const png = await readFile(join(ROOT, 'src/public/logos', f));
+    assert.equal(png.readUInt32BE(0), 0x89504e47, `${f}: PNG`);
+  }
+  const home = await page('');
+  const ids = JSON.parse(home.match(/<script type="application\/json" id="strings">([\s\S]*?)<\/script>/)?.[1] ?? '{}').logos;
+  assert.deepEqual([...ids].sort(), files.map((f) => f.slice(0, -4)).sort());
+  const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
+  assert.ok(app.includes('/logos/${t.id}.png'), 'app.js uses the local logo');
+  for (const file of await htmlFiles()) {
+    assert.doesNotMatch(await readFile(join(DIST, file), 'utf8'), /i\.ytimg\.com|espncdn\.com/, `${file}: no third-party image`);
+  }
+  assert.doesNotMatch(app, /i\.ytimg\.com|espncdn\.com/, 'app.js: no third-party image');
 });

@@ -22,22 +22,25 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 - `lib/feeds.js` ニュースと試合日程をサーバー側で取得する。現所属クラブの `TEAM_ID`（86 = Real Madrid）は移籍したら変える。
   一緒に直す場所は同じファイルのコメントにあり、`test/rules.test.mjs` が言語ごとの直し忘れを落とす。
 - `workers/feeds/` Cron Trigger（20分ごと）で `FEEDS` KV に JSON を書く Worker。空の結果では上書きしない。
-  `functions/api/*` がそれを返し、ブラウザが呼ぶのは自サイトの `/api/*` だけ。
+  `functions/api/*` と `/matches/` の Function がそれを返し、ブラウザが呼ぶのは自サイトの `/api/*` だけ。
+  ファン予想（`lib/predict.js`）は D1 `VOTES` に書き、Worker が30日後に個々の票を消す。
 - `docs/dev-flow.md` 開発フローの詳細と、決まりごとにどのファイルが正本か。`docs/review-lessons.md` 過去の指摘メモ。
   `docs/feature-map.md` どのページに何があり、何で検証するかの地図。
   `docs/skill-evals.md`・`docs/context-evals.md`・`docs/design-evals.md` レビュー用スキル、CLAUDE.md、設計判断用スキルを変えるときの評価。
 - `.claude/skills/pr-review/` AIレビューの指示（レビューのスレッドでだけ使う）。`.claude/skills/verify-flow/` 実画面での検証（`test/flows/`）。`.claude/skills/design-debate/` 着手前の設計判断。`.claude/hooks/verify.sh` 作業終了時の自動検証。
 
-デプロイ手順（Pages プロジェクト `infinito-mourinho`、Worker `infinito-mourinho-feeds`、共有の KV `FEEDS`）は `README.md` を読む。
+デプロイの順番と、作成済みのリソース（Pages `infinito-mourinho`、Worker `infinito-mourinho-feeds`、KV `FEEDS`、
+D1 `VOTES`、secret `VOTE_SALT`）は `README.md` を読む。ローカル開発の落とし穴（ポートの取り合い、キャッシュ）も README にある。
 
 ## コマンド
 
 - 依存の導入: `npm ci`（wrangler のみ、開発用）
 - ビルド: `npm run build`。`SITE_URL` に本番のオリジンを設定する（未設定なら pages.dev の URL）
 - テスト: `npm test`（`node --test`。フィード解析、ビルド結果、`test/rules.test.mjs` の決まりのチェック）
-- ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み）
+- ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み。ほかのプロジェクトと取り合うことがある: README）
 - 実画面の検証: `npm run dev` のあと `npm run verify`（`test/flows/*.json`、PASS・FAIL・BLOCKED を返す）
 - Worker のローカル実行: `npm run feeds:dev` のあと `curl "http://localhost:8787/__scheduled"`
+- 本番の Worker のログ: `npx wrangler tail --config workers/feeds/wrangler.toml`
 
 lint と型チェックのスクリプトはまだない。`package.json` に存在するスクリプトだけが、Hooks で自動実行されます。
 
@@ -50,12 +53,14 @@ lint と型チェックのスクリプトはまだない。`package.json` に存
    大きめの作業だけ、計画をチェックリストで示してから実装する。
    依頼や計画に「着手前にオーナーと決めること」がある機能や、作り方が2つ以上あってオーナーに選んでもらう機能は、`design-debate` スキルで論点を割り、推奨案つきで聞いてから実装する。
 4. ブランチを切って作業する。広い調査はサブエージェントに任せ、要約だけ受け取る。
-5. lint・型チェック・テストが通るまで完了としない（Hooks が自動で確認する）。
-   Hooks は1回だけ完了を止め、2回目は無限ループを避けて通す。通ったあとも失敗が残っていれば、
-   完了とせず、失敗をそのまま PR の「検証結果」に書いてユーザーに伝える。
+5. lint・型チェック・テストが通るまで完了としない（Hooks が自動で確認する。挙動は `docs/dev-flow.md` の 4）。
+   失敗が残っていれば、完了とせず、失敗をそのまま PR の「検証結果」に書いてユーザーに伝える。
    「できました」という自己申告ではなく、緑になった結果を PR に書く。
+   テストと検証フローは、対象が見つからないと黙って通る形にしない。見つけた件数を確かめ、わざと壊して落ちることを確かめる。
+   照合はキーや共通の class でなく中身（パス、消えたら困る文字列そのもの）で行う。
 6. PR は `.github/pull_request_template.md` に沿って書き、「壊れる条件」も埋める。CI が落ちたら自分で直す。
-7. ユーザーに報告する前に、**実装とは別のスレッド**で `pr-review` スキルを使って AI レビューを受ける。
+7. ユーザーに報告する前に、**実装とは別のスレッド**で `pr-review` スキルによる AI レビューを受ける
+   （手段はクラウドのルーティン。起動と待ち方は `docs/dev-flow.md` の 6）。
    「必須」の指摘がなくなるまで直して再レビューする。3周で終わらなければユーザーに判断を仰ぐ。
 8. レビューが「合格」になったら、最終確認を依頼する前に、学びを `docs/review-lessons.md` に
    1行ずつ追記して同じ PR にコミットする（マージ後に別の PR を作らない）。
@@ -70,6 +75,7 @@ lint と型チェックのスクリプトはまだない。`package.json` に存
 - 名言・エピソード・経歴は検証できる事実だけを書く。年や細部が不確かなら書かない。
 - ページはサーバー側で描画する。内容は HTML に含め、JS は補助に限る。
 - ブラウザの言語で自動リダイレクトしない（SEO に悪い）。`app.js` は閉じられる提案バナーを出すだけ。
+- 色・書体・赤の使い方は `docs/design.md` に従う。
 
 ## 運用のルール
 

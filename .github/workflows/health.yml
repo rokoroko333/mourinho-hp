@@ -1,0 +1,31 @@
+# Every hour: fails when production's news or matches have not been refreshed for two hours (scripts/health.mjs),
+# so GitHub emails the owner instead of the site quietly serving old data. Read-only: one GET to /api/home.
+# GitHub turns off scheduled workflows after 60 days without activity in the repository; the weekly routines
+# keep it active, and it can be turned on again from the Actions tab.
+name: Health
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A late run never overlaps the next one, so one outage does not send two emails at once.
+concurrency:
+  group: health
+  cancel-in-progress: false
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+      - run: node scripts/health.mjs

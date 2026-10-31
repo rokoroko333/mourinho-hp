@@ -1,12 +1,14 @@
 // Static site generator: renders src/content/*.json into dist/ as plain HTML, one copy per language.
 // No framework and no runtime dependencies, so the build runs anywhere `node` does (including Cloudflare Pages).
-import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm, cp, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL, MATCH_TIME_ZONE, MATCH_CITY } from '../lib/feeds.js';
 import { withYears, pickOnThisDay, quizQuestions, dealQuiz } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+// Team logos served from our site (`npm run images`), by ESPN team id.
+const LOGO_IDS = (await readdir(join(ROOT, 'src/public/logos'))).filter((f) => /^\d+\.png$/.test(f)).map((f) => f.slice(0, -4)).sort((x, y) => x - y);
 const OUT = join(ROOT, 'dist');
 // Production origin, used for canonical/hreflang/sitemap. Set SITE_URL in the Pages build settings
 // once the custom domain is decided.
@@ -20,7 +22,7 @@ const [ui, quotes, episodes, history, videos, trophies, stats, remarks, rivals, 
 );
 // In calendar order (month and day), then by year.
 onThisDay.sort((a, b) => a.date.slice(5).localeCompare(b.date.slice(5)) || a.date.localeCompare(b.date));
-// Newest first. Added by hand with their sources, never from the feeds (docs/plans/phase2.md, item 6).
+// Newest first. Added by hand with their sources, never from the feeds (docs/plans/archive/phase2.md, item 6).
 remarks.sort((a, b) => b.date.localeCompare(a.date));
 
 withYears(quotes);
@@ -165,12 +167,13 @@ function quoteBody(q, lang) {
 // The tagline in the quote marks of the language it is written in: the Japanese pages keep the English one.
 const taglineText = (u) => fill(u.tagline === ui.en.tagline ? ui.en.quoteMarks : u.quoteMarks, { text: u.tagline });
 
-// A link to the video on YouTube with its real thumbnail, so it works without JavaScript. app.js swaps
-// in a youtube-nocookie player on click, except for videos whose owner disabled embedding.
+// A link to the video on YouTube, so it works without JavaScript. The thumbnail is served from our site
+// (src/public/thumbs/, `npm run images`), so the browser contacts YouTube only when the visitor clicks: app.js
+// then swaps in a youtube-nocookie player, except for videos whose owner disabled embedding.
 // Every id was checked to exist with YouTube's oEmbed endpoint (401 there means embedding is off).
 function videoCard(v, lang) {
   return `<a class="card card-link video" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener"${v.embed === false ? '' : ` data-video-id="${esc(v.id)}"`}>
-      <span class="video-thumb"><img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
+      <span class="video-thumb"><img src="/thumbs/${esc(v.id)}.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
       <h3>${esc(v.title[lang])}</h3>
       <p class="card-label">YouTube · ${esc(v.channel)}</p>
     </a>`;
@@ -186,6 +189,8 @@ function liveStrings(lang) {
     // Kick-off times in the club's own time zone, whatever the visitor's (lib/feeds.js).
     timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY[lang] }),
     predict: ui[lang].predict,
+    // ESPN team ids with a logo served from our site (src/public/logos/, `npm run images`); others get none.
+    logos: LOGO_IDS,
   };
 }
 const stringsScript = (lang) =>
@@ -329,7 +334,7 @@ ${header(lang, pathsOf('quotes'), 'quotes')}
     <div class="grid grid-2">
       ${episodes
         .map(
-          (e) => `<a class="card card-link" id="${e.id}" href="${detailPaths('stories', e.id)[lang]}">
+          (e) => `<a class="card card-link" id="story-${e.id}" href="${detailPaths('stories', e.id)[lang]}">
         <p class="card-label">${e.year}</p>
         <h3>${esc(e.title[lang])}</h3>
         <p class="muted">${esc(e.text[lang])}</p>
@@ -498,11 +503,12 @@ function detailPage(lang, kind, id) {
       title: `${fill(d.storyTitle, { title: e.title[lang] })} | ${u.siteName}`,
       description: clip(e.text[lang], 160),
     };
-    mainEntity = { '@type': 'Article', headline: e.title[lang], description: t.description, inLanguage: lang, about: MOURINHO };
+    mainEntity = { '@type': 'Article', headline: e.title[lang], description: t.description, inLanguage: lang, about: MOURINHO, citation: e.sources.map((s) => s.url) };
     shareText = `${e.title[lang]} — José Mourinho`;
     body = `<p class="card-label">${esc(d.storyLabel)} · ${e.year}</p>
     <h1 class="detail-title">${esc(e.title[lang])}</h1>
-    <p class="detail-text">${esc(e.text[lang])}</p>`;
+    <p class="detail-text">${esc(e.text[lang])}</p>
+    ${sourceList(e.sources, lang)}`;
   }
   return `${head(lang, paths, t, { mainEntity, ...(image && { image, imageAlt: shareText }) })}
 <body data-lang="${lang}">
@@ -627,7 +633,7 @@ function eraRecord(eraId, lang) {
     </div>`;
 }
 
-// Numbers only from stats.json, each with its sources and the date it holds for (docs/plans/phase2.md, item 3).
+// Numbers only from stats.json, each with its sources and the date it holds for (docs/plans/archive/phase2.md, item 3).
 function statsPage(lang) {
   const u = ui[lang];
   const p = u.stats;
@@ -729,7 +735,7 @@ ${header(lang, pathsOf('remarks'), 'remarks')}
 ${footer(lang)}`;
 }
 
-// Quiz (docs/plans/phase3.md): one question per sourced trophy, nothing new to source. The HTML holds ten
+// Quiz (#50): one question per sourced trophy, nothing new to source. The HTML holds ten
 // questions dealt by the build's day, each with its answer and sources in a <details>, so it works without
 // JS; app.js marks answers, keeps the score and deals ten more from the embedded list.
 const QUIZ_SIZE = 10;
@@ -917,7 +923,7 @@ function fuzzyDate(date, lang) {
   return date;
 }
 
-// Head-to-head from Mourinho's side, exactly as one source counted it on its date (docs/plans/phase2.md, item 4).
+// Head-to-head from Mourinho's side, exactly as one source counted it on its date (docs/plans/archive/phase2.md, item 4).
 // A rival's name as each language writes it: the name itself, or its local form (`localName`, e.g. katakana).
 const rivalName = (r, lang) => r.localName?.[lang] ?? r.name;
 
@@ -1085,7 +1091,7 @@ ${footer(lang)}`;
 
 // /news/ is a shell that app.js fills from /api/news. Its content changes all the time and only the heading
 // is in the HTML, so it is noindex and left out of the sitemap: leaving it out alone would not keep it out
-// of search, since every page links to it (docs/plans/phase2.md, item 7).
+// of search, since every page links to it (docs/plans/archive/phase2.md, item 7).
 function newsPage(lang) {
   const u = ui[lang];
   const p = u.news;
@@ -1187,6 +1193,30 @@ const routes = [
 for (const { paths, render: page } of [...routes, ...liveRoutes]) {
   for (const lang of LANGS) await write(join(paths[lang], 'index.html'), page(lang));
 }
+// Without a 404.html, Pages answers any unknown path with the home page and status 200, so anyone could hand
+// out a made-up address that looks like a page of the site. The visitor's language is not known here, so the
+// page says it in all four, each linking to that language's home. Not in the sitemap, and noindex.
+await write('404.html', `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>${esc(ui.en.notFound.title)} | ${esc(ui.en.siteName)}</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body data-lang="en">
+<main class="wrap page">
+${LANGS.map((l) => `  <section class="section" lang="${l}">
+    <h1>${esc(ui[l].notFound.title)}</h1>
+    <p>${esc(ui[l].notFound.text)}</p>
+    <p class="more"><a href="${pathOf(l, 'home')}">${esc(ui[l].notFound.home)} ${icon.arrow}</a></p>
+  </section>`).join('\n')}
+</main>
+</body>
+</html>
+`);
 await write('sitemap.xml', sitemap(routes));
 await write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 

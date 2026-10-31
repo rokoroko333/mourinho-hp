@@ -6,12 +6,14 @@
     "build": "node scripts/build.mjs",
     "screenshot": "node scripts/screenshot.mjs",
     "og": "node scripts/og.mjs",
+    "images": "node scripts/images.mjs",
     "test": "node --test test/*.test.mjs",
     "dev": "npm run build && wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist",
     "feeds:dev": "wrangler dev --config workers/feeds/wrangler.toml --test-scheduled",
     "feeds:deploy": "wrangler deploy --config workers/feeds/wrangler.toml",
-    "verify": "node scripts/verify.mjs"
+    "verify": "node scripts/verify.mjs",
+    "health": "node scripts/health.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"

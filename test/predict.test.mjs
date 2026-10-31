@@ -1,14 +1,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
-import { BURST_LIMIT, connectionOf, keyedHash, openMatch, outcomeOf, parseScore, purge, recordVote, summary } from '../lib/predict.js';
+import { BURST_LIMIT, NETWORK_LIMIT, networkOf, connectionOf, keyedHash, openMatch, outcomeOf, parseScore, purge, recordVote, summary } from '../lib/predict.js';
 import { onRequestGet, onRequestPost } from '../functions/api/predict.js';
+import { onRequestGet as homeGet } from '../functions/api/home.js';
+import { KV_KEYS } from '../lib/feeds.js';
 
 // A stand-in for D1 on Node's own SQLite, with the real schema: prepare(sql).bind(...).first() / run() / all().
 async function fakeD1() {
   const db = new DatabaseSync(':memory:');
-  db.exec(await readFile(new URL('../migrations/0001_predictions.sql', import.meta.url), 'utf8'));
+  // Every migration, in order, as D1 applies them.
+  for (const f of (await readdir(new URL('../migrations/', import.meta.url))).filter((f) => f.endsWith('.sql')).sort()) {
+    db.exec(await readFile(new URL(`../migrations/${f}`, import.meta.url), 'utf8'));
+  }
   const prepare = (sql) => ({
     sql,
     bind: (...args) => ({
@@ -53,11 +58,16 @@ test('a vote is for the next match only, with a set kick-off still ahead', () =>
   assert.equal(openMatch(matches, '401', Date.parse('2026-11-01T15:15Z')).error, 'closed at kick-off');
   assert.equal(openMatch({ next: { ...madridAway, timeTbd: true } }, '401', now).error, 'kick-off time not set');
   assert.equal(openMatch({ next: { ...madridAway, away: { id: '1' } } }, '401', now).status, 409);
+  // A kick-off that does not parse never closes, so it is refused like an unset time.
+  assert.equal(openMatch({ next: { ...madridAway, date: 'soon' } }, '401', now).error, 'kick-off time not set');
 });
 
 test('scores are whole numbers from 0 to 15', () => {
-  assert.deepEqual(parseScore({ home: '1', away: 2 }), { home: 1, away: 2 });
-  for (const bad of [{ home: -1, away: 0 }, { home: 1.5, away: 0 }, { home: 16, away: 0 }, { home: 'x', away: 0 }, {}]) assert.equal(parseScore(bad), null);
+  assert.deepEqual(parseScore({ home: 1, away: 2 }), { home: 1, away: 2 });
+  // Numbers only: strings, null, '' and booleans are refused rather than read as 0 or 1.
+  for (const bad of [{ home: -1, away: 0 }, { home: 1.5, away: 0 }, { home: 16, away: 0 }, { home: 'x', away: 0 }, { home: '1', away: 2 }, { home: null, away: '' }, { home: true, away: 0 }, {}, null]) {
+    assert.equal(parseScore(bad), null, JSON.stringify(bad));
+  }
 });
 
 test('outcomes read from the club side, home or away', () => {
@@ -182,5 +192,93 @@ test('the predict endpoint refuses other sites, non-JSON, bad scores, closed mat
     assert.equal((await onRequestGet({ request: new Request('https://site.example/api/predict?match=x'), env })).status, 400);
   } finally {
     Date.now = realNow;
+  }
+});
+
+test('one IPv6 /48 may cast at most NETWORK_LIMIT votes per match; IPv4 has no such limit', async () => {
+  assert.equal(networkOf('2001:db8:1:2:aaaa::1'), '2001:db8:1::/48');
+  assert.equal(networkOf('203.0.113.7'), null);
+  const db = await fakeD1();
+  const results = [];
+  // Each /64 in the /48 is a new "connection", as a tunnel broker would hand out.
+  for (let i = 0; i < NETWORK_LIMIT + 2; i++) results.push((await vote(db, `2001:db8:1:${(i + 1).toString(16)}::1`, 1, 0)).reason ?? 'ok');
+  assert.equal(results.filter((r) => r === 'ok').length, NETWORK_LIMIT);
+  assert.deepEqual(results.slice(-2), ['network', 'network']);
+  assert.equal((await vote(db, '2001:db8:2:1::1', 1, 0)).recorded, true, 'another /48 still votes');
+  assert.equal((await vote(db, '203.0.113.9', 1, 0)).recorded, true, 'IPv4 is not limited by network');
+  assert.equal(db.db.prepare('SELECT COUNT(DISTINCT network) AS n FROM votes WHERE network IS NOT NULL').get().n, 2);
+  assert.doesNotMatch(JSON.stringify(db.db.prepare('SELECT * FROM votes').all()), /2001:db8|203\.0/, 'only keyed hashes are stored');
+  // The count is the votes themselves, so it goes with them at the purge.
+  await purge(db, Date.parse('2026-12-02T00:00:00Z'));
+  assert.equal(db.db.prepare('SELECT COUNT(*) AS n FROM votes').get().n, 0);
+});
+
+test('the endpoint answers 429 past the /48 limit, 503 when D1 fails, and caches the tally it reads', async () => {
+  const realNow = Date.now;
+  Date.now = () => now;
+  const db = await fakeD1();
+  const env = { VOTES: db, VOTE_SALT: 's3cret', FEEDS: { get: async () => JSON.stringify(matches) } };
+  const post = (ip, e = env) => onRequestPost({ request: new Request('https://site.example/api/predict', { method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify({ match: '401', home: 1, away: 0 }) }), env: e });
+  const realCaches = globalThis.caches;
+  const store = new Map();
+  globalThis.caches = { default: { match: async (r) => store.get(r.url)?.clone(), put: async (r, res) => store.set(r.url, res) } };
+  try {
+    for (let i = 0; i < NETWORK_LIMIT; i++) assert.equal((await post(`2001:db8:5:${(i + 1).toString(16)}::1`)).status, 200);
+    assert.equal((await post('2001:db8:5:ffff::1')).status, 429);
+    // D1 throwing (down, or over its daily quota) is a 503, not an exception.
+    const broken = { ...env, VOTES: { prepare: () => { throw new Error('D1_ERROR: quota'); } } };
+    assert.equal((await post('7.7.7.7', broken)).status, 503);
+    const get = (e) => onRequestGet({ request: new Request('https://site.example/api/predict?match=401'), env: e, waitUntil: () => {} });
+    assert.equal((await get(broken)).status, 503);
+    // The tally is read once and then served from the cache: a new vote does not show until the TTL.
+    assert.equal((await (await get(env)).json()).total, NETWORK_LIMIT);
+    await post('8.8.8.8');
+    assert.equal((await (await get(env)).json()).total, NETWORK_LIMIT, 'cached');
+  } finally {
+    globalThis.caches = realCaches;
+    Date.now = realNow;
+  }
+});
+
+test('the kick-off is stored normalised, so the purge finds it whatever form the feed used', async () => {
+  const db = await fakeD1();
+  await recordVote(db, { secret: 's3cret', address: '1.1.1.1', match: { ...madridAway, date: '2026-11-01T15:15Z' }, home: 1, away: 2, now });
+  assert.equal(db.db.prepare('SELECT kickoff FROM votes').get().kickoff, '2026-11-01T15:15:00.000Z');
+});
+
+test('/api/home answers the news, the matches and the tallies in one response, with the API headers', async () => {
+  const db = await fakeD1();
+  await vote(db, '1.1.1.1', 1, 2);
+  const kv = { [KV_KEYS.news]: JSON.stringify({ items: [{ title: 'Mourinho', link: 'https://x' }] }), [KV_KEYS.matches]: JSON.stringify(matches) };
+  const env = { VOTES: db, FEEDS: { get: async (k) => kv[k] ?? null } };
+  const realCaches = globalThis.caches;
+  const store = new Map();
+  globalThis.caches = { default: { match: async (r) => store.get(r.url)?.clone(), put: async (r, res) => store.set(r.url, res) } };
+  const waits = [];
+  const ctx = (url) => ({ request: new Request(url), env, waitUntil: (p) => waits.push(p) });
+  try {
+    const res = await homeGet(ctx('https://site.example/api/home?lang=ja'));
+    assert.equal(res.status, 200);
+    assert.equal(res.headers.get('X-Content-Type-Options'), 'nosniff');
+    assert.match(res.headers.get('Content-Security-Policy'), /default-src 'none'/);
+    const body = await res.json();
+    assert.equal(body.news.items[0].title, 'Mourinho');
+    assert.equal(body.matches.next.id, '401');
+    assert.equal(body.predict['401'].total, 1);
+    assert.equal((await homeGet(ctx('https://site.example/api/home?lang=xx'))).status, 400);
+    await Promise.all(waits);
+    // Another language or a random query is the same cache entry; the D1 count does not run again.
+    await vote(db, '2.2.2.2', 0, 0);
+    assert.equal((await (await homeGet(ctx('https://site.example/api/home?lang=es&x=1'))).json()).predict['401'].total, 1);
+    // With D1 failing, the news and the matches still go out, without tallies.
+    store.clear();
+    const broken = { ...env, VOTES: { prepare: () => { throw new Error('D1_ERROR'); } } };
+    const res2 = await homeGet({ request: new Request('https://site.example/api/home?lang=en'), env: broken, waitUntil: () => {} });
+    const body2 = await res2.json();
+    assert.equal(res2.status, 200);
+    assert.ok(body2.news && body2.matches);
+    assert.deepEqual(body2.predict, {});
+  } finally {
+    globalThis.caches = realCaches;
   }
 });

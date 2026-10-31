@@ -13,7 +13,14 @@
       "es": "Sancionado sin banquillo para una eliminatoria de Champions ante el Bayern, se dijo que se coló en el vestuario del Chelsea escondido en el cesto de la ropa del utillero.",
       "pt": "Castigado sem banco para uma eliminatória da Champions com o Bayern, terá entrado no balneário do Chelsea escondido no cesto da roupa do roupeiro.",
       "ja": "チャンピオンズリーグのバイエルン・ミュンヘン戦でベンチ入りを禁じられていたが、用具係の洗濯かごに隠れてチェルシーのロッカールームに入り込んだと広く報じられた。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11095/11612678/jose-mourinho-explains-how-he-hid-in-laundry-basket-to-escape-ban-while-at-chelsea",
+        "publisher": "Sky Sports",
+        "date": "2019-01-20"
+      }
+    ]
   },
   {
     "id": "special-one",
@@ -29,7 +36,14 @@
       "es": "En su primera rueda de prensa en el Chelsea soltó 'creo que soy especial' y se adueñó de los titulares durante dos décadas.",
       "pt": "Na primeira conferência de imprensa no Chelsea disse 'acho que sou especial' e dominou as manchetes durante duas décadas.",
       "ja": "チェルシーでの最初の記者会見で、イングランドのメディアに「自分はスペシャル・ワンだと思う」と語った。その後20年にわたり、見出しを独占した。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/15116/11522231/special-one-remembering-jose-mourinho-s-first-ever-chelsea-press-conference",
+        "publisher": "Sky Sports",
+        "date": "2018-10-18"
+      }
+    ]
   },
   {
     "id": "old-trafford-run",
@@ -45,23 +59,47 @@
       "es": "Cuando el gol de Costinha eliminó al Manchester United de la Champions, el técnico del Oporto corrió por la banda con su abrigo: la imagen que lo presentó al mundo.",
       "pt": "Quando o golo de Costinha eliminou o Manchester United da Champions, o treinador do FC Porto correu pela linha lateral de sobretudo: a imagem que o apresentou ao mundo.",
       "ja": "コスチーニャの終盤のゴールでマンチェスター・ユナイテッドがチャンピオンズリーグから敗退すると、ポルトの監督はオーバーコート姿でタッチライン沿いを駆け抜けた。この姿が彼を世界に知らしめた。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11096/10293342/jose-mourinho-appointed-man-utd-manager-his-greatest-old-trafford-moments-so-far",
+        "publisher": "Sky Sports",
+        "date": "2016-05-26"
+      },
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/0250-0c50fb10bb2f-f9c4678eda93-1000--mourinho-s-top-five-champions-league-moments/",
+        "publisher": "UEFA",
+        "date": "2012-11-26"
+      }
+    ]
   },
   {
     "id": "sprinklers",
     "year": 2010,
     "title": {
-      "en": "Dancing in the sprinklers",
-      "es": "Bailando bajo los aspersores",
-      "pt": "A dançar debaixo dos aspersores",
-      "ja": "スプリンクラーの中で踊る"
+      "en": "Running through the sprinklers",
+      "es": "Corriendo bajo los aspersores",
+      "pt": "A correr debaixo dos aspersores",
+      "ja": "スプリンクラーの中を駆ける"
     },
     "text": {
-      "en": "After Inter knocked out Barcelona at Camp Nou, the home side switched on the sprinklers. Mourinho ran across the soaking pitch with his finger in the air.",
-      "es": "Tras eliminar el Inter al Barça en el Camp Nou, encendieron los aspersores. Mourinho cruzó el césped empapado con el dedo al cielo.",
-      "pt": "Depois de o Inter eliminar o Barcelona em Camp Nou, ligaram os aspersores. Mourinho atravessou o relvado encharcado de dedo no ar.",
-      "ja": "インテルがカンプ・ノウでバルセロナを敗退させると、ホーム側はスプリンクラーを作動させた。モウリーニョは指を突き上げ、水浸しのピッチを駆け抜けた。"
-    }
+      "en": "After Inter knocked out Barcelona at Camp Nou, the sprinklers came on. Mourinho ran across the soaking pitch to salute the Inter fans.",
+      "es": "Tras eliminar el Inter al Barça en el Camp Nou, se encendieron los aspersores. Mourinho cruzó el césped empapado para saludar a la afición del Inter.",
+      "pt": "Depois de o Inter eliminar o Barcelona em Camp Nou, os aspersores foram ligados. Mourinho atravessou o relvado encharcado para saudar os adeptos do Inter.",
+      "ja": "インテルがカンプ・ノウでバルセロナを敗退させると、スプリンクラーが作動した。モウリーニョは水浸しのピッチを駆け抜け、インテルのサポーターに応えた。"
+    },
+    "sources": [
+      {
+        "url": "https://www.inter.it/en/news/2020-04-28-10-unforgettable-moments-from-barcelona-inter",
+        "publisher": "Inter",
+        "date": "2020-04-28"
+      },
+      {
+        "url": "https://www.espn.com/sports/soccer/news/_/id/6296093/andre-villas-boas-special-one",
+        "publisher": "ESPN",
+        "date": "2011-04-06"
+      }
+    ]
   },
   {
     "id": "materazzi",
@@ -73,11 +111,23 @@
       "ja": "マテラッツィとの抱擁"
     },
     "text": {
-      "en": "Moments after winning the treble in Madrid, Mourinho stopped his car outside the Bernabéu to hug a tearful Marco Materazzi. Both men cried; he never returned to Inter's bench.",
-      "es": "Minutos después de ganar el triplete en Madrid, Mourinho paró el coche junto al Bernabéu para abrazar a un Materazzi entre lágrimas. Lloraron los dos; nunca volvió al banquillo del Inter.",
-      "pt": "Minutos depois de ganhar o triplete em Madrid, Mourinho parou o carro junto ao Bernabéu para abraçar um Materazzi em lágrimas. Choraram os dois; nunca mais voltou ao banco do Inter.",
-      "ja": "マドリードで3冠を達成した直後、モウリーニョはベルナベウの外で車を止め、涙を流すマルコ・マテラッツィを抱きしめた。2人とも泣いた。彼がインテルのベンチに戻ることはなかった。"
-    }
+      "en": "After winning the treble in Madrid, as he was about to leave the Bernabéu, Mourinho hugged a tearful Marco Materazzi. Both men cried; he never returned to Inter's bench.",
+      "es": "Tras ganar el triplete en Madrid, cuando estaba a punto de irse del Bernabéu, Mourinho abrazó a un Materazzi entre lágrimas. Lloraron los dos; nunca volvió al banquillo del Inter.",
+      "pt": "Depois de ganhar o triplete em Madrid, quando estava prestes a deixar o Bernabéu, Mourinho abraçou um Materazzi em lágrimas. Choraram os dois; nunca mais voltou ao banco do Inter.",
+      "ja": "マドリードで3冠を達成した直後、ベルナベウを去ろうとしていたモウリーニョは、涙を流すマルコ・マテラッツィを抱きしめた。2人とも泣いた。彼がインテルのベンチに戻ることはなかった。"
+    },
+    "sources": [
+      {
+        "url": "https://sport.sky.it/calcio/2017/06/22/giornata-mondiale-abbracci-quelli-storici-nel-calcio",
+        "publisher": "Sky Sport",
+        "date": "2017-06-22"
+      },
+      {
+        "url": "https://www.uefa.com/uefachampionsleague/news/0254-0d7c9fecf8b1-26a2b2b83f20-1000--inter-s-incredible-night-in-madrid/",
+        "publisher": "UEFA",
+        "date": "2010-12-21"
+      }
+    ]
   },
   {
     "id": "handcuffs",
@@ -93,23 +143,40 @@
       "es": "Furioso con el árbitro en un partido ante la Sampdoria, cruzó las muñecas ante las cámaras como si estuviera esposado y se ganó una sanción.",
       "pt": "Furioso com o árbitro num jogo com a Sampdoria, cruzou os pulsos para as câmaras como se estivesse algemado e levou um castigo.",
       "ja": "サンプドリア戦で審判に激怒し、手錠をかけられたように両手首を交差させてカメラに向けた。これでベンチ入り禁止処分を受けた。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://africa.espn.com/football/story/_/id/37459112/jose-mourinho-charged-manchester-united-manager-disciplinary-record",
+        "publisher": "ESPN"
+      }
+    ]
   },
   {
     "id": "medal",
     "year": 2006,
     "title": {
-      "en": "Medals into the crowd",
-      "es": "Medallas a la grada",
-      "pt": "Medalhas para a bancada",
+      "en": "A medal into the crowd",
+      "es": "Medalla a la grada",
+      "pt": "Medalha para a bancada",
       "ja": "メダルを観客席へ"
     },
     "text": {
-      "en": "Celebrating Chelsea's second straight Premier League title, he threw his winner's medal into the stands – and then the replacement too.",
-      "es": "Celebrando la segunda Premier seguida del Chelsea, lanzó su medalla de campeón a la grada... y luego también la de repuesto.",
-      "pt": "A festejar a segunda Premier League seguida do Chelsea, atirou a medalha de campeão para a bancada... e depois também a de substituição.",
-      "ja": "チェルシーのプレミアリーグ連覇を祝う場で、優勝メダルをスタンドに投げ込んだ。さらに代わりのメダルも投げ入れた。"
-    }
+      "en": "Celebrating Chelsea's second straight Premier League title, he threw his winner's medal and his jacket into the crowd.",
+      "es": "Celebrando la segunda Premier seguida del Chelsea, lanzó a la grada su medalla de campeón y su chaqueta.",
+      "pt": "A festejar a segunda Premier League seguida do Chelsea, atirou para a bancada a medalha de campeão e o casaco.",
+      "ja": "チェルシーのプレミアリーグ連覇を祝う場で、優勝メダルとジャケットをスタンドに投げ込んだ。"
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/soccer/story/_/id/37458600/jose-mourinho-top-10-moments-chelsea-boss-stamford-bridge",
+        "publisher": "ESPN",
+        "date": "2016-10-20"
+      },
+      {
+        "url": "https://www.premierleague.com/en/news/4160298/ten-memorable-moments-from-man-utd-v-chelsea",
+        "publisher": "Premier League"
+      }
+    ]
   },
   {
     "id": "eye-poke",
@@ -125,7 +192,18 @@
       "es": "En una tangana de la Supercopa le metió el dedo en el ojo a Tito Vilanova, segundo del Barça: la imagen más polémica de la guerra de Clásicos con Guardiola.",
       "pt": "Numa confusão na Supertaça espanhola, meteu o dedo no olho de Tito Vilanova, adjunto do Barcelona: a imagem mais polémica da guerra de Clássicos com Guardiola.",
       "ja": "スーペルコパ・デ・エスパーニャでのタッチライン際の乱闘中、バルセロナのアシスタントコーチ、ティト・ビラノバの目を突いた。モウリーニョとグアルディオラのクラシコ抗争で最も悪名高い場面である。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.espn.com/football/story/_/id/37508619/barcelona-cult-figure-observer-opens-mourinho-infamous-eye-poke-tito-vilanova",
+        "publisher": "ESPN",
+        "date": "2019-04-30"
+      },
+      {
+        "url": "https://africa.espn.com/football/story/_/id/37459112/jose-mourinho-charged-manchester-united-manager-disciplinary-record",
+        "publisher": "ESPN"
+      }
+    ]
   },
   {
     "id": "little-horse",
@@ -137,11 +215,18 @@
       "ja": "「我々は小さな馬だ」"
     },
     "text": {
-      "en": "Top of the table with Chelsea, he insisted his team was only a 'little horse that needs milk' – a classic way to take pressure off his players.",
-      "es": "Líder con el Chelsea, insistía en que su equipo era solo 'un caballito que necesita leche': su clásica forma de quitar presión a los jugadores.",
-      "pt": "Líder com o Chelsea, insistia que a equipa era apenas 'um cavalinho que precisa de leite': a forma clássica de tirar pressão aos jogadores.",
-      "ja": "チェルシーで首位に立ちながら、自分のチームは「ミルクが必要な小さな馬」にすぎないと言い張った。選手から重圧を取り除く、彼の典型的なやり方である。"
-    }
+      "en": "Chasing the title with Chelsea alongside Manchester City and Arsenal, he insisted his team was only a 'little horse that needs milk' – a classic way to take pressure off his players.",
+      "es": "Peleando la liga con el Chelsea frente al City y el Arsenal, insistía en que su equipo era solo 'un caballito que necesita leche': su clásica forma de quitar presión a los jugadores.",
+      "pt": "Na luta pelo título com o Chelsea, frente ao City e ao Arsenal, insistia que a equipa era apenas 'um cavalinho que precisa de leite': a forma clássica de tirar pressão aos jogadores.",
+      "ja": "チェルシーでマンチェスター・シティ、アーセナルと優勝を争うなか、自分のチームは「ミルクが必要な小さな馬」にすぎないと言い張った。選手から重圧を取り除く、彼の典型的なやり方である。"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/news-media/news/0212-0f8a3dacd54b-3943d9225582-1000--mourinho-makes-it-a-two-and-a-half-horse-race",
+        "publisher": "UEFA",
+        "date": "2014-02-04"
+      }
+    ]
   },
   {
     "id": "specialist-in-failure",
@@ -157,7 +242,14 @@
       "es": "Años de pique con Arsène Wenger culminaron cuando llamó al técnico del Arsenal 'especialista en el fracaso'.",
       "pt": "Anos de rivalidade com Arsène Wenger culminaram quando chamou ao treinador do Arsenal 'especialista em fracassos'.",
       "ja": "アーセン・ヴェンゲルとの長年の確執は、彼がアーセナルの監督を「失敗のスペシャリスト」と呼んだときに頂点に達した。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11668/9166123/jose-mourinho-arsene-wenger-a-specialist-in-failure",
+        "publisher": "Sky Sports",
+        "date": "2014-02-15"
+      }
+    ]
   },
   {
     "id": "ear-cup",
@@ -173,7 +265,14 @@
       "es": "Tras la remontada del Manchester United en el campo de la Juventus, saltó al césped y se llevó la mano a la oreja ante la afición local que lo había insultado toda la noche.",
       "pt": "Depois da reviravolta do Manchester United no estádio da Juventus, entrou no relvado e levou a mão à orelha para os adeptos da casa que o insultaram a noite toda.",
       "ja": "マンチェスター・ユナイテッドがアウェーのユヴェントス戦で終盤に逆転勝ちすると、ピッチに歩み出て、一晩中彼を罵っていたホームのファンに向けて耳に手を当てた。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://africa.espn.com/football/story/_/id/37564349/insulted-90-minutes",
+        "publisher": "ESPN",
+        "date": "2018-11-07"
+      }
+    ]
   },
   {
     "id": "football-heritage",
@@ -189,7 +288,14 @@
       "es": "Cuestionado en el Manchester United, dio una larga lección en rueda de prensa sobre su 'herencia futbolística' y el respeto que merecía.",
       "pt": "Contestado no Manchester United, deu uma longa lição em conferência de imprensa sobre a sua 'herança futebolística' e o respeito que merecia.",
       "ja": "マンチェスター・ユナイテッドで批判を浴びるなか、記者会見で自身の「フットボールの遺産」と、それに払われるべき敬意について長い講義をした。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11667/11292616/jose-mourinho-comes-out-fighting-as-he-defends-man-utd-record",
+        "publisher": "Sky Sports",
+        "date": "2018-03-17"
+      }
+    ]
   },
   {
     "id": "taylor-car-park",
@@ -205,7 +311,14 @@
       "es": "Tras perder la Roma la final de la Europa League ante el Sevilla en los penaltis, increpó al árbitro Anthony Taylor en el aparcamiento del estadio y la UEFA lo sancionó.",
       "pt": "Depois de a Roma perder a final da Liga Europa com o Sevilha nos penáltis, confrontou o árbitro Anthony Taylor no parque do estádio e foi castigado pela UEFA.",
       "ja": "ローマがヨーロッパリーグ決勝でセビージャにPK戦で敗れた後、スタジアムの駐車場でアンソニー・テイラー主審に詰め寄り、UEFAから出場停止処分を受けた。"
-    }
+    },
+    "sources": [
+      {
+        "url": "https://www.skysports.com/football/news/11095/12907108/europa-league-final-roma-manager-jose-mourinho-handed-four-game-uefa-ban-for-anthony-taylor-comments",
+        "publisher": "Sky Sports",
+        "date": "2023-06-21"
+      }
+    ]
   },
   {
     "id": "roma-tears",
@@ -217,10 +330,22 @@
       "ja": "ティラナの涙"
     },
     "text": {
-      "en": "Winning the first Europa Conference League with Roma, he became the first coach to win the Champions League, the UEFA Cup/Europa League and the Conference League – and cried on the bench.",
-      "es": "Al ganar la primera Conference League con la Roma se convirtió en el primer técnico en ganar Champions, UEFA/Europa League y Conference, y lloró en el banquillo.",
-      "pt": "Ao ganhar a primeira Liga Conferência com a Roma tornou-se o primeiro treinador a vencer Champions, Taça UEFA/Liga Europa e Conferência, e chorou no banco.",
-      "ja": "ローマで第1回のヨーロッパ・カンファレンスリーグを制し、チャンピオンズリーグ、UEFAカップ/ヨーロッパリーグ、カンファレンスリーグのすべてを制した初の監督となった。そしてベンチで涙を流した。"
-    }
+      "en": "Winning the first Europa Conference League with Roma, he became the first coach to win the Champions League, the UEFA Cup/Europa League and the Conference League – and was in tears at the final whistle.",
+      "es": "Al ganar la primera Conference League con la Roma se convirtió en el primer técnico en ganar Champions, UEFA/Europa League y Conference, y terminó llorando al pitido final.",
+      "pt": "Ao ganhar a primeira Liga Conferência com a Roma tornou-se o primeiro treinador a vencer Champions, Taça UEFA/Liga Europa e Conferência, e acabou em lágrimas no apito final.",
+      "ja": "ローマで第1回のヨーロッパ・カンファレンスリーグを制し、チャンピオンズリーグ、UEFAカップ/ヨーロッパリーグ、カンファレンスリーグのすべてを制した初の監督となった。試合終了の笛とともに涙を流した。"
+    },
+    "sources": [
+      {
+        "url": "https://www.uefa.com/uefaconferenceleague/news/0275-153b4c3b58ce-9dd2bc95bfd0-1000/",
+        "publisher": "UEFA",
+        "date": "2022-05-25"
+      },
+      {
+        "url": "https://www.uefa.com/uefaeuropaleague/news/0281-1812ecd1d018-1e6b993bc29a-1000--jose-mourinho-eyeing-sixth-uefa-final-win-out-of-six/",
+        "publisher": "UEFA",
+        "date": "2023-05-31"
+      }
+    ]
   }
 ]

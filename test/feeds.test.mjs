@@ -319,3 +319,22 @@ test('an outlet feed that fails is fetched once more, and one that fails twice i
   assert.deepEqual(r.failedOutlets, ['MARCA']);
   assert.ok(r.emptyOutlets.includes('MARCA'));
 });
+
+test('an outlet that answers 404 is not fetched again', async () => {
+  const moved = OUTLETS.find((o) => o.name === 'El Mundo');
+  const tries = new Map();
+  const feeds = fakeFeeds();
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    tries.set(url, (tries.get(url) || 0) + 1);
+    return url === moved.feed ? new Response('gone', { status: 404 }) : feeds(url);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport(new Date('2026-10-28T00:00:00Z'));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(tries.get(moved.feed), 1);
+  assert.deepEqual(r.failedOutlets, ['El Mundo']);
+});

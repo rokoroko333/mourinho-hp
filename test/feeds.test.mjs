@@ -294,7 +294,7 @@ test('the press slots are Spain 7, Portugal 4, England 4, add up to the list, an
   assert.ok([...new Set(merged.map((i) => i.source))].every((s) => count('source', s) <= NEWS_PER_SOURCE));
 });
 
-// One failed fetch of an outlet (AS was missing from one run in production, #66) is retried once; an
+// One failed fetch of an outlet (AS was missing from one run in production, #67) is retried once; an
 // outlet that fails twice is named in the report.
 test('an outlet feed that fails is fetched once more, and one that fails twice is named', async () => {
   const [flaky, down] = [OUTLETS.find((o) => o.name === 'Diario AS'), OUTLETS.find((o) => o.name === 'MARCA')];

@@ -12,12 +12,15 @@
 // Secrets are not set here (README, "Deploying"). SITE_URL is passed through to the build when set.
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { SITE_ORIGIN } from '../lib/site.js';
 
 export const D1_NAME = 'infinito-mourinho-votes';
 
 // Why the repository is not in a state to release from; an empty list means it is.
-export function repoProblems({ branch, dirty, head, remote, tagExists = false, tag = '' }) {
+export function repoProblems({ branch, dirty, head, remote, tagExists = false, tag = '', siteUrl }) {
   const problems = [];
+  // A SITE_URL left in the shell would build canonical links to another address (lib/site.js is the real one).
+  if (siteUrl && siteUrl.replace(/\/$/, '') !== SITE_ORIGIN) problems.push(`SITE_URL is set to ${siteUrl}, not ${SITE_ORIGIN} (unset it)`);
   if (branch !== 'main') problems.push(`on branch ${branch}, not main`);
   if (dirty) problems.push('uncommitted changes (git status)');
   if (head !== remote) problems.push(`HEAD ${head.slice(0, 7)} is not origin/main ${remote.slice(0, 7)} (git pull, or push first)`);
@@ -80,6 +83,7 @@ function main() {
     remote: git('rev-parse', 'origin/main'),
     tag,
     tagExists: git('tag', '-l', tag) !== '',
+    siteUrl: process.env.SITE_URL,
   });
   if (problems.length) {
     console.error(`Not released:\n${problems.map((p) => `- ${p}`).join('\n')}`);
@@ -107,7 +111,7 @@ function main() {
   } catch {
     console.error('Health check failed (see above); the release itself went out.');
   }
-  console.log(`\nReleased as ${tag}. Check the pages: npm run verify -- --base https://infinito-mourinho.pages.dev`);
+  console.log(`\nReleased as ${tag}. Check the pages: npm run verify -- --base ${SITE_ORIGIN}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

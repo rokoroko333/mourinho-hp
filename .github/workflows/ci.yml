@@ -25,3 +25,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      # Bundles the Worker and the Pages Functions with the locked wrangler, without deploying (no login needed),
+      # so a wrangler update or an import that only breaks the bundle fails here, not at release time.
+      - run: npx wrangler deploy --dry-run --outdir "$RUNNER_TEMP/worker" --config workers/feeds/wrangler.toml
+      - run: npx wrangler pages functions build --outdir "$RUNNER_TEMP/functions"

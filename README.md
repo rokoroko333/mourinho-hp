@@ -86,6 +86,24 @@ fails the check, so a stopped cron cannot hide behind it (a KV outage therefore 
 show fresh data). After a club move, all three ESPN schedule URLs for the new
 `TEAM_ID` must answer with an `events` list holding at least one match (comment above `TEAM_ID` in `lib/feeds.js`).
 
+**Free-plan usage**: `.github/workflows/usage.yml` runs `npm run usage` every day at 00:40 UTC. It fails, and GitHub
+emails the owner, when yesterday's use of any daily free limit (Functions requests, KV reads and writes, D1 rows
+read and written) reached 70%; the run's log has the table. It needs the repository secret `CLOUDFLARE_API_TOKEN`,
+set once:
+
+1. Cloudflare dashboard → My Profile → API Tokens → Create Token → "Create Custom Token".
+2. Permissions: **Account** · **Account Analytics** · **Read** (nothing else). Account Resources: the site's account.
+3. Create, copy the token, then GitHub → the repository → Settings → Secrets and variables → Actions →
+   New repository secret, named `CLOUDFLARE_API_TOKEN`.
+
+By hand: `CLOUDFLARE_API_TOKEN=<token> npm run usage` (or `-- 2026-11-01` for another UTC day).
+
+Both scheduled checks (Health and Usage) send their failure emails to the account that last changed the workflow's
+schedule, if its GitHub notification settings include Actions (Settings → Notifications → Actions: "Send
+notifications for failed workflows only"). GitHub turns a schedule off after 60 days without activity in a public
+repository, and then no email comes either: the weekly routines keep the repository active, and the Actions tab shows
+a disabled workflow with a button to turn it back on.
+
 The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
 with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
 
@@ -107,6 +125,12 @@ What is live: `git tag -l 'deploy-*'` (newest last) and `npx wrangler pages depl
 Then fix forward on a branch, and release again.
 
 ## Free plan budget at 15,000 visitors/day
+
+The daily limits the usage check compares against are written once, in `LIMITS` in `scripts/usage.mjs`.
+When the usage check fails: the first limit to come is the Functions requests (one per page view with live data).
+Move to Workers Paid ($5 a month for the account: 10 million requests, 10 million KV reads and 25 billion D1 rows read
+a month included; beyond, $0.30 per million requests and $0.50 per million KV reads). KV writes stay at about 145 a
+day whatever the traffic (two per cron run).
 
 - **Static pages**: unlimited requests and bandwidth on Pages.
 - **Functions** (`/api/*` and `/matches/`): one call per page view with live data (`/api/home`), plus a POST per

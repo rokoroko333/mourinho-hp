@@ -1,5 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { checkHome, MAX_AGE_MS } from '../scripts/health.mjs';
 
 const now = new Date('2026-11-01T12:00:00Z');
@@ -54,4 +56,12 @@ test('readFeed does not seed KV after a failed read, so a live copy never replac
   const body = JSON.parse(await readFeed(down, { key: 'matches', live: async () => ({ next: { id: '1' } }) }));
   assert.equal(body.live, true);
   assert.equal(puts.length, 0);
+});
+
+// The workflow runs the file itself: its exit code must come through main() and the "run directly" check
+// (no network needed: a missing --base value is refused before any request).
+test('node scripts/health.mjs exits with its own code when run directly', () => {
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL('../scripts/health.mjs', import.meta.url)), '--base'], { encoding: 'utf8' });
+  assert.equal(r.status, 2, r.stderr);
+  assert.match(r.stderr, /usage: npm run health/);
 });

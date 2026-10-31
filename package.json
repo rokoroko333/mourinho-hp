@@ -14,7 +14,8 @@
     "feeds:deploy": "wrangler deploy --config workers/feeds/wrangler.toml",
     "verify": "node scripts/verify.mjs",
     "health": "node scripts/health.mjs",
-    "release": "node scripts/release.mjs"
+    "release": "node scripts/release.mjs",
+    "usage": "node scripts/usage.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"

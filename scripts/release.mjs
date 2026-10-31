@@ -86,12 +86,18 @@ function main() {
     process.exit(1);
   }
   if (dryRun) {
-    // Read-only: what the D1 step would apply.
-    exec({ cmd: 'npx', args: ['wrangler', 'd1', 'migrations', 'list', D1_NAME, '--remote'], piped: true });
+    // Read-only: what the D1 step would apply. Not logged in or offline: say so and still show the steps.
+    try {
+      exec({ cmd: 'npx', args: ['wrangler', 'd1', 'migrations', 'list', D1_NAME, '--remote'], piped: true });
+    } catch {
+      console.error('(could not list the pending D1 migrations: npx wrangler login?)');
+    }
   }
   const failed = runSteps(releaseSteps(tag), { run: exec, dryRun });
   if (failed) {
-    console.error(`\nRelease stopped at "${failed}". The steps before it are live; see README.md "Rolling back".`);
+    // Install and tests change nothing in production; from the D1 step on, earlier steps may be live.
+    const live = !['install', 'tests'].includes(failed);
+    console.error(`\nRelease stopped at "${failed}". ${live ? 'The steps before it are live; see README.md "Rolling back".' : 'Nothing was deployed.'}`);
     process.exit(1);
   }
   if (dryRun) return console.log('\n(dry run: nothing was deployed)');

@@ -55,7 +55,7 @@ Log in once with `npx wrangler login`.
 2. applies pending D1 migrations (`migrations/`, remote; the dry run lists them);
 3. deploys the Worker;
 4. deploys Pages;
-5. tags the commit `deploy-<UTC date-time>` and pushes the tag;
+5. tags the commit `deploy-<UTC date-time when the release started>` and pushes the tag;
 6. runs `npm run health`, which only reports.
 
 It stops at the first failure, and nothing after a failed step runs. Details are in `scripts/release.mjs`. Set `SITE_URL=https://<domain>` in the environment
@@ -86,6 +86,11 @@ fails the check, so a stopped cron cannot hide behind it (a KV outage therefore 
 show fresh data). After a club move, all three ESPN schedule URLs for the new
 `TEAM_ID` must answer with an `events` list holding at least one match (comment above `TEAM_ID` in `lib/feeds.js`).
 
+The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
+with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
+
+Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
+
 ## Rolling back
 
 What is live: `git tag -l 'deploy-*'` (newest last) and `npx wrangler pages deployment list --project-name infinito-mourinho`.
@@ -100,11 +105,6 @@ What is live: `git tag -l 'deploy-*'` (newest last) and `npx wrangler pages depl
   It overwrites the current data with that moment's; votes cast since then are lost.
 
 Then fix forward on a branch, and release again.
-
-The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
-with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
-
-Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
 
 ## Free plan budget at 15,000 visitors/day
 

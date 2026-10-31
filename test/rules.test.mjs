@@ -188,9 +188,14 @@ test('the club feeds and the highlights page are those of the current club', asy
   const head = feeds.slice(0, feeds.indexOf('export const TEAM_ID'));
   const [, club] = head.slice(head.lastIndexOf('\n\n')).match(/\(\d+ = ([^)]+)\)/) ?? [];
   assert.ok(club, 'the comment above TEAM_ID no longer says "(<id> = <club>)"; update this test');
-  // How a club is written in a URL: real-madrid, real_madrid, realmadrid.
+  // How a club is written in a URL, as whole words: real-madrid, real_madrid, /realmadrid, @realmadrid. Whole words,
+  // so a short name (Inter) does not match inside another word (international).
   const words = club.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/\s+/);
-  const names = (url) => ['-', '_', ''].some((sep) => url.toLowerCase().includes(words.join(sep)));
+  const names = (url) => {
+    const t = url.toLowerCase().split(/[^a-z0-9]+/);
+    return t.includes(words.join('')) || t.some((_, i) => words.every((w, j) => t[i + j] === w));
+  };
+  assert.ok(names('https://x.com/rss/futbol/' + words.join('-') + '.xml') && !names('https://x.com/' + words.join('') + 'x/'), 'the club-name match');
   const { OUTLETS, HIGHLIGHTS_URL } = await import('../lib/feeds.js');
   const clubFeeds = OUTLETS.filter((o) => o.club);
   assert.ok(clubFeeds.length > 0, 'no feed is marked club: true');

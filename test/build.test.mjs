@@ -48,8 +48,18 @@ test('no built page prints a missing value or repeats an element id', async () =
   assert.ok(files.length > 100, `only ${files.length} files`);
   for (const file of files) {
     const text = await readFile(join(DIST, file), 'utf8');
-    const bad = text.match(/\bundefined\b|\bNaN\b|\[object Object\]|\bnull\b(?![^<]*<\/script>)/);
-    assert.equal(bad, null, `${file}: prints "${bad?.[0]}" near "${bad && text.slice(Math.max(0, bad.index - 60), bad.index + 20)}"`);
+    // The page's text outside scripts, and separately the values inside its JSON scripts (structured data,
+    // the live strings), where a missing field shows up as null.
+    const outside = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '');
+    const bad = outside.match(/\bundefined\b|\bNaN\b|\[object Object\]|\bnull\b/);
+    assert.equal(bad, null, `${file}: prints "${bad?.[0]}" near "${bad && outside.slice(Math.max(0, bad.index - 60), bad.index + 20)}"`);
+    for (const [, body] of text.matchAll(/<script type="application\/(?:ld\+)?json"[^>]*>([\s\S]*?)<\/script>/g)) {
+      JSON.parse(body, (k, v) => {
+        // A quote with no known year is sent to app.js as `year: null` on purpose (build.mjs, the daily quotes).
+        assert.ok((v !== null || k === 'year') && !(typeof v === 'string' && /^(undefined|NaN|\[object Object\])$|\bundefined\b/.test(v)), `${file}: JSON "${k}" is ${JSON.stringify(v)}`);
+        return v;
+      });
+    }
     const seen = new Set();
     for (const [, id] of text.matchAll(/\sid="([^"]*)"/g)) {
       assert.ok(!seen.has(id), `${file}: id "${id}" used twice`);
@@ -507,13 +517,18 @@ test('every story has an id, a year, its text in every language and a source', a
       assert.ok(typeof e.text?.[l] === 'string' && e.text[l].trim(), `${e.id}: text in ${l}`);
     }
     assert.ok(e.sources?.length > 0, `${e.id}: at least one source`);
-    // Shown on the story's own page, like a quote's.
     const html = await page(`stories/${e.id}`);
-    for (const s of e.sources) assert.ok(html.includes(`href="${s.url}"`), `${e.id}: source ${s.url} on its page`);
     for (const s of e.sources) {
       assert.match(s.url, /^https:\/\/\S+$/, `${e.id}: source url`);
-      assert.match(s.date, /^\d{4}(-\d{2}-\d{2})?$/, `${e.id}: source date`);
+      // The date the article itself states, when it states one: never a later republish date (review-lessons #29 #36).
+      if (s.date !== undefined) {
+        assert.match(s.date, /^\d{4}(-\d{2}-\d{2})?$/, `${e.id}: source date`);
+        assert.ok(s.date <= new Date().toISOString().slice(0, 10), `${e.id}: source date ${s.date} is in the future`);
+      }
       assert.ok(s.publisher, `${e.id}: publisher`);
+      // Shown on the story's own page, like a quote's (the page writes the URL HTML-escaped).
+      const href = s.url.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      assert.ok(html.includes(`href="${href}"`), `${e.id}: source ${s.url} on its page`);
     }
   }
 });

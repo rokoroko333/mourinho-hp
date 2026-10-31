@@ -283,3 +283,12 @@ test('every overflow check in the overflow flows is the same check', async () =>
   assert.ok(checks.length >= 10, `expected the overflow checks, found ${checks.length}`);
   assert.equal(new Set(checks).size, 1, 'the overflow checks differ; change every copy together');
 });
+
+// The On this day card is picked twice, by the build (pickOnThisDay) and by app.js on a later day; a limit
+// changed in one place only would show a different number of entries once the day changes.
+test('app.js picks the On this day card with the same limit as scripts/content.mjs', async () => {
+  const { OTD_LIMIT } = await import('../scripts/content.mjs');
+  const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
+  const block = app.slice(app.indexOf("readJson('otd-data')"), app.indexOf('// Quote & story of the day'));
+  assert.match(block, new RegExp(`\\.slice\\(0, ${OTD_LIMIT}\\)`), `app.js should keep at most ${OTD_LIMIT} entries, like OTD_LIMIT`);
+});

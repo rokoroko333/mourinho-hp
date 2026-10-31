@@ -35,9 +35,11 @@ José Mourinho の非公式ファンサイト。旧 Netlify の単一ファイ�
 - 依存の導入: `npm ci`（wrangler のみ、開発用）
 - ビルド: `npm run build`。`SITE_URL` に本番のオリジンを設定する（未設定なら pages.dev の URL）
 - テスト: `npm test`（`node --test`。フィード解析、ビルド結果、`test/rules.test.mjs` の決まりのチェック）
-- ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み）
+- ローカル確認: `npm run dev`（http://localhost:8788、Pages Functions 込み）。8788 は別のプロジェクトも使うので、
+  `curl -s localhost:8788 | grep 'Infinito Mourinho'` で自分のサイトか確かめる。`/matches/` のエッジキャッシュは、サーバーを止めてから `.wrangler/state/v3/cache` を消す
 - 実画面の検証: `npm run dev` のあと `npm run verify`（`test/flows/*.json`、PASS・FAIL・BLOCKED を返す）
 - Worker のローカル実行: `npm run feeds:dev` のあと `curl "http://localhost:8787/__scheduled"`
+- 本番の Worker のログ: `npx wrangler tail --config workers/feeds/wrangler.toml`（`--config` がないと Pages と見なされて失敗する）
 
 lint と型チェックのスクリプトはまだない。`package.json` に存在するスクリプトだけが、Hooks で自動実行されます。
 
@@ -53,6 +55,7 @@ lint と型チェックのスクリプトはまだない。`package.json` に存
    Hooks は1回だけ完了を止め、2回目は無限ループを避けて通す。通ったあとも失敗が残っていれば、
    完了とせず、失敗をそのまま PR の「検証結果」に書いてユーザーに伝える。
    「できました」という自己申告ではなく、緑になった結果を PR に書く。
+   テストと検証フローは、対象が見つからないと黙って通る形にしない。見つけた件数を確かめ、わざと壊して落ちることを確かめる。
 6. PR は `.github/pull_request_template.md` に沿って書き、「壊れる条件」も埋める。CI が落ちたら自分で直す。
 7. ユーザーに報告する前に、**実装とは別のスレッド**で `pr-review` スキルを使って AI レビューを受ける。
    「必須」の指摘がなくなるまで直して再レビューする。3周で終わらなければユーザーに判断を仰ぐ。
@@ -69,6 +72,7 @@ lint と型チェックのスクリプトはまだない。`package.json` に存
 - 名言・エピソード・経歴は検証できる事実だけを書く。年や細部が不確かなら書かない。
 - ページはサーバー側で描画する。内容は HTML に含め、JS は補助に限る。
 - ブラウザの言語で自動リダイレクトしない（SEO に悪い）。`app.js` は閉じられる提案バナーを出すだけ。
+- 色・書体・赤の使い方は `docs/design.md` に従う（色は `styles.css` の `:root` の変数だけで書く）。
 
 ## 運用のルール
 

@@ -59,7 +59,8 @@ shape until the next cron run (at most 20 minutes).
 
 After deploying, check production with `npm run verify -- --base https://infinito-mourinho.pages.dev` (the flows
 never post votes outside localhost) and the Worker's log with `npx wrangler tail --config workers/feeds/wrangler.toml`
-(`outlets:empty`, `outlets:failed`, `feeds:failed`).
+(`outlets:empty`, `outlets:failed`, `feeds:failed`; without `--config`, Wrangler reads `wrangler.toml`, takes the
+project for Pages and fails).
 
 Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
 

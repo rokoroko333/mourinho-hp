@@ -182,6 +182,22 @@ test('migration 0003 starts the counts from the old tallies and the kept votes',
   assert.equal(db.prepare("SELECT votes FROM counts WHERE match_id = '2'").get().votes, 2);
 });
 
+// Code from before 0003 reads `tallies` plus `votes`: the purge keeps feeding `tallies`, all or nothing, so that
+// code (mid-release, or after a rollback) and the new `counts` agree.
+test('the purge also moves the votes into tallies, together with the delete or not at all', async () => {
+  const db = await fakeD1();
+  await vote(db, '1.1.1.1', 1, 2);
+  await vote(db, '2.2.2.2', 1, 2);
+  const oldTotal = () => db.db.prepare("SELECT (SELECT COALESCE(SUM(votes), 0) FROM tallies) + (SELECT COUNT(*) FROM votes) AS n").get().n;
+  db.fail = 1; // the DELETE fails after the INSERT
+  await assert.rejects(purge(db, Date.parse('2026-12-02T00:00:00Z')));
+  assert.equal(oldTotal(), 2, 'nothing counted twice or lost');
+  db.fail = null;
+  await purge(db, Date.parse('2026-12-02T00:00:00Z'));
+  assert.equal(oldTotal(), 2, 'older code sees the same total');
+  assert.equal((await summary(db, matches, '401')).total, 2, 'and so does the summary');
+});
+
 // The Pages Function itself: what it refuses, and that it records through lib/predict.js.
 test('the predict endpoint refuses other sites, non-JSON, bad scores, closed matches, bursts and missing setup', async () => {
   const db = await fakeD1();

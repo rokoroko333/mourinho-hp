@@ -2,7 +2,8 @@
 -- new vote, so the summary reads a few rows per match instead of counting every vote on each read (D1's free plan
 -- allows 5 million rows read a day; counting votes would pass that at about 170 votes a match and 15,000 visits a
 -- day). A vote stays a single statement: the trigger runs inside it, and an ignored duplicate fires nothing.
--- `tallies` (0001) is no longer written or read; it stays so older code keeps working until it is replaced.
+-- `tallies` (0001) is no longer read; the purge still adds to it, so code from before this migration (during a
+-- release, or after a rollback) shows the same numbers.
 CREATE TABLE IF NOT EXISTS counts (
   match_id TEXT NOT NULL,
   home INTEGER NOT NULL,
@@ -15,7 +16,7 @@ INSERT INTO counts (match_id, home, away, votes)
   SELECT match_id, home, away, SUM(n) FROM (
     SELECT match_id, home, away, votes AS n FROM tallies
     UNION ALL SELECT match_id, home, away, COUNT(*) AS n FROM votes GROUP BY match_id, home, away
-  ) GROUP BY match_id, home, away
+  ) WHERE true GROUP BY match_id, home, away
   ON CONFLICT (match_id, home, away) DO NOTHING;
 CREATE TRIGGER IF NOT EXISTS votes_count AFTER INSERT ON votes BEGIN
   INSERT INTO counts (match_id, home, away, votes) VALUES (NEW.match_id, NEW.home, NEW.away, 1)

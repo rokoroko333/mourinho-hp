@@ -124,6 +124,10 @@ account (auto-renew on). The apex and `www` are custom domains of the Pages proj
 - **Rate limit on the API**: zone → Security → WAF → Rate limiting rules (the free plan has one): URI path starts
   with `/api/`, same IP, 60 requests per 10 seconds, block for 10 seconds.
 
+Cloudflare Web Analytics is on for the zone (Cloudflare turned it on with the domain): on the custom domain it
+inserts its beacon (`static.cloudflareinsights.com`, cookieless page views, countries, referrers) into every page,
+which the CSP allows, and nothing else from outside. The numbers are in the dashboard's Web Analytics for the domain.
+
 A redirect done in a Function would run on every request and count toward the Functions limit, so the redirects
 stay in Cloudflare's rules.
 

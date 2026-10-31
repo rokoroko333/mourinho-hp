@@ -1,6 +1,6 @@
 ---
 name: verify-flow
-description: 変更したページを実際に動かして確かめる。src/ や scripts/build.mjs を変えたあと、PR を出す前に、ボタン・メニュー・言語・動画などの動作を npm run verify で検証し、PASS・FAIL・BLOCKED と証拠を PR に書くときに使う。
+description: 変更したページを実際に動かして確かめる。src/・scripts/build.mjs・lib/・functions/ を変えたあと、PR を出す前に、ボタン・メニュー・言語・動画などの動作を npm run verify で検証し、PASS・FAIL・BLOCKED と証拠を PR に書くときに使う。
 ---
 
 # 実画面での検証

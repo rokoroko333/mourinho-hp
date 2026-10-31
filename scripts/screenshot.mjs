@@ -28,7 +28,7 @@ function parseArgs(argv) {
     else if (argv[i] === '--pr') opts.pr = Number(argv[++i]);
     else opts.paths.push(argv[i]);
   }
-  if (!opts.paths.length) opts.paths = ['/', '/es/', '/pt/'];
+  if (!opts.paths.length) opts.paths = ['/', '/es/', '/pt/', '/ja/'];
   if (opts.pr !== null && !Number.isInteger(opts.pr)) throw new Error('--pr needs a PR number');
   return opts;
 }

@@ -20,7 +20,7 @@ const [ui, quotes, episodes, history, videos, trophies, stats, remarks, rivals, 
 );
 // In calendar order (month and day), then by year.
 onThisDay.sort((a, b) => a.date.slice(5).localeCompare(b.date.slice(5)) || a.date.localeCompare(b.date));
-// Newest first. Added by hand with their sources, never from the feeds (docs/plans/phase2.md, item 6).
+// Newest first. Added by hand with their sources, never from the feeds (docs/plans/archive/phase2.md, item 6).
 remarks.sort((a, b) => b.date.localeCompare(a.date));
 
 withYears(quotes);
@@ -627,7 +627,7 @@ function eraRecord(eraId, lang) {
     </div>`;
 }
 
-// Numbers only from stats.json, each with its sources and the date it holds for (docs/plans/phase2.md, item 3).
+// Numbers only from stats.json, each with its sources and the date it holds for (docs/plans/archive/phase2.md, item 3).
 function statsPage(lang) {
   const u = ui[lang];
   const p = u.stats;
@@ -729,7 +729,7 @@ ${header(lang, pathsOf('remarks'), 'remarks')}
 ${footer(lang)}`;
 }
 
-// Quiz (docs/plans/phase3.md): one question per sourced trophy, nothing new to source. The HTML holds ten
+// Quiz (#50): one question per sourced trophy, nothing new to source. The HTML holds ten
 // questions dealt by the build's day, each with its answer and sources in a <details>, so it works without
 // JS; app.js marks answers, keeps the score and deals ten more from the embedded list.
 const QUIZ_SIZE = 10;
@@ -917,7 +917,7 @@ function fuzzyDate(date, lang) {
   return date;
 }
 
-// Head-to-head from Mourinho's side, exactly as one source counted it on its date (docs/plans/phase2.md, item 4).
+// Head-to-head from Mourinho's side, exactly as one source counted it on its date (docs/plans/archive/phase2.md, item 4).
 // A rival's name as each language writes it: the name itself, or its local form (`localName`, e.g. katakana).
 const rivalName = (r, lang) => r.localName?.[lang] ?? r.name;
 
@@ -1085,7 +1085,7 @@ ${footer(lang)}`;
 
 // /news/ is a shell that app.js fills from /api/news. Its content changes all the time and only the heading
 // is in the HTML, so it is noindex and left out of the sitemap: leaving it out alone would not keep it out
-// of search, since every page links to it (docs/plans/phase2.md, item 7).
+// of search, since every page links to it (docs/plans/archive/phase2.md, item 7).
 function newsPage(lang) {
   const u = ui[lang];
   const p = u.news;

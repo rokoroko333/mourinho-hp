@@ -174,19 +174,23 @@ test('share buttons link to each network with the page URL, without loading thir
   for (const [tag] of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.match(tag, /src="\//, 'scripts are same-origin');
 });
 
-test('videos show real thumbnails and play only from hosts the Content-Security-Policy allows', async () => {
+test('videos show thumbnails from our own site and play only from hosts the Content-Security-Policy allows', async () => {
   await build();
   const videos = await load('videos.json');
   const csp = (await readFile(join(ROOT, 'src/public/_headers'), 'utf8')).match(/Content-Security-Policy: (.*)/)[1];
   const directive = (name) => csp.match(new RegExp(`${name} ([^;]*)`))[1].split(' ');
-  assert.ok(directive('img-src').includes('https://i.ytimg.com'), 'thumbnails');
+  // Images only from our own site: thumbnails and logos are fetched by `npm run images` and committed, so a
+  // visitor's browser contacts neither YouTube nor ESPN before clicking (security review, #70).
+  assert.deepEqual(directive('img-src'), ["'self'"], 'images from our site only');
   assert.ok(directive('frame-src').includes('https://www.youtube-nocookie.com'), 'player');
   const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
   assert.ok(app.includes('https://www.youtube-nocookie.com/embed/'), 'app.js embeds from the allowed host');
   const home = await page('es');
   for (const v of videos) {
     assert.match(v.id, /^[\w-]{11}$/, `${v.id}: YouTube video id`);
-    assert.ok(home.includes(`src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg"`), `${v.id}: thumbnail`);
+    assert.ok(home.includes(`src="/thumbs/${v.id}.jpg"`), `${v.id}: thumbnail`);
+    const jpg = await readFile(join(DIST, 'thumbs', `${v.id}.jpg`)).catch(() => null);
+    assert.ok(jpg && jpg[0] === 0xff && jpg[1] === 0xd8, `${v.id}: dist/thumbs/${v.id}.jpg is a JPEG (run npm run images)`);
     assert.ok(home.includes(`href="https://www.youtube.com/watch?v=${v.id}"`), `${v.id}: link to YouTube`);
     assert.equal(home.includes(`data-video-id="${v.id}"`), v.embed !== false, `${v.id}: plays in place unless embedding is off`);
   }
@@ -703,4 +707,29 @@ test('404.html exists, is noindex, out of the sitemap, and links to the home pag
     assert.ok(section.includes(`href="${home}"`) && section.includes(ui[lang].notFound.title), `${lang}: title and home link`);
   }
   assert.doesNotMatch(await readFile(join(DIST, 'sitemap.xml'), 'utf8'), /404/);
+});
+
+// Logos come from our site too: app.js builds /logos/<id>.png only for ids the build lists, and nothing in
+// the pages or the scripts points a browser at ESPN or YouTube images.
+test('team logos are local PNGs listed for app.js, and no page or script loads third-party images', async () => {
+  await build();
+  const files = (await readdir(join(ROOT, 'src/public/logos'))).filter((f) => f.endsWith('.png'));
+  assert.ok(files.length >= 20, `expected the league logos, found ${files.length}; run npm run images`);
+  // The current club (TEAM_ID, changed on a move) must have one: run npm run images after a move.
+  const { TEAM_ID } = await import('../lib/feeds.js');
+  assert.ok(files.includes(`${TEAM_ID}.png`), `the current club (${TEAM_ID}) has a logo`);
+  for (const f of files) {
+    assert.match(f, /^\d{1,8}\.png$/);
+    const png = await readFile(join(ROOT, 'src/public/logos', f));
+    assert.equal(png.readUInt32BE(0), 0x89504e47, `${f}: PNG`);
+  }
+  const home = await page('');
+  const ids = JSON.parse(home.match(/<script type="application\/json" id="strings">([\s\S]*?)<\/script>/)?.[1] ?? '{}').logos;
+  assert.deepEqual([...ids].sort(), files.map((f) => f.slice(0, -4)).sort());
+  const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
+  assert.ok(app.includes('/logos/${t.id}.png'), 'app.js uses the local logo');
+  for (const file of await htmlFiles()) {
+    assert.doesNotMatch(await readFile(join(DIST, file), 'utf8'), /i\.ytimg\.com|espncdn\.com/, `${file}: no third-party image`);
+  }
+  assert.doesNotMatch(app, /i\.ytimg\.com|espncdn\.com/, 'app.js: no third-party image');
 });

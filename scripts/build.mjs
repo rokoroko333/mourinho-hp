@@ -1,12 +1,14 @@
 // Static site generator: renders src/content/*.json into dist/ as plain HTML, one copy per language.
 // No framework and no runtime dependencies, so the build runs anywhere `node` does (including Cloudflare Pages).
-import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm, cp, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL, MATCH_TIME_ZONE, MATCH_CITY } from '../lib/feeds.js';
 import { withYears, pickOnThisDay, quizQuestions, dealQuiz } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+// Team logos served from our site (`npm run images`), by ESPN team id.
+const LOGO_IDS = (await readdir(join(ROOT, 'src/public/logos'))).filter((f) => /^\d+\.png$/.test(f)).map((f) => f.slice(0, -4)).sort((x, y) => x - y);
 const OUT = join(ROOT, 'dist');
 // Production origin, used for canonical/hreflang/sitemap. Set SITE_URL in the Pages build settings
 // once the custom domain is decided.
@@ -165,12 +167,13 @@ function quoteBody(q, lang) {
 // The tagline in the quote marks of the language it is written in: the Japanese pages keep the English one.
 const taglineText = (u) => fill(u.tagline === ui.en.tagline ? ui.en.quoteMarks : u.quoteMarks, { text: u.tagline });
 
-// A link to the video on YouTube with its real thumbnail, so it works without JavaScript. app.js swaps
-// in a youtube-nocookie player on click, except for videos whose owner disabled embedding.
+// A link to the video on YouTube, so it works without JavaScript. The thumbnail is served from our site
+// (src/public/thumbs/, `npm run images`), so the browser contacts YouTube only when the visitor clicks: app.js
+// then swaps in a youtube-nocookie player, except for videos whose owner disabled embedding.
 // Every id was checked to exist with YouTube's oEmbed endpoint (401 there means embedding is off).
 function videoCard(v, lang) {
   return `<a class="card card-link video" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener"${v.embed === false ? '' : ` data-video-id="${esc(v.id)}"`}>
-      <span class="video-thumb"><img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
+      <span class="video-thumb"><img src="/thumbs/${esc(v.id)}.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
       <h3>${esc(v.title[lang])}</h3>
       <p class="card-label">YouTube · ${esc(v.channel)}</p>
     </a>`;
@@ -186,6 +189,8 @@ function liveStrings(lang) {
     // Kick-off times in the club's own time zone, whatever the visitor's (lib/feeds.js).
     timeZone: MATCH_TIME_ZONE, localTime: fill(ui[lang].matches.localTime, { city: MATCH_CITY[lang] }),
     predict: ui[lang].predict,
+    // ESPN team ids with a logo served from our site (src/public/logos/, `npm run images`); others get none.
+    logos: LOGO_IDS,
   };
 }
 const stringsScript = (lang) =>

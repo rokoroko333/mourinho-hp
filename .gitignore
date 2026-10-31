@@ -4,3 +4,5 @@ dist/
 .dev.vars
 .DS_Store
 screenshots/
+# Half-filled folder of scripts/images.mjs if a run stops
+src/public/.thumbs-*

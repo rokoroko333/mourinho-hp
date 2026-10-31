@@ -142,7 +142,7 @@ function footer(lang) {
   return `<footer class="site-footer">
   <div class="wrap">
     <p class="footer-name">Infinito Mourinho</p>
-    <p class="footer-tag">${esc(fill(u.quoteMarks, { text: u.tagline }))}</p>
+    <p class="footer-tag">${esc(taglineText(u))}</p>
     <nav class="footer-nav">
       ${PAGES.map((p) => `<a href="${pathOf(lang, p)}">${esc(p === 'home' ? u.nav.home : u.nav[p])}</a>`).join(' · ')}
     </nav>
@@ -165,6 +165,9 @@ function quoteBody(q, lang) {
 // A link to the video on YouTube with its real thumbnail, so it works without JavaScript. app.js swaps
 // in a youtube-nocookie player on click, except for videos whose owner disabled embedding.
 // Every id was checked to exist with YouTube's oEmbed endpoint (401 there means embedding is off).
+// The tagline in the quote marks of the language it is written in: the Japanese pages keep the English one.
+const taglineText = (u) => fill(u.tagline === ui.en.tagline ? ui.en.quoteMarks : u.quoteMarks, { text: u.tagline });
+
 function videoCard(v, lang) {
   return `<a class="card card-link video" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener"${v.embed === false ? '' : ` data-video-id="${esc(v.id)}"`}>
       <span class="video-thumb"><img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
@@ -209,7 +212,7 @@ ${header(lang, pathsOf('home'), 'home')}
 <section class="hero">
   <div class="wrap hero-inner">
     <h1>Infinito <span class="gold">Mourinho</span></h1>
-    <p class="hero-tag">${esc(fill(u.quoteMarks, { text: u.tagline }))}</p>
+    <p class="hero-tag">${esc(taglineText(u))}</p>
   </div>
 </section>
 

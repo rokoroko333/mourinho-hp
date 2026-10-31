@@ -208,8 +208,9 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
       assert.ok([club, clubIn(lang)].some((name) => all.get(key)?.includes(name)), `ui.json ${lang}.${key} does not name ${clubIn(lang)}; it is listed beside TEAM_ID as a place to change on a move`);
     }
     for (const [key, text] of all) {
-      if (!text.includes(club) || history.has(key)) continue;
-      assert.ok(listed.includes(key), `ui.json ${lang}.${key} names ${club} but is not in the list above TEAM_ID in lib/feeds.js; add it there`);
+      const named = [club, clubIn(lang)].find((name) => text.includes(name));
+      if (!named || history.has(key)) continue;
+      assert.ok(listed.includes(key), `ui.json ${lang}.${key} names ${named} but is not in the list above TEAM_ID in lib/feeds.js; add it there`);
     }
   }
 });

@@ -1,0 +1,8 @@
+{
+  "description": "The home page's On this day card lists today's entries in every year, or else this month's, events and quotes together, oldest first, and its link opens that month's page",
+  "steps": [
+    { "goto": "/" },
+    { "eval": "(() => { const years = [...document.querySelectorAll('#otd-list .otd-year')].map((y) => Number(y.textContent)); return years.length > 0 && years.every((y, i) => i === 0 || y >= years[i - 1]) && /\\S/.test(document.querySelector('#otd-label').textContent); })()" },
+    { "eval": "fetch(document.querySelector('#otd-link').href).then((r) => r.ok)" }
+  ]
+}

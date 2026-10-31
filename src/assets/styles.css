@@ -308,7 +308,14 @@ h1, h2, h3 { margin: 0; line-height: 1.1; font-family: var(--display); font-weig
 /* On this day */
 .otd { margin-top: 24px; }
 .otd p { margin: 0; }
-.otd-year { font: 800 56px/0.9 var(--display); color: var(--gold); }
+/* A timeline: oldest first, each year on the gold rule. */
+.otd-list { list-style: none; margin: 16px 0 0; padding: 0 0 0 16px; border-left: 2px solid var(--gold); display: grid; gap: 18px; }
+.otd-list li { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.otd-when { font-size: 14px; color: var(--muted); }
+.otd-year { font: 800 26px/1 var(--display); color: var(--gold); margin-right: 6px; }
+.otd-quote { font-style: italic; }
+.otd-quote a { color: inherit; text-decoration: none; }
+.otd-quote a:hover { text-decoration: underline; }
 
 /* Quiz */
 .quiz-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }

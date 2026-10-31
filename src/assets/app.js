@@ -187,14 +187,25 @@
   const otdCard = $('#on-this-day');
   if (otd && otdCard && otdCard.dataset.built !== new Date().toISOString().slice(0, 10)) {
     const today = new Date().toISOString().slice(5, 10);
-    const same = otd.events.find((e) => e.date.slice(5) === today);
-    const month = otd.events.filter((x) => x.date.slice(5, 7) === today.slice(0, 2));
-    const inMonth = same ? null : month.find((x) => x.date.slice(5) > today) || month.at(-1);
-    const e = same || inMonth || otd.events.find((x) => x.date.slice(5) > today) || otd.events[0];
-    $('#otd-label').textContent = (same ? otd.labels.today : inMonth ? otd.labels.month : otd.labels.next).replace('{day}', e.day);
-    $('#otd-year').textContent = e.date.slice(0, 4);
-    $('#otd-text').textContent = e.text;
-    $('#otd-link').setAttribute('href', e.path);
+    const md = (x) => x.date.slice(5);
+    const timeline = (list) => [...list]
+      .sort((a, b) => Number(!!b.event) - Number(!!a.event) || b.date.localeCompare(a.date))
+      .slice(0, 8)
+      .sort((a, b) => a.date.localeCompare(b.date));
+    const same = otd.items.filter((x) => md(x) === today);
+    const month = otd.items.filter((x) => md(x).slice(0, 2) === today.slice(0, 2));
+    const days = [...new Set(otd.items.map(md))].sort();
+    const next = days.find((d) => d > today) || days[0];
+    const [kind, day, items] = same.length ? ['today', today, same] : month.length ? ['month', today, month] : ['next', next, otd.items.filter((x) => md(x) === next)];
+    const shown = timeline(items);
+    const monthName = new Intl.DateTimeFormat(lang, { month: 'long', timeZone: 'UTC' }).format(new Date(`2000-${day}T00:00:00Z`));
+    $('#otd-label').textContent = kind === 'month' ? otd.labels.month.replace('{month}', monthName) : otd.labels[kind].replace('{day}', shown[0].day);
+    $('#otd-list').replaceChildren(...shown.map((x) => el('li', {},
+      el('p', { class: 'otd-when' }, el('time', { datetime: x.date }, el('span', { class: 'otd-year' }, x.date.slice(0, 4)), ` ${x.day}`)),
+      ...(x.quote
+        ? [el('p', { class: 'otd-quote', lang: 'en' }, el('a', { href: x.path }, `“${x.quote}”`)), el('p', { class: 'muted' }, x.text)]
+        : [el('p', {}, x.text)]))));
+    $('#otd-link').setAttribute('href', otd.months[Number(day.slice(0, 2))]);
   }
 
   // Quote & story of the day

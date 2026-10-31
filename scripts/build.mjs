@@ -162,12 +162,12 @@ function quoteBody(q, lang) {
 <p class="quote-context">— ${esc(q.context[lang])}${q.year ? `, ${q.year}` : ''}</p>`;
 }
 
-// A link to the video on YouTube with its real thumbnail, so it works without JavaScript. app.js swaps
-// in a youtube-nocookie player on click, except for videos whose owner disabled embedding.
-// Every id was checked to exist with YouTube's oEmbed endpoint (401 there means embedding is off).
 // The tagline in the quote marks of the language it is written in: the Japanese pages keep the English one.
 const taglineText = (u) => fill(u.tagline === ui.en.tagline ? ui.en.quoteMarks : u.quoteMarks, { text: u.tagline });
 
+// A link to the video on YouTube with its real thumbnail, so it works without JavaScript. app.js swaps
+// in a youtube-nocookie player on click, except for videos whose owner disabled embedding.
+// Every id was checked to exist with YouTube's oEmbed endpoint (401 there means embedding is off).
 function videoCard(v, lang) {
   return `<a class="card card-link video" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener"${v.embed === false ? '' : ` data-video-id="${esc(v.id)}"`}>
       <span class="video-thumb"><img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="video-play">${icon.play}</span></span>
@@ -799,24 +799,38 @@ const otdMonths = [...new Set(onThisDay.map((e) => Number(e.date.slice(5, 7))))]
 const dayMonth = (mmdd, lang) =>
   new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`2000-${mmdd}T00:00:00Z`));
 
+// The card's timeline: the On this day events and every quote with a full date, in this language.
+const datedQuotes = quotes.filter((q) => /^\d{4}-\d{2}-\d{2}$/.test(q.date || ''));
+const otdItems = (lang) => [
+  ...onThisDay.map((e) => ({ date: e.date, event: true, text: e.text[lang], path: monthPaths(Number(e.date.slice(5, 7)))[lang] })),
+  ...datedQuotes.map((q) => ({ date: q.date, quote: q.text, text: q.context[lang], path: detailPaths('quotes', q.id)[lang] })),
+];
+const otdLabel = (p, kind, mmdd, lang) =>
+  kind === 'month' ? fill(p.monthHeading, { month: monthName(Number(mmdd.slice(0, 2)), lang) }) : fill(p[kind], { day: dayMonth(mmdd, lang) });
+// One entry of the card, as text only (app.js builds the same with textContent).
+function otdItem(x, lang) {
+  const body = x.quote
+    ? `<p class="otd-quote" lang="en"><a href="${x.path}">“${esc(x.quote)}”</a></p><p class="muted">${esc(x.text)}</p>`
+    : `<p>${esc(x.text)}</p>`;
+  return `<li><p class="otd-when"><time datetime="${x.date}"><span class="otd-year">${x.date.slice(0, 4)}</span> ${esc(dayMonth(x.date.slice(5), lang))}</time></p>${body}</li>`;
+}
+
 function otdCard(lang) {
   if (!onThisDay.length) return '';
   const p = ui[lang].onthisday;
-  const { event: e, kind } = pickOnThisDay(onThisDay);
+  const all = otdItems(lang);
+  const { kind, day, items } = pickOnThisDay(all);
   const data = {
-    labels: { today: p.today, month: p.month, next: p.next },
-    events: onThisDay.map((x) => ({
-      date: x.date,
-      day: dayMonth(x.date.slice(5), lang),
-      text: x.text[lang],
-      path: monthPaths(Number(x.date.slice(5, 7)))[lang],
-    })),
+    labels: { today: p.today, month: p.monthHeading, next: p.next },
+    items: all.map((x) => ({ ...x, day: dayMonth(x.date.slice(5), lang) })),
+    months: Object.fromEntries(otdMonths.map((m) => [m, monthPaths(m)[lang]])),
   };
   return `<article class="card otd" id="on-this-day" data-built="${new Date().toISOString().slice(0, 10)}">
-    <p class="card-label" id="otd-label">${esc(fill(p[kind], { day: dayMonth(e.date.slice(5), lang) }))}</p>
-    <p class="otd-year" id="otd-year">${esc(e.date.slice(0, 4))}</p>
-    <p id="otd-text">${esc(e.text[lang])}</p>
-    <div class="card-foot"><a class="more-link" id="otd-link" href="${monthPaths(Number(e.date.slice(5, 7)))[lang]}">${esc(p.more)} ${icon.arrow}</a></div>
+    <p class="card-label" id="otd-label">${esc(otdLabel(p, kind, day, lang))}</p>
+    <ol class="otd-list" id="otd-list">
+      ${items.map((x) => otdItem(x, lang)).join('\n      ')}
+    </ol>
+    <div class="card-foot"><a class="more-link" id="otd-link" href="${monthPaths(Number(day.slice(0, 2)))[lang]}">${esc(p.more)} ${icon.arrow}</a></div>
     <script type="application/json" id="otd-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
   </article>`;
 }
@@ -859,6 +873,18 @@ ${header(lang, pathsOf('onthisday'), 'history')}
 ${footer(lang)}`;
 }
 
+// The quotes dated in a month, oldest first, under its events.
+function monthQuotes(m, lang) {
+  const list = datedQuotes.filter((q) => Number(q.date.slice(5, 7)) === m).sort((a, b) => a.date.localeCompare(b.date));
+  if (!list.length) return '';
+  return `<section class="section">
+    <div class="section-head"><h2>${esc(fill(ui[lang].onthisday.monthQuotes, { month: monthName(m, lang) }))}</h2></div>
+    <div class="grid grid-2">
+      ${list.map((q) => `<a class="card card-quote card-link" href="${detailPaths('quotes', q.id)[lang]}"><p class="card-label"><time datetime="${q.date}">${esc(longDate(q.date, lang))}</time></p>${quoteBody(q, lang)}</a>`).join('\n      ')}
+    </div>
+  </section>`;
+}
+
 function monthPage(lang, m) {
   const u = ui[lang];
   const p = u.onthisday;
@@ -875,6 +901,7 @@ ${header(lang, monthPaths(m), 'history')}
   <ul class="trophy-list">
     ${onThisDay.filter((e) => Number(e.date.slice(5, 7)) === m).map((e) => otdEvent(e, lang)).join('\n    ')}
   </ul>
+  ${monthQuotes(m, lang)}
 </main>
 ${footer(lang)}`;
 }

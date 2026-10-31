@@ -635,21 +635,26 @@ test('every on-this-day event has an exact date, a known era, text in four langu
 });
 
 // The home card's pick: today's event, else the next one, wrapping to January after the last date.
-test('pickOnThisDay picks today, then this month (next to come, else the latest), then the next date, wrapping to the first', () => {
-  const events = [{ date: '2004-01-23' }, { date: '2010-05-10' }, { date: '2010-05-22' }, { date: '2000-12-03' }];
-  const at = (d) => pickOnThisDay(events, new Date(`2026-${d}T12:00:00Z`));
-  assert.deepEqual(at('05-22'), { event: events[2], today: true, kind: 'today' });
-  assert.deepEqual(at('01-01'), { event: events[0], today: false, kind: 'month' });
-  assert.deepEqual(at('05-15'), { event: events[2], today: false, kind: 'month' });
-  assert.deepEqual(at('05-23'), { event: events[2], today: false, kind: 'month' });
-  assert.deepEqual(at('06-01'), { event: events[3], today: false, kind: 'next' });
-  assert.deepEqual(at('12-31'), { event: events[3], today: false, kind: 'month' });
-  assert.deepEqual(pickOnThisDay(events.slice(0, 3), new Date('2026-12-31T12:00:00Z')), { event: events[0], today: false, kind: 'next' });
+test('pickOnThisDay shows today in every year, else this month, else the next dated day, as a timeline', () => {
+  const ev = (date) => ({ date, event: true });
+  const q = (date) => ({ date });
+  const items = [ev('2010-05-22'), q('2004-05-22'), ev('2003-05-21'), q('2012-05-02'), ev('2000-12-03'), ev('2004-01-23'), q('2007-12-03')];
+  const at = (d, list = items, limit) => pickOnThisDay(list, new Date(`2026-${d}T12:00:00Z`), limit);
+  const dates = (r) => r.items.map((x) => x.date);
+  // Today: every year's entry for the day, oldest first, quotes and events together.
+  assert.deepEqual([at('05-22').kind, dates(at('05-22'))], ['today', ['2004-05-22', '2010-05-22']]);
+  // No entry today: the whole month, oldest first.
+  assert.deepEqual([at('05-15').kind, dates(at('05-15'))], ['month', ['2003-05-21', '2004-05-22', '2010-05-22', '2012-05-02']]);
+  // No entry this month: the next dated day (all its years), wrapping past December.
+  assert.deepEqual([at('06-01').kind, at('06-01').day, dates(at('06-01'))], ['next', '12-03', ['2000-12-03', '2007-12-03']]);
+  assert.deepEqual([at('12-31', items.filter((x) => !x.date.includes('-12-'))).kind, at('12-31', items.filter((x) => !x.date.includes('-12-'))).day], ['next', '01-23']);
+  // Over the limit, events stay and the oldest quotes go; still oldest first.
+  assert.deepEqual(dates(at('05-15', items, 3)), ['2003-05-21', '2010-05-22', '2012-05-02']);
   // The day is the UTC one: 00:30 on 22 May in Lisbon (UTC+1) is still 21 May in UTC.
-  assert.deepEqual(pickOnThisDay(events, new Date('2026-05-22T00:30:00+01:00')), { event: events[2], today: false, kind: 'month' });
+  assert.deepEqual(dates(pickOnThisDay(items, new Date('2026-05-22T00:30:00+01:00'))), ['2003-05-21']);
 });
 
-test('month pages list their events with sources, and the home page shows one event', async () => {
+test('month pages list their events with sources and their quotes, and the home page shows a timeline', async () => {
   await build();
   const events = await load('onthisday.json');
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
@@ -673,5 +678,14 @@ test('month pages list their events with sources, and the home page shows one ev
     const front = await page(home);
     const card = front.slice(front.indexOf('id="on-this-day"'), front.indexOf('</article>', front.indexOf('id="on-this-day"')));
     assert.ok(events.some((e) => card.includes(e.text[lang].replace(/'/g, '&#39;').replace(/"/g, '&quot;'))), `${lang}: home shows an event`);
+    // The card is a timeline: its years never go backwards.
+    const years = [...card.matchAll(/class="otd-year">(\d{4})</g)].map((m) => Number(m[1]));
+    assert.ok(years.length > 0 && years.every((y, i) => i === 0 || y >= years[i - 1]), `${lang}: the card lists oldest first`);
+    // Every quote with a full date is on its month's page, linking to the quote.
+    const quotes = (await load('quotes.json')).filter((q) => /^\d{4}-\d{2}-\d{2}$/.test(q.date || ''));
+    for (const q of quotes) {
+      const html = await page(`${base}/${months[lang][Number(q.date.slice(5, 7)) - 1]}`);
+      assert.ok(html.includes(`/${q.id}/"`), `${lang}: ${q.id} on its month page`);
+    }
   }
 });

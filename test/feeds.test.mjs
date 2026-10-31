@@ -255,3 +255,18 @@ test('normalizeEvent keeps only https logo URLs', () => {
   assert.equal(m.home.logo, 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png');
   assert.equal(m.away.logo, '');
 });
+
+// The Spanish press the owner asked for (#63): the Madrid sports papers, the Barcelona ones and the two
+// national dailies. Sport refuses our bot, so it only comes through Google News and has no outlet feed.
+test('the outlets cover MARCA, AS, Mundo Deportivo, El País and El Mundo, and do not fetch Sport', () => {
+  const spanish = OUTLETS.filter((o) => o.lang === 'es').map((o) => o.name);
+  for (const name of ['MARCA', 'Diario AS', 'Mundo Deportivo', 'EL PAÍS', 'El Mundo']) assert.ok(spanish.includes(name), `${name} is an outlet`);
+  assert.ok(!OUTLETS.some((o) => /sport\.es/.test(o.feed)), 'Sport answers 406 to our bot; do not fetch it under another name');
+  // Their section fronts rarely carry him: AS is read from its Mourinho tag (all about him), El País from
+  // its Real Madrid tag, filtered by his name.
+  const by = (name) => OUTLETS.find((o) => o.name === name);
+  assert.match(by('Diario AS').feed, /\/tag\/jose_mourinho_a$/);
+  assert.equal(by('Diario AS').all, true);
+  assert.match(by('EL PAÍS').feed, /\/tag\/real_madrid_a$/);
+  assert.ok(!by('EL PAÍS').all && !by('El Mundo').all, 'El País and El Mundo feeds carry other news; keep the name filter');
+});

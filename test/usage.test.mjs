@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { totalsOf, checkUsage, yesterday, run, LIMITS, WARN_AT, ACCOUNT_ID } from '../scripts/usage.mjs';
 
 // The shape Cloudflare's GraphQL API answers (checked against the real account, 2026-11-01).
@@ -70,4 +72,17 @@ test('usage exits 0 within the limits, 1 at 70% or more, 2 without a token or a 
   await run({ token: 'tok', day, accountId: 'acc', fetchImpl: async (url, init) => ((sent = init), new Response(JSON.stringify(answer()))), ...quiet });
   assert.equal(sent.headers.Authorization, 'Bearer tok');
   assert.deepEqual(JSON.parse(sent.body).variables, { a: 'acc', d: day });
+});
+
+// The workflow runs the file itself, so the exit code must survive main() and the "run directly" check: run it as
+// GitHub does, without a token (no network needed).
+test('node scripts/usage.mjs exits 2 without a token and on a bad date, as the workflow runs it', () => {
+  const script = fileURLToPath(new URL('../scripts/usage.mjs', import.meta.url));
+  const env = { ...process.env, CLOUDFLARE_API_TOKEN: '' };
+  const noToken = spawnSync(process.execPath, [script], { env, encoding: 'utf8' });
+  assert.equal(noToken.status, 2, noToken.stderr);
+  assert.match(noToken.stderr, /CLOUDFLARE_API_TOKEN is not set/);
+  const badDay = spawnSync(process.execPath, [script, '2026-1-5'], { env: { ...env, CLOUDFLARE_API_TOKEN: 't' }, encoding: 'utf8' });
+  assert.equal(badDay.status, 2, badDay.stderr);
+  assert.match(badDay.stderr, /usage:/);
 });

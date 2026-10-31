@@ -48,6 +48,8 @@ export function totalsOf(answer) {
       if (typeof v !== 'number' || !Number.isFinite(v)) throw new Error(`not a number in the answer: ${JSON.stringify(r)}`);
       return n + v;
     }, 0);
+  // The free plan limits KV reads and writes separately (LIMITS); deletes and lists have their own limits, not
+  // checked here as the site makes almost none.
   const kv = (type) => sum(a.kvOperationsAdaptiveGroups.filter((r) => r.dimensions?.actionType === type), (r) => r.sum?.requests);
   return {
     requests: sum(a.workersInvocationsAdaptive, (r) => r.sum?.requests) + sum(a.pagesFunctionsInvocationsAdaptiveGroups, (r) => r.sum?.requests),
@@ -98,8 +100,13 @@ export async function run({ token, day, accountId = ACCOUNT_ID, fetchImpl = fetc
 }
 
 async function main() {
-  const day = process.argv.slice(2).find((a) => /^\d{4}-\d{2}-\d{2}$/.test(a)) || yesterday();
-  process.exit(await run({ token: process.env.CLOUDFLARE_API_TOKEN, day, accountId: process.env.CLOUDFLARE_ACCOUNT_ID || ACCOUNT_ID }));
+  // A day must be written YYYY-MM-DD; anything else is refused rather than quietly measuring yesterday.
+  const arg = process.argv[2];
+  if (arg !== undefined && !(/^\d{4}-\d{2}-\d{2}$/.test(arg) && !Number.isNaN(Date.parse(arg)))) {
+    console.error(`usage: npm run usage [-- YYYY-MM-DD]  (got "${arg}")`);
+    process.exit(2);
+  }
+  process.exit(await run({ token: process.env.CLOUDFLARE_API_TOKEN, day: arg || yesterday() }));
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

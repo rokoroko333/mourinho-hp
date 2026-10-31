@@ -262,4 +262,11 @@ test('the outlets cover MARCA, AS, Mundo Deportivo, El País and El Mundo, and d
   const spanish = OUTLETS.filter((o) => o.lang === 'es').map((o) => o.name);
   for (const name of ['MARCA', 'Diario AS', 'Mundo Deportivo', 'EL PAÍS', 'El Mundo']) assert.ok(spanish.includes(name), `${name} is an outlet`);
   assert.ok(!OUTLETS.some((o) => /sport\.es/.test(o.feed)), 'Sport answers 406 to our bot; do not fetch it under another name');
+  // Their section fronts rarely carry him: AS is read from its Mourinho tag (all about him), El País from
+  // its Real Madrid tag, filtered by his name.
+  const by = (name) => OUTLETS.find((o) => o.name === name);
+  assert.match(by('Diario AS').feed, /\/tag\/jose_mourinho_a$/);
+  assert.equal(by('Diario AS').all, true);
+  assert.match(by('EL PAÍS').feed, /\/tag\/real_madrid_a$/);
+  assert.ok(!by('EL PAÍS').all && !by('El Mundo').all, 'El País and El Mundo feeds carry other news; keep the name filter');
 });

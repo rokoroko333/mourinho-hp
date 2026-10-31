@@ -293,3 +293,48 @@ test('the press slots are Spain 7, Portugal 4, England 4, add up to the list, an
   assert.deepEqual([count('press', 'es'), count('press', 'pt'), count('press', 'en')], [7, 4, 4]);
   assert.ok([...new Set(merged.map((i) => i.source))].every((s) => count('source', s) <= NEWS_PER_SOURCE));
 });
+
+// One failed fetch of an outlet (AS was missing from one run in production, #67) is retried once; an
+// outlet that fails twice is named in the report.
+test('an outlet feed that fails is fetched once more, and one that fails twice is named', async () => {
+  const [flaky, down] = [OUTLETS.find((o) => o.name === 'Diario AS'), OUTLETS.find((o) => o.name === 'MARCA')];
+  const tries = new Map();
+  const feeds = fakeFeeds();
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    const n = (tries.get(url) || 0) + 1;
+    tries.set(url, n);
+    if (url === down.feed || (url === flaky.feed && n === 1)) throw new TypeError('fetch failed');
+    return feeds(url);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport(new Date('2026-10-28T00:00:00Z'));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(tries.get(flaky.feed), 2);
+  assert.ok(r.items.some((i) => i.source === 'Diario AS'), 'AS is in after the retry');
+  assert.equal(tries.get(down.feed), 2);
+  assert.deepEqual(r.failedOutlets, ['MARCA']);
+  assert.ok(r.emptyOutlets.includes('MARCA'));
+});
+
+test('an outlet that answers 404 is not fetched again', async () => {
+  const moved = OUTLETS.find((o) => o.name === 'El Mundo');
+  const tries = new Map();
+  const feeds = fakeFeeds();
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    tries.set(url, (tries.get(url) || 0) + 1);
+    return url === moved.feed ? new Response('gone', { status: 404 }) : feeds(url);
+  };
+  let r;
+  try {
+    r = await fetchNewsWithReport(new Date('2026-10-28T00:00:00Z'));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(tries.get(moved.feed), 1);
+  assert.deepEqual(r.failedOutlets, ['El Mundo']);
+});

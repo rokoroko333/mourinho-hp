@@ -69,7 +69,10 @@ owner, when production's news or matches have not been refreshed for two hours (
 failing; see the comment in `scripts/health.mjs`). The cause is in the Worker's log, kept for a few days in Workers
 Logs (Cloudflare dashboard → Workers → `infinito-mourinho-feeds` → Logs; `[observability]` in its `wrangler.toml`,
 which applies from the next `npm run feeds:deploy`). To check by hand: `npm run health`, or "Run workflow" on the
-Health workflow in GitHub's Actions tab.
+Health workflow in GitHub's Actions tab (do this once after the workflow first reaches `main`: schedules only run
+from `main`). A copy the Functions fetched on the spot because KV was empty or unreachable is marked `live` and also
+fails the check, so a stopped cron cannot hide behind it. After a club move, all three ESPN schedule URLs for the new
+`TEAM_ID` must answer with an `events` list (comment above `TEAM_ID` in `lib/feeds.js`).
 
 The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
 with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.

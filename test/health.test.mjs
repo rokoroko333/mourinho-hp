@@ -28,3 +28,21 @@ test('checkHome: a missing part, a missing date or an empty news list is a probl
   b.news.items = [];
   assert.deepEqual(checkHome(b, now), ['matches: no updatedAt', 'news: no items']);
 });
+
+test('checkHome: a copy fetched on the spot (KV empty or down) is a problem even with a fresh date', () => {
+  const b = home(0, 0);
+  b.matches.live = true;
+  assert.deepEqual(checkHome(b, now).map((p) => p.split(':')[0]), ['matches']);
+});
+
+test('readFeed marks a copy fetched on the spot as live, and returns the cron copy from KV as it is', async () => {
+  const { readFeed } = await import('../lib/serve.js');
+  const puts = [];
+  const empty = { env: { FEEDS: { get: async () => null, put: async (k, v) => puts.push(v) } }, waitUntil: (p) => p };
+  const live = JSON.parse(await readFeed(empty, { key: 'matches', live: async () => ({ next: { id: '1' } }) }));
+  assert.equal(live.live, true);
+  assert.equal(JSON.parse(puts[0]).live, true, 'the seeded KV copy stays marked until the cron replaces it');
+  const cron = JSON.stringify({ updatedAt: now.toISOString(), next: { id: '1' } });
+  const fromKv = await readFeed({ env: { FEEDS: { get: async () => cron } }, waitUntil: () => {} }, { key: 'matches', live: async () => ({}) });
+  assert.equal(JSON.parse(fromKv).live, undefined);
+});

@@ -61,4 +61,5 @@
 | `/api/home`（ページの生データを1回で返す。ニュース・試合・予想の集計、エッジに20秒）。`/api/news`・`/api/matches`・`GET /api/predict` は前のデプロイの app.js 用に残す | `functions/api/`、`lib/serve.js`（API のヘッダー） | `npm test`（`test/predict.test.mjs`）、`npm run dev` のあと `curl -i localhost:8788/api/home?lang=en` |
 | 404 ページ（4言語、`noindex`） | `dist/404.html`（`scripts/build.mjs` の末尾） | `npm test`（`test/build.test.mjs`） |
 | 共有画像の生成 | `scripts/og.mjs` | `npm run og` |
+| 動画のサムネイルとチームのロゴの取得（自サイトから配信。CSP の `img-src` は `'self'` だけ） | `scripts/images.mjs` → `src/public/thumbs/`・`src/public/logos/` | `npm run images`、`npm test`（`test/build.test.mjs`） |
 | CSP などのヘッダー | `src/public/_headers` | `npm run dev`（ヘッダーを返す）と `npm run verify`（CSP 違反は FAIL） |

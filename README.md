@@ -25,6 +25,9 @@ npm run verify     # with the dev server running: the browser flows in test/flow
   `npx wrangler d1 migrations apply infinito-mourinho-votes --local` once, and put `VOTE_SALT=<any random string>` in
   `.dev.vars` (git-ignored; never commit it).
 - **Screenshots for a PR**: see `docs/dev-flow.md` (section 5).
+- **Video thumbnails and team logos** (`src/public/thumbs/`, `src/public/logos/`) are fetched by `npm run images` and
+  committed, so visitors' browsers never load images from YouTube or ESPN (the CSP allows images from the site
+  only). Run it after adding a video, or when a new opponent shows without a logo.
 - **Share images** (`src/public/og/`, 1200×630 PNG) are generated with the local Chrome and committed: after adding
   or editing a quote, run `npm run og` and commit the result. The build never needs a browser, and `npm test` fails
   if a quote has no image.

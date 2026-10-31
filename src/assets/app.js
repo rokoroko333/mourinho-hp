@@ -260,7 +260,9 @@
   const goodNews = (item) => item && typeof item.title === 'string' && item.title && httpsUrl(item.link)
     && (item.publishedAt == null || validDate(item.publishedAt))
     && (item.source == null || typeof item.source === 'string') && (item.press == null || typeof item.press === 'string');
-  const goodTeam = (t) => t && typeof t.name === 'string' && (t.logo == null || httpsUrl(t.logo));
+  const goodTeam = (t) => t && typeof t.name === 'string';
+  const logoIds = new Set(strings.logos || []);
+  const hasLogo = (t) => t.id != null && /^\d{1,8}$/.test(String(t.id)) && logoIds.has(String(t.id));
   const goodMatch = (m) => m && validDate(m.date) && goodTeam(m.home) && goodTeam(m.away) && (m.id == null || /^\d{1,12}$/.test(String(m.id)));
   const cleanMatches = (data) => data && {
     ...data,
@@ -318,7 +320,8 @@
   const plainDay = new Intl.DateTimeFormat(lang, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   const teamEl = (t, side) =>
     el('div', { class: 'team' },
-      t.logo ? el('img', { src: t.logo, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
+      // Logos come from our own site (src/public/logos/), never from ESPN: a team without a file has none.
+      hasLogo(t) ? el('img', { src: `/logos/${t.id}.png`, alt: '', width: '52', height: '52', loading: 'lazy' }) : null,
       t.name,
       el('small', {}, side));
   // The next match comes first and carries the countdown: on the home page the #countdown from the HTML is

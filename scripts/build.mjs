@@ -334,7 +334,7 @@ ${header(lang, pathsOf('quotes'), 'quotes')}
     <div class="grid grid-2">
       ${episodes
         .map(
-          (e) => `<a class="card card-link" id="${e.id}" href="${detailPaths('stories', e.id)[lang]}">
+          (e) => `<a class="card card-link" id="story-${e.id}" href="${detailPaths('stories', e.id)[lang]}">
         <p class="card-label">${e.year}</p>
         <h3>${esc(e.title[lang])}</h3>
         <p class="muted">${esc(e.text[lang])}</p>
@@ -503,11 +503,12 @@ function detailPage(lang, kind, id) {
       title: `${fill(d.storyTitle, { title: e.title[lang] })} | ${u.siteName}`,
       description: clip(e.text[lang], 160),
     };
-    mainEntity = { '@type': 'Article', headline: e.title[lang], description: t.description, inLanguage: lang, about: MOURINHO };
+    mainEntity = { '@type': 'Article', headline: e.title[lang], description: t.description, inLanguage: lang, about: MOURINHO, citation: e.sources.map((s) => s.url) };
     shareText = `${e.title[lang]} — José Mourinho`;
     body = `<p class="card-label">${esc(d.storyLabel)} · ${e.year}</p>
     <h1 class="detail-title">${esc(e.title[lang])}</h1>
-    <p class="detail-text">${esc(e.text[lang])}</p>`;
+    <p class="detail-text">${esc(e.text[lang])}</p>
+    ${sourceList(e.sources, lang)}`;
   }
   return `${head(lang, paths, t, { mainEntity, ...(image && { image, imageAlt: shareText }) })}
 <body data-lang="${lang}">

@@ -181,6 +181,24 @@ test('the match time zone and city are those of the current club, as the comment
   for (const lang of Object.keys(ui)) assert.ok(MATCH_CITY[lang], `MATCH_CITY has no ${lang} name`);
 });
 
+// The club's own news feeds and highlights page follow the club: on a move, this fails until each feed marked
+// `club: true` in OUTLETS, and HIGHLIGHTS_URL, name the club in the comment above TEAM_ID (maintenance review).
+test('the club feeds and the highlights page are those of the current club', async () => {
+  const feeds = await readFile(join(ROOT, 'lib/feeds.js'), 'utf8');
+  const head = feeds.slice(0, feeds.indexOf('export const TEAM_ID'));
+  const [, club] = head.slice(head.lastIndexOf('\n\n')).match(/\(\d+ = ([^)]+)\)/) ?? [];
+  assert.ok(club, 'the comment above TEAM_ID no longer says "(<id> = <club>)"; update this test');
+  // How a club is written in a URL: real-madrid, real_madrid, realmadrid.
+  const words = club.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/\s+/);
+  const names = (url) => ['-', '_', ''].some((sep) => url.toLowerCase().includes(words.join(sep)));
+  const { OUTLETS, HIGHLIGHTS_URL } = await import('../lib/feeds.js');
+  const clubFeeds = OUTLETS.filter((o) => o.club);
+  assert.ok(clubFeeds.length > 0, 'no feed is marked club: true');
+  for (const o of clubFeeds) assert.ok(names(o.feed), `${o.name}: marked club: true but its feed does not name ${club}`);
+  for (const o of OUTLETS.filter((x) => !x.club)) assert.ok(!names(o.feed), `${o.name}: its feed names ${club}; mark it club: true`);
+  assert.ok(names(HIGHLIGHTS_URL), `HIGHLIGHTS_URL does not name ${club}`);
+});
+
 // When Mourinho moves, the club name sits in several ui.json strings next to TEAM_ID, and a missed one
 // (or one language) keeps showing the old club (#2, #34). The list of places is the comment above TEAM_ID.
 test('every ui.json string naming the current club is listed beside TEAM_ID, and names it in every language', async () => {
@@ -253,14 +271,39 @@ test('every content text and every ui.json key exists in every language', async 
   const optional = (k) => k === 'home.countdownUnits.sep';
   for (const l of langs) assert.deepEqual(keys(ui[l]).filter((k) => !optional(k)).sort(), en.filter((k) => !optional(k)), `ui.json ${l}: same keys as en`);
   assert.equal(ui.ja.home.countdownUnits.sep, '', 'ui.json ja: the countdown writes number and unit together');
+  let blocks = 0;
   for (const f of (await readdir(join(ROOT, 'src/content'))).filter((f) => f.endsWith('.json') && f !== 'ui.json')) {
     JSON.stringify(JSON.parse(await readFile(join(ROOT, 'src/content', f), 'utf8')), (k, v) => {
-      if (v && typeof v === 'object' && !Array.isArray(v) && 'en' in v && 'pt' in v) {
-        for (const l of langs) assert.ok(v[l] && (Array.isArray(v.en) ? v[l].length === v.en.length : true), `${f}: "${String(v.en).slice(0, 40)}" has no ${l}`);
+      // Any object with English is a translated text (a block missing Portuguese used to slip past).
+      if (v && typeof v === 'object' && !Array.isArray(v) && 'en' in v) {
+        blocks++;
+        for (const l of langs) {
+          assert.ok(v[l] && (Array.isArray(v.en) ? v[l].length === v.en.length : true), `${f}: "${String(v.en).slice(0, 40)}" has no ${l}`);
+          assert.equal(typeof v[l], typeof v.en, `${f}: "${String(v.en).slice(0, 40)}" in ${l} is not a ${typeof v.en}`);
+        }
       }
       return v;
     });
   }
+  // The check found the content's texts (it would pass on nothing if the shape changed).
+  assert.ok(blocks > 200, `only ${blocks} translated texts found`);
+});
+
+// A placeholder written differently in one language ({Month} for {month}) is filled with nothing (build.mjs fill).
+test('every ui.json string uses the same {placeholders} in every language', async () => {
+  const ui = JSON.parse(await readFile(join(ROOT, 'src/content/ui.json'), 'utf8'));
+  const leaves = (o, p = '') => Object.entries(o).flatMap(([k, v]) => (v && typeof v === 'object' ? leaves(v, `${p}${k}.`) : [[`${p}${k}`, v]]));
+  const en = new Map(leaves(ui.en));
+  let checked = 0;
+  for (const lang of Object.keys(ui)) {
+    for (const [key, text] of leaves(ui[lang])) {
+      if (typeof text !== 'string' || typeof en.get(key) !== 'string') continue;
+      const holes = (t) => [...t.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
+      assert.deepEqual(holes(text), holes(en.get(key)), `ui.json ${lang}.${key}: placeholders differ from English`);
+      if (holes(text).length) checked++;
+    }
+  }
+  assert.ok(checked > 0, 'no placeholder found to compare');
 });
 
 // Data names shown on Japanese pages: every rival has a Japanese name, so a new rival cannot show its name

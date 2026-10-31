@@ -14,7 +14,7 @@
 | `home` | `/` ・ `/es/` ・ `/pt/` | `homePage` | 次の試合とカウントダウン、ニュース、発言、今日の名言とエピソード、今日の出来事、経歴の入口、動画 |
 | `quotes` | `/quotes/` ・ `/es/frases/` ・ `/pt/frases/` | `quotesPage` | 名言とエピソードの一覧、テーマ（タグ）の一覧 |
 | `tags` | `/quotes/tag/<タグ>/` ・ `/es/frases/tema/<タグ>/` ・ `/pt/frases/tema/<タグ>/` | `tagPage` | テーマごとの名言 |
-| `stories` | `/stories/<id>/` ・ `/es/anecdotas/<id>/` ・ `/pt/historias/<id>/` | `detailPage` | エピソードの個別ページ、共有ボタン |
+| `stories` | `/stories/<id>/` ・ `/es/anecdotas/<id>/` ・ `/pt/historias/<id>/` | `detailPage` | エピソードの個別ページ、出典、共有ボタン |
 | （名言の個別） | `/quotes/<id>/` ・ `/es/frases/<id>/` ・ `/pt/frases/<id>/` | `detailPage` | 名言の個別ページ、共有ボタン、共有画像（`src/public/og/quotes/`） |
 | `history` | `/history/` ・ `/es/historia/` ・ `/pt/historia/` | `historyPage` | 時代（クラブ）ごとの経歴、タイトル・成績への入口 |
 | （時代の個別） | `/history/<時代>/` ・ `/es/historia/<時代>/` ・ `/pt/historia/<時代>/` | `eraPage` | その時代の経歴・名言・タイトル |

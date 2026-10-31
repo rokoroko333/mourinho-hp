@@ -40,6 +40,24 @@ test('built pages keep to the Content-Security-Policy', async () => {
   }
 });
 
+// A missing field or translation is printed as "undefined" (esc(undefined), `${e.year}`) rather than failing the
+// build, and a duplicate id makes an in-page link land on the wrong card (maintenance review).
+test('no built page prints a missing value or repeats an element id', async () => {
+  await build();
+  const files = [...(await htmlFiles()), 'sitemap.xml'];
+  assert.ok(files.length > 100, `only ${files.length} files`);
+  for (const file of files) {
+    const text = await readFile(join(DIST, file), 'utf8');
+    const bad = text.match(/\bundefined\b|\bNaN\b|\[object Object\]|\bnull\b(?![^<]*<\/script>)/);
+    assert.equal(bad, null, `${file}: prints "${bad?.[0]}" near "${bad && text.slice(Math.max(0, bad.index - 60), bad.index + 20)}"`);
+    const seen = new Set();
+    for (const [, id] of text.matchAll(/\sid="([^"]*)"/g)) {
+      assert.ok(!seen.has(id), `${file}: id "${id}" used twice`);
+      seen.add(id);
+    }
+  }
+});
+
 test('_headers sets a Content-Security-Policy for every path', async () => {
   const headers = await readFile(join(ROOT, 'src/public/_headers'), 'utf8');
   const block = headers.split(/\n(?=\S)/).find((b) => b.startsWith('/*'));
@@ -473,6 +491,33 @@ test('the quiz page shows ten questions with their answers and sources in four l
   }
 });
 
+// Stories follow the facts rules like the quotes: a year, every language and a source (CLAUDE.md).
+test('every story has an id, a year, its text in every language and a source', async () => {
+  await build();
+  const episodes = await load('episodes.json');
+  assert.ok(episodes.length > 0);
+  const ids = new Set();
+  for (const e of episodes) {
+    assert.match(e.id, /^[a-z0-9]+(-[a-z0-9]+)*$/, `${e.id}: id`);
+    assert.ok(!ids.has(e.id), `${e.id}: unique`);
+    ids.add(e.id);
+    assert.ok(Number.isInteger(e.year) && e.year >= 1990 && e.year <= new Date().getFullYear(), `${e.id}: year ${e.year}`);
+    for (const l of ['en', 'es', 'pt', 'ja']) {
+      assert.ok(typeof e.title?.[l] === 'string' && e.title[l].trim(), `${e.id}: title in ${l}`);
+      assert.ok(typeof e.text?.[l] === 'string' && e.text[l].trim(), `${e.id}: text in ${l}`);
+    }
+    assert.ok(e.sources?.length > 0, `${e.id}: at least one source`);
+    // Shown on the story's own page, like a quote's.
+    const html = await page(`stories/${e.id}`);
+    for (const s of e.sources) assert.ok(html.includes(`href="${s.url}"`), `${e.id}: source ${s.url} on its page`);
+    for (const s of e.sources) {
+      assert.match(s.url, /^https:\/\/\S+$/, `${e.id}: source url`);
+      assert.match(s.date, /^\d{4}(-\d{2}-\d{2})?$/, `${e.id}: source date`);
+      assert.ok(s.publisher, `${e.id}: publisher`);
+    }
+  }
+});
+
 // Numbers follow the facts rules: every one has a source, records add up, and eras exist.
 test('every stat has a source, a consistent record and a known era', async () => {
   const stats = await load('stats.json');
@@ -503,6 +548,8 @@ test('every stat has a source, a consistent record and a known era', async () =>
   const c = stats.current;
   sourced(c, 'current');
   assert.ok(eras.has(c.era) && !seen.has(c.era), `current: ${c.era} is a known era not in the table`);
+  // On a move the new club's era is added last in history.json; the current record must follow it.
+  assert.equal(c.era, (await load('history.json')).at(-1).id, 'current: the era of the current club (the last in history.json)');
   assert.match(c.asOf, /^\d{4}-\d{2}-\d{2}$/, 'current: as-of date');
   assert.equal(c.wins + c.draws + c.losses, c.matches, 'current adds up');
   for (const r of stats.records) {

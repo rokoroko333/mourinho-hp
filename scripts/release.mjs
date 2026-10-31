@@ -12,6 +12,7 @@
 // Secrets are not set here (README, "Deploying"). SITE_URL is passed through to the build when set.
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { SITE_ORIGIN } from '../lib/site.js';
 
 export const D1_NAME = 'infinito-mourinho-votes';
 
@@ -107,7 +108,7 @@ function main() {
   } catch {
     console.error('Health check failed (see above); the release itself went out.');
   }
-  console.log(`\nReleased as ${tag}. Check the pages: npm run verify -- --base https://infinito-mourinho.pages.dev`);
+  console.log(`\nReleased as ${tag}. Check the pages: npm run verify -- --base ${SITE_ORIGIN}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

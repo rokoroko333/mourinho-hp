@@ -350,3 +350,22 @@ test('app.js reads live data from /api/home only, and posts predictions to /api/
   assert.deepEqual([...new Set(calls)].sort(), ['/api/home', '/api/predict']);
   assert.equal(calls.filter((c) => c === '/api/home').length, 1, 'one /api/home call per page');
 });
+
+// The site's address is written once (lib/site.js): a second copy is how canonical links once pointed at pages.dev
+// after the move to the custom domain would have happened (maintenance review).
+test('the site address is written only in lib/site.js, and it is the custom domain over https', async () => {
+  const { SITE_ORIGIN } = await import('../lib/site.js');
+  assert.match(SITE_ORIGIN, /^https:\/\/[a-z0-9.-]+$/);
+  assert.doesNotMatch(SITE_ORIGIN, /pages\.dev/);
+  const host = new URL(SITE_ORIGIN).host;
+  const files = [];
+  for (const dir of ['lib', 'scripts', 'functions', 'src', 'test', 'workers', '.github']) {
+    for (const f of await readdir(join(ROOT, dir), { recursive: true })) if (/\.(m?js|json|html|css|ya?ml|toml)$|_headers$|_redirects$/.test(f)) files.push(join(dir, f));
+  }
+  assert.ok(files.length > 30, `only ${files.length} files`);
+  for (const f of files) {
+    if (f === join('lib', 'site.js')) continue;
+    const text = await readFile(join(ROOT, f), 'utf8');
+    assert.ok(!text.includes(`infinito-mourinho${'.pages.dev'}`) && !text.includes(host), `${f}: names the site's address; import SITE_ORIGIN from lib/site.js`);
+  }
+});

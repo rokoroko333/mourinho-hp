@@ -4,15 +4,16 @@ import { readFile, writeFile, mkdir, rm, cp, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HIGHLIGHTS_URL, MATCH_TIME_ZONE, MATCH_CITY } from '../lib/feeds.js';
+import { SITE_ORIGIN } from '../lib/site.js';
 import { withYears, pickOnThisDay, quizQuestions, dealQuiz } from './content.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 // Team logos served from our site (`npm run images`), by ESPN team id.
 const LOGO_IDS = (await readdir(join(ROOT, 'src/public/logos'))).filter((f) => /^\d+\.png$/.test(f)).map((f) => f.slice(0, -4)).sort((x, y) => x - y);
 const OUT = join(ROOT, 'dist');
-// Production origin, used for canonical/hreflang/sitemap. Set SITE_URL in the Pages build settings
-// once the custom domain is decided.
-const SITE_URL = (process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
+// Production origin, used for canonical/hreflang/sitemap (lib/site.js). SITE_URL overrides it for a one-off build
+// elsewhere; releases leave it unset.
+const SITE_URL = (process.env.SITE_URL || SITE_ORIGIN).replace(/\/$/, '');
 const LANGS = ['en', 'es', 'pt', 'ja'];
 const PAGES = ['home', 'quotes', 'history', 'trophies', 'stats', 'rivals', 'remarks', 'onthisday', 'quiz'];
 

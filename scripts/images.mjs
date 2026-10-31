@@ -13,12 +13,13 @@
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SITE_ORIGIN } from '../lib/site.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const THUMBS = join(ROOT, 'src/public/thumbs');
 const LOGOS = join(ROOT, 'src/public/logos');
 const LEAGUES = ['esp.1', 'uefa.champions', 'esp.super_cup'];
-const SITE = process.env.SITE_URL || 'https://infinito-mourinho.pages.dev';
+const SITE = process.env.SITE_URL || SITE_ORIGIN;
 const MAX_BYTES = 200_000;
 
 const MAGIC = { jpg: [0xff, 0xd8, 0xff], png: [0x89, 0x50, 0x4e, 0x47] };

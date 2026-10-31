@@ -58,8 +58,9 @@ Log in once with `npx wrangler login`.
 5. tags the commit `deploy-<UTC date-time when the release started>` and pushes the tag;
 6. runs `npm run health`, which only reports.
 
-It stops at the first failure, and nothing after a failed step runs. Details are in `scripts/release.mjs`. Set `SITE_URL=https://<domain>` in the environment
-once a custom domain is used (without it, URLs point to the pages.dev address).
+It stops at the first failure, and nothing after a failed step runs. Details are in `scripts/release.mjs`. The site's address is
+`SITE_ORIGIN` in `lib/site.js` (canonical links, hreflang, sitemap, share links); `SITE_URL` overrides it for a
+one-off build elsewhere.
 
 Secrets are set by hand, only when a new one is added, before the release, e.g.
 `openssl rand -hex 24 | npx wrangler pages secret put VOTE_SALT --project-name infinito-mourinho`.
@@ -70,7 +71,7 @@ rolling back code does not roll back D1.
 When the shape of the JSON in KV changes, deploy both the Worker and Pages, and keep the pages working with the old
 shape until the next cron run (at most 20 minutes).
 
-After deploying, check production with `npm run verify -- --base https://infinito-mourinho.pages.dev` (the flows
+After deploying, check production with `npm run verify -- --base https://infinito-mourinho.com` (the flows
 never post votes outside localhost) and the Worker's log with `npx wrangler tail --config workers/feeds/wrangler.toml`
 (`outlets:empty`, `outlets:failed`, `feeds:failed`; without `--config`, Wrangler reads `wrangler.toml`, takes the
 project for Pages and fails).
@@ -107,7 +108,24 @@ a disabled workflow with a button to turn it back on.
 The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
 with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
 
-Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
+Search Console: submit `https://infinito-mourinho.com/sitemap.xml`.
+
+## Domain
+
+The site is `https://infinito-mourinho.com` (`lib/site.js`), registered with Cloudflare Registrar in the same
+account (auto-renew on). The apex and `www` are custom domains of the Pages project, each a proxied CNAME to
+`infinito-mourinho.pages.dev` in the zone's DNS. Set once in the dashboard:
+
+- **www → apex**: zone `infinito-mourinho.com` → Rules → Redirect Rules → "Redirect from WWW to root" template
+  (301, keep the path and query).
+- **pages.dev → domain**: account → Bulk Redirects → a list with `infinito-mourinho.pages.dev` →
+  `https://infinito-mourinho.com` (301; preserve path suffix, preserve query string, include subdomains off), and a
+  rule enabling it. Preview deployments (`<hash>.infinito-mourinho.pages.dev`) are not redirected.
+- **Rate limit on the API**: zone → Security → WAF → Rate limiting rules (the free plan has one): URI path starts
+  with `/api/`, same IP, 60 requests per 10 seconds, block for 10 seconds.
+
+A redirect done in a Function would run on every request and count toward the Functions limit, so the redirects
+stay in Cloudflare's rules.
 
 ## Rolling back
 

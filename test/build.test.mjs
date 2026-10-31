@@ -8,6 +8,8 @@ import { promisify } from 'node:util';
 import { pickOnThisDay, quizQuestions, dealQuiz } from '../scripts/content.mjs';
 import { fillMatchesPage } from '../lib/matches-page.js';
 import { existsSync } from 'node:fs';
+import { SITE_ORIGIN } from '../lib/site.js';
+const ORIGIN_RE = SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
@@ -76,6 +78,8 @@ test('_headers sets a Content-Security-Policy for every path', async () => {
   const block = headers.split(/\n(?=\S)/).find((b) => b.startsWith('/*'));
   assert.match(block, /Content-Security-Policy: default-src 'self'; script-src 'self';/);
   assert.match(block, /frame-ancestors 'none'/);
+  // On the custom domain, browsers must keep to HTTPS (pages.dev was on the HSTS preload list; our domain is not).
+  assert.match(block, /Strict-Transport-Security: max-age=31536000; includeSubDomains/);
 });
 
 const DETAIL = { quotes: { en: 'quotes', es: 'es/frases', pt: 'pt/frases', ja: 'ja/quotes' }, stories: { en: 'stories', es: 'es/anecdotas', pt: 'pt/historias', ja: 'ja/stories' } };
@@ -92,9 +96,9 @@ test('every quote and story has its own page in all four languages, linked from 
     for (const [lang, path] of Object.entries(paths)) {
       const html = await page(path);
       assert.match(html, new RegExp(`<html lang="${lang}">`), path);
-      assert.ok(html.includes(`<link rel="canonical" href="https://infinito-mourinho.pages.dev${path}">`), `${path}: canonical`);
+      assert.ok(html.includes(`<link rel="canonical" href="${SITE_ORIGIN}${path}">`), `${path}: canonical`);
       for (const [l, p] of Object.entries(paths)) {
-        assert.ok(html.includes(`hreflang="${l}" href="https://infinito-mourinho.pages.dev${p}"`), `${path}: hreflang ${l}`);
+        assert.ok(html.includes(`hreflang="${l}" href="${SITE_ORIGIN}${p}"`), `${path}: hreflang ${l}`);
       }
       assert.ok(lists[lang].includes(`href="${path}"`), `${lang} list page links to ${path}`);
     }
@@ -117,9 +121,9 @@ test('every career era has its own page in all four languages, linked from the t
       const path = `/${b}/${h.id}/`;
       const html = await page(path);
       assert.match(html, new RegExp(`<html lang="${lang}">`), path);
-      assert.ok(html.includes(`<link rel="canonical" href="https://infinito-mourinho.pages.dev${path}">`), `${path}: canonical`);
+      assert.ok(html.includes(`<link rel="canonical" href="${SITE_ORIGIN}${path}">`), `${path}: canonical`);
       for (const [l, bb] of Object.entries(base)) {
-        assert.ok(html.includes(`hreflang="${l}" href="https://infinito-mourinho.pages.dev/${bb}/${h.id}/"`), `${path}: hreflang ${l}`);
+        assert.ok(html.includes(`hreflang="${l}" href="${SITE_ORIGIN}/${bb}/${h.id}/"`), `${path}: hreflang ${l}`);
       }
       const prev = history[i - 1] && `/${b}/${history[i - 1].id}/`;
       const next = history[i + 1] && `/${b}/${history[i + 1].id}/`;
@@ -162,7 +166,7 @@ const MATCH_PAGES = ['/matches/', '/es/partidos/', '/pt/jogos/', '/ja/matches/']
 test('the sitemap lists every built page exactly once, with all four languages', async () => {
   await build();
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
-  const locs = [...xml.matchAll(/<loc>https:\/\/infinito-mourinho\.pages\.dev([^<]*)<\/loc>/g)].map((m) => m[1]);
+  const locs = [...xml.matchAll(new RegExp(`<loc>${ORIGIN_RE}([^<]*)</loc>`, 'g'))].map((m) => m[1]);
   const pages = (await pageFiles())
     .map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'))
     .filter((p) => !LIVE_PAGES.includes(p));
@@ -180,7 +184,7 @@ test('every page has a 1200×630 share image that exists, and quotes get their o
   const quotes = await load('quotes.json');
   for (const file of await pageFiles()) {
     const html = await readFile(join(DIST, file), 'utf8');
-    const image = html.match(/<meta property="og:image" content="https:\/\/infinito-mourinho\.pages\.dev([^"]+)">/)?.[1];
+    const image = html.match(new RegExp(`<meta property="og:image" content="${ORIGIN_RE}([^"]+)">`))?.[1];
     assert.ok(image, `${file}: og:image`);
     assert.deepEqual(pngSize(await readFile(join(DIST, image))), { width: 1200, height: 630 }, `${file}: ${image}`);
     assert.match(html, /<meta name="twitter:card" content="summary_large_image">/, file);
@@ -195,7 +199,7 @@ test('every page has a 1200×630 share image that exists, and quotes get their o
 test('share buttons link to each network with the page URL, without loading third-party scripts', async () => {
   await build();
   const html = await page('es/anecdotas/medal');
-  const url = encodeURIComponent('https://infinito-mourinho.pages.dev/es/anecdotas/medal/');
+  const url = encodeURIComponent(`${SITE_ORIGIN}/es/anecdotas/medal/`);
   assert.ok(html.includes(`https://www.facebook.com/sharer/sharer.php?u=${url}`));
   assert.ok(html.includes(`&amp;url=${url}`), 'X');
   assert.ok(html.includes(`https://wa.me/?text=`) && html.includes(url), 'WhatsApp');
@@ -296,7 +300,7 @@ test('each tag has a page in all four languages listing exactly its quotes, link
       const shown = [...main.matchAll(/href="\/[^"]*\/([^/"]+)\/"/g)].map((m) => m[1]).sort();
       assert.deepEqual(shown, quotes.filter((q) => q.tags.includes(tag)).map((q) => q.id).sort(), `${path}: its quotes`);
       assert.ok(lists[lang].includes(`href="${path}"`), `${lang} list links to ${path}`);
-      for (const l of Object.keys(base)) assert.ok(html.includes(`hreflang="${l}" href="https://infinito-mourinho.pages.dev/${base[l]}/${tag}/"`), `${path}: hreflang ${l}`);
+      for (const l of Object.keys(base)) assert.ok(html.includes(`hreflang="${l}" href="${SITE_ORIGIN}/${base[l]}/${tag}/"`), `${path}: hreflang ${l}`);
     }
   }
   const q = quotes.find((x) => x.tags.length);

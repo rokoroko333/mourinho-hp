@@ -1,7 +1,7 @@
 // Checks that production is still being refreshed, so a stopped or failing cron is noticed instead of the
 // site quietly serving old news and a "next match" that has already been played (maintenance review).
 //
-//   npm run health                                   # production (SITE_URL, or the pages.dev address)
+//   npm run health                                   # production (lib/site.js, or SITE_URL)
 //   npm run health -- --base http://localhost:8788   # another origin
 //
 // .github/workflows/health.yml runs it every hour. A failed run makes GitHub email the owner.
@@ -17,6 +17,7 @@
 // Exit code: 0 healthy, 1 a problem was found (the problems are printed), 2 bad arguments.
 
 import { pathToFileURL } from 'node:url';
+import { SITE_ORIGIN } from '../lib/site.js';
 
 export const MAX_AGE_MS = 2 * 3600 * 1000;
 
@@ -45,7 +46,7 @@ async function main() {
     console.error('usage: npm run health -- --base <origin>');
     process.exit(2);
   }
-  const base = (i > 0 ? process.argv[i + 1] : process.env.SITE_URL || 'https://infinito-mourinho.pages.dev').replace(/\/$/, '');
+  const base = (i > 0 ? process.argv[i + 1] : process.env.SITE_URL || SITE_ORIGIN).replace(/\/$/, '');
   const url = `${base}/api/home?lang=en`;
   // One retry, so a single network hiccup between GitHub and Cloudflare does not send an email.
   let problems;

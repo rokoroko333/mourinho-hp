@@ -292,3 +292,13 @@ test('app.js picks the On this day card with the same limit as scripts/content.m
   const block = app.slice(app.indexOf("readJson('otd-data')"), app.indexOf('// Quote & story of the day'));
   assert.match(block, new RegExp(`\\.slice\\(0, ${OTD_LIMIT}\\)`), `app.js should keep at most ${OTD_LIMIT} entries, like OTD_LIMIT`);
 });
+
+// Each Function call counts toward the free plan's 100,000 a day even when the edge cache answers, so a page
+// makes one call for its live data (/api/home), plus a POST when a visitor predicts (security review).
+test('app.js reads live data from /api/home only, and posts predictions to /api/predict', async () => {
+  const app = await readFile(join(ROOT, 'src/assets/app.js'), 'utf8');
+  const calls = [...app.matchAll(/(?:getJson|fetch)\(\s*[`'"](\/api\/[a-z]+)/g)].map((m) => m[1]);
+  assert.ok(calls.length >= 2, `expected the API calls in app.js, found ${calls.length}; update this test`);
+  assert.deepEqual([...new Set(calls)].sort(), ['/api/home', '/api/predict']);
+  assert.equal(calls.filter((c) => c === '/api/home').length, 1, 'one /api/home call per page');
+});

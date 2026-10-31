@@ -1,5 +1,8 @@
 name = "infinito-mourinho-feeds"
 main = "src/index.js"
+# No public URL: the Worker only runs on its Cron Trigger. A workers.dev address would let anyone spend the
+# account's shared daily request quota (security review).
+workers_dev = false
 compatibility_date = "2026-10-01"
 
 # Every 20 minutes. Each run writes the shared news list and the matches: 2 KV keys x 72 runs = 144

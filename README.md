@@ -36,11 +36,10 @@ These already exist; the ids are in `wrangler.toml` and `workers/feeds/wrangler.
 | Resource | Name | Used by |
 |---|---|---|
 | Pages project (direct upload from the terminal, not Git-connected) | `infinito-mourinho` | the site and `functions/` |
-| Worker with a Cron Trigger every 20 minutes | `infinito-mourinho-feeds` | writes news and matches to KV, purges old votes |
-| KV namespace | `FEEDS` | shared by the Worker (writes) and `functions/api/news`, `functions/api/matches`, the `/matches/` pages (reads) |
-| D1 database | `infinito-mourinho-votes` (binding `VOTES`) | `functions/api/predict` (votes) and the Worker (purge) |
+| Worker with a Cron Trigger every 20 minutes, no public URL (`workers_dev = false`) | `infinito-mourinho-feeds` | writes news and matches to KV, purges old votes |
+| KV namespace | `FEEDS` | shared by the Worker (writes) and `functions/api/home` (and the older `news`, `matches`), the `/matches/` pages (reads) |
+| D1 database | `infinito-mourinho-votes` (binding `VOTES`) | `functions/api/predict` (votes), `functions/api/home` (tallies) and the Worker (purge) |
 | Pages secret | `VOTE_SALT` | hashes the voter's connection; without it `/api/predict` answers 503 |
-| Worker secret (optional) | `REFRESH_TOKEN` | `GET /refresh` with `Authorization: Bearer <token>` refreshes KV on demand |
 
 Log in once with `npx wrangler login`.
 
@@ -62,12 +61,16 @@ never post votes outside localhost) and the Worker's log with `npx wrangler tail
 (`outlets:empty`, `outlets:failed`, `feeds:failed`; without `--config`, Wrangler reads `wrangler.toml`, takes the
 project for Pages and fails).
 
+The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
+with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
+
 Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Console.
 
 ## Free plan budget at 15,000 visitors/day
 
 - **Static pages**: unlimited requests and bandwidth on Pages.
-- **Functions** (`/api/*` and `/matches/`): about 2 calls per home page view. Responses are edge-cached, but every
+- **Functions** (`/api/*` and `/matches/`): one call per page view with live data (`/api/home`), plus a POST per
+  prediction. Responses are edge-cached, but every
   invocation counts toward the Workers free limit of 100,000 requests/day (roughly 50,000 home page views/day).
   Beyond that, move to Workers Paid ($5/month).
 - **KV**: 2 writes per cron run (the news list and the matches), 144 writes/day (limit 1,000); reads are mostly

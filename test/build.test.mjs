@@ -16,6 +16,8 @@ const DIST = join(ROOT, 'dist');
 let built;
 const build = () => (built ??= promisify(execFile)(process.execPath, [join(ROOT, 'scripts/build.mjs')]));
 const htmlFiles = async () => (await readdir(DIST, { recursive: true })).filter((f) => f.endsWith('.html'));
+// The site's pages: every HTML file but 404.html, which is no page of its own (no sitemap, no share image).
+const pageFiles = async () => (await htmlFiles()).filter((f) => f !== '404.html');
 const page = (path) => readFile(join(DIST, path, 'index.html'), 'utf8');
 const load = async (name) => JSON.parse(await readFile(join(ROOT, 'src/content', name), 'utf8'));
 
@@ -130,7 +132,7 @@ test('the sitemap lists every built page exactly once, with all four languages',
   await build();
   const xml = await readFile(join(DIST, 'sitemap.xml'), 'utf8');
   const locs = [...xml.matchAll(/<loc>https:\/\/infinito-mourinho\.pages\.dev([^<]*)<\/loc>/g)].map((m) => m[1]);
-  const pages = (await htmlFiles())
+  const pages = (await pageFiles())
     .map((f) => `/${f.replace(/index\.html$/, '')}`.replace(/^\/\/$/, '/'))
     .filter((p) => !LIVE_PAGES.includes(p));
   assert.deepEqual([...locs].sort(), [...pages].sort());
@@ -145,7 +147,7 @@ const pngSize = (buf) => ({ width: buf.readUInt32BE(16), height: buf.readUInt32B
 test('every page has a 1200×630 share image that exists, and quotes get their own', async () => {
   await build();
   const quotes = await load('quotes.json');
-  for (const file of await htmlFiles()) {
+  for (const file of await pageFiles()) {
     const html = await readFile(join(DIST, file), 'utf8');
     const image = html.match(/<meta property="og:image" content="https:\/\/infinito-mourinho\.pages\.dev([^"]+)">/)?.[1];
     assert.ok(image, `${file}: og:image`);
@@ -688,4 +690,17 @@ test('month pages list their events with sources and their quotes, and the home 
       assert.ok(html.includes(`/${q.id}/"`), `${lang}: ${q.id} on its month page`);
     }
   }
+});
+
+// Without 404.html, Pages answers any unknown path with the home page and status 200 (security review).
+test('404.html exists, is noindex, out of the sitemap, and links to the home page in every language', async () => {
+  await build();
+  const html = await readFile(join(DIST, '404.html'), 'utf8');
+  assert.match(html, /<meta name="robots" content="noindex">/);
+  const ui = await load('ui.json');
+  for (const [lang, home] of [['en', '/'], ['es', '/es/'], ['pt', '/pt/'], ['ja', '/ja/']]) {
+    const section = html.slice(html.indexOf(`lang="${lang}"`, html.indexOf('<main')));
+    assert.ok(section.includes(`href="${home}"`) && section.includes(ui[lang].notFound.title), `${lang}: title and home link`);
+  }
+  assert.doesNotMatch(await readFile(join(DIST, 'sitemap.xml'), 'utf8'), /404/);
 });

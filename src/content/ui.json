@@ -1,5 +1,6 @@
 {
   "en": {
+    "notFound": {"title": "Page not found", "text": "There is no page at this address.", "home": "Go to the home page"},
     "locale": "en",
     "ogLocale": "en_GB",
     "langName": "English", "menuLabel": "Menu", "langMenuLabel": "Language: English", "closeLabel": "Close",
@@ -72,6 +73,7 @@
     "suggest": "This page is also available in English."
   },
   "es": {
+    "notFound": {"title": "Página no encontrada", "text": "No hay ninguna página en esta dirección.", "home": "Ir a la página de inicio"},
     "locale": "es",
     "ogLocale": "es_ES",
     "langName": "Español", "menuLabel": "Menú", "langMenuLabel": "Idioma: español", "closeLabel": "Cerrar",
@@ -144,6 +146,7 @@
     "suggest": "Esta página también está disponible en español."
   },
   "pt": {
+    "notFound": {"title": "Página não encontrada", "text": "Não existe nenhuma página neste endereço.", "home": "Ir para a página inicial"},
     "locale": "pt",
     "ogLocale": "pt_PT",
     "langName": "Português", "menuLabel": "Menu", "langMenuLabel": "Idioma: português", "closeLabel": "Fechar",
@@ -216,6 +219,7 @@
     "suggest": "Esta página também está disponível em português."
   },
   "ja": {
+    "notFound": {"title": "ページが見つからない", "text": "このアドレスにはページがない。", "home": "トップページへ"},
     "locale": "ja-JP",
     "ogLocale": "ja_JP",
     "langName": "日本語", "menuLabel": "メニュー", "langMenuLabel": "言語：日本語", "closeLabel": "閉じる",

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseRss, mergeNews, outletItems, fetchNewsWithReport, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
+  parseRss, mergeNews, MAX_TITLE, MAX_SOURCE, outletItems, fetchNewsWithReport, pickMatches, seasonStart, normalizeEvent, refreshAll, fetchMatches, scheduleUrls, KV_KEYS, OUTLETS,
 } from '../lib/feeds.js';
 
 const rss = `<?xml version="1.0"?><rss><channel>
@@ -337,4 +337,17 @@ test('an outlet that answers 404 is not fetched again', async () => {
   }
   assert.equal(tries.get(moved.feed), 1);
   assert.deepEqual(r.failedOutlets, ['El Mundo']);
+});
+
+// Third-party text is bounded and links are https only (#70 security review).
+test('parseRss keeps only https links and cuts long titles and sources', () => {
+  const long = 'M'.repeat(1000);
+  const xml = `<rss><item><title>${long}</title><link>https://a.example/1</link><source url="https://a">${long}</source></item>
+<item><title>Plain http</title><link>http://a.example/2</link></item>
+<item><title>Script</title><link>javascript:alert(1)</link></item>
+<item><title>Spaces</title><link>https://a.example/x y</link></item></rss>`;
+  const items = parseRss(xml);
+  assert.equal(items.length, 1);
+  assert.ok(items[0].title.length <= MAX_TITLE && items[0].title.endsWith('…'));
+  assert.ok(items[0].source.length <= MAX_SOURCE);
 });

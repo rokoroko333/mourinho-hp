@@ -1187,6 +1187,30 @@ const routes = [
 for (const { paths, render: page } of [...routes, ...liveRoutes]) {
   for (const lang of LANGS) await write(join(paths[lang], 'index.html'), page(lang));
 }
+// Without a 404.html, Pages answers any unknown path with the home page and status 200, so anyone could hand
+// out a made-up address that looks like a page of the site. The visitor's language is not known here, so the
+// page says it in all four, each linking to that language's home. Not in the sitemap, and noindex.
+await write('404.html', `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>${esc(ui.en.notFound.title)} | ${esc(ui.en.siteName)}</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body data-lang="en">
+<main class="wrap page">
+${LANGS.map((l) => `  <section class="section" lang="${l}">
+    <h1>${esc(ui[l].notFound.title)}</h1>
+    <p>${esc(ui[l].notFound.text)}</p>
+    <p class="more"><a href="${pathOf(l, 'home')}">${esc(ui[l].notFound.home)} ${icon.arrow}</a></p>
+  </section>`).join('\n')}
+</main>
+</body>
+</html>
+`);
 await write('sitemap.xml', sitemap(routes));
 await write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 

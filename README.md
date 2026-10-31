@@ -41,7 +41,7 @@ These already exist; the ids are in `wrangler.toml` and `workers/feeds/wrangler.
 | Pages project (direct upload from the terminal, not Git-connected) | `infinito-mourinho` | the site and `functions/` |
 | Worker with a Cron Trigger every 20 minutes, no public URL (`workers_dev = false`) | `infinito-mourinho-feeds` | writes news and matches to KV, purges old votes |
 | KV namespace | `FEEDS` | shared by the Worker (writes) and `functions/api/home` (and the older `news`, `matches`), the `/matches/` pages (reads) |
-| D1 database | `infinito-mourinho-votes` (binding `VOTES`) | `functions/api/predict` (votes), `functions/api/home` (tallies) and the Worker (purge) |
+| D1 database | `infinito-mourinho-votes` (binding `VOTES`) | `functions/api/predict` (votes), `functions/api/home` (tallies, from `counts`) and the Worker (purge) |
 | Pages secret | `VOTE_SALT` | hashes the voter's connection; without it `/api/predict` answers 503 |
 
 Log in once with `npx wrangler login`.
@@ -117,5 +117,7 @@ Then fix forward on a branch, and release again.
   absorbed by the edge cache.
 - **Worker subrequests**: at most 34 per run (limit 50); the breakdown is in the comment above `refreshAll` in
   `lib/feeds.js`.
-- **D1**: 2 writes per vote (the vote and the burst counter) and a purge per cron run; limits are 100,000 writes and
-  5 million rows read per day.
+- **D1**: 2 writes per vote (the vote, which also updates `counts` through a trigger, and the burst counter) and a
+  purge per cron run; limits are 100,000 writes and 5 million rows read per day. A tally reads only the `counts` rows
+  of its match (one per predicted score, a few dozen at most), at most once per colo every 20 seconds, so reads do not
+  grow with the number of votes.

@@ -715,7 +715,9 @@ test('team logos are local PNGs listed for app.js, and no page or script loads t
   await build();
   const files = (await readdir(join(ROOT, 'src/public/logos'))).filter((f) => f.endsWith('.png'));
   assert.ok(files.length >= 20, `expected the league logos, found ${files.length}; run npm run images`);
-  assert.ok(files.includes('86.png'), 'the current club has a logo');
+  // The current club (TEAM_ID, changed on a move) must have one: run npm run images after a move.
+  const { TEAM_ID } = await import('../lib/feeds.js');
+  assert.ok(files.includes(`${TEAM_ID}.png`), `the current club (${TEAM_ID}) has a logo`);
   for (const f of files) {
     assert.match(f, /^\d{1,8}\.png$/);
     const png = await readFile(join(ROOT, 'src/public/logos', f));

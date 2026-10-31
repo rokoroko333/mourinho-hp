@@ -22,8 +22,9 @@ const SITE = process.env.SITE_URL || 'https://infinito-mourinho.pages.dev';
 const MAX_BYTES = 200_000;
 
 const MAGIC = { jpg: [0xff, 0xd8, 0xff], png: [0x89, 0x50, 0x4e, 0x47] };
+const get = (url) => fetch(url, { signal: AbortSignal.timeout(20_000) });
 async function image(url, kind) {
-  const res = await fetch(url);
+  const res = await get(url);
   if (!res.ok) throw new Error(`${res.status} ${url}`);
   const buf = Buffer.from(await res.arrayBuffer());
   // Only real images of a sane size are written: the site serves these files as they are.
@@ -36,23 +37,40 @@ async function image(url, kind) {
 // must not leave the site without thumbnails).
 const videos = JSON.parse(readFileSync(join(ROOT, 'src/content/videos.json'), 'utf8'));
 // Next to the target, so the rename stays on one disk.
+// If anything fails, the half-filled folder is removed (it sits in src/public/, which the build copies to the
+// site; .gitignore also keeps it out of commits).
 const tmp = mkdtempSync(join(ROOT, 'src/public/.thumbs-'));
-for (const v of videos) {
-  if (!/^[\w-]{11}$/.test(v.id)) throw new Error(`unexpected video id: ${v.id}`);
-  writeFileSync(join(tmp, `${v.id}.jpg`), await image(`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, 'jpg'));
+try {
+  for (const v of videos) {
+    if (!/^[\w-]{11}$/.test(v.id)) throw new Error(`unexpected video id: ${v.id}`);
+    writeFileSync(join(tmp, `${v.id}.jpg`), await image(`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, 'jpg'));
+  }
+  rmSync(THUMBS, { recursive: true, force: true });
+  renameSync(tmp, THUMBS);
+} finally {
+  rmSync(tmp, { recursive: true, force: true });
 }
-rmSync(THUMBS, { recursive: true, force: true });
-renameSync(tmp, THUMBS);
 console.log(`thumbs: ${videos.length}`);
 
 // Logos: the teams of the leagues above, plus every team in this season's matches as the site has them.
 const ids = new Set();
+// A league that cannot be read is reported and skipped; the logos already in the folder stay.
 for (const league of LEAGUES) {
-  const data = await (await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${league}/teams`)).json();
-  for (const { team } of data.sports?.[0]?.leagues?.[0]?.teams || []) if (team?.logos?.length) ids.add(String(team.id));
+  try {
+    const res = await get(`https://site.api.espn.com/apis/site/v2/sports/soccer/${league}/teams`);
+    if (!res.ok) throw new Error(String(res.status));
+    const teams = (await res.json()).sports?.[0]?.leagues?.[0]?.teams || [];
+    if (!teams.length) throw new Error('no teams');
+    for (const { team } of teams) if (team?.logos?.length) ids.add(String(team.id));
+    console.log(`logos: ${league}: ${teams.length} teams`);
+  } catch (err) {
+    console.warn(`logos: could not read ${league} (${err.message}); skipped`);
+  }
 }
 try {
-  const { matches } = await (await fetch(`${SITE}/api/home?lang=en`)).json();
+  const res = await get(`${SITE}/api/home?lang=en`);
+  if (!res.ok) throw new Error(String(res.status));
+  const { matches } = await res.json();
   for (const m of [matches?.next, matches?.latest, ...(matches?.results || []), ...(matches?.fixtures || [])]) {
     for (const t of [m?.home, m?.away]) if (t?.id && t.logo) ids.add(String(t.id));
   }

@@ -253,6 +253,62 @@ test('fetchMatches merges completed and fixture lists without the bot User-Agent
   assert.equal(r.next.id, '3');
 });
 
+// The fixtures failing while the season lists work used to write "no next match" over the good copy (review).
+test('fetchMatches fails as a whole when one ESPN list fails or loses its events, and the cron keeps the last copy', async () => {
+  const now = new Date('2026-10-28T00:00:00Z');
+  const ok = {
+    '?season=2025': [ev('1', '2026-05-23T19:00Z', true)],
+    '?season=2026': [ev('2', '2026-10-25T20:00Z', true, '3', '1')],
+    '?fixture=true': [ev('3', '2026-11-01T15:15Z', false)],
+  };
+  const realFetch = globalThis.fetch;
+  const run = async (answer) => {
+    const calls = [];
+    globalThis.fetch = async (url) => {
+      const q = new URL(url).search;
+      calls.push(q);
+      return answer(q, calls.filter((c) => c === q).length);
+    };
+    try {
+      return { result: await fetchMatches(now).then((m) => m, (e) => e), calls };
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  };
+  // Fixtures down even on the retry: an error naming it, not a copy without the next match.
+  let { result, calls } = await run((q) => (q === '?fixture=true' ? new Response('down', { status: 503 }) : new Response(JSON.stringify({ events: ok[q] }))));
+  assert.ok(result instanceof Error && /503 .*fixture=true/.test(result.message), String(result?.message));
+  assert.equal(calls.filter((c) => c === '?fixture=true').length, 2, 'retried once');
+  // ESPN changes its shape: no `events` list.
+  ({ result } = await run((q) => new Response(JSON.stringify(q === '?fixture=true' ? { items: [] } : { events: ok[q] }))));
+  assert.ok(result instanceof Error && /no events list/.test(result.message), String(result?.message));
+  // A 404 is not retried; a season that has not started (an empty list) is fine.
+  ({ result, calls } = await run((q) => (q === '?season=2025' ? new Response('', { status: 404 }) : new Response(JSON.stringify({ events: ok[q] })))));
+  assert.ok(result instanceof Error);
+  assert.equal(calls.filter((c) => c === '?season=2025').length, 1, '404 not retried');
+  ({ result } = await run((q) => new Response(JSON.stringify({ events: q === '?season=2026' ? [] : ok[q] }))));
+  assert.equal(result.next?.id, '3');
+  // One bad moment: the retry brings the fixtures back.
+  ({ result } = await run((q, n) => (q === '?fixture=true' && n === 1 ? new Response('busy', { status: 503 }) : new Response(JSON.stringify({ events: ok[q] })))));
+  assert.equal(result.next?.id, '3');
+
+  // In the cron: the matches key keeps its last good copy and the report names the failure.
+  const store = new Map([[KV_KEYS.matches, 'old']]);
+  globalThis.fetch = async (url) => {
+    const u = new URL(url);
+    if (u.hostname === 'site.api.espn.com') return u.search === '?fixture=true' ? new Response('down', { status: 503 }) : new Response(JSON.stringify({ events: [ev('2', '2026-10-25T20:00Z', true)] }));
+    return new Response('nothing', { status: 404 });
+  };
+  let report;
+  try {
+    report = await refreshAll({ put: async (k, v) => store.set(k, v) }, now);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.equal(store.get(KV_KEYS.matches), 'old');
+  assert.match(report.matches, /^error: ESPN: 503 .*fixture=true/);
+});
+
 test('normalizeEvent keeps only https logo URLs', () => {
   const e = ev('9', '2026-11-01T19:00Z', false);
   e.competitions[0].competitors[0].team.logo = 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png';

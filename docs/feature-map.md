@@ -54,7 +54,7 @@
 
 | 機能 | 場所 | 確かめ方 |
 |---|---|---|
-| フィードの取得（媒体の RSS が主、国ごとの枠 `NEWS_PRESS_SLOTS`。Google News は本番の Cloudflare から断られる。試合は ESPN） | `lib/feeds.js`、Worker `workers/feeds/`（20分ごと） | `npm test`（`test/feeds.test.mjs`）、`npm run feeds:dev`、本番は `npx wrangler tail --config workers/feeds/wrangler.toml` |
+| フィードの取得（媒体の RSS が主、国ごとの枠 `NEWS_PRESS_SLOTS`。Google News は本番の Cloudflare から断られる。試合は ESPN） | `lib/feeds.js`、Worker `workers/feeds/`（20分ごと） | `npm test`（`test/feeds.test.mjs`）、`npm run feeds:dev`、本番は `npm run health`（毎時 `.github/workflows/health.yml`、2時間更新がないと失敗）と Workers Logs・`npx wrangler tail --config workers/feeds/wrangler.toml` |
 | `/matches/` のサーバー描画（4言語） | `functions/matches/`・`functions/{es/partidos,pt/jogos,ja/matches}/`、`lib/matches-page.js`（エッジに5分） | `npm test`（`test/build.test.mjs`）、`npm run verify`（`match-times`・`no-overflow`） |
 | ファン予想の API | `functions/api/predict.js`、`lib/predict.js`、D1 `VOTES`（`migrations/`）、secret `VOTE_SALT` | `npm test`（`test/predict.test.mjs`）、`npm run verify`（`predict`。送信は localhost だけ） |
 | 投票の削除（キックオフ30日後） | Worker の `scheduled` から `purge`（`lib/predict.js`） | `npm test`（`test/predict.test.mjs`）、Worker のログの `predictions` |

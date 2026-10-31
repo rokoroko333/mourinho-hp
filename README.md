@@ -64,6 +64,13 @@ never post votes outside localhost) and the Worker's log with `npx wrangler tail
 (`outlets:empty`, `outlets:failed`, `feeds:failed`; without `--config`, Wrangler reads `wrangler.toml`, takes the
 project for Pages and fails).
 
+**Monitoring**: `.github/workflows/health.yml` runs `npm run health` every hour. It fails, and GitHub emails the
+owner, when production's news or matches have not been refreshed for two hours (the cron stopped, or ESPN keeps
+failing; see the comment in `scripts/health.mjs`). The cause is in the Worker's log, kept for a few days in Workers
+Logs (Cloudflare dashboard → Workers → `infinito-mourinho-feeds` → Logs; `[observability]` in its `wrangler.toml`,
+which applies from the next `npm run feeds:deploy`). To check by hand: `npm run health`, or "Run workflow" on the
+Health workflow in GitHub's Actions tab.
+
 The Worker no longer has a public URL or the `/refresh` endpoint; if a `REFRESH_TOKEN` secret is still set, remove it
 with `npx wrangler secret delete REFRESH_TOKEN --config workers/feeds/wrangler.toml`.
 
@@ -78,7 +85,7 @@ Once a domain is set: submit `https://<domain>/sitemap.xml` in Google Search Con
   Beyond that, move to Workers Paid ($5/month).
 - **KV**: 2 writes per cron run (the news list and the matches), 144 writes/day (limit 1,000); reads are mostly
   absorbed by the edge cache.
-- **Worker subrequests**: at most 31 per run (limit 50); the breakdown is in the comment above `refreshAll` in
+- **Worker subrequests**: at most 34 per run (limit 50); the breakdown is in the comment above `refreshAll` in
   `lib/feeds.js`.
 - **D1**: 2 writes per vote (the vote and the burst counter) and a purge per cron run; limits are 100,000 writes and
   5 million rows read per day.

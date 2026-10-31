@@ -1,0 +1,7 @@
+{
+  "description": "The home page videos come in a new order on every visit: all of them are there, and the order on screen differs from the order in the page's HTML (the chance of the same order by luck is 1 in 3.6 million with ten videos)",
+  "steps": [
+    { "goto": "/" },
+    { "eval": "(async () => { const shown = [...document.querySelectorAll('#videos .video')].map((a) => a.href); const html = new DOMParser().parseFromString(await (await fetch('/')).text(), 'text/html'); const served = [...html.querySelectorAll('#videos .video')].map((a) => a.getAttribute('href')); return shown.length === served.length && shown.length >= 10 && [...shown].sort().join() === [...served].sort().join() && shown.join() !== served.join(); })()" }
+  ]
+}

@@ -6,14 +6,20 @@ export function withYears(quotes) {
   return quotes;
 }
 
-// Today's event (UTC), or the next one in the calendar when today has none. `events` must be sorted by
+// Today's event (UTC); when today has none, one from this month (the next one still to come, else the
+// latest), so the card stays close to the date rather than pointing weeks ahead; when the month has
+// none, the next one in the calendar. `kind` is 'today', 'month' or 'next'. `events` must be sorted by
 // month and day (the build sorts onthisday.json). The build picks with its own date; app.js picks again
 // from the embedded list when the visitor's UTC day differs (builds are not daily). Keep the two in step:
 // app.js repeats this rule (search for "On this day" there).
 export function pickOnThisDay(events, now = new Date()) {
   const today = now.toISOString().slice(5, 10);
   const same = events.find((e) => e.date.slice(5) === today);
-  return same ? { event: same, today: true } : { event: events.find((e) => e.date.slice(5) > today) || events[0], today: false };
+  if (same) return { event: same, today: true, kind: 'today' };
+  const month = events.filter((e) => e.date.slice(5, 7) === today.slice(0, 2));
+  const inMonth = month.find((e) => e.date.slice(5) > today) || month.at(-1);
+  if (inMonth) return { event: inMonth, today: false, kind: 'month' };
+  return { event: events.find((e) => e.date.slice(5) > today) || events[0], today: false, kind: 'next' };
 }
 
 // A seeded random integer in [0, n) (mulberry32), so the same seed always gives the same quiz.

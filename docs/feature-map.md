@@ -41,7 +41,8 @@
 | 今日の名言の共有 | `home` | `#share-quote` で X（Twitter）の投稿画面を新しいタブで開く | なし |
 | クイズ | `quiz` | 選択肢の `button[data-era]` で正誤（`.is-right`・`.is-wrong`）と `<details>` を開き、全問で `#quiz-score` と、点数入りのシェア `#quiz-share`。`#quiz-again` で別の10問。データは `#quiz-data` | `test/flows/quiz.json` |
 | 動画の再生 | `home` | `.video[data-video-id]` をクリックすると、その場で `iframe.video-frame`（youtube-nocookie）に差し替える | `test/flows/video.json` |
-| 今日の出来事 | `home` | `#on-this-day`。ビルドした日と表示する日が違えば `#otd-data` から選び直す | なし |
+| 動画の並び | `home` | `#videos .grid` の動画を、表示のたびに `app.js` がランダムに並べ替える（HTML は `videos.json` の順） | `test/flows/video-order.json` |
+| 今日の出来事 | `home` | `#on-this-day`。当日の出来事、なければ今月の出来事、それもなければ次の出来事（`pickOnThisDay`）。ビルドした日と表示する日が違えば `#otd-data` から選び直す | `test/build.test.mjs`（`pickOnThisDay`） |
 | ニュース | `home`・`news` | `/api/news?lang=` から `#news-list` と `#news-updated` を描く | なし（KV の中身しだい） |
 | ファン予想 | `home`・`matches` | `#predict`：次の試合のスコアを −/＋ で選んで送る（キックオフまで、1接続1票）。送信後・キックオフ後は勝ち・引き分け・負けの割合（10票から）と人気のスコア、試合後は的中の割合。`/api/predict`（`lib/predict.js`、D1 `VOTES`） | `test/flows/predict.json`（送信は localhost のときだけ） |
 | 試合とカウントダウン | `home`・`matches` | `/api/matches` から `#match-list`（次の試合→前回の結果の順。トップの `#countdown` は次の試合のカードの中）・`#result-list`・`#fixture-list` と `#countdown` を描く。`#countdown` は毎秒更新し、キックオフ時刻が未定（`timeTbd`）なら出さない。時刻はクラブの現地時間（`lib/feeds.js` の `MATCH_TIME_ZONE`、「Madrid time」と明記）。時刻未定の試合は日付と「TBC」だけ。判定と文字列は `src/assets/kickoff.js` | `test/flows/countdown.json`（トップと `/matches/`。次の試合がなければ非表示を確かめる）・`test/flows/match-times.json` |

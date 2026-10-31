@@ -202,10 +202,10 @@ test('every ui.json string naming the current club is listed beside TEAM_ID, and
   const strings = (o, path = '') => Object.entries(o).flatMap(([k, v]) =>
     typeof v === 'string' ? [[`${path}${k}`, v]] : v && typeof v === 'object' ? strings(v, `${path}${k}.`) : []);
   for (const lang of Object.keys(ui)) {
-    const club = clubIn(lang);
     const all = new Map(strings(ui[lang]));
     for (const key of listed) {
-      assert.ok(all.get(key)?.includes(club), `ui.json ${lang}.${key} does not name ${club}; it is listed beside TEAM_ID as a place to change on a move`);
+      // A language may also keep the club's own name (the Japanese home page heads the matches in English).
+      assert.ok([club, clubIn(lang)].some((name) => all.get(key)?.includes(name)), `ui.json ${lang}.${key} does not name ${clubIn(lang)}; it is listed beside TEAM_ID as a place to change on a move`);
     }
     for (const [key, text] of all) {
       if (!text.includes(club) || history.has(key)) continue;

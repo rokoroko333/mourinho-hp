@@ -799,9 +799,9 @@ const dayMonth = (mmdd, lang) =>
 function otdCard(lang) {
   if (!onThisDay.length) return '';
   const p = ui[lang].onthisday;
-  const { event: e, today } = pickOnThisDay(onThisDay);
+  const { event: e, kind } = pickOnThisDay(onThisDay);
   const data = {
-    labels: { today: p.today, next: p.next },
+    labels: { today: p.today, month: p.month, next: p.next },
     events: onThisDay.map((x) => ({
       date: x.date,
       day: dayMonth(x.date.slice(5), lang),
@@ -810,7 +810,7 @@ function otdCard(lang) {
     })),
   };
   return `<article class="card otd" id="on-this-day" data-built="${new Date().toISOString().slice(0, 10)}">
-    <p class="card-label" id="otd-label">${esc(fill(today ? p.today : p.next, { day: dayMonth(e.date.slice(5), lang) }))}</p>
+    <p class="card-label" id="otd-label">${esc(fill(p[kind], { day: dayMonth(e.date.slice(5), lang) }))}</p>
     <p class="otd-year" id="otd-year">${esc(e.date.slice(0, 4))}</p>
     <p id="otd-text">${esc(e.text[lang])}</p>
     <div class="card-foot"><a class="more-link" id="otd-link" href="${monthPaths(Number(e.date.slice(5, 7)))[lang]}">${esc(p.more)} ${icon.arrow}</a></div>

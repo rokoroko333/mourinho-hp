@@ -102,6 +102,10 @@
 | unveiled as manager / sacked / by mutual consent | 監督として発表された / 解任した / 双方の合意により |
 | touchline ban / sent off (manager) | ベンチ入り禁止処分 / 退席処分 |
 | parking the bus / the happy one | 「バスを停める」 / ハッピー・ワン |
+| Lionel Messi / Ross Barkley / Darren Fletcher / Wesley Sneijder | リオネル・メッシ / ロス・バークリー / ダレン・フレッチャー / ヴェスレイ・スナイデル |
+| Son Heung-min / Giovani Lo Celso / Edin Džeko | ソン・フンミン / ジオバニ・ロ・セルソ / エディン・ジェコ |
+| Bodø/Glimt / Dynamo Kyiv / Lugano / West Ham | ボデ/グリムト / ディナモ・キエフ / ルガーノ / ウェストハム |
+| stoppage time | アディショナルタイム |
 
 - 名言の場面説明（`quotes.json` の `context`）では、短くするため「CL」と略してよい。ほかの説明文は「チャンピオンズリーグ」。
 - `/stats/` の記録の説明は、大きな数字の下に置くので「〜の数」「〜試合数」のような名詞句で終える。
